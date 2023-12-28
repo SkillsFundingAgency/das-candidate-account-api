@@ -1,0 +1,6 @@
+@SFA.DAS.CandidateAccount.Api_HostAddress = http://localhost:5177
+
+GET {{SFA.DAS.CandidateAccount.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
