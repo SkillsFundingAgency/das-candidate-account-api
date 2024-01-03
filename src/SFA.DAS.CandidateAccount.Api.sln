@@ -1,16 +1,21 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34330.188
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{666A3BC6-A31F-4D7C-94F0-B35B751246D4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.CandidateAccount.Api", "SFA.DAS.CandidateAccount.Api\SFA.DAS.CandidateAccount.Api.csproj", "{EF7E24CD-F43B-426F-BD1E-10AB1516B2EF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.CandidateAccount.Api", "SFA.DAS.CandidateAccount.Api\SFA.DAS.CandidateAccount.Api.csproj", "{EF7E24CD-F43B-426F-BD1E-10AB1516B2EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.CandidateAccount.Api.UnitTests", "SFA.DAS.CandidateAccount.Api.UnitTests\SFA.DAS.CandidateAccount.Api.UnitTests.csproj", "{C87178B5-A45F-4FF5-9AD0-ECB53B26A283}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.CandidateAccount.Api.UnitTests", "SFA.DAS.CandidateAccount.Api.UnitTests\SFA.DAS.CandidateAccount.Api.UnitTests.csproj", "{C87178B5-A45F-4FF5-9AD0-ECB53B26A283}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.CandidateAccount.Domain", "SFA.DAS.CandidateAccount.Domain\SFA.DAS.CandidateAccount.Domain.csproj", "{F8F47C11-B9DF-41B5-A9BA-E2F866F91893}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.CandidateAccount.Domain", "SFA.DAS.CandidateAccount.Domain\SFA.DAS.CandidateAccount.Domain.csproj", "{F8F47C11-B9DF-41B5-A9BA-E2F866F91893}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.CandidateAccount.Data", "SFA.DAS.CandidateAccount.Data\SFA.DAS.CandidateAccount.Data.csproj", "{63E9B035-C007-49F7-BA36-7C124A018B31}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.CandidateAccount.Data", "SFA.DAS.CandidateAccount.Data\SFA.DAS.CandidateAccount.Data.csproj", "{63E9B035-C007-49F7-BA36-7C124A018B31}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.CandidateAccount.Database", "SFA.DAS.CandidateAccount.Database\SFA.DAS.CandidateAccount.Database.csproj", "{DD59B291-8D0D-4E46-B828-687A74FE1765}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.CandidateAccount.Database", "SFA.DAS.CandidateAccount.Database\SFA.DAS.CandidateAccount.Database.csproj", "{DD59B291-8D0D-4E46-B828-687A74FE1765}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.CandidateAccount.Data.UnitTests", "SFA.DAS.CandidateAccount.Data.UnitTests\SFA.DAS.CandidateAccount.Data.UnitTests.csproj", "{0D42E9A3-7CBB-4117-8299-6EF8EEF43896}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,8 +43,16 @@ Global
 		{DD59B291-8D0D-4E46-B828-687A74FE1765}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DD59B291-8D0D-4E46-B828-687A74FE1765}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DD59B291-8D0D-4E46-B828-687A74FE1765}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D42E9A3-7CBB-4117-8299-6EF8EEF43896}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D42E9A3-7CBB-4117-8299-6EF8EEF43896}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D42E9A3-7CBB-4117-8299-6EF8EEF43896}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D42E9A3-7CBB-4117-8299-6EF8EEF43896}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{C87178B5-A45F-4FF5-9AD0-ECB53B26A283} = {666A3BC6-A31F-4D7C-94F0-B35B751246D4}
+		{0D42E9A3-7CBB-4117-8299-6EF8EEF43896} = {666A3BC6-A31F-4D7C-94F0-B35B751246D4}
 	EndGlobalSection
 EndGlobal
