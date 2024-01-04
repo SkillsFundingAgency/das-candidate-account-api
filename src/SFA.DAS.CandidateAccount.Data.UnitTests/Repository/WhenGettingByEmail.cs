@@ -32,7 +32,7 @@ namespace SFA.DAS.CandidateAccount.Data.UnitTests.Repository
                 LastName = "testLastName"
             };
 
-            List<CandidateEntity> candidates = new List<CandidateEntity>();
+            List<CandidateEntity> candidates = new List<CandidateEntity>(){_candidate};
 
             _candidateAccountDataContext = new Mock<ICandidateAccountDataContext>();
             _candidateAccountDataContext.Setup(x => x.CandidateEntities).ReturnsDbSet(candidates);
@@ -43,9 +43,7 @@ namespace SFA.DAS.CandidateAccount.Data.UnitTests.Repository
         public async Task AndEmailExistsThenCandidateIsReturned()
         {
             //Arrange
-
-            _candidateAccountDataContext.Setup(x => x.CandidateEntities.FirstOrDefaultAsync(CancellationToken.None)).ReturnsAsync(_candidate);
-
+            
             //Act
             var result = await _candidateRepository.GetCandidateByEmail(_candidate.Email);
 
