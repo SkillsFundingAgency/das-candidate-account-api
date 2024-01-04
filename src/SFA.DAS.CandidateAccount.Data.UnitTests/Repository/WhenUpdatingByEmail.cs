@@ -1,18 +1,17 @@
 ﻿using Moq;
 using SFA.DAS.CandidateAccount.Data.Repository;
-using SFA.DAS.CandidateAccount.Data.UnitTests.DatabaseMock;
 using SFA.DAS.CandidateAccount.Domain.Candidate;
-using FluentAssertions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+using SFA.DAS.CandidateAccount.Data.UnitTests.DatabaseMock;
+using FluentAssertions;
 
 namespace SFA.DAS.CandidateAccount.Data.UnitTests.Repository
 {
-    public class WhenGettingByEmail
+    public class WhenUpdatingByEmail
     {
         private Mock<ICandidateAccountDataContext> _candidateAccountDataContext;
         private CandidateRepository _candidateRepository;
@@ -38,29 +37,35 @@ namespace SFA.DAS.CandidateAccount.Data.UnitTests.Repository
             _candidateAccountDataContext.Setup(x => x.CandidateEntities).ReturnsDbSet(candidates);
             _candidateRepository = new CandidateRepository(_candidateAccountDataContext.Object);
         }
-
         [Test]
-        public async Task AndEmailExistsThenCandidateIsReturned()
+        public async Task AndEmailExistsThenCandidateIsUpdated()
         {
             //Arrange
-            
+            var existingCandidate = new CandidateEntity
+            {
+                FirstName = "testName", LastName = "testName2", Email = "testEmail", GovUkIdentifier = "",
+                MiddleNames = "testMiddleName", PhoneNumber = "123", UpdatedOn = DateTime.UtcNow,
+                TermsOfUseAcceptedOn = DateTime.UtcNow
+            };
+
             //Act
-            var result = await _candidateRepository.GetCandidateByEmail(_candidate.Email);
+             await _candidateRepository.UpdateCandidateByEmail(existingCandidate);
 
             //Assert
-            result.Should().BeEquivalentTo(_candidate);
+            _candidateAccountDataContext.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Test]
-        public async Task AndEmailDoesNotExistThenReturnsNull()
+        public async Task AndEmailDoesNotExistThenNoUpdateIsMade()
         {
             //Arrange
-
+            var noCandidateExists = new CandidateEntity
+                { FirstName = "testName", LastName = "testName2", Email = "wrongEmail", GovUkIdentifier = "" };
             //Act
-            var result = await _candidateRepository.GetCandidateByEmail("wrongEmail");
+            await _candidateRepository.UpdateCandidateByEmail(noCandidateExists);
 
             //Assert
-            result.Should().BeNull();
+            _candidateAccountDataContext.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
         }
     }
 }

@@ -10,5 +10,6 @@ namespace SFA.DAS.CandidateAccount.Data.Repository
     {
         Task Insert(Domain.Candidate.CandidateEntity candidate);
         Task<Domain.Candidate.CandidateEntity> GetCandidateByEmail(string email);
+        Task UpdateCandidateByEmail(Domain.Candidate.CandidateEntity candidate);
     }
 }
