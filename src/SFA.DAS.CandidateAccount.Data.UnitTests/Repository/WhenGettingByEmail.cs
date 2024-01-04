@@ -39,7 +39,7 @@ namespace SFA.DAS.CandidateAccount.Data.UnitTests.Repository
             _candidateRepository = new CandidateRepository(_candidateAccountDataContext.Object);
         }
 
-        [Ignore("Todo")]
+        [Test]
         public async Task AndEmailExistsThenCandidateIsReturned()
         {
             //Arrange
