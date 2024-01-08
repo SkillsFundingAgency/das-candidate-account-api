@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SFA.DAS.CandidateAccount.Domain.Application;
 using SFA.DAS.CandidateAccount.Domain.Candidate;
 
 namespace SFA.DAS.CandidateAccount.Data.Candidate
