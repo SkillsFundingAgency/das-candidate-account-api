@@ -5,49 +5,48 @@ using SFA.DAS.CandidateAccount.Data.UnitTests.DatabaseMock;
 using SFA.DAS.CandidateAccount.Domain.Candidate;
 using SFA.DAS.Testing.AutoFixture;
 
-namespace SFA.DAS.CandidateAccount.Data.UnitTests.Repository.Candidate
+namespace SFA.DAS.CandidateAccount.Data.UnitTests.Repository.Candidate;
+
+public class WhenUpdatingByEmail
 {
-    public class WhenUpdatingByEmail
+    [Test, MoqAutoData]
+    public async Task AndEmailExistsThenCandidateIsUpdated(
+        CandidateEntity candidate,
+        [Frozen]Mock<ICandidateAccountDataContext> context,
+        CandidateRepository repository)
     {
-        [Test, MoqAutoData]
-        public async Task AndEmailExistsThenCandidateIsUpdated(
-            CandidateEntity candidate,
-            [Frozen]Mock<ICandidateAccountDataContext> context,
-            CandidateRepository repository)
+        //Arrange
+        context.Setup(x => x.CandidateEntities)
+            .ReturnsDbSet(new List<CandidateEntity> { candidate });
+        var existingCandidate = new CandidateEntity
         {
-            //Arrange
-            context.Setup(x => x.CandidateEntities)
-                .ReturnsDbSet(new List<CandidateEntity> { candidate });
-            var existingCandidate = new CandidateEntity
-            {
-                FirstName = "testName", LastName = "testName2", Email = candidate.Email, GovUkIdentifier = "",
-                MiddleNames = "testMiddleName", PhoneNumber = "123", UpdatedOn = DateTime.UtcNow,
-                TermsOfUseAcceptedOn = DateTime.UtcNow
-            };
+            FirstName = "testName", LastName = "testName2", Email = candidate.Email, GovUkIdentifier = "",
+            MiddleNames = "testMiddleName", PhoneNumber = "123", UpdatedOn = DateTime.UtcNow,
+            TermsOfUseAcceptedOn = DateTime.UtcNow
+        };
 
-            //Act
-             await repository.UpdateCandidateByEmail(existingCandidate);
+        //Act
+        await repository.UpdateCandidateByEmail(existingCandidate);
 
-            //Assert
-            context.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
-        }
+        //Assert
+        context.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
+    }
 
-        [Test, MoqAutoData]
-        public async Task AndEmailDoesNotExistThenNoUpdateIsMade(
-            CandidateEntity candidate,
-            [Frozen]Mock<ICandidateAccountDataContext> context,
-            CandidateRepository repository)
-        {
-            //Arrange
-            context.Setup(x => x.CandidateEntities)
-                .ReturnsDbSet(new List<CandidateEntity> { candidate });
-            var noCandidateExists = new CandidateEntity
-                { FirstName = "testName", LastName = "testName2", Email = "wrongEmail", GovUkIdentifier = "" };
-            //Act
-            await repository.UpdateCandidateByEmail(noCandidateExists);
+    [Test, MoqAutoData]
+    public async Task AndEmailDoesNotExistThenNoUpdateIsMade(
+        CandidateEntity candidate,
+        [Frozen]Mock<ICandidateAccountDataContext> context,
+        CandidateRepository repository)
+    {
+        //Arrange
+        context.Setup(x => x.CandidateEntities)
+            .ReturnsDbSet(new List<CandidateEntity> { candidate });
+        var noCandidateExists = new CandidateEntity
+            { FirstName = "testName", LastName = "testName2", Email = "wrongEmail", GovUkIdentifier = "" };
+        //Act
+        await repository.UpdateCandidateByEmail(noCandidateExists);
 
-            //Assert
-            context.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
-        }
+        //Assert
+        context.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
     }
 }
