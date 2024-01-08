@@ -23,7 +23,7 @@ namespace SFA.DAS.CandidateAccount.Data.Candidate
             builder.Property(x => x.AddressLine4).HasColumnName("AddressLine3").HasColumnType("varchar").HasMaxLength(150).IsRequired();
             builder.Property(x => x.Postcode).HasColumnName("Postcode").HasColumnType("varchar").HasMaxLength(50).IsRequired();
             builder.Property(x => x.Uprn).HasColumnName("Uprn").HasColumnType("varchar").HasMaxLength(150).IsRequired();
-            builder.Property(x => x.ApprenticeId).HasColumnName("ApprenticeId").HasColumnType("varchar").IsRequired();
+            builder.Property(x => x.CandidateId).HasColumnName("CandidateId").HasColumnType("uniqueidentifier").IsRequired();
         }
     }
 }

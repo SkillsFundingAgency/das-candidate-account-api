@@ -19,7 +19,7 @@ namespace SFA.DAS.CandidateAccount.Data.Candidate
             builder.Property(x => x.Id).HasColumnName("Id").HasColumnType("uniqueidentifier").IsRequired();
             builder.Property(x => x.EmailAddress).HasColumnName("EmailAddress").HasColumnType("varchar").HasMaxLength(255).IsRequired();
             builder.Property(x => x.ChangedOn).HasColumnName("ChangedOn").HasColumnType("DateTime").IsRequired();
-            builder.Property(x => x.ApprenticeId).HasColumnName("ApprenticeId").HasColumnType("varchar").HasMaxLength(150).IsRequired();
+            builder.Property(x => x.CandidateId).HasColumnName("CandidateId").HasColumnType("uniqueidentifier").IsRequired();
 
         }
     }

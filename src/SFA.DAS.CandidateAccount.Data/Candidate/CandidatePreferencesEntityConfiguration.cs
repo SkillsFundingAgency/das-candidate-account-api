@@ -17,7 +17,7 @@ namespace SFA.DAS.CandidateAccount.Data.Candidate
             builder.HasKey(x => x.Id);
 
             builder.Property(x => x.Id).HasColumnName("Id").HasColumnType("uniqueidentifier").IsRequired();
-            builder.Property(x => x.ApprenticeId).HasColumnName("ApprenticeId").HasColumnType("varchar").HasMaxLength(50).IsRequired();
+            builder.Property(x => x.CandidateId).HasColumnName("CandidateId").HasColumnType("uniqueidentifier").IsRequired();
             builder.Property(x => x.PreferenceId).HasColumnName("PreferenceId").HasColumnType("varchar").HasMaxLength(50).IsRequired();
             builder.Property(x => x.Status).HasColumnName("Status").HasColumnType("varchar").HasMaxLength(150).IsRequired();
             builder.Property(x => x.CreatedOn).HasColumnName("CreatedOn").HasColumnType("DateTime").IsRequired();

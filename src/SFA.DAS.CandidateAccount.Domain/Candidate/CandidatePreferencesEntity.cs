@@ -9,7 +9,7 @@ namespace SFA.DAS.CandidateAccount.Domain.Candidate
     public class CandidatePreferencesEntity
     {
         public Guid Id { get; set; }
-        public Guid ApprenticeId { get; set; }
+        public Guid CandidateId { get; set; }
         public Guid PreferenceId { get; set; }
         public required string Status { get; set; }
         public DateTime CreatedOn { get; set; }

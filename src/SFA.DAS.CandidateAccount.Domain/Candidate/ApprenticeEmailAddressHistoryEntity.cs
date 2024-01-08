@@ -11,6 +11,6 @@ namespace SFA.DAS.CandidateAccount.Domain.Candidate
         public Guid Id { get; set; }
         public string EmailAddress { get; set; }
         public DateTime ChangedOn { get; set; }
-        public Guid ApprenticeId { get; set; }
+        public Guid CandidateId { get; set; }
     }
 }

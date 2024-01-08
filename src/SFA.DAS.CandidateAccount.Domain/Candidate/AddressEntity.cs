@@ -15,6 +15,6 @@ namespace SFA.DAS.CandidateAccount.Domain.Candidate
         public string AddressLine4 { get; set; }
         public string Postcode { get; set; }
         public string Uprn { get; set; }
-        public Guid ApprenticeId { get; set; }
+        public Guid CandidateId { get; set; }
     }
 }

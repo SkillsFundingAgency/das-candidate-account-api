@@ -12,6 +12,6 @@ namespace SFA.DAS.CandidateAccount.Domain.Candidate
         public string Gender { get; set; }
         public string DisabilityStatus { get; set; }
         public string Ethnicity { get; set; }
-        public Guid ApprenticeId { get; set; }
+        public Guid CandidateId { get; set; }
     }
 }
