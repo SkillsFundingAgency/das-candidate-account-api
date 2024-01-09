@@ -6,5 +6,5 @@ CREATE TABLE dbo.[Geopoint] (
     [Northing]				nvarchar(150)	    NOT NULL,
     [AddressId]             uniqueidentifier    NOT NULL
     CONSTRAINT [PK_Location] PRIMARY KEY (Id),    
-    CONSTRAINT [FK_Address] FOREIGN KEY (AddressId) REFERENCES [Address].[Id]
+    CONSTRAINT [FK_Address] FOREIGN KEY (AddressId) REFERENCES [Address](Id)
     )

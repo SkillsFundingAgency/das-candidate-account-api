@@ -6,5 +6,5 @@ CREATE TABLE dbo.[CandidatePreferences] (
     [CreatedOn]			    datetime		NOT NULL,
     [UpdatedOn]			    datetime		NULL
 
-    CONSTRAINT [PK_User] PRIMARY KEY (Id)
+    CONSTRAINT [PK_CandidatePreferences] PRIMARY KEY (Id)
     )

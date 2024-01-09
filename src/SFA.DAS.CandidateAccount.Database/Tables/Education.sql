@@ -4,6 +4,6 @@ CREATE TABLE dbo.[Education] (
     [FromYear]  			smallint      	    NOT NULL,
     [ToYear]    			smallint    	    NOT NULL,
     [ApplicationTemplateId] uniqueidentifier    NOT NULL,
-    CONSTRAINT [PK_User] PRIMARY KEY (Id),
-    CONSTRAINT [FK_Template] FOREIGN KEY (ApplicationTemplateId) REFERENCES [ApplicationTemplate].[Id]
+    CONSTRAINT [PK_Education] PRIMARY KEY (Id),
+    CONSTRAINT [FK_Education_ApplicationTemplate] FOREIGN KEY (ApplicationTemplateId) REFERENCES [ApplicationTemplate](Id)
     )

@@ -10,7 +10,7 @@ CREATE TABLE dbo.[Candidate] (
     [UpdatedOn]			    datetime		    NULL,
     [TermsOfUseAcceptedOn]	datetime		    NULL,
     [GovUkIdentifier]       varchar(150)        NULL
-    CONSTRAINT [PK_User] PRIMARY KEY (Id),
-    INDEX [IX_User_Email] NONCLUSTERED(Email),
-    INDEX [IX_User_GovUkIdentifier] NONCLUSTERED(GovUkIdentifier)
-    )
+    CONSTRAINT [PK_Candidate] PRIMARY KEY (Id),
+    INDEX [IX_Candidate_Email] NONCLUSTERED(Email),
+    INDEX [IX_Candidate_GovUkIdentifier] NONCLUSTERED(GovUkIdentifier)
+)
