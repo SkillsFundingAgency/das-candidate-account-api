@@ -9,7 +9,7 @@ trigger:
   batch: true
   branches:
     include:
-      - "DASD-10245"
+      - "main"
 
 variables:
 - name: SolutionBaseName
@@ -21,7 +21,7 @@ variables:
 - group: RELEASE Management Resources
 - group: RELEASE das-candidate-account-api
 - name: Deploy
-  value: $[or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), eq(variables['Build.Reason'], 'Manual'), eq(variables['Build.Reason'], 'PullRequest'))]
+  value: $[or(eq(variables['Build.SourceBranch'], 'refs/heads/DASD-10245'), eq(variables['Build.Reason'], 'Manual'), eq(variables['Build.Reason'], 'PullRequest'))]
 
 
 resources:
