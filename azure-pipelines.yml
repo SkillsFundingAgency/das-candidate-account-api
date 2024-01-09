@@ -9,7 +9,7 @@ trigger:
   batch: true
   branches:
     include:
-      - "DASD-10245"
+      - "main"
 
 variables:
 - name: SolutionBaseName
@@ -30,7 +30,7 @@ resources:
   - repository: das-platform-building-blocks
     type: github
     name: SkillsFundingAgency/das-platform-building-blocks
-    ref: refs/tags/2.1.9
+    ref: refs/heads/DASD-10245
     endpoint: SkillsFundingAgency
   - repository: das-platform-automation
     type: github
