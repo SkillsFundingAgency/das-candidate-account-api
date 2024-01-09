@@ -6,6 +6,6 @@ CREATE TABLE dbo.[Qualification] (
     [ToYear]    			smallint    	NOT NULL,
     [IsPredicted]           bit             NOT NULL,
     [ApplicationTemplateId] uniqueidentifier    NOT NULL
-    CONSTRAINT [PK_User] PRIMARY KEY (Id),
-    CONSTRAINT [FK_Template] FOREIGN KEY (ApplicationTemplateId) REFERENCES [Candidate].[Id]
+    CONSTRAINT [PK_Qualification] PRIMARY KEY (Id),
+    CONSTRAINT [FK_Qualification_ApplicationTemplate] FOREIGN KEY (ApplicationTemplateId) REFERENCES [Candidate](Id)
     )

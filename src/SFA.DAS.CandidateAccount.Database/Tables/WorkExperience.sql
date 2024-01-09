@@ -6,6 +6,6 @@ CREATE TABLE dbo.[WorkExperience] (
     [ToYear]    			smallint    	NOT NULL,
     [ApplicationTemplateId] uniqueidentifier     NOT NULL,
     [Description]  			nvarchar(max)   NOT NULL
-    CONSTRAINT [PK_User] PRIMARY KEY (Id),
-    CONSTRAINT [FK_Template] FOREIGN KEY (ApplicationTemplateId) REFERENCES [ApplicationTemplate].[Id]
+    CONSTRAINT [PK_WorkExperience] PRIMARY KEY (Id),
+    CONSTRAINT [FK_WorkExperience_ApplicationTemplate] FOREIGN KEY (ApplicationTemplateId) REFERENCES [ApplicationTemplate](Id)
     )

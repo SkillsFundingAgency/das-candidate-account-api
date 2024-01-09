@@ -5,6 +5,6 @@ CREATE TABLE dbo.[AboutYou] (
     [HobbiesAndInterests]   nvarchar(max)       NOT NULL,
     [Support]  		    	nvarchar(max)       NOT NULL,
     [ApplicationTemplateId] uniqueidentifier    NOT NULL
-    CONSTRAINT [PK_User] PRIMARY KEY (Id),
-    CONSTRAINT [FK_Template] FOREIGN KEY (ApplicationTemplateId) REFERENCES [ApplicationTemplate].[Id]
+    CONSTRAINT [PK_AboutYou] PRIMARY KEY (Id),
+    CONSTRAINT [FK_AboutYou_ApplicationTemplate] FOREIGN KEY (ApplicationTemplateId) REFERENCES [dbo].[ApplicationTemplate](Id)
     )

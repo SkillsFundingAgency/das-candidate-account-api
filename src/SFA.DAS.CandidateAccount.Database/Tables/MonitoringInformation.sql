@@ -4,6 +4,6 @@ CREATE TABLE dbo.[MonitoringInformation] (
     [DisabilityStatus]		nvarchar(150)	    NOT NULL,
     [Ethnicity]				nvarchar(150)	    NOT NULL,
     [CandidateId]			uniqueidentifier	NOT NULL
-    CONSTRAINT [PK_User] PRIMARY KEY (Id),
-    CONSTRAINT [FK_Candidate] FOREIGN KEY (CandidateId) REFERENCES [Candidate].[Id]
+    CONSTRAINT [PK_MonitoringInformation] PRIMARY KEY (Id),
+    CONSTRAINT [FK_MonitoringInformation_Candidate] FOREIGN KEY (CandidateId) REFERENCES [Candidate](Id)
     )
