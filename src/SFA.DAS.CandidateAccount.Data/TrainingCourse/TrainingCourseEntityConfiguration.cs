@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SFA.DAS.CandidateAccount.Domain.Application;
 
-namespace SFA.DAS.CandidateAccount.Data.Candidate;
+namespace SFA.DAS.CandidateAccount.Data.TrainingCourse;
 
 public class TrainingCourseEntityConfiguration : IEntityTypeConfiguration<TrainingCourseEntity>
 {

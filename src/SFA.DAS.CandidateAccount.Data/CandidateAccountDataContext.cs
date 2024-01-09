@@ -4,6 +4,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using SFA.DAS.CandidateAccount.Data.Candidates;
+using SFA.DAS.CandidateAccount.Domain.Application;
 using SFA.DAS.CandidateAccount.Domain.Candidate;
 using SFA.DAS.CandidateAccount.Domain.Configuration;
 
@@ -12,6 +13,7 @@ namespace SFA.DAS.CandidateAccount.Data;
 public interface ICandidateAccountDataContext
 {
     DbSet<CandidateEntity> CandidateEntities { get; set; }
+    DbSet<ApplicationTemplateEntity> ApplicationTemplateEntities { get; set; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken  = default (CancellationToken));
 }
@@ -21,6 +23,7 @@ public class CandidateAccountDataContext : DbContext, ICandidateAccountDataConte
     private readonly ChainedTokenCredential _azureServiceTokenProvider;
     private readonly EnvironmentConfiguration _environmentConfiguration;
     public DbSet<CandidateEntity> CandidateEntities { get; set; }
+    public DbSet<ApplicationTemplateEntity> ApplicationTemplateEntities { get; set; }
 
     private readonly CandidateAccountConfiguration? _configuration;
 

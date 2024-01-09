@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SFA.DAS.CandidateAccount.Domain.Candidate;
 
-namespace SFA.DAS.CandidateAccount.Data.Candidate;
+namespace SFA.DAS.CandidateAccount.Data.ApprenticesEmailAddressHistory;
 
 public class ApprenticeEmailAddressHistoryEntityConfiguration : IEntityTypeConfiguration<ApprenticeEmailAddressHistoryEntity>
 {

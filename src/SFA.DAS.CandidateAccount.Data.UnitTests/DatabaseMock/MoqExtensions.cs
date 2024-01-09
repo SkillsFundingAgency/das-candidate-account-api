@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using Moq.Language.Flow;
-using SFA.DAS.CandidateAccount.Data.Repository;
 
 namespace SFA.DAS.CandidateAccount.Data.UnitTests.DatabaseMock
 
