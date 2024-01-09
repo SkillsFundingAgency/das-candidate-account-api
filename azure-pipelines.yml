@@ -21,7 +21,7 @@ variables:
 - group: RELEASE Management Resources
 - group: RELEASE das-candidate-account-api
 - name: Deploy
-  value: $[or(eq(variables['Build.SourceBranch'], 'refs/heads/DASD-10245'), eq(variables['Build.Reason'], 'Manual'), eq(variables['Build.Reason'], 'PullRequest'))]
+  value: $[or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), eq(variables['Build.Reason'], 'Manual'), eq(variables['Build.Reason'], 'PullRequest'))]
 
 
 resources:
@@ -30,7 +30,7 @@ resources:
   - repository: das-platform-building-blocks
     type: github
     name: SkillsFundingAgency/das-platform-building-blocks
-    ref: refs/heads/DASD-10245
+    ref: refs/tags/2.1.12
     endpoint: SkillsFundingAgency
   - repository: das-platform-automation
     type: github
@@ -53,7 +53,7 @@ stages:
   - template: azure-pipelines-templates/build/job/dacpaccs-template.yml@das-platform-building-blocks
     parameters:
       SolutionBaseName: $(SolutionBaseName)
-      SqlProjectPath: src/$(SolutionBaseName).Database/$(SolutionBaseName).Database.csproj
+      DatabaseProjectPath: src/$(SolutionBaseName).Database/$(SolutionBaseName).Database.csproj
   
 - stage: Deploy_AT
   dependsOn: Build
