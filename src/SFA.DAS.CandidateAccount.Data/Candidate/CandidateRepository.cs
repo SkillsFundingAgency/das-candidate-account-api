@@ -7,18 +7,25 @@ public interface ICandidateRepository
     Task<Domain.Candidate.CandidateEntity> GetCandidateByEmail(string email);
     Task UpdateCandidateByEmail(Domain.Candidate.CandidateEntity candidate);
 }
-public class CandidateRepository(ICandidateAccountDataContext dataContext) : ICandidateRepository
+public class CandidateRepository : ICandidateRepository
 {
+    private readonly ICandidateAccountDataContext _dataContext;
+
+    public CandidateRepository(ICandidateAccountDataContext dataContext)
+    {
+        _dataContext = dataContext;
+    }
+
     public async Task Insert(Domain.Candidate.CandidateEntity candidate)
     {
-        await dataContext.CandidateEntities.AddAsync(candidate);
+        await _dataContext.CandidateEntities.AddAsync(candidate);
 
-        await dataContext.SaveChangesAsync();
+        await _dataContext.SaveChangesAsync();
     }
 
     public async Task<Domain.Candidate.CandidateEntity> GetCandidateByEmail(string email)
     {
-        var result = await dataContext
+        var result = await _dataContext
             .CandidateEntities
             .FirstOrDefaultAsync(c => c.Email.Equals(email));
 
@@ -27,13 +34,13 @@ public class CandidateRepository(ICandidateAccountDataContext dataContext) : ICa
 
     public async Task UpdateCandidateByEmail(Domain.Candidate.CandidateEntity candidate)
     {
-        var existingCandidate = await dataContext.CandidateEntities.FirstOrDefaultAsync(c => c.Email.Equals(candidate.Email));
+        var existingCandidate = await _dataContext.CandidateEntities.FirstOrDefaultAsync(c => c.Email.Equals(candidate.Email));
 
         if (existingCandidate != null)
         {
             candidate.Id = existingCandidate.Id;
-            dataContext.CandidateEntities.Update(candidate);
-            await dataContext.SaveChangesAsync();
+            _dataContext.CandidateEntities.Update(candidate);
+            await _dataContext.SaveChangesAsync();
         }
     }
 }

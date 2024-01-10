@@ -25,8 +25,8 @@ public static class DatabaseExtensions
             
         services.AddSingleton(new EnvironmentConfiguration(environmentName));
 
-        services.AddTransient<ICandidateAccountDataContext, CandidateAccountDataContext>(provider => provider.GetService<CandidateAccountDataContext>()!);
-        services.AddTransient(provider => new Lazy<CandidateAccountDataContext>(provider.GetService<CandidateAccountDataContext>()!));
+        services.AddScoped<ICandidateAccountDataContext, CandidateAccountDataContext>(provider => provider.GetService<CandidateAccountDataContext>()!);
+        services.AddScoped(provider => new Lazy<CandidateAccountDataContext>(provider.GetService<CandidateAccountDataContext>()!));
         services.AddSingleton(new ChainedTokenCredential(
             new ManagedIdentityCredential(),
             new AzureCliCredential(),
