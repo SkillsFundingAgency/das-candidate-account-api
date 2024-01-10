@@ -14,6 +14,7 @@ public class WhenAddingServicesToTheContainer
 {
     [TestCase(typeof(ICandidateRepository))]
     [TestCase(typeof(IApplicationTemplateRepository))]
+    [TestCase(typeof(IApplicationRepository))]
     public void Then_The_Dependencies_Are_Correctly_Resolved(Type toResolve)
     {
         var serviceCollection = new ServiceCollection();

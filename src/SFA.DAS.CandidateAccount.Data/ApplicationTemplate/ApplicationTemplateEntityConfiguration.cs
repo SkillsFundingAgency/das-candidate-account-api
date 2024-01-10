@@ -8,7 +8,7 @@ public class ApplicationTemplateEntityConfiguration : IEntityTypeConfiguration<A
 {
     public void Configure(EntityTypeBuilder<ApplicationTemplateEntity> builder)
     {
-        builder.ToTable("ApprenticeTemplate");
+        builder.ToTable("ApplicationTemplate");
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Id).HasColumnName("Id").HasColumnType("uniqueidentifier").IsRequired();

@@ -5,24 +5,24 @@ using SFA.DAS.CandidateAccount.Data.UnitTests.DatabaseMock;
 using SFA.DAS.CandidateAccount.Domain.Application;
 using SFA.DAS.Testing.AutoFixture;
 
-namespace SFA.DAS.CandidateAccount.Data.UnitTests.Repository.Application;
+namespace SFA.DAS.CandidateAccount.Data.UnitTests.Repository.ApplicationTemplate;
 
-public class WhenInsertingApplication
+public class WhenInsertingApplicationTemplate
 {
     [Test, RecursiveMoqAutoData]
     public async Task ThenTheApplicationIsInserted(
-        ApplicationEntity applicationEntity,
+        ApplicationTemplateEntity applicationTemplateEntity,
         [Frozen]Mock<ICandidateAccountDataContext> context,
-        ApplicationRepository repository)
+        ApplicationTemplateRepository repository)
     {
         //Arrange
-        context.Setup(x => x.ApplicationEntities).ReturnsDbSet(new List<ApplicationEntity>());
+        context.Setup(x => x.ApplicationTemplateEntities).ReturnsDbSet(new List<ApplicationTemplateEntity>());
             
         //Act
-        await repository.Insert(applicationEntity);
+        await repository.Insert(applicationTemplateEntity);
 
         //Assert
-        context.Verify(x => x.ApplicationEntities.AddAsync(applicationEntity, CancellationToken.None), Times.Once);
+        context.Verify(x => x.ApplicationTemplateEntities.AddAsync(applicationTemplateEntity, CancellationToken.None), Times.Once);
         context.Verify(x => x.SaveChangesAsync(CancellationToken.None), Times.Once);
     }
 }
