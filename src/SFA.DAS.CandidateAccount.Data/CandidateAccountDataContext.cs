@@ -15,8 +15,6 @@ public interface ICandidateAccountDataContext
 {
     DbSet<CandidateEntity> CandidateEntities { get; set; }
     DbSet<ApplicationTemplateEntity> ApplicationTemplateEntities { get; set; }
-    DbSet<ApplicationEntity> ApplicationEntities { get; set; }
-
     Task<int> SaveChangesAsync(CancellationToken cancellationToken  = default (CancellationToken));
 }
 public class CandidateAccountDataContext : DbContext, ICandidateAccountDataContext
@@ -26,8 +24,7 @@ public class CandidateAccountDataContext : DbContext, ICandidateAccountDataConte
     private readonly EnvironmentConfiguration _environmentConfiguration;
     public DbSet<CandidateEntity> CandidateEntities { get; set; }
     public DbSet<ApplicationTemplateEntity> ApplicationTemplateEntities { get; set; }
-    public DbSet<ApplicationEntity> ApplicationEntities { get; set; }
-
+   
     private readonly CandidateAccountConfiguration? _configuration;
 
     public CandidateAccountDataContext()
@@ -73,7 +70,6 @@ public class CandidateAccountDataContext : DbContext, ICandidateAccountDataConte
     {
         modelBuilder.ApplyConfiguration(new CandidateEntityConfiguration());
         modelBuilder.ApplyConfiguration(new ApplicationTemplateEntityConfiguration());
-        modelBuilder.ApplyConfiguration(new ApplicationEntityConfiguration());
         
         base.OnModelCreating(modelBuilder);
     }

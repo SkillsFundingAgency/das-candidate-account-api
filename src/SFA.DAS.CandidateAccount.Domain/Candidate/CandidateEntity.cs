@@ -1,3 +1,5 @@
+using SFA.DAS.CandidateAccount.Domain.Application;
+
 namespace SFA.DAS.CandidateAccount.Domain.Candidate;
 
 public record CandidateEntity
@@ -13,4 +15,6 @@ public record CandidateEntity
     public DateTime? UpdatedOn { get; set; }
     public DateTime? TermsOfUseAcceptedOn { get; set; }
     public required string GovUkIdentifier { get; set; }
+    
+    public virtual ICollection<ApplicationTemplateEntity> Applications { get; set; } = null!;
 }
