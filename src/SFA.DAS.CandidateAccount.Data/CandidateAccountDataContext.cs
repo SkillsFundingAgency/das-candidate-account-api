@@ -14,7 +14,7 @@ namespace SFA.DAS.CandidateAccount.Data;
 public interface ICandidateAccountDataContext
 {
     DbSet<CandidateEntity> CandidateEntities { get; set; }
-    DbSet<ApplicationTemplateEntity> ApplicationTemplateEntities { get; set; }
+    DbSet<ApplicationEntity> ApplicationEntities { get; set; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken  = default (CancellationToken));
 }
 public class CandidateAccountDataContext : DbContext, ICandidateAccountDataContext
@@ -23,7 +23,7 @@ public class CandidateAccountDataContext : DbContext, ICandidateAccountDataConte
     private readonly ChainedTokenCredential _azureServiceTokenProvider;
     private readonly EnvironmentConfiguration _environmentConfiguration;
     public DbSet<CandidateEntity> CandidateEntities { get; set; }
-    public DbSet<ApplicationTemplateEntity> ApplicationTemplateEntities { get; set; }
+    public DbSet<ApplicationEntity> ApplicationEntities { get; set; }
    
     private readonly CandidateAccountConfiguration? _configuration;
 
@@ -69,7 +69,7 @@ public class CandidateAccountDataContext : DbContext, ICandidateAccountDataConte
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new CandidateEntityConfiguration());
-        modelBuilder.ApplyConfiguration(new ApplicationTemplateEntityConfiguration());
+        modelBuilder.ApplyConfiguration(new ApplicationEntityConfiguration());
         
         base.OnModelCreating(modelBuilder);
     }

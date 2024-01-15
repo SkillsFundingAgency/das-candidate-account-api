@@ -16,7 +16,7 @@ public class WorkExperienceEntityConfiguration : IEntityTypeConfiguration<WorkEx
         builder.Property(x => x.JobTitle).HasColumnName("JobTitle").HasColumnType("varchar").HasMaxLength(150).IsRequired();
         builder.Property(x => x.FromYear).HasColumnName("FromYear").HasColumnType("smallint").IsRequired();
         builder.Property(x => x.ToYear).HasColumnName("ToYear").HasColumnType("smallint").IsRequired();
-        builder.Property(x => x.ApplicationTemplateId).HasColumnName("ApplicationTemplateId").HasColumnType("uniqueidentifier").HasMaxLength(50).IsRequired();
+        builder.Property(x => x.ApplicationId).HasColumnName("ApplicationId").HasColumnType("uniqueidentifier").HasMaxLength(50).IsRequired();
         builder.Property(x => x.Description).HasColumnName("Description").HasColumnType("varchar").IsRequired();
     }
 }

@@ -4,8 +4,8 @@ CREATE TABLE dbo.[WorkExperience] (
     [JobTitle]  			nvarchar(150)	NOT NULL,
     [FromYear]  			smallint      	NOT NULL,
     [ToYear]    			smallint    	NOT NULL,
-    [ApplicationTemplateId] uniqueidentifier     NOT NULL,
+    [ApplicationId]         uniqueidentifier     NOT NULL,
     [Description]  			nvarchar(max)   NOT NULL
     CONSTRAINT [PK_WorkExperience] PRIMARY KEY (Id),
-    CONSTRAINT [FK_WorkExperience_ApplicationTemplate] FOREIGN KEY (ApplicationTemplateId) REFERENCES [ApplicationTemplate](Id)
+    CONSTRAINT [FK_WorkExperience_Application] FOREIGN KEY (ApplicationId) REFERENCES [Application](Id)
     )

@@ -7,7 +7,7 @@
         public string JobTitle { get; set; }
         public int FromYear { get; set; }
         public int ToYear { get; set; }
-        public Guid ApplicationTemplateId { get; set; }
+        public Guid ApplicationId { get; set; }
         public string Description { get; set; }
     }
 }

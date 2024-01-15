@@ -1,16 +1,15 @@
 using System.ComponentModel.DataAnnotations;
 using MediatR;
 using SFA.DAS.CandidateAccount.Data.Application;
-using SFA.DAS.CandidateAccount.Data.ApplicationTemplate;
 using SFA.DAS.CandidateAccount.Data.Candidate;
 using SFA.DAS.CandidateAccount.Domain.Application;
 using ValidationResult = SFA.DAS.CandidateAccount.Domain.RequestHandlers.ValidationResult;
 
-namespace SFA.DAS.CandidateAccount.Application.ApplicationTemplate.Commands.CreateApplication;
+namespace SFA.DAS.CandidateAccount.Application.Application.Commands.CreateApplication;
 
 public class CreateApplicationRequestHandler(
     ICandidateRepository candidateRepository,
-    IApplicationTemplateRepository applicationTemplateRepository)
+    IApplicationRepository applicationRepository)
     : IRequestHandler<CreateApplicationRequest, CreateApplicationResponse>
 {
     public async Task<CreateApplicationResponse> Handle(CreateApplicationRequest request, CancellationToken cancellationToken)
@@ -27,7 +26,7 @@ public class CreateApplicationRequestHandler(
         {
             throw new ValidationException(validationResult.DataAnnotationResult,null, null);
         }
-        var applicationTemplate = await applicationTemplateRepository.Upsert(new ApplicationTemplateEntity
+        var application = await applicationRepository.Upsert(new ApplicationEntity
         {
             VacancyReference = request.VacancyReference,
             CandidateId = candidate.Id,
@@ -36,8 +35,8 @@ public class CreateApplicationRequestHandler(
 
         return new CreateApplicationResponse
         {
-            ApplicationTemplate = applicationTemplate.Item1,
-            IsCreated = applicationTemplate.Item2
+            Application = application.Item1,
+            IsCreated = application.Item2
         };
     }
 }

@@ -5,9 +5,8 @@ using Microsoft.Extensions.Configuration.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using SFA.DAS.CandidateAccount.Api.AppStart;
-using SFA.DAS.CandidateAccount.Application.ApplicationTemplate.Commands.CreateApplication;
+using SFA.DAS.CandidateAccount.Application.Application.Commands.CreateApplication;
 using SFA.DAS.CandidateAccount.Data.Application;
-using SFA.DAS.CandidateAccount.Data.ApplicationTemplate;
 using SFA.DAS.CandidateAccount.Data.Candidate;
 using SFA.DAS.CandidateAccount.Domain.Configuration;
 
@@ -16,7 +15,7 @@ namespace SFA.DAS.CandidateAccount.Api.UnitTests.AppStart;
 public class WhenAddingServicesToTheContainer
 {
     [TestCase(typeof(ICandidateRepository))]
-    [TestCase(typeof(IApplicationTemplateRepository))]
+    [TestCase(typeof(IApplicationRepository))]
     [TestCase(typeof(IRequestHandler<CreateApplicationRequest, CreateApplicationResponse>))]
     public void Then_The_Dependencies_Are_Correctly_Resolved(Type toResolve)
     {

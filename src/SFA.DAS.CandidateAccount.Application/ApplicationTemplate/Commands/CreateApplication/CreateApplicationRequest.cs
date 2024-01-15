@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace SFA.DAS.CandidateAccount.Application.ApplicationTemplate.Commands.CreateApplication;
+namespace SFA.DAS.CandidateAccount.Application.Application.Commands.CreateApplication;
 
 public class CreateApplicationRequest : IRequest<CreateApplicationResponse>
 {

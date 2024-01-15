@@ -13,6 +13,6 @@ namespace SFA.DAS.CandidateAccount.Domain.Candidate
         public string Improvements { get; set; }
         public string HobbiesAndInterests { get; set; }
         public string Support { get; set; }
-        public Guid ApplicationTemplateId { get; set; }
+        public Guid ApplicationId { get; set; }
     }
 }

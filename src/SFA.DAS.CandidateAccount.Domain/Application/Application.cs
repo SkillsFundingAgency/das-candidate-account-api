@@ -1,6 +1,6 @@
 namespace SFA.DAS.CandidateAccount.Domain.Application;
 
-public class ApplicationTemplate
+public class Application
 {
     public Guid Id { get; set; }
     public Guid CandidateId { get; set; }
@@ -8,9 +8,9 @@ public class ApplicationTemplate
     public required string VacancyReference { get; set; }
     public short Status { get; set; }
 
-    public static implicit operator ApplicationTemplate(ApplicationTemplateEntity source)
+    public static implicit operator Application(ApplicationEntity source)
     {
-        return new ApplicationTemplate
+        return new Application
         {
             Id = source.Id,
             CandidateId = source.CandidateId,

@@ -16,6 +16,6 @@ public class AboutYouEntityConfiguration : IEntityTypeConfiguration<AboutYouEnti
         builder.Property(x => x.Improvements).HasColumnName("Improvements").HasColumnType("varchar").IsRequired(); 
         builder.Property(x => x.HobbiesAndInterests).HasColumnName("HobbiesAndInterests").HasColumnType("varchar").IsRequired(); 
         builder.Property(x => x.Support).HasColumnName("Support").HasColumnType("varchar").IsRequired();
-        builder.Property(x => x.ApplicationTemplateId).HasColumnName("ApplicationTemplateId").HasColumnType("uniqueidentifier").IsRequired();
+        builder.Property(x => x.ApplicationId).HasColumnName("ApplicationId").HasColumnType("uniqueidentifier").IsRequired();
     }
 }

@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.CandidateAccount.Domain.Application
 {
-    public class ApplicationTemplateEntity
+    public class ApplicationEntity
     {
         public Guid Id { get; set; }
         public Guid CandidateId { get; set; }
@@ -13,5 +13,10 @@ namespace SFA.DAS.CandidateAccount.Domain.Application
         public DateTime? UpdatedDate { get; set; }
         
         public virtual CandidateEntity CandidateEntity { get; set; } = null!;
+        public bool HasCompletedEducationHistory { get; set; }
+        public bool HasCompletedWorkHistory { get; set; }
+        public bool HasCompletedApplicationQuestions { get; set; }
+        public bool HasCompletedInterviewAdjustments { get; set; }
+        public bool HasCompletedDisabilityConfidence { get; set; }
     }
 }

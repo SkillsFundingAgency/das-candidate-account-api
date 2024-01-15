@@ -15,6 +15,6 @@ public class EducationEntityConfiguration : IEntityTypeConfiguration<EducationEn
         builder.Property(x => x.Institution).HasColumnName("Institution").HasColumnType("varchar").HasMaxLength(150).IsRequired();
         builder.Property(x => x.FromYear).HasColumnName("FromYear").HasColumnType("smallint").IsRequired();
         builder.Property(x => x.ToYear).HasColumnName("ToYear").HasColumnType("smallint").IsRequired();
-        builder.Property(x => x.ApplicationTemplateId).HasColumnName("ApplicationTemplateId").HasColumnType("uniqueidentifier").IsRequired();
+        builder.Property(x => x.ApplicationId).HasColumnName("ApplicationId").HasColumnType("uniqueidentifier").IsRequired();
     }
 }

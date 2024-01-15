@@ -15,7 +15,7 @@ public class TrainingCourseEntityConfiguration : IEntityTypeConfiguration<Traini
         builder.Property(x => x.Provider).HasColumnName("Provider").HasColumnType("varchar").HasMaxLength(150).IsRequired();
         builder.Property(x => x.FromYear).HasColumnName("FromYear").HasColumnType("smallint").IsRequired();
         builder.Property(x => x.ToYear).HasColumnName("ToYear").HasColumnType("smallint").IsRequired();
-        builder.Property(x => x.ApplicationTemplateId).HasColumnName("ApplicationTemplateId").HasColumnType("uniqueidentifier").IsRequired();
+        builder.Property(x => x.ApplicationId).HasColumnName("ApplicationId").HasColumnType("uniqueidentifier").IsRequired();
         builder.Property(x => x.Title).HasColumnName("Title").HasColumnType("varchar").IsRequired();
     }
 }

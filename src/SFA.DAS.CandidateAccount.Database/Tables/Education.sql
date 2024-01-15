@@ -3,7 +3,7 @@ CREATE TABLE dbo.[Education] (
     [Institution]  			nvarchar(150)	    NOT NULL,
     [FromYear]  			smallint      	    NOT NULL,
     [ToYear]    			smallint    	    NOT NULL,
-    [ApplicationTemplateId] uniqueidentifier    NOT NULL,
+    [ApplicationId]         uniqueidentifier    NOT NULL,
     CONSTRAINT [PK_Education] PRIMARY KEY (Id),
-    CONSTRAINT [FK_Education_ApplicationTemplate] FOREIGN KEY (ApplicationTemplateId) REFERENCES [ApplicationTemplate](Id)
+    CONSTRAINT [FK_Education_Application] FOREIGN KEY (ApplicationId) REFERENCES [Application](Id)
     )
