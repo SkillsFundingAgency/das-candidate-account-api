@@ -9,7 +9,7 @@ namespace SFA.DAS.CandidateAccount.Data.UnitTests.Repository.Candidate;
 
 public class WhenUpdatingByEmail
 {
-    [Test, MoqAutoData]
+    [Test, RecursiveMoqAutoData]
     public async Task AndEmailExistsThenCandidateIsUpdated(
         CandidateEntity candidate,
         [Frozen]Mock<ICandidateAccountDataContext> context,
@@ -32,7 +32,7 @@ public class WhenUpdatingByEmail
         context.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
     }
 
-    [Test, MoqAutoData]
+    [Test, RecursiveMoqAutoData]
     public async Task AndEmailDoesNotExistThenNoUpdateIsMade(
         CandidateEntity candidate,
         [Frozen]Mock<ICandidateAccountDataContext> context,

@@ -4,7 +4,7 @@ namespace SFA.DAS.CandidateAccount.Data.Candidate;
 public interface ICandidateRepository
 {
     Task Insert(Domain.Candidate.CandidateEntity candidate);
-    Task<Domain.Candidate.CandidateEntity> GetCandidateByEmail(string email);
+    Task<Domain.Candidate.CandidateEntity?> GetCandidateByEmail(string email);
     Task UpdateCandidateByEmail(Domain.Candidate.CandidateEntity candidate);
 }
 public class CandidateRepository : ICandidateRepository
@@ -23,7 +23,7 @@ public class CandidateRepository : ICandidateRepository
         await _dataContext.SaveChangesAsync();
     }
 
-    public async Task<Domain.Candidate.CandidateEntity> GetCandidateByEmail(string email)
+    public async Task<Domain.Candidate.CandidateEntity?> GetCandidateByEmail(string email)
     {
         var result = await _dataContext
             .CandidateEntities

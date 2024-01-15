@@ -10,7 +10,7 @@ namespace SFA.DAS.CandidateAccount.Data.UnitTests.Repository.Candidate;
 
 public class WhenGettingByEmail
 {
-    [Test, MoqAutoData]
+    [Test, RecursiveMoqAutoData]
     public async Task AndEmailExistsThenCandidateIsReturned(
         CandidateEntity candidate, 
         [Frozen] Mock<ICandidateAccountDataContext> context,
@@ -26,7 +26,7 @@ public class WhenGettingByEmail
         result.Should().BeEquivalentTo(candidate);
     }
 
-    [Test, MoqAutoData]
+    [Test, RecursiveMoqAutoData]
     public async Task AndEmailDoesNotExistThenReturnsNull(
         CandidateEntity candidate, 
         [Frozen] Mock<ICandidateAccountDataContext> context,

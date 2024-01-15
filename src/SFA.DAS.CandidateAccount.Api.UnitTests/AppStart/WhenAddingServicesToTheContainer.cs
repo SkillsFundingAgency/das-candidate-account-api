@@ -1,10 +1,13 @@
+using MediatR;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using SFA.DAS.CandidateAccount.Api.AppStart;
+using SFA.DAS.CandidateAccount.Application.ApplicationTemplate.Commands.CreateApplication;
 using SFA.DAS.CandidateAccount.Data.Application;
+using SFA.DAS.CandidateAccount.Data.ApplicationTemplate;
 using SFA.DAS.CandidateAccount.Data.Candidate;
 using SFA.DAS.CandidateAccount.Domain.Configuration;
 
@@ -14,7 +17,7 @@ public class WhenAddingServicesToTheContainer
 {
     [TestCase(typeof(ICandidateRepository))]
     [TestCase(typeof(IApplicationTemplateRepository))]
-    [TestCase(typeof(IApplicationRepository))]
+    [TestCase(typeof(IRequestHandler<CreateApplicationRequest, CreateApplicationResponse>))]
     public void Then_The_Dependencies_Are_Correctly_Resolved(Type toResolve)
     {
         var serviceCollection = new ServiceCollection();
@@ -37,7 +40,7 @@ public class WhenAddingServicesToTheContainer
         serviceCollection.AddConfigurationOptions(configuration);
         serviceCollection.AddDistributedMemoryCache();
         serviceCollection.AddServiceRegistration();
-        serviceCollection.AddDatabaseRegistration(candidateAccountConfiguration,"DEV");
+        serviceCollection.AddDatabaseRegistration(candidateAccountConfiguration!,"DEV");
         
     }
     
@@ -47,11 +50,9 @@ public class WhenAddingServicesToTheContainer
         {
             InitialData = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>("FindAnApprenticeshipOuterApi:BaseUrl", "https://test.com/"),
-                new KeyValuePair<string, string>("FindAnApprenticeshipOuterApi:Key", "123edc"),
-                new KeyValuePair<string, string>("EnvironmentName", "test"),
-                new KeyValuePair<string, string>("ConnectionString", "test"),
-            }
+                new("EnvironmentName", "test"),
+                new("ConnectionString", "test"),
+            }!
         };
 
         var provider = new MemoryConfigurationProvider(configSource);

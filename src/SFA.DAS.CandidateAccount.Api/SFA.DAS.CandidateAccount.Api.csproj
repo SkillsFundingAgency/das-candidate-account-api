@@ -31,6 +31,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\SFA.DAS.CandidateAccount.Application\SFA.DAS.CandidateAccount.Application.csproj" />
       <ProjectReference Include="..\SFA.DAS.CandidateAccount.Data\SFA.DAS.CandidateAccount.Data.csproj" />
       <ProjectReference Include="..\SFA.DAS.CandidateAccount.Domain\SFA.DAS.CandidateAccount.Domain.csproj" />
     </ItemGroup>
