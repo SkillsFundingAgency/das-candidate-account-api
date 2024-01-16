@@ -27,14 +27,14 @@ public class CandidateRepository : ICandidateRepository
     {
         var result = await _dataContext
             .CandidateEntities
-            .FirstOrDefaultAsync(c => c.Email.Equals(email));
+            .FirstOrDefaultAsync(c => c.Email == email);
 
         return result;
     }
 
     public async Task UpdateCandidateByEmail(Domain.Candidate.CandidateEntity candidate)
     {
-        var existingCandidate = await _dataContext.CandidateEntities.FirstOrDefaultAsync(c => c.Email.Equals(candidate.Email));
+        var existingCandidate = await _dataContext.CandidateEntities.FirstOrDefaultAsync(c => c.Email== candidate.Email);
 
         if (existingCandidate != null)
         {

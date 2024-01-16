@@ -17,6 +17,7 @@ builder.Services.AddOptions();
 builder.Services.Configure<CandidateAccountConfiguration>(rootConfiguration.GetSection(nameof(CandidateAccountConfiguration)));
 builder.Services.AddSingleton(cfg => cfg.GetService<IOptions<CandidateAccountConfiguration>>()!.Value);
 
+builder.Services.AddServiceRegistration();
 
 var candidateAccountConfiguration = rootConfiguration
     .GetSection(nameof(CandidateAccountConfiguration))

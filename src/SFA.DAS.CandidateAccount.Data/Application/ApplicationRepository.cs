@@ -13,8 +13,8 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
     public async Task<Tuple<ApplicationEntity,bool>> Upsert(ApplicationEntity applicationEntity)
     {
         var application = await dataContext.ApplicationEntities.SingleOrDefaultAsync(c =>
-            c.VacancyReference.Equals(applicationEntity.VacancyReference) &&
-            c.CandidateId.Equals(applicationEntity.CandidateId));
+            c.VacancyReference == applicationEntity.VacancyReference &&
+            c.CandidateId == applicationEntity.CandidateId);
 
         if (application == null)
         {

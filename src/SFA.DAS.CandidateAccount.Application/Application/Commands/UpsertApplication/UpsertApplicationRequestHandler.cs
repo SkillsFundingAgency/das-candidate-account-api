@@ -5,14 +5,14 @@ using SFA.DAS.CandidateAccount.Data.Candidate;
 using SFA.DAS.CandidateAccount.Domain.Application;
 using ValidationResult = SFA.DAS.CandidateAccount.Domain.RequestHandlers.ValidationResult;
 
-namespace SFA.DAS.CandidateAccount.Application.Application.Commands.CreateApplication;
+namespace SFA.DAS.CandidateAccount.Application.Application.Commands.UpsertApplication;
 
-public class CreateApplicationRequestHandler(
+public class UpsertApplicationRequestHandler(
     ICandidateRepository candidateRepository,
     IApplicationRepository applicationRepository)
-    : IRequestHandler<CreateApplicationRequest, CreateApplicationResponse>
+    : IRequestHandler<UpsertApplicationRequest, UpsertApplicationResponse>
 {
-    public async Task<CreateApplicationResponse> Handle(CreateApplicationRequest request, CancellationToken cancellationToken)
+    public async Task<UpsertApplicationResponse> Handle(UpsertApplicationRequest request, CancellationToken cancellationToken)
     {
         var candidate = await candidateRepository.GetCandidateByEmail(request.Email);
 
@@ -20,20 +20,23 @@ public class CreateApplicationRequestHandler(
         if (candidate == null)
         {
             validationResult.AddError(nameof(candidate), "CandidateAccount does not exist");
-        }
-        
-        if (!validationResult.IsValid())
-        {
             throw new ValidationException(validationResult.DataAnnotationResult,null, null);
         }
+        
         var application = await applicationRepository.Upsert(new ApplicationEntity
         {
             VacancyReference = request.VacancyReference,
             CandidateId = candidate.Id,
-            Status = request.Status
+            Status = (short)request.Status,
+            IsDisabilityConfidenceComplete = (short)request.IsDisabilityConfidenceComplete,
+            IsApplicationQuestionsComplete = (short)request.IsApplicationQuestionsComplete,
+            IsEducationHistoryComplete = (short)request.IsEducationHistoryComplete,
+            IsInterviewAdjustmentsComplete = (short)request.IsInterviewAdjustmentsComplete,
+            IsWorkHistoryComplete = (short)request.IsWorkHistoryComplete,
+            DisabilityStatus = request.DisabilityStatus
         });
 
-        return new CreateApplicationResponse
+        return new UpsertApplicationResponse
         {
             Application = application.Item1,
             IsCreated = application.Item2
