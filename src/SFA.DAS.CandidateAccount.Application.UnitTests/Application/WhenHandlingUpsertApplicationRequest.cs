@@ -11,7 +11,7 @@ using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.CandidateAccount.Application.UnitTests.Application;
 
-public class WhenHandlingCreateApplicationRequest
+public class WhenHandlingUpsertApplicationRequest
 {
     [Test, RecursiveMoqAutoData]
     public async Task Then_The_Request_Is_Handled_Candidate_Retrieved_And_Application_Created(
