@@ -1,47 +1,62 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SFA.DAS.CandidateAccount.Domain.Candidate;
 
 namespace SFA.DAS.CandidateAccount.Data.Candidate;
 public interface ICandidateRepository
 {
-    Task Insert(Domain.Candidate.CandidateEntity candidate);
-    Task<Domain.Candidate.CandidateEntity?> GetCandidateByEmail(string email);
-    Task UpdateCandidateByEmail(Domain.Candidate.CandidateEntity candidate);
+    Task<CandidateEntity> Insert(CandidateEntity candidate);
+    Task<CandidateEntity?> GetCandidateByEmail(string email);
+    Task UpdateCandidateByEmail(CandidateEntity candidate);
 }
-public class CandidateRepository : ICandidateRepository
+public class CandidateRepository(ICandidateAccountDataContext dataContext) : ICandidateRepository
 {
-    private readonly ICandidateAccountDataContext _dataContext;
-
-    public CandidateRepository(ICandidateAccountDataContext dataContext)
+    public async Task<CandidateEntity> Insert(CandidateEntity candidate)
     {
-        _dataContext = dataContext;
+        await dataContext.CandidateEntities.AddAsync(candidate);
+
+        await dataContext.SaveChangesAsync();
+        return candidate;
     }
 
-    public async Task Insert(Domain.Candidate.CandidateEntity candidate)
+    public async Task<CandidateEntity?> GetCandidateByEmail(string email)
     {
-        await _dataContext.CandidateEntities.AddAsync(candidate);
-
-        await _dataContext.SaveChangesAsync();
-    }
-
-    public async Task<Domain.Candidate.CandidateEntity?> GetCandidateByEmail(string email)
-    {
-        var result = await _dataContext
+        var result = await dataContext
             .CandidateEntities
             .FirstOrDefaultAsync(c => c.Email == email);
 
         return result;
     }
 
-    public async Task UpdateCandidateByEmail(Domain.Candidate.CandidateEntity candidate)
+    public async Task UpdateCandidateByEmail(CandidateEntity candidate)
     {
-        var existingCandidate = await _dataContext.CandidateEntities.FirstOrDefaultAsync(c => c.Email== candidate.Email);
+        var existingCandidate = await dataContext.CandidateEntities.FirstOrDefaultAsync(c => c.Email== candidate.Email);
 
         if (existingCandidate != null)
         {
             candidate.Id = existingCandidate.Id;
-            _dataContext.CandidateEntities.Update(candidate);
-            await _dataContext.SaveChangesAsync();
+            dataContext.CandidateEntities.Update(candidate);
+            await dataContext.SaveChangesAsync();
         }
     }
+    // public async Task<Tuple<CandidateEntity,bool>> Upsert(CandidateEntity candidate)
+    // {
+    //     var candidateEntity = await dataContext.CandidateEntities.SingleOrDefaultAsync(c =>
+    //         c.Email== candidate.Email);
+    //
+    //     if (candidateEntity == null)
+    //     {
+    //         await dataContext.CandidateEntities.AddAsync(candidate);
+    //         await dataContext.SaveChangesAsync();
+    //         return new Tuple<CandidateEntity, bool>(candidate, true);    
+    //     }
+    //     
+    //     candidateEntity.FirstName = candidate.FirstName;
+    //     candidateEntity.LastName = candidate.LastName;
+    //     candidateEntity.GovUkIdentifier = candidate.GovUkIdentifier;
+    //     
+    //     await dataContext.SaveChangesAsync();
+    //     
+    //     return new Tuple<CandidateEntity, bool>(candidateEntity, false);
+    // }
 }
 
