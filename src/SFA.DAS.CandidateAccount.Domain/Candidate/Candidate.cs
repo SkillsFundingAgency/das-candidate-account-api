@@ -17,7 +17,7 @@ public class Candidate
             CreatedOn = source.CreatedOn,
             UpdatedOn = source.UpdatedOn,
             TermsOfUseAcceptedOn = source.TermsOfUseAcceptedOn,
-            Applications = source.Applications.Select(c=>(Application.Application)c)
+            Applications = source.Applications?.Select(c=>(Application.Application)c)
         };
     }
 

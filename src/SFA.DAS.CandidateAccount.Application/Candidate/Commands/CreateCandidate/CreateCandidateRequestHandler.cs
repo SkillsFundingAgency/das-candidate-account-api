@@ -12,11 +12,13 @@ public class CreateCandidateRequestHandler(ICandidateRepository candidateReposit
     {
         var candidate = await candidateRepository.Insert(new CandidateEntity
         {
+            Id = request.Id,
             Email = request.Email,
             FirstName = request.FirstName,
             LastName = request.LastName,
             GovUkIdentifier = request.GovUkIdentifier,
-            CreatedOn = DateTime.UtcNow
+            CreatedOn = DateTime.UtcNow,
+            DateOfBirth = request.DateOfBirth
         });
 
         return new CreateCandidateResponse

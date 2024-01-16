@@ -18,7 +18,8 @@ public class WhenHandlingCreateCandidateRequest
         CreateCandidateRequestHandler handler)
     {
         candidateRepository.Setup(x => x.Insert(It.Is<CandidateEntity>(c => 
-                c.Email.Equals(request.Email)
+                c.Id.Equals(request.Id)
+                && c.Email.Equals(request.Email)
                 && c.FirstName.Equals(request.FirstName)
                 && c.LastName.Equals(request.LastName)
                 && c.GovUkIdentifier.Equals(request.GovUkIdentifier)

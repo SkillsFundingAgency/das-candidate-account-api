@@ -16,5 +16,5 @@ public record CandidateEntity
     public DateTime? TermsOfUseAcceptedOn { get; set; }
     public required string GovUkIdentifier { get; set; }
     
-    public virtual ICollection<ApplicationEntity> Applications { get; set; } = null!;
+    public virtual ICollection<ApplicationEntity>? Applications { get; set; } = null!;
 }
