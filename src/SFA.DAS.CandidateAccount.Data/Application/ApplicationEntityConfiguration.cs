@@ -18,13 +18,26 @@ public class ApplicationEntityConfiguration : IEntityTypeConfiguration<Applicati
         builder.Property(x => x.Status).HasColumnName("Status").HasColumnType("tinyint").IsRequired().HasDefaultValue(0);
         builder.Property(x => x.CreatedDate).HasColumnName("CreatedDate").HasColumnType("datetime").IsRequired().HasDefaultValue();
         builder.Property(x => x.UpdatedDate).HasColumnName("UpdatedDate").HasColumnType("datetime").IsRequired(false);
-        builder.Property(x => x.IsEducationHistoryComplete).HasColumnName("IsEducationHistoryComplete").HasColumnType("tinyint").IsRequired().HasDefaultValue(0);
-        builder.Property(x => x.IsWorkHistoryComplete).HasColumnName("IsWorkHistoryComplete").HasColumnType("tinyint").IsRequired().HasDefaultValue(0);
-        builder.Property(x => x.IsApplicationQuestionsComplete).HasColumnName("IsApplicationQuestionsComplete").HasColumnType("tinyint").IsRequired().HasDefaultValue(0);
-        builder.Property(x => x.IsInterviewAdjustmentsComplete).HasColumnName("IsInterviewAdjustmentsComplete").HasColumnType("tinyint").IsRequired().HasDefaultValue(0);
-        builder.Property(x => x.IsDisabilityConfidenceComplete).HasColumnName("IsDisabilityConfidenceComplete").HasColumnType("tinyint").IsRequired().HasDefaultValue(0);
+        builder.Property(x => x.QualificationsStatus).HasColumnName("QualificationsStatus").HasColumnType("tinyint").IsRequired().HasDefaultValue(0);
+        builder.Property(x => x.TrainingCoursesStatus).HasColumnName("TrainingCoursesStatus").HasColumnType("tinyint").IsRequired().HasDefaultValue(0);
+        builder.Property(x => x.JobsStatus).HasColumnName("JobsStatus").HasColumnType("tinyint").IsRequired().HasDefaultValue(0);
+        builder.Property(x => x.WorkExperienceStatus).HasColumnName("WorkExperienceStatus").HasColumnType("tinyint").IsRequired().HasDefaultValue(0);
+        builder.Property(x => x.SkillsAndStrengthStatus).HasColumnName("SkillsAndStrengthStatus").HasColumnType("tinyint").IsRequired().HasDefaultValue(0);
+        builder.Property(x => x.InterestsStatus).HasColumnName("InterestsStatus").HasColumnType("tinyint").IsRequired().HasDefaultValue(0);
+        builder.Property(x => x.HowWillYouTravelStatus).HasColumnName("HowWillYouTravelStatus").HasColumnType("tinyint").IsRequired().HasDefaultValue(0);
+        builder.Property(x => x.AdditionalQuestion1Status).HasColumnName("AdditionalQuestion1Status").HasColumnType("tinyint").IsRequired().HasDefaultValue(0);
+        builder.Property(x => x.AdditionalQuestion2Status).HasColumnName("AdditionalQuestion2Status").HasColumnType("tinyint").IsRequired().HasDefaultValue(0);
+        builder.Property(x => x.InterviewAdjustmentsStatus).HasColumnName("InterviewAdjustmentsStatus").HasColumnType("tinyint").IsRequired().HasDefaultValue(0);
+        builder.Property(x => x.DisabilityConfidenceStatus).HasColumnName("DisabilityConfidenceStatus").HasColumnType("tinyint").IsRequired().HasDefaultValue(0);
 
         builder.HasIndex(c =>  new { c.VacancyReference, c.CandidateId});
         builder.HasIndex(c =>  new { c.CandidateId});
+
+        builder
+            .HasOne(c => c.CandidateEntity)
+            .WithMany(c => c.Applications)
+            .HasForeignKey(c => c.CandidateId)
+            .HasPrincipalKey(c => c.Id);
+        
     }
 }

@@ -28,11 +28,11 @@ public class UpsertApplicationRequestHandler(
             VacancyReference = request.VacancyReference,
             CandidateId = candidate.Id,
             Status = (short)request.Status,
-            IsDisabilityConfidenceComplete = (short)request.IsDisabilityConfidenceComplete,
-            IsApplicationQuestionsComplete = (short)request.IsApplicationQuestionsComplete,
-            IsEducationHistoryComplete = (short)request.IsEducationHistoryComplete,
-            IsInterviewAdjustmentsComplete = (short)request.IsInterviewAdjustmentsComplete,
-            IsWorkHistoryComplete = (short)request.IsWorkHistoryComplete,
+            DisabilityConfidenceStatus = (short)request.IsDisabilityConfidenceComplete,
+            JobsStatus = (short)request.IsApplicationQuestionsComplete,
+            QualificationsStatus = (short)request.IsEducationHistoryComplete,
+            WorkExperienceStatus = (short)request.IsInterviewAdjustmentsComplete,
+            TrainingCoursesStatus = (short)request.IsWorkHistoryComplete,
             DisabilityStatus = request.DisabilityStatus
         });
 

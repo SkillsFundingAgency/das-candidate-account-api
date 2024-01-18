@@ -29,11 +29,11 @@ public class WhenHandlingUpsertApplicationRequest
                 && c.CandidateId.Equals(candidateEntity.Id)
                 && c.DisabilityStatus.Equals(request.DisabilityStatus)
                 && c.Status.Equals((short)request.Status)
-                && c.IsApplicationQuestionsComplete.Equals((short)request.IsApplicationQuestionsComplete)
-                && c.IsDisabilityConfidenceComplete.Equals((short)request.IsDisabilityConfidenceComplete)
-                && c.IsEducationHistoryComplete.Equals((short)request.IsEducationHistoryComplete)
-                && c.IsWorkHistoryComplete.Equals((short)request.IsWorkHistoryComplete)
-                && c.IsInterviewAdjustmentsComplete.Equals((short)request.IsInterviewAdjustmentsComplete)
+                && c.JobsStatus.Equals((short)request.IsApplicationQuestionsComplete)
+                && c.DisabilityConfidenceStatus.Equals((short)request.IsDisabilityConfidenceComplete)
+                && c.QualificationsStatus.Equals((short)request.IsEducationHistoryComplete)
+                && c.TrainingCoursesStatus.Equals((short)request.IsWorkHistoryComplete)
+                && c.WorkExperienceStatus.Equals((short)request.IsInterviewAdjustmentsComplete)
                 ))).ReturnsAsync(new Tuple<ApplicationEntity, bool>(applicationEntity, true));
 
         var actual = await handler.Handle(request, CancellationToken.None);
@@ -69,11 +69,11 @@ public class WhenHandlingUpsertApplicationRequest
                 && c.CandidateId.Equals(candidateEntity.Id)
                 && c.DisabilityStatus.Equals(request.DisabilityStatus)
                 && c.Status.Equals((short)request.Status)
-                && c.IsApplicationQuestionsComplete.Equals((short)request.IsApplicationQuestionsComplete)
-                && c.IsDisabilityConfidenceComplete.Equals((short)request.IsDisabilityConfidenceComplete)
-                && c.IsEducationHistoryComplete.Equals((short)request.IsEducationHistoryComplete)
-                && c.IsWorkHistoryComplete.Equals((short)request.IsWorkHistoryComplete)
-                && c.IsInterviewAdjustmentsComplete.Equals((short)request.IsInterviewAdjustmentsComplete)
+                && c.JobsStatus.Equals((short)request.IsApplicationQuestionsComplete)
+                && c.DisabilityConfidenceStatus.Equals((short)request.IsDisabilityConfidenceComplete)
+                && c.QualificationsStatus.Equals((short)request.IsEducationHistoryComplete)
+                && c.TrainingCoursesStatus.Equals((short)request.IsWorkHistoryComplete)
+                && c.WorkExperienceStatus.Equals((short)request.IsInterviewAdjustmentsComplete)
             ))).ReturnsAsync(new Tuple<ApplicationEntity, bool>(applicationEntity, false));
 
         var actual = await handler.Handle(request, CancellationToken.None);

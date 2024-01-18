@@ -13,10 +13,16 @@ namespace SFA.DAS.CandidateAccount.Domain.Application
         public DateTime? UpdatedDate { get; set; }
         
         public virtual CandidateEntity CandidateEntity { get; set; } = null!;
-        public short IsEducationHistoryComplete { get; set; }
-        public short IsWorkHistoryComplete { get; set; }
-        public short IsApplicationQuestionsComplete { get; set; }
-        public short IsInterviewAdjustmentsComplete { get; set; }
-        public short IsDisabilityConfidenceComplete { get; set; }
+        public short QualificationsStatus { get; set; }
+        public short TrainingCoursesStatus { get; set; }
+        public short JobsStatus { get; set; }
+        public short WorkExperienceStatus { get; set; }
+        public short DisabilityConfidenceStatus { get; set; }
+        public short SkillsAndStrengthStatus { get; set; }
+        public short InterestsStatus { get; set; }
+        public short HowWillYouTravelStatus { get; set; }
+        public short AdditionalQuestion1Status { get; set; }
+        public short AdditionalQuestion2Status { get; set; }
+        public short InterviewAdjustmentsStatus { get; set; }
     }
 }
