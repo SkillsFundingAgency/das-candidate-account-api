@@ -20,7 +20,6 @@ namespace SFA.DAS.CandidateAccount.Domain.Application
         public short DisabilityConfidenceStatus { get; set; }
         public short SkillsAndStrengthStatus { get; set; }
         public short InterestsStatus { get; set; }
-        public short HowWillYouTravelStatus { get; set; }
         public short AdditionalQuestion1Status { get; set; }
         public short AdditionalQuestion2Status { get; set; }
         public short InterviewAdjustmentsStatus { get; set; }

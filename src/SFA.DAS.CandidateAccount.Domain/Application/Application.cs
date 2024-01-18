@@ -16,8 +16,6 @@ public class Application
 
     public SectionStatus InterviewAdjustmentsStatus { get; set; }
 
-    public SectionStatus HowWillYouTravelStatus { get; set; }
-
     public SectionStatus AdditionalQuestion2Status { get; set; }
 
     public SectionStatus AdditionalQuestion1Status { get; set; }
@@ -46,7 +44,6 @@ public class Application
             InterestsStatus = ParseValue<SectionStatus>(source.InterestsStatus),
             AdditionalQuestion1Status = ParseValue<SectionStatus>(source.AdditionalQuestion1Status),
             AdditionalQuestion2Status = ParseValue<SectionStatus>(source.AdditionalQuestion2Status),
-            HowWillYouTravelStatus = ParseValue<SectionStatus>(source.HowWillYouTravelStatus),
             InterviewAdjustmentsStatus = ParseValue<SectionStatus>(source.InterviewAdjustmentsStatus),
             SkillsAndStrengthStatus = ParseValue<SectionStatus>(source.SkillsAndStrengthStatus),
             EducationHistorySectionStatus = GetSectionStatus(
@@ -63,7 +60,6 @@ public class Application
             [
                 ParseValue<SectionStatus>(source.SkillsAndStrengthStatus),
                 ParseValue<SectionStatus>(source.InterestsStatus),
-                ParseValue<SectionStatus>(source.HowWillYouTravelStatus),
                 ParseValue<SectionStatus>(source.AdditionalQuestion1Status),
                 ParseValue<SectionStatus>(source.AdditionalQuestion2Status)
             ]),

@@ -18,7 +18,6 @@ public class WhenConvertingFromApplicationEntityToModel
         source.Status = 2;
         source.SkillsAndStrengthStatus = 0;
         source.InterviewAdjustmentsStatus = 0;
-        source.HowWillYouTravelStatus = 0;
         source.AdditionalQuestion2Status = 0;
         source.AdditionalQuestion1Status = 0;
         source.InterestsStatus = 0;
@@ -38,7 +37,6 @@ public class WhenConvertingFromApplicationEntityToModel
         actual.Status.Should().Be(ApplicationStatus.Withdrawn);
         actual.SkillsAndStrengthStatus.Should().Be(SectionStatus.NotStarted);
         actual.InterviewAdjustmentsStatus.Should().Be(SectionStatus.NotStarted);
-        actual.HowWillYouTravelStatus.Should().Be(SectionStatus.NotStarted);
         actual.AdditionalQuestion2Status.Should().Be(SectionStatus.NotStarted);
         actual.AdditionalQuestion1Status.Should().Be(SectionStatus.NotStarted);
         actual.InterestsStatus.Should().Be(SectionStatus.NotStarted);
@@ -65,16 +63,15 @@ public class WhenConvertingFromApplicationEntityToModel
         actual.EducationHistorySectionStatus.Should().Be(expectedStatus);
     }
     
-    [TestCase(SectionStatus.NotStarted, SectionStatus.NotStarted, SectionStatus.NotStarted,SectionStatus.NotStarted,SectionStatus.NotStarted,SectionStatus.NotStarted)]
-    [TestCase(SectionStatus.NotRequired, SectionStatus.Completed, SectionStatus.Completed,SectionStatus.NotRequired,SectionStatus.NotRequired,SectionStatus.Completed)]
-    [TestCase(SectionStatus.Completed, SectionStatus.Completed, SectionStatus.Completed,SectionStatus.Completed,SectionStatus.Completed,SectionStatus.Completed)]
-    public void Then_The_Section_States_Are_Calculated_For_Application_Questions(SectionStatus skillsAndStrengthsStatus, SectionStatus interestsStatus, SectionStatus howWillYouTravelStatus,SectionStatus additionalQuestion1Status, SectionStatus additionalQuestion2Status, SectionStatus expectedStatus)
+    [TestCase(SectionStatus.NotStarted, SectionStatus.NotStarted, SectionStatus.NotStarted,SectionStatus.NotStarted,SectionStatus.NotStarted)]
+    [TestCase(SectionStatus.NotRequired, SectionStatus.Completed, SectionStatus.NotRequired,SectionStatus.NotRequired,SectionStatus.Completed)]
+    [TestCase(SectionStatus.Completed, SectionStatus.Completed, SectionStatus.Completed,SectionStatus.Completed,SectionStatus.Completed)]
+    public void Then_The_Section_States_Are_Calculated_For_Application_Questions(SectionStatus skillsAndStrengthsStatus, SectionStatus interestsStatus, SectionStatus additionalQuestion1Status, SectionStatus additionalQuestion2Status, SectionStatus expectedStatus)
     {
         var source = new ApplicationEntity
         {
             SkillsAndStrengthStatus = (short)skillsAndStrengthsStatus,
             InterestsStatus = (short)interestsStatus,
-            HowWillYouTravelStatus = (short)howWillYouTravelStatus,
             AdditionalQuestion1Status = (short)additionalQuestion1Status,
             AdditionalQuestion2Status = (short)additionalQuestion2Status,
         };

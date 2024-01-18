@@ -60,7 +60,6 @@ public class WhenUpsertingApplication
         updateEntity.WorkExperienceStatus = 2;
         updateEntity.SkillsAndStrengthStatus = 2;
         updateEntity.InterestsStatus = 2;
-        updateEntity.HowWillYouTravelStatus = 2;
         updateEntity.AdditionalQuestion1Status = 2;
         updateEntity.AdditionalQuestion2Status = 2;
         updateEntity.InterviewAdjustmentsStatus = 2;
@@ -74,7 +73,6 @@ public class WhenUpsertingApplication
         applicationEntity.WorkExperienceStatus = 0;
         applicationEntity.SkillsAndStrengthStatus = 0;
         applicationEntity.InterestsStatus = 0;
-        applicationEntity.HowWillYouTravelStatus = 0;
         applicationEntity.AdditionalQuestion1Status = 0;
         applicationEntity.AdditionalQuestion2Status = 0;
         applicationEntity.InterviewAdjustmentsStatus = 0;
@@ -91,7 +89,6 @@ public class WhenUpsertingApplication
         actual.Item1.WorkExperienceStatus.Should().Be(2);
         actual.Item1.SkillsAndStrengthStatus.Should().Be(2);
         actual.Item1.InterestsStatus.Should().Be(2);
-        actual.Item1.HowWillYouTravelStatus.Should().Be(2);
         actual.Item1.AdditionalQuestion1Status.Should().Be(2);
         actual.Item1.AdditionalQuestion2Status.Should().Be(2);
         actual.Item1.InterviewAdjustmentsStatus.Should().Be(2);

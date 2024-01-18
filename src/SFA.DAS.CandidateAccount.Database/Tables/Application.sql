@@ -13,7 +13,6 @@ CREATE TABLE dbo.[Application] (
     [WorkExperienceStatus]              tinyint             NOT NULL default(0),
     [SkillsAndStrengthStatus]           tinyint             NOT NULL default(0),
     [InterestsStatus]                   tinyint             NOT NULL default(0),
-    [HowWillYouTravelStatus]            tinyint             NOT NULL default(0),
     [AdditionalQuestion1Status]         tinyint             NOT NULL default(0),
     [AdditionalQuestion2Status]         tinyint             NOT NULL default(0),
     [InterviewAdjustmentsStatus]        tinyint             NOT NULL default(0),

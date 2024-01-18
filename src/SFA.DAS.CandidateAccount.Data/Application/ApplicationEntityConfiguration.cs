@@ -24,7 +24,6 @@ public class ApplicationEntityConfiguration : IEntityTypeConfiguration<Applicati
         builder.Property(x => x.WorkExperienceStatus).HasColumnName("WorkExperienceStatus").HasColumnType("tinyint").IsRequired().HasDefaultValue(0);
         builder.Property(x => x.SkillsAndStrengthStatus).HasColumnName("SkillsAndStrengthStatus").HasColumnType("tinyint").IsRequired().HasDefaultValue(0);
         builder.Property(x => x.InterestsStatus).HasColumnName("InterestsStatus").HasColumnType("tinyint").IsRequired().HasDefaultValue(0);
-        builder.Property(x => x.HowWillYouTravelStatus).HasColumnName("HowWillYouTravelStatus").HasColumnType("tinyint").IsRequired().HasDefaultValue(0);
         builder.Property(x => x.AdditionalQuestion1Status).HasColumnName("AdditionalQuestion1Status").HasColumnType("tinyint").IsRequired().HasDefaultValue(0);
         builder.Property(x => x.AdditionalQuestion2Status).HasColumnName("AdditionalQuestion2Status").HasColumnType("tinyint").IsRequired().HasDefaultValue(0);
         builder.Property(x => x.InterviewAdjustmentsStatus).HasColumnName("InterviewAdjustmentsStatus").HasColumnType("tinyint").IsRequired().HasDefaultValue(0);
