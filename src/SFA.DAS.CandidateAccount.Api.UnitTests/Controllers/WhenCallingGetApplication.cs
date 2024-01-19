@@ -1,0 +1,103 @@
+using System.ComponentModel.DataAnnotations;
+using System.Net;
+using AutoFixture.NUnit3;
+using FluentAssertions;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using Moq;
+using SFA.DAS.CandidateAccount.Api.Controllers;
+using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplication;
+using SFA.DAS.Testing.AutoFixture;
+
+namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers;
+
+public class WhenCallingGetApplication
+{
+    [Test, MoqAutoData]
+    public async Task Then_The_Command_Is_Sent_To_Mediator_And_Ok_Returned(
+        Guid id,
+        Guid candidateId,
+        GetApplicationQueryResult response,
+        [Frozen] Mock<IMediator> mediator,
+        [Greedy] ApplicationController controller)
+    {
+        //Arrange
+        mediator.Setup(x => x.Send(It.Is<GetApplicationQuery>(
+                c=> 
+                    c.ApplicationId.Equals(id)
+                    && c.CandidateId.Equals(candidateId)
+            ), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(response);
+        
+        //Act
+        var actual = await controller.GetApplication(id, candidateId) as OkObjectResult;
+        
+        //Assert
+        Assert.That(actual, Is.Not.Null);
+        actual.StatusCode.Should().Be((int) HttpStatusCode.OK);
+        actual.Value.Should().BeEquivalentTo(response.Application);
+    }
+    
+    [Test, MoqAutoData]
+    public async Task Then_If_Null_Returned_From_Mediator_Then_NotFound_Is_Returned(
+        Guid id,
+        Guid candidateId,
+        GetApplicationQueryResult response,
+        [Frozen] Mock<IMediator> mediator,
+        [Greedy] ApplicationController controller)
+    {
+        //Arrange
+        mediator.Setup(x => x.Send(It.IsAny<GetApplicationQuery>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new GetApplicationQueryResult
+            {
+                Application = null
+            });
+        
+        //Act
+        var actual = await controller.GetApplication(id, candidateId) as StatusCodeResult;
+        
+        //Assert
+        Assert.That(actual, Is.Not.Null);
+        actual.StatusCode.Should().Be((int) HttpStatusCode.NotFound);
+    }
+    
+    [Test, MoqAutoData]
+    public async Task Then_If_ValidationError_Returned_From_Mediator_Then_BadRequest_Is_Returned(
+        Guid id,
+        Guid candidateId,
+        GetApplicationQueryResult response,
+        [Frozen] Mock<IMediator> mediator,
+        [Greedy] ApplicationController controller)
+    {
+        //Arrange
+        mediator.Setup(x => x.Send(It.IsAny<GetApplicationQuery>(), It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new ValidationException());
+        
+        //Act
+        var actual = await controller.GetApplication(id, candidateId) as BadRequestObjectResult;
+        
+        //Assert
+        Assert.That(actual, Is.Not.Null);
+        actual.StatusCode.Should().Be((int) HttpStatusCode.BadRequest);
+    }
+    
+    [Test, MoqAutoData]
+    public async Task Then_If_Exception_Returned_From_Mediator_Then_InternalServerErrorr_Is_Returned(
+        Guid id,
+        Guid candidateId,
+        GetApplicationQueryResult response,
+        [Frozen] Mock<IMediator> mediator,
+        [Greedy] ApplicationController controller)
+    {
+        //Arrange
+        mediator.Setup(x => x.Send(It.IsAny<GetApplicationQuery>(), It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new Exception());
+        
+        //Act
+        var actual = await controller.GetApplication(id, candidateId) as StatusCodeResult;
+        
+        //Assert
+        Assert.That(actual, Is.Not.Null);
+        actual.StatusCode.Should().Be((int) HttpStatusCode.InternalServerError);
+    }
+}
