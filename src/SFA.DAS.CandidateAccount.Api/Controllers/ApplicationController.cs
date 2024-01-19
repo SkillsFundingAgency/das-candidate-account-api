@@ -52,7 +52,7 @@ public class ApplicationController(IMediator mediator, ILogger<ApplicationContro
     }
     
     [HttpPatch]
-    [Route("/candidate/{candidateId}/[controller]s/{id}")]
+    [Route("Candidates/{candidateId}/[controller]s/{id}")]
     public async Task<IActionResult> PatchApplication([FromRoute]Guid id,[FromRoute]Guid candidateId, [FromBody]JsonPatchDocument<PatchApplication> applicationRequest)
     {
         try

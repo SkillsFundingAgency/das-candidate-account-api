@@ -8,7 +8,7 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers;
 
 [ApiVersion("1.0")]
 [ApiController]
-[Route("api/[controller]/")]
+[Route("api/[controller]s/")]
 public class CandidateController(IMediator mediator, ILogger<ApplicationController> logger) : Controller
 {
     [HttpPost]
