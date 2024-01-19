@@ -6,6 +6,8 @@ namespace SFA.DAS.CandidateAccount.Data.Application;
 public interface IApplicationRepository
 {
     Task<Tuple<ApplicationEntity,bool>> Upsert(ApplicationEntity applicationEntity);
+    Task<ApplicationEntity?> GetById(Guid applicationId);
+    Task<ApplicationEntity> Update(ApplicationEntity application);
 }
 
 public class ApplicationRepository(ICandidateAccountDataContext dataContext) : IApplicationRepository
@@ -39,5 +41,17 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
         await dataContext.SaveChangesAsync();
         
         return new Tuple<ApplicationEntity, bool>(application, false);
+    }
+
+    public async Task<ApplicationEntity?> GetById(Guid applicationId)
+    {
+        return await dataContext.ApplicationEntities.FindAsync(applicationId);
+    }
+
+    public async Task<ApplicationEntity> Update(ApplicationEntity application)
+    {
+        dataContext.ApplicationEntities.Update(application);
+        await dataContext.SaveChangesAsync();
+        return application;
     }
 }
