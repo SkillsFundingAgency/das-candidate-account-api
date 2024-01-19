@@ -28,10 +28,10 @@ public class WhenConvertingFromApplicationEntityToModel
         actual.VacancyReference.Should().Be(source.VacancyReference);
         actual.CandidateId.Should().Be(source.CandidateId);
         actual.DisabilityStatus.Should().Be(source.DisabilityStatus);
-        actual.JobStatus.Should().Be(SectionStatus.NotRequired);
-        actual.QualificationStatus.Should().Be(SectionStatus.Completed);
+        actual.JobsStatus.Should().Be(SectionStatus.NotRequired);
+        actual.QualificationsStatus.Should().Be(SectionStatus.Completed);
         actual.WorkExperienceStatus.Should().Be(SectionStatus.InProgress);
-        actual.TrainingCourseStatus.Should().Be(SectionStatus.NotStarted);
+        actual.TrainingCoursesStatus.Should().Be(SectionStatus.NotStarted);
         actual.DisabilityConfidenceStatus.Should().Be(SectionStatus.InProgress);
         actual.DisabilityConfidenceStatus.Should().Be(SectionStatus.InProgress);
         actual.Status.Should().Be(ApplicationStatus.Withdrawn);
