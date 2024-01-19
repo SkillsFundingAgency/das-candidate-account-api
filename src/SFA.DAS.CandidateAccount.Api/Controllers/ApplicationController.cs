@@ -1,9 +1,12 @@
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 using MediatR;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.CandidateAccount.Api.ApiRequests;
+using SFA.DAS.CandidateAccount.Application.Application.Commands.PatchApplication;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.UpsertApplication;
+using SFA.DAS.CandidateAccount.Domain.Application;
 
 namespace SFA.DAS.CandidateAccount.Api.Controllers;
 
@@ -44,6 +47,32 @@ public class ApplicationController(IMediator mediator, ILogger<ApplicationContro
         catch (Exception e)
         {
             logger.LogError(e, "Upsert Application : An error occurred");
+            return new StatusCodeResult((int) HttpStatusCode.InternalServerError);
+        }
+    }
+    
+    [HttpPatch]
+    [Route("{id}")]
+    public async Task<IActionResult> PatchApplication([FromRoute]Guid id, [FromBody]JsonPatchDocument<PatchApplication> applicationRequest)
+    {
+        try
+        {
+            var result = await mediator.Send(new PatchApplicationCommand
+            {
+                Patch = applicationRequest,
+                Id = id
+            });
+
+            if (result.Application == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(result.Application);
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e,"Unable to update application");
             return new StatusCodeResult((int) HttpStatusCode.InternalServerError);
         }
     }

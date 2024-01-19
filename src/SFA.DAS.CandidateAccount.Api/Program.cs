@@ -6,6 +6,7 @@ using SFA.DAS.Api.Common.AppStart;
 using SFA.DAS.Api.Common.Configuration;
 using SFA.DAS.Api.Common.Infrastructure;
 using SFA.DAS.CandidateAccount.Api.AppStart;
+using SFA.DAS.CandidateAccount.Api.Infrastructure;
 using SFA.DAS.CandidateAccount.Data;
 using SFA.DAS.CandidateAccount.Domain.Configuration;
 
@@ -58,7 +59,8 @@ builder.Services
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-    });
+    })
+    .AddNewtonsoftJson();
 
 builder.Services.AddApplicationInsightsTelemetry();
 
@@ -66,6 +68,7 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "CandidateAccountApi", Version = "v1" });
     c.OperationFilter<SwaggerVersionHeaderFilter>();
+    c.DocumentFilter<JsonPatchDocumentFilter>();
 });
             
 builder.Services.AddApiVersioning(opt => {
