@@ -12,11 +12,11 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers;
 
 [ApiVersion("1.0")]
 [ApiController]
-[Route("api/[controller]/")]
+[Route("api/")]
 public class ApplicationController(IMediator mediator, ILogger<ApplicationController> logger) : Controller
 {
     [HttpPut]
-    [Route("{vacancyReference}")]
+    [Route("[controller]s/{vacancyReference}")]
     public async Task<IActionResult> PutApplication([FromRoute]string vacancyReference, ApplicationRequest applicationRequest)
     {
         try
@@ -52,14 +52,15 @@ public class ApplicationController(IMediator mediator, ILogger<ApplicationContro
     }
     
     [HttpPatch]
-    [Route("{id}")]
-    public async Task<IActionResult> PatchApplication([FromRoute]Guid id, [FromBody]JsonPatchDocument<PatchApplication> applicationRequest)
+    [Route("/candidate/{candidateId}/[controller]s/{id}")]
+    public async Task<IActionResult> PatchApplication([FromRoute]Guid id,[FromRoute]Guid candidateId, [FromBody]JsonPatchDocument<PatchApplication> applicationRequest)
     {
         try
         {
             var result = await mediator.Send(new PatchApplicationCommand
             {
                 Patch = applicationRequest,
+                CandidateId = candidateId,
                 Id = id
             });
 

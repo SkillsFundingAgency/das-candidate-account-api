@@ -16,6 +16,13 @@ public class PatchApplicationCommandHandler (IApplicationRepository applicationR
             return new PatchApplicationCommandResponse();
         }
 
+        if (application.CandidateId != request.CandidateId)
+        {
+            var validationResult = new ValidationResult();
+            validationResult.AddError(nameof(application.CandidateId),"Application does not belong to candidate");
+            throw new ValidationException(validationResult.DataAnnotationResult,null, null);
+        }
+
         var patchedDoc = (Domain.Application.PatchApplication)application;
         
         request.Patch.ApplyTo(patchedDoc);

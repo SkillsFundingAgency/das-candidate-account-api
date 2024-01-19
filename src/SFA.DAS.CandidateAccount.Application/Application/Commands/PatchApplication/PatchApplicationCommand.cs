@@ -7,4 +7,5 @@ public class PatchApplicationCommand : IRequest<PatchApplicationCommandResponse>
 {
     public Guid Id { get; set; }
     public JsonPatchDocument<Domain.Application.PatchApplication> Patch { get ; set ; }
+    public Guid CandidateId { get; set; }
 }

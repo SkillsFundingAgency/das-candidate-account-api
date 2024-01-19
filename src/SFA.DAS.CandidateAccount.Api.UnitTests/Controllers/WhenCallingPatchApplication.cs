@@ -17,6 +17,7 @@ public class WhenCallingPatchApplication
     [Test, MoqAutoData]
     public async Task Then_The_Command_Is_Sent_To_Mediator_And_Ok_Returned(
         Guid id,
+        Guid candidateId,
         PatchApplicationCommandResponse response,
         JsonPatchDocument<PatchApplication> request,
         [Frozen] Mock<IMediator> mediator,
@@ -26,12 +27,13 @@ public class WhenCallingPatchApplication
         mediator.Setup(x => x.Send(It.Is<PatchApplicationCommand>(
                 c=> 
                 c.Id.Equals(id)
+                && c.CandidateId.Equals(candidateId)
                 && c.Patch.Equals(request)
                 ), It.IsAny<CancellationToken>()))
             .ReturnsAsync(response);
         
         //Act
-        var actual = await controller.PatchApplication(id, request) as OkObjectResult;
+        var actual = await controller.PatchApplication(id, candidateId, request) as OkObjectResult;
         
         //Assert
         Assert.That(actual, Is.Not.Null);
@@ -42,6 +44,7 @@ public class WhenCallingPatchApplication
     [Test, MoqAutoData]
     public async Task Then_If_Null_Returned_From_Mediator_Then_NotFound_Is_Returned(
         Guid id,
+        Guid candidateId,
         JsonPatchDocument<PatchApplication> request,
         [Frozen] Mock<IMediator> mediator,
         [Greedy] ApplicationController controller)
@@ -54,7 +57,7 @@ public class WhenCallingPatchApplication
             });
         
         //Act
-        var actual = await controller.PatchApplication(id, request) as StatusCodeResult;
+        var actual = await controller.PatchApplication(id, candidateId, request) as StatusCodeResult;
         
         //Assert
         Assert.That(actual, Is.Not.Null);
@@ -64,6 +67,7 @@ public class WhenCallingPatchApplication
     [Test, MoqAutoData]
     public async Task Then_If_An_Error_Then_An_InternalServer_Error_Is_Returned(
         Guid id,
+        Guid candidateId,
         JsonPatchDocument<PatchApplication> request,
         [Frozen] Mock<IMediator> mediator,
         [Greedy] ApplicationController controller)
@@ -73,7 +77,7 @@ public class WhenCallingPatchApplication
             .ThrowsAsync(new Exception());
         
         //Act
-        var actual = await controller.PatchApplication(id, request) as StatusCodeResult;
+        var actual = await controller.PatchApplication(id, candidateId, request) as StatusCodeResult;
         
         //Assert
         Assert.That(actual, Is.Not.Null);

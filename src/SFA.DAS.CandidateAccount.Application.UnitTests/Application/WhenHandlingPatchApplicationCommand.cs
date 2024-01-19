@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using AutoFixture.NUnit3;
 using FluentAssertions;
 using Microsoft.AspNetCore.JsonPatch;
@@ -35,6 +36,7 @@ public class WhenHandlingPatchApplicationCommand
         var command = new PatchApplicationCommand
         {
             Id = applicationEntity.Id,
+            CandidateId = applicationEntity.CandidateId,
             Patch = patchCommand 
         };
         update.Status = (short)patch.Status;
@@ -59,7 +61,7 @@ public class WhenHandlingPatchApplicationCommand
     }
 
     [Test, RecursiveMoqAutoData]
-    public async Task Then_If_The_Demand_Does_Not_Exist_Null_Returned(
+    public async Task Then_If_The_Application_Does_Not_Exist_Null_Returned(
         PatchApplicationCommand command,
         [Frozen] Mock<IApplicationRepository> service,
         PatchApplicationCommandHandler handler)
@@ -73,5 +75,19 @@ public class WhenHandlingPatchApplicationCommand
         //Assert
         actual.Should().BeEquivalentTo(new PatchApplicationCommandResponse());
         service.Verify(x=>x.Update(It.IsAny<ApplicationEntity>()), Times.Never);
+    }
+    
+    [Test, RecursiveMoqAutoData]
+    public async Task Then_If_The_Application_Does_Not_Belong_To_The_Candidate_Validation_Error_Returned(
+        ApplicationEntity entity,
+        PatchApplicationCommand command,
+        [Frozen] Mock<IApplicationRepository> service,
+        PatchApplicationCommandHandler handler)
+    {
+        //Arrange
+        service.Setup(x => x.GetById(command.Id)).ReturnsAsync(entity);
+        
+        Assert.ThrowsAsync<ValidationException>(()=> handler.Handle(command, CancellationToken.None));
+        
     }
 }
