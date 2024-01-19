@@ -72,6 +72,10 @@ public class ApplicationController(IMediator mediator, ILogger<ApplicationContro
 
             return Ok(result.Application);
         }
+        catch (ValidationException e)
+        {
+            return BadRequest(e.ValidationResult.ErrorMessage);
+        }
         catch (Exception e)
         {
             logger.LogError(e,"Unable to update application");

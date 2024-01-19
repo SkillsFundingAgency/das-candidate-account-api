@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Net;
 using AutoFixture.NUnit3;
 using FluentAssertions;
@@ -82,5 +83,25 @@ public class WhenCallingPatchApplication
         //Assert
         Assert.That(actual, Is.Not.Null);
         actual.StatusCode.Should().Be((int) HttpStatusCode.InternalServerError);
+    }
+    
+    [Test, MoqAutoData]
+    public async Task Then_If_ValidationError_Then_BadRequest_Response_Returned(
+        Guid id,
+        Guid candidateId,
+        JsonPatchDocument<PatchApplication> request,
+        [Frozen] Mock<IMediator> mediator,
+        [Greedy] ApplicationController controller)
+    {
+        //Arrange
+        mediator.Setup(x => x.Send(It.IsAny<PatchApplicationCommand>(), It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new ValidationException("Error"));
+        
+        //Act
+        var actual = await controller.PatchApplication(id, candidateId, request) as StatusCodeResult;
+        
+        //Assert
+        var result = actual as BadRequestResult;
+        result?.StatusCode.Should().Be((int) HttpStatusCode.BadRequest);
     }
 }
