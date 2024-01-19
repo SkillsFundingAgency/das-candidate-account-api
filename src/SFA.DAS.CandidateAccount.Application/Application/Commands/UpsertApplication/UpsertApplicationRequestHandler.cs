@@ -16,9 +16,9 @@ public class UpsertApplicationRequestHandler(
     {
         var candidate = await candidateRepository.GetCandidateByEmail(request.Email);
 
-        var validationResult = new ValidationResult();
         if (candidate == null)
         {
+            var validationResult = new ValidationResult();
             validationResult.AddError(nameof(candidate), "CandidateAccount does not exist");
             throw new ValidationException(validationResult.DataAnnotationResult,null, null);
         }
