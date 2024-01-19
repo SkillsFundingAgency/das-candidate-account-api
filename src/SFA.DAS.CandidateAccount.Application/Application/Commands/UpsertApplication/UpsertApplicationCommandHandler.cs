@@ -7,14 +7,14 @@ using ValidationResult = SFA.DAS.CandidateAccount.Domain.RequestHandlers.Validat
 
 namespace SFA.DAS.CandidateAccount.Application.Application.Commands.UpsertApplication;
 
-public class UpsertApplicationRequestHandler(
+public class UpsertApplicationCommandHandler(
     ICandidateRepository candidateRepository,
     IApplicationRepository applicationRepository)
-    : IRequestHandler<UpsertApplicationRequest, UpsertApplicationResponse>
+    : IRequestHandler<UpsertApplicationCommand, UpsertApplicationCommandResponse>
 {
-    public async Task<UpsertApplicationResponse> Handle(UpsertApplicationRequest request, CancellationToken cancellationToken)
+    public async Task<UpsertApplicationCommandResponse> Handle(UpsertApplicationCommand command, CancellationToken cancellationToken)
     {
-        var candidate = await candidateRepository.GetCandidateByEmail(request.Email);
+        var candidate = await candidateRepository.GetCandidateByEmail(command.Email);
 
         if (candidate == null)
         {
@@ -25,18 +25,18 @@ public class UpsertApplicationRequestHandler(
         
         var application = await applicationRepository.Upsert(new ApplicationEntity
         {
-            VacancyReference = request.VacancyReference,
+            VacancyReference = command.VacancyReference,
             CandidateId = candidate.Id,
-            Status = (short)request.Status,
-            DisabilityConfidenceStatus = (short)request.IsDisabilityConfidenceComplete,
-            JobsStatus = (short)request.IsApplicationQuestionsComplete,
-            QualificationsStatus = (short)request.IsEducationHistoryComplete,
-            WorkExperienceStatus = (short)request.IsInterviewAdjustmentsComplete,
-            TrainingCoursesStatus = (short)request.IsWorkHistoryComplete,
-            DisabilityStatus = request.DisabilityStatus
+            Status = (short)command.Status,
+            DisabilityConfidenceStatus = (short)command.IsDisabilityConfidenceComplete,
+            JobsStatus = (short)command.IsApplicationQuestionsComplete,
+            QualificationsStatus = (short)command.IsEducationHistoryComplete,
+            WorkExperienceStatus = (short)command.IsInterviewAdjustmentsComplete,
+            TrainingCoursesStatus = (short)command.IsWorkHistoryComplete,
+            DisabilityStatus = command.DisabilityStatus
         });
 
-        return new UpsertApplicationResponse
+        return new UpsertApplicationCommandResponse
         {
             Application = application.Item1,
             IsCreated = application.Item2

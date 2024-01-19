@@ -3,7 +3,7 @@ using SFA.DAS.CandidateAccount.Domain.Application;
 
 namespace SFA.DAS.CandidateAccount.Application.Application.Commands.UpsertApplication;
 
-public class UpsertApplicationRequest : IRequest<UpsertApplicationResponse>
+public class UpsertApplicationCommand : IRequest<UpsertApplicationCommandResponse>
 {
     public string VacancyReference { get; set; }
     public string Email { get; set; }

@@ -16,7 +16,7 @@ public class WhenAddingServicesToTheContainer
 {
     [TestCase(typeof(ICandidateRepository))]
     [TestCase(typeof(IApplicationRepository))]
-    [TestCase(typeof(IRequestHandler<UpsertApplicationRequest, UpsertApplicationResponse>))]
+    [TestCase(typeof(IRequestHandler<UpsertApplicationCommand, UpsertApplicationCommandResponse>))]
     public void Then_The_Dependencies_Are_Correctly_Resolved(Type toResolve)
     {
         var serviceCollection = new ServiceCollection();

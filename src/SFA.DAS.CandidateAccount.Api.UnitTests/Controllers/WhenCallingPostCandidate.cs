@@ -49,7 +49,7 @@ public class WhenCallingPostCandidate
         [Greedy] CandidateController controller)
     {
         //Arrange
-        mediator.Setup(x => x.Send(It.IsAny<UpsertApplicationRequest>(),
+        mediator.Setup(x => x.Send(It.IsAny<UpsertApplicationCommand>(),
             CancellationToken.None)).ThrowsAsync(new Exception("Error"));
         
         //Act
