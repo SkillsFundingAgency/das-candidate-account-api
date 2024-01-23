@@ -2,8 +2,12 @@ namespace SFA.DAS.CandidateAccount.Domain.Candidate;
 
 public class Candidate
 {
-    public static implicit operator Candidate(CandidateEntity source)
+    public static implicit operator Candidate?(CandidateEntity? source)
     {
+        if (source == null)
+        {
+            return null;
+        }
         return new Candidate
         {
             Id = source.Id,
