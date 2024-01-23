@@ -6,6 +6,8 @@ public interface ICandidateRepository
 {
     Task<CandidateEntity> Insert(CandidateEntity candidate);
     Task<CandidateEntity?> GetCandidateByEmail(string email);
+    Task<CandidateEntity?> GetById(Guid id);
+    Task<CandidateEntity?> GetByGovIdentifier(string id);
     Task UpdateCandidateByEmail(CandidateEntity candidate);
 }
 public class CandidateRepository(ICandidateAccountDataContext dataContext) : ICandidateRepository
@@ -23,6 +25,24 @@ public class CandidateRepository(ICandidateAccountDataContext dataContext) : ICa
         var result = await dataContext
             .CandidateEntities
             .FirstOrDefaultAsync(c => c.Email == email);
+
+        return result;
+    }
+
+    public async Task<CandidateEntity?> GetById(Guid id)
+    {
+        var result = await dataContext
+            .CandidateEntities
+            .FirstOrDefaultAsync(c => c.Id == id);
+
+        return result;
+    }
+
+    public async Task<CandidateEntity?> GetByGovIdentifier(string id)
+    {
+        var result = await dataContext
+            .CandidateEntities
+            .FirstOrDefaultAsync(c => c.GovUkIdentifier == id);
 
         return result;
     }
