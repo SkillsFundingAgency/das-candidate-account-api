@@ -12,18 +12,18 @@ namespace SFA.DAS.CandidateAccount.Data.UnitTests.Repository.WorkExperience
     {
         [Test, RecursiveMoqAutoData]
         public async Task ThenTheCandidateIsInserted(
-            WorkExperienceEntity workExperience,
+            WorkHistoryEntity workHistory,
             [Frozen] Mock<ICandidateAccountDataContext> context,
-            WorkExperienceRepository repository)
+            WorkHistoryRepository repository)
         {
             //Arrange
-            context.Setup(x => x.WorkExperienceEntities).ReturnsDbSet(new List<WorkExperienceEntity>());
+            context.Setup(x => x.WorkExperienceEntities).ReturnsDbSet(new List<WorkHistoryEntity>());
 
             //Act
-            await repository.Insert(workExperience);
+            await repository.Insert(workHistory);
 
             //Assert
-            context.Verify(x => x.WorkExperienceEntities.AddAsync(workExperience, CancellationToken.None), Times.Once);
+            context.Verify(x => x.WorkExperienceEntities.AddAsync(workHistory, CancellationToken.None), Times.Once);
             context.Verify(x => x.SaveChangesAsync(CancellationToken.None), Times.Once);
         }
     }

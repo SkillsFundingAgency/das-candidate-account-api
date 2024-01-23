@@ -16,11 +16,11 @@ public class WhenHandlingCreateWorkHistoryCommand
     [Test, RecursiveMoqAutoData]
     public async Task Then_Request_Is_Handled_And_Entity_Created(
         CreateWorkHistoryCommand request,
-        WorkExperienceEntity entity,
-        [Frozen] Mock<IWorkExperienceRepository> workExperienceRepository,
+        WorkHistoryEntity entity,
+        [Frozen] Mock<IWorkHistoryRepository> workExperienceRepository,
         CreateWorkHistoryCommandHandler handler)
     {
-        workExperienceRepository.Setup(x => x.Insert(It.Is<WorkExperienceEntity>(c =>
+        workExperienceRepository.Setup(x => x.Insert(It.Is<WorkHistoryEntity>(c =>
             c.ApplicationId    == request.ApplicationId &&
             c.Employer == request.EmployerName &&
             c.JobTitle == request.JobTitle &&

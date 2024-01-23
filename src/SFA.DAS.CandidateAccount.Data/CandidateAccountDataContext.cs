@@ -16,7 +16,7 @@ public interface ICandidateAccountDataContext
 {
     DbSet<CandidateEntity> CandidateEntities { get; set; }
     DbSet<ApplicationEntity> ApplicationEntities { get; set; }
-    DbSet<WorkExperienceEntity> WorkExperienceEntities { get; set; }
+    DbSet<WorkHistoryEntity> WorkExperienceEntities { get; set; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken  = default (CancellationToken));
 }
 public class CandidateAccountDataContext : DbContext, ICandidateAccountDataContext
@@ -26,7 +26,7 @@ public class CandidateAccountDataContext : DbContext, ICandidateAccountDataConte
     private readonly EnvironmentConfiguration _environmentConfiguration;
     public DbSet<CandidateEntity> CandidateEntities { get; set; }
     public DbSet<ApplicationEntity> ApplicationEntities { get; set; }
-    public DbSet<WorkExperienceEntity> WorkExperienceEntities { get; set; }
+    public DbSet<WorkHistoryEntity> WorkExperienceEntities { get; set; }
 
     private readonly CandidateAccountConfiguration? _configuration;
 

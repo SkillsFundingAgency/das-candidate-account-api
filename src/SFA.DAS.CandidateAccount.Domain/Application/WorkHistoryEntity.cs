@@ -1,8 +1,9 @@
 ﻿namespace SFA.DAS.CandidateAccount.Domain.Application
 {
-    public class WorkExperienceEntity
+    public class WorkHistoryEntity
     {
         public Guid Id { get; set; }
+        public short WorkHistoryType { get; set; }
         public string Employer { get; set; }
         public string JobTitle { get; set; }
         public DateTime StartDate { get; set; }

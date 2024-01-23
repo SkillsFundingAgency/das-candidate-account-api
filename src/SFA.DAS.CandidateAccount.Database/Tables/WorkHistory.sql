@@ -1,5 +1,6 @@
-CREATE TABLE dbo.[WorkExperience] (
+CREATE TABLE dbo.[WorkHistory] (
     [Id]					uniqueidentifier		NOT NULL,
+    [WorkHistoryType]       tinyint         NOT NULL,
     [Employer]   			nvarchar(150)	NOT NULL,
     [JobTitle]  			nvarchar(150)	NOT NULL,
     [StartDate]  			datetime      	NOT NULL,

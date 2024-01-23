@@ -40,7 +40,7 @@ public class WhenCallingPostWorkHistory
         
         //Assert
         var result = actual as CreatedResult;
-        var actualResult = result.Value as CandidateAccount.Domain.Application.WorkExperienceEntity;
+        var actualResult = result.Value as CandidateAccount.Domain.Application.WorkHistoryEntity;
         actualResult.Should().BeEquivalentTo(createWorkHistoryResponse.WorkHistory);
     }
     [Test, MoqAutoData]

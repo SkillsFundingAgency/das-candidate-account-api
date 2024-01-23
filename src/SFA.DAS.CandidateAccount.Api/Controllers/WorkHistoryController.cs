@@ -18,6 +18,7 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers
             {
                 var result = await mediator.Send(new CreateWorkHistoryCommand
                 {
+                    WorkHistoryType = request.WorkHistoryType,
                     CandidateId = candidateId,
                     ApplicationId = applicationId,
                     EmployerName = request.EmployerName,

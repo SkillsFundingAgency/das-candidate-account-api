@@ -11,7 +11,7 @@ public static class AddServiceRegistrationExtension
     {
         services.AddScoped<IApplicationRepository, ApplicationRepository>();
         services.AddScoped<ICandidateRepository, CandidateRepository>();
-        services.AddScoped<IWorkExperienceRepository, WorkExperienceRepository>();
+        services.AddScoped<IWorkHistoryRepository, WorkHistoryRepository>();
         services.AddMediatR(configuration => configuration.RegisterServicesFromAssembly(typeof(UpsertApplicationCommand).Assembly));
     }
 }

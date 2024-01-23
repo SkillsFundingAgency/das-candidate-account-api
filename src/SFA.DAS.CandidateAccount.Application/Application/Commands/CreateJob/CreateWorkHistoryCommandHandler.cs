@@ -4,13 +4,14 @@ using SFA.DAS.CandidateAccount.Domain.Application;
 
 namespace SFA.DAS.CandidateAccount.Application.Application.Commands.CreateJob;
 
-public class CreateWorkHistoryCommandHandler(IWorkExperienceRepository workExperienceRepository) :
+public class CreateWorkHistoryCommandHandler(IWorkHistoryRepository workHistoryRepository) :
     IRequestHandler<CreateWorkHistoryCommand, CreateWorkHistoryResponse>
 {
     public async Task<CreateWorkHistoryResponse> Handle(CreateWorkHistoryCommand request, CancellationToken cancellationToken)
     {
-        var result = await workExperienceRepository.Insert(new WorkExperienceEntity
+        var result = await workHistoryRepository.Insert(new WorkHistoryEntity
         {
+            WorkHistoryType = (short) request.WorkHistoryType,
             ApplicationId = request.ApplicationId,
             Description = request.JobDescription,
             Employer = request.EmployerName,

@@ -4,11 +4,11 @@ using SFA.DAS.CandidateAccount.Domain.Application;
 
 namespace SFA.DAS.CandidateAccount.Data.WorkExperience;
 
-public class WorkExperienceEntityConfiguration : IEntityTypeConfiguration<WorkExperienceEntity>
+public class WorkExperienceEntityConfiguration : IEntityTypeConfiguration<WorkHistoryEntity>
 {
-    public void Configure(EntityTypeBuilder<WorkExperienceEntity> builder)
+    public void Configure(EntityTypeBuilder<WorkHistoryEntity> builder)
     {
-        builder.ToTable("WorkExperience");
+        builder.ToTable("WorkHistory");
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Id).HasColumnName("Id").HasColumnType("uniqueidentifier").IsRequired();
