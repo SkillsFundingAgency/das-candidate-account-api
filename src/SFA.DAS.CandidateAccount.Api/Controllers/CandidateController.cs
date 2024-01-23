@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.CandidateAccount.Api.ApiRequests;
 using SFA.DAS.CandidateAccount.Application.Candidate.Commands.CreateCandidate;
+using SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetCandidate;
 
 namespace SFA.DAS.CandidateAccount.Api.Controllers;
 
@@ -32,6 +33,29 @@ public class CandidateController(IMediator mediator, ILogger<ApplicationControll
         catch (Exception e)
         {
             logger.LogError(e, "Upsert Application : An error occurred");
+            return new StatusCodeResult((int) HttpStatusCode.InternalServerError);
+        }
+    }
+
+    [HttpGet]
+    [Route("{id}")]
+    public async Task<IActionResult> GetCandidate(string id)
+    {
+        try
+        {
+            var result = await mediator.Send(new GetCandidateQuery
+            {
+                Id = id
+            });
+            if (result.Candidate == null)
+            {
+                return NotFound();
+            }
+            return Ok(result.Candidate);
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e, "Get Candidate : An error occurred");
             return new StatusCodeResult((int) HttpStatusCode.InternalServerError);
         }
     }
