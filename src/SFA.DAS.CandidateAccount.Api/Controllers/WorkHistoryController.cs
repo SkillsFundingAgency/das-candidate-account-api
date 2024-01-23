@@ -12,7 +12,6 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers
     public class WorkHistoryController(IMediator mediator, ILogger<ApplicationController> logger) : Controller
     {
         [HttpPost]
-        [Route("{id}")]
         public async Task<IActionResult> PostWorkHistory([FromRoute] Guid candidateId, [FromRoute] Guid applicationId, WorkHistoryRequest request)
         {
             try
