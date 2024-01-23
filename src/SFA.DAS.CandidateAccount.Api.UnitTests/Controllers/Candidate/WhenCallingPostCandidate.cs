@@ -10,7 +10,7 @@ using SFA.DAS.CandidateAccount.Application.Application.Commands.UpsertApplicatio
 using SFA.DAS.CandidateAccount.Application.Candidate.Commands.CreateCandidate;
 using SFA.DAS.Testing.AutoFixture;
 
-namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers;
+namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.Candidate;
 
 public class WhenCallingPostCandidate
 {

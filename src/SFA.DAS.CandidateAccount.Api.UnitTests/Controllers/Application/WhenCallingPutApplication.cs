@@ -10,7 +10,7 @@ using SFA.DAS.CandidateAccount.Api.Controllers;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.UpsertApplication;
 using SFA.DAS.Testing.AutoFixture;
 
-namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers;
+namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.Application;
 
 public class WhenCallingPutApplication
 {
