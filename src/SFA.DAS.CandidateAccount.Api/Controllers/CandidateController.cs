@@ -18,7 +18,7 @@ public class CandidateController(IMediator mediator, ILogger<ApplicationControll
     {
         try
         {
-            var result = await mediator.Send(new CreateCandidateRequest
+            var result = await mediator.Send(new CreateCandidateCommand
             {
                 Id = id,
                 Email = request.Email,

@@ -18,12 +18,12 @@ public class WhenCallingPostCandidate
     public async Task Then_If_MediatorCall_Returns_Created_Then_Created_Result_Returned(
         Guid id,
         CandidateRequest candidateRequest,
-        CreateCandidateResponse createCandidateResponse,
+        CreateCandidateCommandResponse createCandidateCommandResponse,
         [Frozen] Mock<IMediator> mediator,
         [Greedy] CandidateController controller)
     {
         //Arrange
-        mediator.Setup(x => x.Send(It.Is<CreateCandidateRequest>(c => 
+        mediator.Setup(x => x.Send(It.Is<CreateCandidateCommand>(c => 
                 c.Email.Equals(candidateRequest.Email)
                 && c.GovUkIdentifier.Equals(candidateRequest.GovUkIdentifier)
                 && c.FirstName.Equals(candidateRequest.FirstName)
@@ -31,7 +31,7 @@ public class WhenCallingPostCandidate
                 && c.DateOfBirth.Equals(candidateRequest.DateOfBirth)
                 && c.Id.Equals(id)
             ), CancellationToken.None))
-            .ReturnsAsync(createCandidateResponse);
+            .ReturnsAsync(createCandidateCommandResponse);
         
         //Act
         var actual = await controller.PostCandidate(id, candidateRequest);
@@ -39,7 +39,7 @@ public class WhenCallingPostCandidate
         //Assert
         var result = actual as CreatedResult;
         var actualResult = result.Value as Domain.Candidate.Candidate;
-        actualResult.Should().BeEquivalentTo(createCandidateResponse.Candidate);
+        actualResult.Should().BeEquivalentTo(createCandidateCommandResponse.Candidate);
     }
     [Test, MoqAutoData]
     public async Task Then_If_Error_Then_InternalServerError_Response_Returned(
