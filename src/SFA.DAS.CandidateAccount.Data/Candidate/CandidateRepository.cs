@@ -8,7 +8,7 @@ public interface ICandidateRepository
     Task<CandidateEntity?> GetCandidateByEmail(string email);
     Task<CandidateEntity?> GetById(Guid id);
     Task<CandidateEntity?> GetByGovIdentifier(string id);
-    Task UpdateCandidateByEmail(CandidateEntity candidate);
+    Task<CandidateEntity?> UpdateCandidateById(Domain.Candidate.Candidate candidate);
 }
 public class CandidateRepository(ICandidateAccountDataContext dataContext) : ICandidateRepository
 {
@@ -47,36 +47,24 @@ public class CandidateRepository(ICandidateAccountDataContext dataContext) : ICa
         return result;
     }
 
-    public async Task UpdateCandidateByEmail(CandidateEntity candidate)
+    public async Task<CandidateEntity?> UpdateCandidateById(Domain.Candidate.Candidate candidate)
     {
-        var existingCandidate = await dataContext.CandidateEntities.FirstOrDefaultAsync(c => c.Email== candidate.Email);
+        var existingCandidate = await dataContext
+            .CandidateEntities
+            .FirstOrDefaultAsync(c => c.Id == candidate.Id);
 
         if (existingCandidate != null)
         {
-            candidate.Id = existingCandidate.Id;
-            dataContext.CandidateEntities.Update(candidate);
+            existingCandidate.FirstName = candidate.FirstName ?? existingCandidate.FirstName;
+            existingCandidate.LastName = candidate.LastName ?? existingCandidate.LastName;
+            existingCandidate.Email = candidate.Email;
+            existingCandidate.UpdatedOn = DateTime.UtcNow;
+            existingCandidate.DateOfBirth = DateTime.UtcNow;//TODO - This needs changing
+            dataContext.CandidateEntities.Update(existingCandidate);
             await dataContext.SaveChangesAsync();
         }
+
+        return existingCandidate;
     }
-    // public async Task<Tuple<CandidateEntity,bool>> Upsert(CandidateEntity candidate)
-    // {
-    //     var candidateEntity = await dataContext.CandidateEntities.SingleOrDefaultAsync(c =>
-    //         c.Email== candidate.Email);
-    //
-    //     if (candidateEntity == null)
-    //     {
-    //         await dataContext.CandidateEntities.AddAsync(candidate);
-    //         await dataContext.SaveChangesAsync();
-    //         return new Tuple<CandidateEntity, bool>(candidate, true);    
-    //     }
-    //     
-    //     candidateEntity.FirstName = candidate.FirstName;
-    //     candidateEntity.LastName = candidate.LastName;
-    //     candidateEntity.GovUkIdentifier = candidate.GovUkIdentifier;
-    //     
-    //     await dataContext.SaveChangesAsync();
-    //     
-    //     return new Tuple<CandidateEntity, bool>(candidateEntity, false);
-    // }
 }
 
