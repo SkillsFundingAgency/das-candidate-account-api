@@ -24,7 +24,7 @@ public class ApplicationController(IMediator mediator, ILogger<ApplicationContro
         {
             var result = await mediator.Send(new UpsertApplicationCommand
             {
-                Email = applicationRequest.Email,
+                CandidateId = applicationRequest.CandidateId,
                 VacancyReference = vacancyReference,
                 Status = applicationRequest.Status,
                 DisabilityStatus = applicationRequest.DisabilityStatus,
