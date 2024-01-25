@@ -17,16 +17,13 @@ public class WhenHandlingUpsertApplicationCommand
     public async Task Then_The_Request_Is_Handled_Candidate_Retrieved_And_Application_Created(
         UpsertApplicationCommand command,
         ApplicationEntity applicationEntity,
-        CandidateEntity candidateEntity,
         [Frozen] Mock<IApplicationRepository> applicationRepository, 
-        [Frozen] Mock<ICandidateRepository> candidateRepository, 
         UpsertApplicationCommandHandler handler)
     {
-        candidateRepository.Setup(x => x.GetCandidateByEmail(command.Email)).ReturnsAsync(candidateEntity);
         applicationRepository.Setup(x =>
             x.Upsert(It.Is<ApplicationEntity>(c => 
                 c.VacancyReference.Equals(command.VacancyReference)
-                && c.CandidateId.Equals(candidateEntity.Id)
+                && c.CandidateId.Equals(command.CandidateId)
                 && c.DisabilityStatus.Equals(command.DisabilityStatus)
                 && c.Status.Equals((short)command.Status)
                 && c.JobsStatus.Equals((short)command.IsApplicationQuestionsComplete)
@@ -43,30 +40,16 @@ public class WhenHandlingUpsertApplicationCommand
     }
 
     [Test, RecursiveMoqAutoData]
-    public void Then_If_The_Candidate_Does_Not_Exist_Then_Error_Returned(
-        UpsertApplicationCommand command,
-        [Frozen] Mock<ICandidateRepository> candidateRepository, 
-        UpsertApplicationCommandHandler handler)
-    {
-        candidateRepository.Setup(x => x.GetCandidateByEmail(command.Email))!.ReturnsAsync((CandidateEntity)null!);
-        
-        Assert.ThrowsAsync<ValidationException>(()=> handler.Handle(command, CancellationToken.None));
-    }
-
-    [Test, RecursiveMoqAutoData]
     public async Task Then_If_The_Candidate_And_Application_Exist_It_Is_Updated(
         UpsertApplicationCommand command,
         ApplicationEntity applicationEntity,
-        CandidateEntity candidateEntity,
         [Frozen] Mock<IApplicationRepository> applicationRepository, 
-        [Frozen] Mock<ICandidateRepository> candidateRepository, 
         UpsertApplicationCommandHandler handler)
     {
-        candidateRepository.Setup(x => x.GetCandidateByEmail(command.Email)).ReturnsAsync(candidateEntity);
         applicationRepository.Setup(x =>
             x.Upsert(It.Is<ApplicationEntity>(c => 
                 c.VacancyReference.Equals(command.VacancyReference)
-                && c.CandidateId.Equals(candidateEntity.Id)
+                && c.CandidateId.Equals(command.CandidateId)
                 && c.DisabilityStatus.Equals(command.DisabilityStatus)
                 && c.Status.Equals((short)command.Status)
                 && c.JobsStatus.Equals((short)command.IsApplicationQuestionsComplete)
