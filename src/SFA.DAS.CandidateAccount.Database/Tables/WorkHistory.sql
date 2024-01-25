@@ -7,6 +7,6 @@ CREATE TABLE dbo.[WorkHistory] (
     [EndDate]    			datetime    	NULL,
     [ApplicationId]         uniqueidentifier     NOT NULL,
     [Description]  			nvarchar(max)   NOT NULL
-    CONSTRAINT [PK_WorkExperience] PRIMARY KEY (Id),
-    CONSTRAINT [FK_WorkExperience_Application] FOREIGN KEY (ApplicationId) REFERENCES [Application](Id)
+    CONSTRAINT [PK_WorkHistory] PRIMARY KEY (Id),
+    CONSTRAINT [FK_WorkHistory_Application] FOREIGN KEY (ApplicationId) REFERENCES [Application](Id)
     )
