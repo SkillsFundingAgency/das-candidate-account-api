@@ -8,7 +8,7 @@ public interface ICandidateRepository
     Task<CandidateEntity?> GetCandidateByEmail(string email);
     Task<CandidateEntity?> GetById(Guid id);
     Task<CandidateEntity?> GetByGovIdentifier(string id);
-    Task<CandidateEntity?> UpdateCandidateById(Domain.Candidate.Candidate candidate);
+    Task<Tuple<CandidateEntity,bool>> UpsertCandidate(Domain.Candidate.Candidate candidate);
 }
 public class CandidateRepository(ICandidateAccountDataContext dataContext) : ICandidateRepository
 {
@@ -47,24 +47,31 @@ public class CandidateRepository(ICandidateAccountDataContext dataContext) : ICa
         return result;
     }
 
-    public async Task<CandidateEntity?> UpdateCandidateById(Domain.Candidate.Candidate candidate)
+    public async Task<Tuple<CandidateEntity,bool>> UpsertCandidate(Domain.Candidate.Candidate candidate)
     {
         var existingCandidate = await dataContext
             .CandidateEntities
             .FirstOrDefaultAsync(c => c.Id == candidate.Id);
 
-        if (existingCandidate != null)
+        if (existingCandidate == null)
         {
-            existingCandidate.FirstName = candidate.FirstName ?? existingCandidate.FirstName;
-            existingCandidate.LastName = candidate.LastName ?? existingCandidate.LastName;
-            existingCandidate.Email = candidate.Email;
-            existingCandidate.UpdatedOn = DateTime.UtcNow;
-            existingCandidate.DateOfBirth = DateTime.UtcNow;//TODO - This needs changing
-            dataContext.CandidateEntities.Update(existingCandidate);
+            var newCandidate = (CandidateEntity)candidate;
+            newCandidate.CreatedOn = DateTime.UtcNow;
+            newCandidate.UpdatedOn = null;
+            await dataContext.CandidateEntities.AddAsync(newCandidate);
             await dataContext.SaveChangesAsync();
+            return new Tuple<CandidateEntity, bool>(newCandidate, true);
         }
-
-        return existingCandidate;
+        
+        existingCandidate.FirstName = candidate.FirstName ?? existingCandidate.FirstName;
+        existingCandidate.LastName = candidate.LastName ?? existingCandidate.LastName;
+        existingCandidate.Email = candidate.Email;
+        existingCandidate.UpdatedOn = DateTime.UtcNow;
+        existingCandidate.DateOfBirth = DateTime.UtcNow;//TODO - This needs changing
+        dataContext.CandidateEntities.Update(existingCandidate);
+        await dataContext.SaveChangesAsync();
+    
+        return new Tuple<CandidateEntity, bool>(existingCandidate, false);
     }
 }
 

@@ -8,7 +8,7 @@ using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.CandidateAccount.Data.UnitTests.Repository.Candidate;
 
-public class WhenUpdatingById
+public class WhenUpsertingCandidate
 {
     [Test, RecursiveMoqAutoData]
     public async Task AndIdExistsThenCandidateIsUpdated(
@@ -23,14 +23,15 @@ public class WhenUpdatingById
         existingCandidate.Id = candidate.Id;
 
         //Act
-        var actual = await repository.UpdateCandidateById(existingCandidate);
+        var actual = await repository.UpsertCandidate(existingCandidate);
 
         //Assert
         context.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
-        actual.FirstName.Should().Be(existingCandidate.FirstName);
-        actual.LastName.Should().Be(existingCandidate.LastName);
-        actual.GovUkIdentifier.Should().Be(candidate.GovUkIdentifier);
-        actual.UpdatedOn.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(5));
+        actual.Item1.FirstName.Should().Be(existingCandidate.FirstName);
+        actual.Item1.LastName.Should().Be(existingCandidate.LastName);
+        actual.Item1.GovUkIdentifier.Should().Be(candidate.GovUkIdentifier);
+        actual.Item1.UpdatedOn.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(5));
+        actual.Item2.Should().BeFalse();
     }
     [Test, RecursiveMoqAutoData]
     public async Task AndIdExistsThenCandidateIsUpdatedIfNotNull(
@@ -47,19 +48,19 @@ public class WhenUpdatingById
         existingCandidate.LastName = null;
 
         //Act
-        var actual = await repository.UpdateCandidateById(existingCandidate);
+        var actual = await repository.UpsertCandidate(existingCandidate);
 
         //Assert
         context.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
-        actual.FirstName.Should().Be(candidate.FirstName);
-        actual.LastName.Should().Be(candidate.LastName);
-        actual.Email.Should().Be(existingCandidate.Email);
-        actual.GovUkIdentifier.Should().Be(candidate.GovUkIdentifier);
-        actual.UpdatedOn.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(5));
+        actual.Item1.FirstName.Should().Be(candidate.FirstName);
+        actual.Item1.LastName.Should().Be(candidate.LastName);
+        actual.Item1.Email.Should().Be(existingCandidate.Email);
+        actual.Item1.GovUkIdentifier.Should().Be(candidate.GovUkIdentifier);
+        actual.Item1.UpdatedOn.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(5));
     }
 
     [Test, RecursiveMoqAutoData]
-    public async Task AndIdDoesNotExistThenNoUpdateIsMade(
+    public async Task AndIdDoesNotExistThenNoUpdateIsMadeAndInserted(
         CandidateEntity candidate,
         [Frozen]Mock<ICandidateAccountDataContext> context,
         CandidateRepository repository)
@@ -70,10 +71,13 @@ public class WhenUpdatingById
         var noCandidateExists = new Domain.Candidate.Candidate
             {Id=Guid.NewGuid(), FirstName = "testName", LastName = "testName2", Email = "test@test.com", GovUkIdentifier = "" };
         //Act
-        var actual = await repository.UpdateCandidateById(noCandidateExists);
+        var actual = await repository.UpsertCandidate(noCandidateExists);
 
         //Assert
-        context.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
-        Assert.IsNull(actual);
+        context.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
+        Assert.IsNotNull(actual);
+        actual.Item2.Should().BeTrue();
+        actual.Item1.Should().BeEquivalentTo(noCandidateExists, options => options.Excluding(c=>c.CreatedOn).Excluding(c=>c.UpdatedOn));
+        actual.Item1.CreatedOn.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(5));
     }
 }
