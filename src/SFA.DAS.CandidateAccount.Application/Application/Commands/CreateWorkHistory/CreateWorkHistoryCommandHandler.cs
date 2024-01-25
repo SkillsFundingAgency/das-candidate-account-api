@@ -2,7 +2,7 @@
 using SFA.DAS.CandidateAccount.Data.WorkExperience;
 using SFA.DAS.CandidateAccount.Domain.Application;
 
-namespace SFA.DAS.CandidateAccount.Application.Application.Commands.CreateJob;
+namespace SFA.DAS.CandidateAccount.Application.Application.Commands.CreateWorkHistory;
 
 public class CreateWorkHistoryCommandHandler(IWorkHistoryRepository workHistoryRepository) :
     IRequestHandler<CreateWorkHistoryCommand, CreateWorkHistoryResponse>

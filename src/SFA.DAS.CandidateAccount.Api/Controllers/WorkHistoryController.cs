@@ -2,7 +2,7 @@
 using System.Net;
 using MediatR;
 using SFA.DAS.CandidateAccount.Api.ApiRequests;
-using SFA.DAS.CandidateAccount.Application.Application.Commands.CreateJob;
+using SFA.DAS.CandidateAccount.Application.Application.Commands.CreateWorkHistory;
 
 namespace SFA.DAS.CandidateAccount.Api.Controllers
 {

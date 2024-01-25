@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using SFA.DAS.CandidateAccount.Api.ApiRequests;
 using SFA.DAS.CandidateAccount.Api.Controllers;
-using SFA.DAS.CandidateAccount.Application.Application.Commands.CreateJob;
+using SFA.DAS.CandidateAccount.Application.Application.Commands.CreateWorkHistory;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.UpsertApplication;
 using SFA.DAS.Testing.AutoFixture;
 

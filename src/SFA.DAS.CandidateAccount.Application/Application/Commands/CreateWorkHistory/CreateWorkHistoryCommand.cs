@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using SFA.DAS.CandidateAccount.Domain.Application;
 
-namespace SFA.DAS.CandidateAccount.Application.Application.Commands.CreateJob
+namespace SFA.DAS.CandidateAccount.Application.Application.Commands.CreateWorkHistory
 {
     public class CreateWorkHistoryCommand : IRequest<CreateWorkHistoryResponse>
     {
