@@ -4,6 +4,23 @@ namespace SFA.DAS.CandidateAccount.Domain.Candidate;
 
 public record CandidateEntity
 {
+    public static implicit operator CandidateEntity(Candidate source)
+    {
+        return new CandidateEntity
+        {
+            Id = source.Id,
+            Email = source.Email,
+            FirstName = source.FirstName,
+            LastName = source.LastName,
+            GovUkIdentifier = source.GovUkIdentifier,
+            DateOfBirth = source.DateOfBirth,
+            CreatedOn = source.CreatedOn,
+            TermsOfUseAcceptedOn = source.TermsOfUseAcceptedOn,
+            MiddleNames = source.MiddleNames,
+            PhoneNumber = source.PhoneNumber,
+            UpdatedOn = source.UpdatedOn
+        };
+    }
     public Guid Id { get; set; }
     public string? FirstName { get; set; }
     public string? MiddleNames { get; set; }
