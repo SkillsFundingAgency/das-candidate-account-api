@@ -11,6 +11,7 @@ CREATE TABLE dbo.[Candidate] (
     [TermsOfUseAcceptedOn]	datetime		    NULL,
     [GovUkIdentifier]       varchar(150)        NOT NULL
     CONSTRAINT [PK_Candidate] PRIMARY KEY (Id),
+    CONSTRAINT [UK_Candidate] UNIQUE (GovUkIdentifier),
     INDEX [IX_Candidate_Email] NONCLUSTERED(Email),
     INDEX [IX_Candidate_GovUkIdentifier] NONCLUSTERED(GovUkIdentifier)
 )

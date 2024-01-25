@@ -20,7 +20,7 @@ public class WhenUpsertingCandidate
         //Arrange
         context.Setup(x => x.CandidateEntities)
             .ReturnsDbSet(new List<CandidateEntity> { candidate });
-        existingCandidate.Id = candidate.Id;
+        existingCandidate.GovUkIdentifier = candidate.GovUkIdentifier;
 
         //Act
         var actual = await repository.UpsertCandidate(existingCandidate);
@@ -43,7 +43,7 @@ public class WhenUpsertingCandidate
         //Arrange
         context.Setup(x => x.CandidateEntities)
             .ReturnsDbSet(new List<CandidateEntity> { candidate });
-        existingCandidate.Id = candidate.Id;
+        existingCandidate.GovUkIdentifier = candidate.GovUkIdentifier;
         existingCandidate.FirstName = null;
         existingCandidate.LastName = null;
 
@@ -69,7 +69,10 @@ public class WhenUpsertingCandidate
         context.Setup(x => x.CandidateEntities)
             .ReturnsDbSet(new List<CandidateEntity> { candidate });
         var noCandidateExists = new Domain.Candidate.Candidate
-            {Id=Guid.NewGuid(), FirstName = "testName", LastName = "testName2", Email = "test@test.com", GovUkIdentifier = "" };
+        {
+            Id=Guid.NewGuid(), FirstName = "testName", LastName = "testName2", Email = "test@test.com", GovUkIdentifier = "someidentifier"
+        };
+        
         //Act
         var actual = await repository.UpsertCandidate(noCandidateExists);
 

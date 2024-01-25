@@ -51,7 +51,7 @@ public class CandidateRepository(ICandidateAccountDataContext dataContext) : ICa
     {
         var existingCandidate = await dataContext
             .CandidateEntities
-            .FirstOrDefaultAsync(c => c.Id == candidate.Id);
+            .FirstOrDefaultAsync(c => c.GovUkIdentifier == candidate.GovUkIdentifier);
 
         if (existingCandidate == null)
         {

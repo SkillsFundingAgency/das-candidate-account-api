@@ -17,24 +17,24 @@ public class WhenCallingPostCandidate
     [Test, MoqAutoData]
     public async Task Then_If_MediatorCall_Returns_Created_Then_Created_Result_Returned(
         Guid id,
-        CandidateRequest candidateRequest,
+        PostCandidateRequest postCandidateRequest,
         CreateCandidateCommandResponse createCandidateCommandResponse,
         [Frozen] Mock<IMediator> mediator,
         [Greedy] CandidateController controller)
     {
         //Arrange
         mediator.Setup(x => x.Send(It.Is<CreateCandidateCommand>(c => 
-                c.Email.Equals(candidateRequest.Email)
-                && c.GovUkIdentifier.Equals(candidateRequest.GovUkIdentifier)
-                && c.FirstName.Equals(candidateRequest.FirstName)
-                && c.LastName.Equals(candidateRequest.LastName)
-                && c.DateOfBirth.Equals(candidateRequest.DateOfBirth)
+                c.Email.Equals(postCandidateRequest.Email)
+                && c.GovUkIdentifier.Equals(postCandidateRequest.GovUkIdentifier)
+                && c.FirstName.Equals(postCandidateRequest.FirstName)
+                && c.LastName.Equals(postCandidateRequest.LastName)
+                && c.DateOfBirth.Equals(postCandidateRequest.DateOfBirth)
                 && c.Id.Equals(id)
             ), CancellationToken.None))
             .ReturnsAsync(createCandidateCommandResponse);
         
         //Act
-        var actual = await controller.PostCandidate(id, candidateRequest);
+        var actual = await controller.PostCandidate(id, postCandidateRequest);
         
         //Assert
         var result = actual as CreatedResult;
@@ -44,7 +44,7 @@ public class WhenCallingPostCandidate
     [Test, MoqAutoData]
     public async Task Then_If_Error_Then_InternalServerError_Response_Returned(
         Guid id,
-        CandidateRequest candidateRequest,
+        PostCandidateRequest postCandidateRequest,
         [Frozen] Mock<IMediator> mediator,
         [Greedy] CandidateController controller)
     {
@@ -53,7 +53,7 @@ public class WhenCallingPostCandidate
             CancellationToken.None)).ThrowsAsync(new Exception("Error"));
         
         //Act
-        var actual = await controller.PostCandidate(id, candidateRequest);
+        var actual = await controller.PostCandidate(id, postCandidateRequest);
         
         //Assert
         var result = actual as StatusCodeResult;

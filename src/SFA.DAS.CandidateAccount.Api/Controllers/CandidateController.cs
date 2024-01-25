@@ -3,7 +3,9 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.CandidateAccount.Api.ApiRequests;
 using SFA.DAS.CandidateAccount.Application.Candidate.Commands.CreateCandidate;
+using SFA.DAS.CandidateAccount.Application.Candidate.Commands.UpsertCandidate;
 using SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetCandidate;
+using SFA.DAS.CandidateAccount.Domain.Candidate;
 
 namespace SFA.DAS.CandidateAccount.Api.Controllers;
 
@@ -14,7 +16,7 @@ public class CandidateController(IMediator mediator, ILogger<ApplicationControll
 {
     [HttpPost]
     [Route("{id}")]
-    public async Task<IActionResult> PostCandidate(Guid id, CandidateRequest request)
+    public async Task<IActionResult> PostCandidate(Guid id, PostCandidateRequest request)
     {
         try
         {
@@ -56,6 +58,41 @@ public class CandidateController(IMediator mediator, ILogger<ApplicationControll
         catch (Exception e)
         {
             logger.LogError(e, "Get Candidate : An error occurred");
+            return new StatusCodeResult((int) HttpStatusCode.InternalServerError);
+        }
+    }
+
+    [HttpPut]
+    [Route("{id}")]
+    public async Task<IActionResult> PutCandidate([FromRoute]string id, PutCandidateRequest postCandidateRequest)
+    {
+        try
+        {
+            var result = await mediator.Send(new UpsertCandidateCommand
+            {
+                Candidate = new Candidate
+                {
+                    Id = Guid.Empty,
+                    GovUkIdentifier = id,
+                    DateOfBirth = postCandidateRequest.DateOfBirth,
+                    Email = postCandidateRequest.Email,
+                    FirstName = postCandidateRequest.FirstName,
+                    LastName = postCandidateRequest.LastName,
+                    MiddleNames = postCandidateRequest.MiddleNames,
+                    PhoneNumber = postCandidateRequest.PhoneNumber,
+                    TermsOfUseAcceptedOn = postCandidateRequest.TermsOfUseAcceptedOn
+                }
+            });
+
+            if (result.IsCreated)
+            {
+                return Created($"{result.Candidate.Id}",result.Candidate);
+            }
+            return Ok(result.Candidate);
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e, "Upsert Candidate : An error occurred");
             return new StatusCodeResult((int) HttpStatusCode.InternalServerError);
         }
     }
