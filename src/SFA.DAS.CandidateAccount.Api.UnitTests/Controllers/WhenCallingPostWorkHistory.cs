@@ -10,7 +10,7 @@ using SFA.DAS.CandidateAccount.Application.Application.Commands.CreateJob;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.UpsertApplication;
 using SFA.DAS.Testing.AutoFixture;
 
-namespace SFA.DAS.WorkHistoryAccount.Api.UnitTests.Controllers;
+namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers;
 
 public class WhenCallingPostWorkHistory
 {
