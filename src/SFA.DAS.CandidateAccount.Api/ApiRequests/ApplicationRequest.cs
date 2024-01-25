@@ -6,7 +6,7 @@ namespace SFA.DAS.CandidateAccount.Api.ApiRequests;
 public class ApplicationRequest
 {
     [Required]
-    public required string Email { get; set; }
+    public required Guid CandidateId { get; set; }
     
     public ApplicationStatus Status { get; set; }
     public string? DisabilityStatus { get; set; }

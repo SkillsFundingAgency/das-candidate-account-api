@@ -24,8 +24,8 @@ public class WhenCallingPutApplication
     {
         //Arrange
         upsertApplicationCommandResult.IsCreated = true;
-        mediator.Setup(x => x.Send(It.Is<UpsertApplicationCommand>(c => 
-                c.Email.Equals(applicationRequest.Email)
+        mediator.Setup(x => x.Send(It.Is<UpsertApplicationCommand>(c =>
+                c.CandidateId.Equals(applicationRequest.CandidateId)
                 && c.Status.Equals(applicationRequest.Status)
                 && c.DisabilityStatus.Equals(applicationRequest.DisabilityStatus)
                 && c.VacancyReference.Equals(vacancyReference)
@@ -57,7 +57,7 @@ public class WhenCallingPutApplication
         //Arrange
         upsertApplicationCommandResult.IsCreated = false;
         mediator.Setup(x => x.Send(It.Is<UpsertApplicationCommand>(c => 
-                c.Email.Equals(applicationRequest.Email)
+                c.CandidateId.Equals(applicationRequest.CandidateId)
                 && c.Status.Equals(applicationRequest.Status)
                 && c.DisabilityStatus.Equals(applicationRequest.DisabilityStatus)
                 && c.VacancyReference.Equals(vacancyReference)
