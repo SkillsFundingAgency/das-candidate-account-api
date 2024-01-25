@@ -1,8 +1,8 @@
 CREATE TABLE dbo.[Candidate] (
     [Id]					uniqueidentifier	NOT NULL,
-    [FirstName]				nvarchar(150)	    NOt NULL,
+    [FirstName]				nvarchar(150)	    NULL,
     [MiddleNames]			nvarchar(150)	    NULL,
-    [LastName]				nvarchar(150)	    NOT NULL,
+    [LastName]				nvarchar(150)	    NULL,
     [Email]					varchar(255)	    NOT NULL,
     [PhoneNumber]			varchar(50)	        NULL,
     [DateOfBirth]			datetime		    NOT NULL,
