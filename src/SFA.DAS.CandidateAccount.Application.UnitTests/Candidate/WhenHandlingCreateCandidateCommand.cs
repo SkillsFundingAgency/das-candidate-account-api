@@ -8,25 +8,25 @@ using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.CandidateAccount.Application.UnitTests.Candidate;
 
-public class WhenHandlingCreateCandidateRequest
+public class WhenHandlingCreateCandidateCommand
 {
     [Test, RecursiveMoqAutoData]
     public async Task Then_Request_Is_Handled_And_Entity_Created(
-        CreateCandidateRequest request,
+        CreateCandidateCommand command,
         CandidateEntity entity,
         [Frozen] Mock<ICandidateRepository> candidateRepository,
-        CreateCandidateRequestHandler handler)
+        CreateCandidateCommandHandler handler)
     {
         candidateRepository.Setup(x => x.Insert(It.Is<CandidateEntity>(c => 
-                c.Id.Equals(request.Id)
-                && c.Email.Equals(request.Email)
-                && c.FirstName.Equals(request.FirstName)
-                && c.LastName.Equals(request.LastName)
-                && c.GovUkIdentifier.Equals(request.GovUkIdentifier)
+                c.Id.Equals(command.Id)
+                && c.Email.Equals(command.Email)
+                && c.FirstName.Equals(command.FirstName)
+                && c.LastName.Equals(command.LastName)
+                && c.GovUkIdentifier.Equals(command.GovUkIdentifier)
                 )))
             .ReturnsAsync(entity);
         
-        var actual = await handler.Handle(request, CancellationToken.None);
+        var actual = await handler.Handle(command, CancellationToken.None);
 
         actual.Candidate.Should().BeEquivalentTo(entity, options => options.Excluding(c=>c.Applications));
     }

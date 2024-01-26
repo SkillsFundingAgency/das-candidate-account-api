@@ -2,8 +2,12 @@ namespace SFA.DAS.CandidateAccount.Domain.Candidate;
 
 public class Candidate
 {
-    public static implicit operator Candidate(CandidateEntity source)
+    public static implicit operator Candidate?(CandidateEntity? source)
     {
+        if (source == null)
+        {
+            return null;
+        }
         return new Candidate
         {
             Id = source.Id,
@@ -23,13 +27,13 @@ public class Candidate
 
     public IEnumerable<Application.Application>? Applications { get; set; }
 
-    public string GovUkIdentifier { get; set; }
+    public string GovUkIdentifier { get; set; } = null!;
 
-    public string LastName { get; set; }
+    public string? LastName { get; set; }
 
-    public string FirstName { get; set; }
-    public string MiddleNames { get; set; }
-    public string PhoneNumber { get; set; }
+    public string? FirstName { get; set; }
+    public string? MiddleNames { get; set; }
+    public string? PhoneNumber { get; set; }
     public DateTime DateOfBirth { get; set; }
     public DateTime CreatedOn { get; set; }
     public DateTime? UpdatedOn { get; set; }

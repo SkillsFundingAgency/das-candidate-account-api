@@ -2,7 +2,7 @@ using MediatR;
 
 namespace SFA.DAS.CandidateAccount.Application.Candidate.Commands.CreateCandidate;
 
-public class CreateCandidateRequest : IRequest<CreateCandidateResponse>
+public class CreateCandidateCommand : IRequest<CreateCandidateCommandResponse>
 {
     public required string Email { get; set; }
     public required string FirstName { get; set; }
