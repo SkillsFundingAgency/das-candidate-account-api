@@ -3,14 +3,34 @@ using System.Net;
 using MediatR;
 using SFA.DAS.CandidateAccount.Api.ApiRequests;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.CreateWorkHistory;
+using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplicationWorkHistories;
 
 namespace SFA.DAS.CandidateAccount.Api.Controllers
 {
     [ApiVersion("1.0")]
     [ApiController]
     [Route("candidates/{candidateId}/applications/{applicationId}/work-history")]
-    public class WorkHistoryController(IMediator mediator, ILogger<ApplicationController> logger) : Controller
+    public class WorkHistoryController(IMediator mediator, ILogger<WorkHistoryController> logger) : Controller
     {
+        [HttpGet]
+        public async Task<IActionResult> GetWorkHistories([FromRoute] Guid candidateId, [FromRoute] Guid applicationId)
+        {
+            try
+            {
+                var result = await mediator.Send(new GetApplicationWorkHistoriesQuery
+                {
+                    CandidateId = candidateId,
+                    ApplicationId = applicationId,
+                });
+                return Ok(result.WorkHistories);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, "Get Job Histories : An error occurred");
+                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
         [HttpPost]
         public async Task<IActionResult> PostWorkHistory([FromRoute] Guid candidateId, [FromRoute] Guid applicationId, WorkHistoryRequest request)
         {
