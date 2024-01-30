@@ -12,9 +12,9 @@ public class CandidateEntityConfiguration : IEntityTypeConfiguration<CandidateEn
         builder.HasKey(x => x.Id);
         
         builder.Property(x => x.Id).HasColumnName("Id").HasColumnType("uniqueidentifier").IsRequired();
-        builder.Property(x => x.FirstName).HasColumnName("FirstName").HasColumnType("varchar").HasMaxLength(150).IsRequired();
+        builder.Property(x => x.FirstName).HasColumnName("FirstName").HasColumnType("varchar").HasMaxLength(150).IsRequired(false);
         builder.Property(x => x.MiddleNames).HasColumnName("MiddleNames").HasColumnType("varchar").HasMaxLength(150).IsRequired(false);
-        builder.Property(x => x.LastName).HasColumnName("LastName").HasColumnType("varchar").HasMaxLength(150).IsRequired();
+        builder.Property(x => x.LastName).HasColumnName("LastName").HasColumnType("varchar").HasMaxLength(150).IsRequired(false);
         builder.Property(x => x.Email).HasColumnName("Email").HasColumnType("varchar").HasMaxLength(255).IsRequired();
         builder.Property(x => x.PhoneNumber).HasColumnName("PhoneNumber").HasColumnType("varchar").HasMaxLength(50).IsRequired(false);
         builder.Property(x => x.DateOfBirth).HasColumnName("DateOfBirth").HasColumnType("DateTime").IsRequired();
