@@ -1,0 +1,27 @@
+﻿using SFA.DAS.CandidateAccount.Domain.Candidate;
+
+namespace SFA.DAS.CandidateAccount.Domain.Application
+{
+    public class ApplicationEntity
+    {
+        public Guid Id { get; set; }
+        public Guid CandidateId { get; set; }
+        public string? DisabilityStatus { get; set; }
+        public string VacancyReference { get; set; } = null!;
+        public short Status { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public DateTime? UpdatedDate { get; set; }
+        
+        public virtual CandidateEntity CandidateEntity { get; set; } = null!;
+        public short QualificationsStatus { get; set; }
+        public short TrainingCoursesStatus { get; set; }
+        public short JobsStatus { get; set; }
+        public short WorkExperienceStatus { get; set; }
+        public short DisabilityConfidenceStatus { get; set; }
+        public short SkillsAndStrengthStatus { get; set; }
+        public short InterestsStatus { get; set; }
+        public short AdditionalQuestion1Status { get; set; }
+        public short AdditionalQuestion2Status { get; set; }
+        public short InterviewAdjustmentsStatus { get; set; }
+    }
+}
