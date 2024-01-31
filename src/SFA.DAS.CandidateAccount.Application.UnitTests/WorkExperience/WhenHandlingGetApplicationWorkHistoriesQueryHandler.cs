@@ -19,10 +19,12 @@ public class WhenHandlingGetApplicationWorkHistoriesQueryHandler
         [Frozen] Mock<IWorkHistoryRepository> workExperienceRepository,
         GetApplicationWorkHistoriesQueryHandler handler)
     {
-        workExperienceRepository.Setup(x => x.Get(request.ApplicationId, CancellationToken.None)).ReturnsAsync(entities);
+        workExperienceRepository.Setup(x => x.Get(request.ApplicationId, request.CandidateId, CancellationToken.None)).ReturnsAsync(entities);
 
         var actual = await handler.Handle(request, CancellationToken.None);
 
-        actual.WorkHistories.Should().BeEquivalentTo(entities, options => options.Excluding(c => c.Id));
+        actual.WorkHistories.Should().BeEquivalentTo(entities, options => options
+            .Excluding(ctx => ctx.WorkHistoryType)
+        );
     }
 }

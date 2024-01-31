@@ -45,7 +45,15 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
 
     public async Task<ApplicationEntity?> GetById(Guid applicationId)
     {
-        return await dataContext.ApplicationEntities.FindAsync(applicationId);
+        try
+        {
+            return await dataContext.ApplicationEntities.FindAsync(applicationId);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 
     public async Task<ApplicationEntity> Update(ApplicationEntity application)
