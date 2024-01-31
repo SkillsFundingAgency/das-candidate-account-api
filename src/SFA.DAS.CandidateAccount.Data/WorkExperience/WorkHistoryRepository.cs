@@ -20,22 +20,14 @@ namespace SFA.DAS.CandidateAccount.Data.WorkExperience
 
         public async Task<List<WorkHistoryEntity>> Get(Guid applicationId, Guid candidateId, CancellationToken cancellationToken)
         {
-            try
-            {
-                var query = from wrk in dataContext.WorkExperienceEntities.Where(fil => fil.ApplicationId == applicationId)
-                        .OrderBy(a => a.StartDate)
-                        .ThenBy(a => a.JobTitle)
-                    join application in dataContext.ApplicationEntities.Where(fil => fil.CandidateId == candidateId && fil.Id == applicationId)
-                        on wrk.ApplicationId equals application.Id
-                    select wrk;
+            var query = from wrk in dataContext.WorkExperienceEntities.Where(fil => fil.ApplicationId == applicationId)
+                    .OrderBy(a => a.StartDate)
+                    .ThenBy(a => a.JobTitle)
+                        join application in dataContext.ApplicationEntities.Where(fil => fil.CandidateId == candidateId && fil.Id == applicationId)
+                            on wrk.ApplicationId equals application.Id
+                        select wrk;
 
-                return await query.ToListAsync(cancellationToken);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+            return await query.ToListAsync(cancellationToken);
         }
     }
 }
