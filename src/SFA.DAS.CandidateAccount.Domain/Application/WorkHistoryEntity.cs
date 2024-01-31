@@ -10,5 +10,8 @@
         public DateTime? EndDate { get; set; }
         public Guid ApplicationId { get; set; }
         public string Description { get; set; }
+
+        public virtual ApplicationEntity ApplicationEntity { get; set;  }
+
     }
 }
