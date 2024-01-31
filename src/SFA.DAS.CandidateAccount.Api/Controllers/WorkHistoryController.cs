@@ -4,6 +4,8 @@ using MediatR;
 using SFA.DAS.CandidateAccount.Api.ApiRequests;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.CreateWorkHistory;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplicationWorkHistories;
+using Azure.Core;
+using SFA.DAS.CandidateAccount.Application.Application.Commands.DeleteWorkHistory;
 
 namespace SFA.DAS.CandidateAccount.Api.Controllers
 {
@@ -60,7 +62,21 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers
         [HttpDelete]
         public async Task<IActionResult> DeleteWorkHistory([FromRoute] Guid candidateId, [FromRoute] Guid applicationId, [FromRoute] Guid workHistoryId)
         {
+            try
+            {
+                var result = await mediator.Send(new DeleteJobCommand
+                {
+                    ApplicationId = applicationId,
+                    JobId = workHistoryId
+                });
 
+                return Ok;
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, "DeleteJob : An error occurred");
+                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+            }
         }
     }
 }
