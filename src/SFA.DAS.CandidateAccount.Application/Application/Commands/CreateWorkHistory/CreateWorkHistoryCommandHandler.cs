@@ -11,7 +11,7 @@ public class CreateWorkHistoryCommandHandler(IWorkHistoryRepository workHistoryR
     {
         var result = await workHistoryRepository.Insert(new WorkHistoryEntity
         {
-            WorkHistoryType = (short) request.WorkHistoryType,
+            WorkHistoryType = (byte) request.WorkHistoryType,
             ApplicationId = request.ApplicationId,
             Description = request.JobDescription,
             Employer = request.EmployerName,
