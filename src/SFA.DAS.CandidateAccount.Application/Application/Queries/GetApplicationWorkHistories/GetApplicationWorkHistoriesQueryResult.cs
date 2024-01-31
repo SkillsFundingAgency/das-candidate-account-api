@@ -2,5 +2,5 @@
 
 public record GetApplicationWorkHistoriesQueryResult
 {
-    public List<Domain.Application.WorkHistoryEntity> WorkHistories { get; init; } = [];
+    public List<Domain.Application.WorkHistory> WorkHistories { get; init; } = [];
 }
