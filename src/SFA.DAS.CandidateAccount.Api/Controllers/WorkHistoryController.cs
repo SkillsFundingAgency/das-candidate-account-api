@@ -71,7 +71,7 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers
                     CandidateId= candidateId,
                 });
 
-                return Ok;
+                return Ok(result);
             }
             catch (Exception e)
             {

@@ -12,12 +12,13 @@ namespace SFA.DAS.CandidateAccount.Application.Application.Commands.DeleteWorkHi
 {
     public class DeleteJobCommandHandler(
         IWorkHistoryRepository workHistoryRepository)
-        : IRequestHandler<DeleteJobCommand, >
+        : IRequestHandler<DeleteJobCommand, Unit>
     {
-        public async Task<> Handle(DeleteJobCommand command, CancellationToken cancellation)
+        public async Task<Unit> Handle(DeleteJobCommand command, CancellationToken cancellation)
         {
-            var delete = await workHistoryRepository.Delete(command.ApplicationId, command.JobId, command.CandidateId);
+            await workHistoryRepository.Delete(command.ApplicationId, command.JobId, command.CandidateId);
 
+            return Unit.Value;
 
         }
     }
