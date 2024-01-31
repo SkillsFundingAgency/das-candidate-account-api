@@ -11,7 +11,7 @@ using SFA.DAS.CandidateAccount.Application.Application.Commands.PatchApplication
 using SFA.DAS.CandidateAccount.Domain.Application;
 using SFA.DAS.Testing.AutoFixture;
 
-namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers;
+namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.Application;
 
 public class WhenCallingPatchApplication
 {
