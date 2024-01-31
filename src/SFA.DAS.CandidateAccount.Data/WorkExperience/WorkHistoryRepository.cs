@@ -34,7 +34,7 @@ namespace SFA.DAS.CandidateAccount.Data.WorkExperience
         public async Task Delete(Guid applicationId, Guid id, Guid candidateId)
         {
             await dataContext.WorkExperienceEntities
-                .Where(c => c.ApplicationId == applicationId && c.Id == id && c.Application.CandidateId = candidateId)
+                .Where(c => c.ApplicationId == applicationId && c.Id == id && c.CandidateId = candidateId)
                 .ExecuteDeleteAsync();
         }
     }
