@@ -37,6 +37,7 @@ namespace SFA.DAS.CandidateAccount.Data.WorkExperience
                 .Include(c => c.ApplicationEntity)
                 .Where(c => c.ApplicationId == applicationId && c.Id == id && c.ApplicationEntity.CandidateId == candidateId)
                 .ExecuteDeleteAsync();
+              
         }
     }
 }
