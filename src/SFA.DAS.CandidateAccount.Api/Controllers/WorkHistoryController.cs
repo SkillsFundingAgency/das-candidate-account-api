@@ -56,5 +56,11 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers
                 return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
             }
         }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteWorkHistory([FromRoute] Guid candidateId, [FromRoute] Guid applicationId, [FromRoute] Guid workHistoryId)
+        {
+
+        }
     }
 }
