@@ -7,7 +7,7 @@ namespace SFA.DAS.CandidateAccount.Data.WorkExperience
     {
         Task<WorkHistoryEntity> Insert(WorkHistoryEntity workHistoryEntity);
         Task<List<WorkHistoryEntity>> Get(Guid applicationId, CancellationToken cancellationToken);
-        Task Delete(Guid applicationId, Guid id);
+        Task Delete(Guid applicationId, Guid id, Guid candidateId);
 
     }
     public class WorkHistoryRepository(ICandidateAccountDataContext dataContext) : IWorkHistoryRepository
@@ -30,7 +30,7 @@ namespace SFA.DAS.CandidateAccount.Data.WorkExperience
             return await query.ToListAsync(cancellationToken);
         }
 
-        public async Task Delete(Guid applicationId, Guid id)
+        public async Task Delete(Guid applicationId, Guid id, Guid candidateId)
         {
             await dataContext.WorkExperienceEntities
                 .Where(c => c.ApplicationId == applicationId && c.Id == id)

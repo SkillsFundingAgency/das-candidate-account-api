@@ -67,7 +67,8 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers
                 var result = await mediator.Send(new DeleteJobCommand
                 {
                     ApplicationId = applicationId,
-                    JobId = workHistoryId
+                    JobId = workHistoryId,
+                    CandidateId= candidateId,
                 });
 
                 return Ok;
