@@ -2,8 +2,10 @@
 using System.Net;
 using MediatR;
 using SFA.DAS.CandidateAccount.Api.ApiRequests;
+using SFA.DAS.CandidateAccount.Api.ApiResponses;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.CreateWorkHistory;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplicationWorkHistories;
+using SFA.DAS.CandidateAccount.Domain.Application;
 
 namespace SFA.DAS.CandidateAccount.Api.Controllers
 {
@@ -13,7 +15,7 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers
     public class WorkHistoryController(IMediator mediator, ILogger<WorkHistoryController> logger) : Controller
     {
         [HttpGet]
-        public async Task<IActionResult> GetWorkHistories([FromRoute] Guid candidateId, [FromRoute] Guid applicationId)
+        public async Task<IActionResult> GetWorkHistories([FromRoute] Guid candidateId, [FromRoute] Guid applicationId, WorkHistoryType? workHistoryType)
         {
             try
             {
@@ -21,8 +23,9 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers
                 {
                     CandidateId = candidateId,
                     ApplicationId = applicationId,
+                    WorkHistoryType = workHistoryType
                 });
-                return Ok(result.WorkHistories);
+                return Ok((GetWorkHistoriesApiResponse) result);
             }
             catch (Exception e)
             {

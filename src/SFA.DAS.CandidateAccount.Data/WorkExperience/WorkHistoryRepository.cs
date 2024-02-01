@@ -6,7 +6,7 @@ namespace SFA.DAS.CandidateAccount.Data.WorkExperience
     public interface IWorkHistoryRepository
     {
         Task<WorkHistoryEntity> Insert(WorkHistoryEntity workHistoryEntity);
-        Task<List<WorkHistoryEntity>> Get(Guid applicationId, Guid candidateId, CancellationToken cancellationToken);
+        Task<List<WorkHistoryEntity>> GetAll(Guid applicationId, Guid candidateId, WorkHistoryType? workHistoryType, CancellationToken cancellationToken);
 
     }
     public class WorkHistoryRepository(ICandidateAccountDataContext dataContext) : IWorkHistoryRepository
@@ -18,9 +18,11 @@ namespace SFA.DAS.CandidateAccount.Data.WorkExperience
             return workHistoryEntity;
         }
 
-        public async Task<List<WorkHistoryEntity>> Get(Guid applicationId, Guid candidateId, CancellationToken cancellationToken)
+        public async Task<List<WorkHistoryEntity>> GetAll(Guid applicationId, Guid candidateId, WorkHistoryType? workHistoryType, CancellationToken cancellationToken)
         {
-            var query = from wrk in dataContext.WorkExperienceEntities.Where(fil => fil.ApplicationId == applicationId)
+            var query = from wrk in dataContext.WorkExperienceEntities
+                    .Where(fil => fil.ApplicationId == applicationId)
+                    .Where(fil => workHistoryType == null || fil.WorkHistoryType == (byte) workHistoryType)
                     .OrderBy(a => a.StartDate)
                     .ThenBy(a => a.JobTitle)
                         join application in dataContext.ApplicationEntities.Where(fil => fil.CandidateId == candidateId && fil.Id == applicationId)
