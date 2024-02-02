@@ -6,6 +6,8 @@ namespace SFA.DAS.CandidateAccount.Data.WorkExperience
     public interface IWorkHistoryRepository
     {
         Task<WorkHistoryEntity> Insert(WorkHistoryEntity workHistoryEntity);
+
+        Task<WorkHistoryEntity?> Get(Guid applicationId, Guid candidateId, Guid id, WorkHistoryType? workHistoryType, CancellationToken cancellationToken);
         Task<List<WorkHistoryEntity>> GetAll(Guid applicationId, Guid candidateId, WorkHistoryType? workHistoryType, CancellationToken cancellationToken);
 
     }
@@ -30,6 +32,21 @@ namespace SFA.DAS.CandidateAccount.Data.WorkExperience
                         select wrk;
 
             return await query.ToListAsync(cancellationToken);
+        }
+
+        public async Task<WorkHistoryEntity?> Get(Guid applicationId, Guid candidateId, Guid id, WorkHistoryType? workHistoryType, CancellationToken cancellationToken)
+        {
+            var query = from wrk in dataContext.WorkExperienceEntities
+                    .Where(fil => fil.ApplicationId == applicationId)
+                    .Where(fil => fil.Id == id)
+                    .Where(fil => workHistoryType == null || fil.WorkHistoryType == (byte)workHistoryType)
+                    .OrderBy(a => a.StartDate)
+                    .ThenBy(a => a.JobTitle)
+                join application in dataContext.ApplicationEntities.Where(fil => fil.CandidateId == candidateId && fil.Id == applicationId)
+                    on wrk.ApplicationId equals application.Id
+                select wrk;
+
+            return await query.SingleOrDefaultAsync(cancellationToken);
         }
     }
 }

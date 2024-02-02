@@ -5,6 +5,7 @@ using SFA.DAS.CandidateAccount.Api.ApiRequests;
 using SFA.DAS.CandidateAccount.Api.ApiResponses;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.CreateWorkHistory;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplicationWorkHistories;
+using SFA.DAS.CandidateAccount.Application.Application.Queries.GetWorkHistoryItem;
 using SFA.DAS.CandidateAccount.Domain.Application;
 
 namespace SFA.DAS.CandidateAccount.Api.Controllers
@@ -56,6 +57,28 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers
             catch (Exception e)
             {
                 logger.LogError(e, "PostJob : An error occurred");
+                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<IActionResult> Get([FromRoute] Guid candidateId, [FromRoute] Guid applicationId, [FromRoute] Guid id, WorkHistoryType? workHistoryType)
+        {
+            try
+            {
+                var result = await mediator.Send(new GetWorkHistoryItemQuery
+                {
+                    CandidateId = candidateId,
+                    ApplicationId = applicationId,
+                    WorkHistoryType = workHistoryType,
+                    Id = id
+                });
+                return Ok((GetWorkHistoryItemApiResponse)result);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, "GetWorkHistoryItem : An error occurred");
                 return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
             }
         }
