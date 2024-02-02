@@ -14,7 +14,7 @@ namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers;
 
 public class WhenCallingPostWorkHistory
 {
-    [Test, MoqAutoData]
+    [Test, RecursiveMoqAutoData]
     public async Task Then_If_MediatorCall_Returns_Created_Then_Created_Result_Returned(
         Guid candidateId,
         Guid applicationId,

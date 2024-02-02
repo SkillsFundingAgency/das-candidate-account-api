@@ -1,18 +1,12 @@
 ﻿using AutoFixture.NUnit3;
 using FluentAssertions;
 using MediatR;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using SFA.DAS.CandidateAccount.Api.Controllers;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.DeleteWorkHistory;
 using SFA.DAS.Testing.AutoFixture;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.WorkHistory
 {

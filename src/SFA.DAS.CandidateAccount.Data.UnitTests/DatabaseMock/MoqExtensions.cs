@@ -47,7 +47,6 @@ namespace SFA.DAS.CandidateAccount.Data.UnitTests.DatabaseMock
         {
             mock.Setup(m => m.AsQueryable()).Returns(mock.Object);
             mock.Setup(m => m.AsAsyncEnumerable()).Returns(CreateAsyncMock(data));
-            mock.Setup(m => m.ExecuteDeleteAsync(It.IsAny<CancellationToken>())).ReturnsAsync(1);
         }
 
         private static void ConfigureQueryableCalls<TEntity>(

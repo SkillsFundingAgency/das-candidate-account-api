@@ -33,11 +33,12 @@ namespace SFA.DAS.CandidateAccount.Data.WorkExperience
 
         public async Task Delete(Guid applicationId, Guid id, Guid candidateId)
         {
-            await dataContext.WorkExperienceEntities
-                .Include(c => c.ApplicationEntity)
-                .Where(c => c.ApplicationId == applicationId && c.Id == id && c.ApplicationEntity.CandidateId == candidateId)
-                .ExecuteDeleteAsync();
-              
+            var workHistory = await dataContext.WorkExperienceEntities
+            .Where(w => w.Id == id && w.ApplicationId == applicationId && w.ApplicationEntity.CandidateId == candidateId)
+            .SingleOrDefaultAsync();
+
+            dataContext.WorkExperienceEntities.Remove(workHistory);
+            await dataContext.SaveChangesAsync();
         }
     }
 }

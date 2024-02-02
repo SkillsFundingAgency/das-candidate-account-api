@@ -4,7 +4,6 @@ using MediatR;
 using SFA.DAS.CandidateAccount.Api.ApiRequests;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.CreateWorkHistory;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplicationWorkHistories;
-using Azure.Core;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.DeleteWorkHistory;
 
 namespace SFA.DAS.CandidateAccount.Api.Controllers
@@ -59,7 +58,7 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers
             }
         }
 
-        [HttpDelete]
+        [HttpDelete("{workHistoryId}")]
         public async Task<IActionResult> DeleteWorkHistory([FromRoute] Guid candidateId, [FromRoute] Guid applicationId, [FromRoute] Guid workHistoryId)
         {
             try
@@ -68,7 +67,7 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers
                 {
                     ApplicationId = applicationId,
                     JobId = workHistoryId,
-                    CandidateId= candidateId,
+                    CandidateId = candidateId
                 });
 
                 return Ok(result);

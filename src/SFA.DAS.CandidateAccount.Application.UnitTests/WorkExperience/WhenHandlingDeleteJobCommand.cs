@@ -3,11 +3,6 @@ using Moq;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.DeleteWorkHistory;
 using SFA.DAS.CandidateAccount.Data.WorkExperience;
 using SFA.DAS.Testing.AutoFixture;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SFA.DAS.CandidateAccount.Application.UnitTests.WorkExperience
 {
