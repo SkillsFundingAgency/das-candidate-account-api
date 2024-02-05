@@ -4,6 +4,7 @@ using MediatR;
 using SFA.DAS.CandidateAccount.Api.ApiRequests;
 using SFA.DAS.CandidateAccount.Api.ApiResponses;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.CreateWorkHistory;
+using SFA.DAS.CandidateAccount.Application.Application.Commands.UpdateWorkHistory;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplicationWorkHistories;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetWorkHistoryItem;
 using SFA.DAS.CandidateAccount.Domain.Application;
@@ -79,6 +80,33 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers
             catch (Exception e)
             {
                 logger.LogError(e, "GetWorkHistoryItem : An error occurred");
+                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        [HttpPut]
+        [Route("{id}")]
+        public async Task<IActionResult> PutWorkHistoryItem([FromRoute] Guid candidateId, [FromRoute] Guid applicationId, [FromRoute] Guid id, PutWorkHIstoryItemRequest request)
+        {
+            try
+            {
+                await mediator.Send(new UpdateWorkHistoryCommand
+                {
+                    Id = id,
+                    ApplicationId = applicationId,
+                    CandidateId = candidateId,
+                    EmployerName = request.Employer,
+                    JobTitle = request.JobTitle,
+                    JobDescription = request.Description,
+                    StartDate = request.StartDate,
+                    EndDate = request.EndDate,
+                    WorkHistoryType = request.WorkHistoryType
+                });
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, "Put WorkHistoryItem : An error occurred");
                 return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
             }
         }
