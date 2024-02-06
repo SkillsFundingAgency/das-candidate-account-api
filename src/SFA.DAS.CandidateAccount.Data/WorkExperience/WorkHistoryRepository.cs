@@ -39,7 +39,7 @@ namespace SFA.DAS.CandidateAccount.Data.WorkExperience
             var query = from wrk in dataContext.WorkExperienceEntities
                     .Where(fil => fil.ApplicationId == applicationId)
                     .Where(fil => workHistoryType == null || fil.WorkHistoryType == (byte) workHistoryType)
-                    .OrderBy(a => a.StartDate)
+                    .OrderByDescending(a => a.StartDate)
                     .ThenBy(a => a.JobTitle)
                         join application in dataContext.ApplicationEntities.Where(fil => fil.CandidateId == candidateId && fil.Id == applicationId)
                             on wrk.ApplicationId equals application.Id
