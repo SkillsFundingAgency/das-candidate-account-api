@@ -3,6 +3,7 @@ using FluentAssertions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
+using SFA.DAS.CandidateAccount.Api.ApiRequests;
 using SFA.DAS.CandidateAccount.Api.Controllers;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.DeleteWorkHistory;
 using SFA.DAS.Testing.AutoFixture;
@@ -16,17 +17,17 @@ namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.WorkHistory
         public async Task Then_If_MediatorCall_Returns_Ok_Then_Ok_Result_Returned(
             Guid candidateId,
             Guid applicationId,
-            Guid workHistoryId,
+            DeleteWorkHistoryRequest request,
             [Frozen] Mock<IMediator> mediator,
             [Greedy] WorkHistoryController controller)
         {
-            var actual = await controller.DeleteWorkHistory(candidateId, applicationId, workHistoryId) as OkObjectResult;
+            var actual = await controller.DeleteWorkHistory(candidateId, applicationId, request) as OkObjectResult;
 
             actual.Should().BeOfType<OkObjectResult>();
             mediator.Verify(x => x.Send(It.Is<DeleteJobCommand>(c =>
                     c.CandidateId.Equals(candidateId) &&
                     c.ApplicationId.Equals(applicationId) &&
-                    c.JobId.Equals(workHistoryId)
+                    c.JobId.Equals(request.JobId)
                 ), CancellationToken.None));
 
         }
@@ -35,7 +36,7 @@ namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.WorkHistory
         public async Task Then_If_Error_Then_InternalServerError_Response_Returned(
             Guid candidateId,
             Guid applicationId,
-            Guid workHistoryId,
+            DeleteWorkHistoryRequest request,
             [Frozen] Mock<IMediator> mediator,
             [Greedy] WorkHistoryController controller)
         {
@@ -44,7 +45,7 @@ namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.WorkHistory
                 .ThrowsAsync(new Exception("Error"));
 
             // Act
-            var actual = await controller.DeleteWorkHistory(candidateId, applicationId, workHistoryId);
+            var actual = await controller.DeleteWorkHistory(candidateId, applicationId, request);
 
             // Assert
             actual.Should().BeOfType<StatusCodeResult>();
