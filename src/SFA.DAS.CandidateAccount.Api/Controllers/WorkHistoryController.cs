@@ -58,7 +58,8 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers
             }
         }
 
-        [HttpDelete("/delete")]
+        [HttpDelete]
+        [Route ("delete")]
         public async Task<IActionResult> DeleteWorkHistory([FromRoute] Guid candidateId, [FromRoute] Guid applicationId, DeleteWorkHistoryRequest request)
         {
             try
