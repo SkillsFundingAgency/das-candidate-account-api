@@ -8,6 +8,8 @@ using SFA.DAS.CandidateAccount.Api.Controllers;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplicationWorkHistories;
 using SFA.DAS.Testing.AutoFixture;
 using System.Net;
+using SFA.DAS.CandidateAccount.Api.ApiResponses;
+using SFA.DAS.CandidateAccount.Domain.Application;
 
 namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.WorkHistory
 {
@@ -17,6 +19,7 @@ namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.WorkHistory
         public async Task Then_The_Command_Is_Sent_To_Mediator_And_Ok_Returned(
         Guid applicationId,
         Guid candidateId,
+        WorkHistoryType workHistoryType,
         GetApplicationWorkHistoriesQueryResult response,
         [Frozen] Mock<IMediator> mediator,
         [Greedy] WorkHistoryController controller)
@@ -25,52 +28,26 @@ namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.WorkHistory
             mediator.Setup(x => x.Send(It.Is<GetApplicationWorkHistoriesQuery>(
                     c =>
                         c.ApplicationId.Equals(applicationId) &&
-                        c.CandidateId.Equals(candidateId)
+                        c.CandidateId.Equals(candidateId) &&
+                        c.WorkHistoryType.Equals(workHistoryType)
                 ), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(response);
 
             //Act
-            var actual = await controller.GetWorkHistories(candidateId, applicationId) as OkObjectResult;
+            var actual = await controller.GetWorkHistories(candidateId, applicationId, workHistoryType) as OkObjectResult;
 
             //Assert
             using var scope = new AssertionScope();
             actual.Should().NotBeNull();
             actual?.StatusCode.Should().Be((int)HttpStatusCode.OK);
-            actual?.Value.Should().BeEquivalentTo(response.WorkHistories);
-        }
-
-        [Test, MoqAutoData]
-        public async Task Then_If_Null_Returned_From_Mediator_Then_Null_Is_Returned(
-            Guid applicationId,
-            Guid candidateId,
-            [Frozen] Mock<IMediator> mediator,
-            [Greedy] WorkHistoryController controller)
-        {
-            //Arrange
-            mediator.Setup(x => x.Send(It.Is<GetApplicationWorkHistoriesQuery>(
-                    c =>
-                        c.ApplicationId.Equals(applicationId) &&
-                        c.CandidateId.Equals(candidateId)
-                ), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new GetApplicationWorkHistoriesQueryResult
-                {
-                    WorkHistories = null!
-                });
-
-            //Act
-            var actual = await controller.GetWorkHistories(candidateId, applicationId) as OkObjectResult;
-
-            //Assert
-            using var scope = new AssertionScope();
-            actual.Should().NotBeNull();
-            actual?.StatusCode.Should().Be((int)HttpStatusCode.OK);
-            actual?.Value.Should().BeNull();
+            actual?.Value.Should().BeEquivalentTo((GetWorkHistoriesApiResponse)response);
         }
 
         [Test, MoqAutoData]
         public async Task Then_If_Exception_Returned_From_Mediator_Then_InternalServerError_Is_Returned(
             Guid applicationId,
             Guid candidateId,
+            WorkHistoryType workHistoryType,
             [Frozen] Mock<IMediator> mediator,
             [Greedy] WorkHistoryController controller)
         {
@@ -79,7 +56,7 @@ namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.WorkHistory
                 .ThrowsAsync(new Exception());
 
             //Act
-            var actual = await controller.GetWorkHistories(applicationId, candidateId) as StatusCodeResult;
+            var actual = await controller.GetWorkHistories(candidateId, applicationId, workHistoryType) as StatusCodeResult;
 
             //Assert
             Assert.That(actual, Is.Not.Null);

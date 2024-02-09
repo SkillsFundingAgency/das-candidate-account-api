@@ -2,9 +2,12 @@
 using System.Net;
 using MediatR;
 using SFA.DAS.CandidateAccount.Api.ApiRequests;
+using SFA.DAS.CandidateAccount.Api.ApiResponses;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.CreateWorkHistory;
+using SFA.DAS.CandidateAccount.Application.Application.Commands.UpdateWorkHistory;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplicationWorkHistories;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.DeleteWorkHistory;
+using SFA.DAS.CandidateAccount.Domain.Application;
 
 namespace SFA.DAS.CandidateAccount.Api.Controllers
 {
@@ -14,7 +17,7 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers
     public class WorkHistoryController(IMediator mediator, ILogger<WorkHistoryController> logger) : Controller
     {
         [HttpGet]
-        public async Task<IActionResult> GetWorkHistories([FromRoute] Guid candidateId, [FromRoute] Guid applicationId)
+        public async Task<IActionResult> GetWorkHistories([FromRoute] Guid candidateId, [FromRoute] Guid applicationId, WorkHistoryType? workHistoryType)
         {
             try
             {
@@ -22,8 +25,9 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers
                 {
                     CandidateId = candidateId,
                     ApplicationId = applicationId,
+                    WorkHistoryType = workHistoryType
                 });
-                return Ok(result.WorkHistories);
+                return Ok((GetWorkHistoriesApiResponse) result);
             }
             catch (Exception e)
             {
@@ -58,24 +62,51 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers
             }
         }
 
-        [HttpDelete]
-        [Route ("delete")]
-        public async Task<IActionResult> DeleteWorkHistory([FromRoute] Guid candidateId, [FromRoute] Guid applicationId, DeleteWorkHistoryRequest request)
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<IActionResult> Get([FromRoute] Guid candidateId, [FromRoute] Guid applicationId, [FromRoute] Guid id, WorkHistoryType? workHistoryType)
         {
             try
             {
-                var result = await mediator.Send(new DeleteJobCommand
+                var result = await mediator.Send(new GetWorkHistoryItemQuery
                 {
+                    CandidateId = candidateId,
                     ApplicationId = applicationId,
-                    JobId = request.JobId,
-                    CandidateId = candidateId
+                    WorkHistoryType = workHistoryType,
+                    Id = id
                 });
-
-                return Ok(result);
+                return Ok((GetWorkHistoryItemApiResponse)result);
             }
             catch (Exception e)
             {
-                logger.LogError(e, "DeleteJob : An error occurred");
+                logger.LogError(e, "GetWorkHistoryItem : An error occurred");
+                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        [HttpPut]
+        [Route("{id}")]
+        public async Task<IActionResult> PutWorkHistoryItem([FromRoute] Guid candidateId, [FromRoute] Guid applicationId, [FromRoute] Guid id, PutWorkHIstoryItemRequest request)
+        {
+            try
+            {
+                await mediator.Send(new UpdateWorkHistoryCommand
+                {
+                    Id = id,
+                    ApplicationId = applicationId,
+                    CandidateId = candidateId,
+                    EmployerName = request.Employer,
+                    JobTitle = request.JobTitle,
+                    JobDescription = request.Description,
+                    StartDate = request.StartDate,
+                    EndDate = request.EndDate,
+                    WorkHistoryType = request.WorkHistoryType
+                });
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, "Put WorkHistoryItem : An error occurred");
                 return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
             }
         }

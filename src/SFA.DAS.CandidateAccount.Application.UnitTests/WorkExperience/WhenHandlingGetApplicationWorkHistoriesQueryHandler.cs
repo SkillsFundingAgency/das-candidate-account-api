@@ -19,7 +19,7 @@ public class WhenHandlingGetApplicationWorkHistoriesQueryHandler
         [Frozen] Mock<IWorkHistoryRepository> workExperienceRepository,
         GetApplicationWorkHistoriesQueryHandler handler)
     {
-        workExperienceRepository.Setup(x => x.Get(request.ApplicationId, request.CandidateId, CancellationToken.None)).ReturnsAsync(entities);
+        workExperienceRepository.Setup(x => x.GetAll(request.ApplicationId, request.CandidateId, request.WorkHistoryType, CancellationToken.None)).ReturnsAsync(entities);
 
         var actual = await handler.Handle(request, CancellationToken.None);
 
