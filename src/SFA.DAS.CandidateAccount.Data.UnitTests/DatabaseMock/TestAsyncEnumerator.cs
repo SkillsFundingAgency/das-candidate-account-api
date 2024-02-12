@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SFA.DAS.CandidateAccount.Data.UnitTests.DatabaseMock
+﻿namespace SFA.DAS.CandidateAccount.Data.UnitTests.DatabaseMock
 {
     public class TestAsyncEnumerator<T> : IAsyncEnumerator<T>
     {
