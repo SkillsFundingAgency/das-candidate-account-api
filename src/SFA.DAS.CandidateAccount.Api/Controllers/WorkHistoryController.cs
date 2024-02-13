@@ -114,14 +114,14 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers
 
         [HttpDelete]
         [Route("{id}")]
-        public async Task<IActionResult> DeleteWorkHistory([FromRoute] Guid candidateId, [FromRoute] Guid applicationId, [FromRoute] Guid jobId)
+        public async Task<IActionResult> DeleteWorkHistory([FromRoute] Guid candidateId, [FromRoute] Guid applicationId, [FromRoute] Guid id)
         {
             try
             {
                 var result = await mediator.Send(new DeleteJobCommand
                 {
                     ApplicationId = applicationId,
-                    JobId = jobId,
+                    JobId = id,
                     CandidateId = candidateId
                 });
 
