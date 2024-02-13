@@ -5,6 +5,7 @@ namespace SFA.DAS.CandidateAccount.Data.TrainingCourse
 {
     public interface ITrainingCourseRespository
     {
+        Task<TrainingCourseEntity> Insert(TrainingCourseEntity trainingCourseEntity);
         Task Update(TrainingCourseEntity trainingCourseEntity);
         Task<TrainingCourseEntity?> Get(Guid applicationId, Guid candidateId, Guid id, CancellationToken cancellationToken);
         Task<List<TrainingCourseEntity>> GetAll(Guid applicationId, Guid candidateId, CancellationToken cancellationToken);
@@ -35,6 +36,13 @@ namespace SFA.DAS.CandidateAccount.Data.TrainingCourse
                         select course;
 
             return await query.ToListAsync(cancellationToken);
+        }
+
+        public async Task<TrainingCourseEntity> Insert(TrainingCourseEntity trainingCourseEntity)
+        {
+            await dataContext.TrainingCourseEntities.AddAsync(trainingCourseEntity);
+            await dataContext.SaveChangesAsync();
+            return trainingCourseEntity;
         }
 
         public async Task Update(TrainingCourseEntity trainingCourseEntity)

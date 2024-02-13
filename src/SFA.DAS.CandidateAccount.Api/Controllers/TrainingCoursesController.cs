@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.CandidateAccount.Api.ApiRequests;
 using SFA.DAS.CandidateAccount.Api.ApiResponses;
+using SFA.DAS.CandidateAccount.Application.Application.Commands.CreateTrainingCourse;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.UpdateTrainingCourse;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetTrainingCourseItem;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetTrainingCourses;
@@ -73,6 +74,28 @@ public class TrainingCoursesController(IMediator mediator, ILogger<WorkHistoryCo
         catch (Exception e)
         {
             logger.LogError(e, "Put TrainingCourseItem : An error occurred");
+            return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+        }
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> PostTrainingCourse([FromRoute] Guid candidateId, [FromRoute] Guid applicationId, TrainingCourseRequest request)
+    {
+        try
+        {
+            var result = await mediator.Send(new CreateTrainingCourseCommand
+            {
+                CandidateId = candidateId,
+                ApplicationId = applicationId,
+                CourseName = request.CourseName,
+                YearAchieved = request.YearAchieved
+            });
+
+            return Created($"{result.TrainingCourseId}", result.TrainingCourse);
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e, "PostTrainingCourse : An error occurred");
             return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
         }
     }
