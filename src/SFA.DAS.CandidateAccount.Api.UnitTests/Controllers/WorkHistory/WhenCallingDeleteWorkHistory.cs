@@ -17,17 +17,17 @@ namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.WorkHistory
         public async Task Then_If_MediatorCall_Returns_Ok_Then_Ok_Result_Returned(
             Guid candidateId,
             Guid applicationId,
-            Guid jobId,
+            Guid id,
             [Frozen] Mock<IMediator> mediator,
             [Greedy] WorkHistoryController controller)
         {
-            var actual = await controller.DeleteWorkHistory(candidateId, applicationId, jobId) as OkObjectResult;
+            var actual = await controller.DeleteWorkHistory(candidateId, applicationId, id) as OkObjectResult;
 
             actual.Should().BeOfType<OkObjectResult>();
             mediator.Verify(x => x.Send(It.Is<DeleteJobCommand>(c =>
                     c.CandidateId.Equals(candidateId) &&
                     c.ApplicationId.Equals(applicationId) &&
-                    c.JobId.Equals(jobId)
+                    c.JobId.Equals(id)
                 ), CancellationToken.None));
 
         }
@@ -36,7 +36,7 @@ namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.WorkHistory
         public async Task Then_If_Error_Then_InternalServerError_Response_Returned(
             Guid candidateId,
             Guid applicationId,
-            Guid jobId,
+            Guid id,
             [Frozen] Mock<IMediator> mediator,
             [Greedy] WorkHistoryController controller)
         {
@@ -45,7 +45,7 @@ namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.WorkHistory
                 .ThrowsAsync(new Exception("Error"));
 
             // Act
-            var actual = await controller.DeleteWorkHistory(candidateId, applicationId, jobId);
+            var actual = await controller.DeleteWorkHistory(candidateId, applicationId, id);
 
             // Assert
             actual.Should().BeOfType<StatusCodeResult>();
