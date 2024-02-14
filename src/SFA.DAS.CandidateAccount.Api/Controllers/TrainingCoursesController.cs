@@ -75,7 +75,8 @@ public class TrainingCoursesController(IMediator mediator, ILogger<WorkHistoryCo
                     ApplicationId = applicationId,
                     Title = request.CourseName,
                     ToYear = (int)request.YearAchieved
-                }
+                },
+                CandidateId = candidateId
             });
 
             if (result.IsCreated)

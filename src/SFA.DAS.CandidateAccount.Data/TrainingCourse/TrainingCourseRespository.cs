@@ -5,8 +5,7 @@ namespace SFA.DAS.CandidateAccount.Data.TrainingCourse
 {
     public interface ITrainingCourseRespository
     {
-        Task Update(TrainingCourseEntity trainingCourseEntity);
-        Task<Tuple<TrainingCourseEntity, bool>> UpsertTrainingCourse(Domain.Application.TrainingCourse trainingCourseEntity);
+        Task<Tuple<TrainingCourseEntity, bool>> UpsertTrainingCourse(Domain.Application.TrainingCourse trainingCourseEntity, Guid candidateId);
         Task<TrainingCourseEntity?> Get(Guid applicationId, Guid candidateId, Guid id, CancellationToken cancellationToken);
         Task<List<TrainingCourseEntity>> GetAll(Guid applicationId, Guid candidateId, CancellationToken cancellationToken);
     }
@@ -38,35 +37,30 @@ namespace SFA.DAS.CandidateAccount.Data.TrainingCourse
             return await query.ToListAsync(cancellationToken);
         }
 
-        public async Task Update(TrainingCourseEntity trainingCourseEntity)
+        public async Task<Tuple<TrainingCourseEntity, bool>> UpsertTrainingCourse(Domain.Application.TrainingCourse trainingCourseEntity, Guid candidateId)
         {
-            var entity = await dataContext.TrainingCourseEntities.SingleAsync(x => x.Id == trainingCourseEntity.Id && x.ApplicationId == trainingCourseEntity.ApplicationId);
+            var query = from course in dataContext.TrainingCourseEntities
+                    .Where(tc => tc.Id == trainingCourseEntity.Id)
+                    .Where(tc => tc.ApplicationId == trainingCourseEntity.ApplicationId)
+                        join application in dataContext.ApplicationEntities.Where(app => app.CandidateId == candidateId && app.Id == trainingCourseEntity.ApplicationId)
+                        on course.ApplicationId equals application.Id
+                        select course;
 
-            entity.ToYear = trainingCourseEntity.ToYear;
-            entity.Title = trainingCourseEntity.Title;
+            var trainingCourse = await query.SingleOrDefaultAsync();
 
-            await dataContext.SaveChangesAsync();
-        }
-
-        public async Task<Tuple<TrainingCourseEntity, bool>> UpsertTrainingCourse(Domain.Application.TrainingCourse trainingCourseEntity)
-        {
-            var entity = await dataContext.TrainingCourseEntities
-                .SingleOrDefaultAsync(x => x.Id == trainingCourseEntity.Id
-                && x.ApplicationId == trainingCourseEntity.ApplicationId);
-
-            if (entity is null)
+            if (trainingCourse is null)
             {
                 await dataContext.TrainingCourseEntities.AddAsync((TrainingCourseEntity)trainingCourseEntity);
                 await dataContext.SaveChangesAsync();
                 return new Tuple<TrainingCourseEntity, bool>(trainingCourseEntity, true);
             }
 
-            entity.ToYear = trainingCourseEntity.ToYear;
-            entity.Title = trainingCourseEntity.Title;
-            dataContext.TrainingCourseEntities.Update(entity);
+            trainingCourse.ToYear = trainingCourseEntity.ToYear;
+            trainingCourse.Title = trainingCourseEntity.Title;
+            dataContext.TrainingCourseEntities.Update(trainingCourse);
 
             await dataContext.SaveChangesAsync();
-            return new Tuple<TrainingCourseEntity, bool>(entity, false);
+            return new Tuple<TrainingCourseEntity, bool>(trainingCourse, false);
         }
     }
 }

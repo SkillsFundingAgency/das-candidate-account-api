@@ -17,7 +17,7 @@ public class WhenHandlingUpdateTrainingCourseCommand
         UpsertTrainingCourseCommandHandler handler)
     {
         trainingCourseRepository.Setup(x =>
-            x.UpsertTrainingCourse(command.TrainingCourse)).ReturnsAsync(new Tuple<TrainingCourseEntity, bool>(trainingCourseEntity, true));
+            x.UpsertTrainingCourse(command.TrainingCourse, command.CandidateId)).ReturnsAsync(new Tuple<TrainingCourseEntity, bool>(trainingCourseEntity, true));
 
         var actual = await handler.Handle(command, CancellationToken.None);
 
@@ -32,7 +32,7 @@ public class WhenHandlingUpdateTrainingCourseCommand
         [Frozen] Mock<ITrainingCourseRespository> trainingCourseRepository,
         UpsertTrainingCourseCommandHandler handler)
     {
-        trainingCourseRepository.Setup(x => x.UpsertTrainingCourse(command.TrainingCourse))
+        trainingCourseRepository.Setup(x => x.UpsertTrainingCourse(command.TrainingCourse, command.CandidateId))
             .ReturnsAsync(new Tuple<TrainingCourseEntity, bool>(trainingCourseEntity, false));
 
         var actual = await handler.Handle(command, CancellationToken.None);

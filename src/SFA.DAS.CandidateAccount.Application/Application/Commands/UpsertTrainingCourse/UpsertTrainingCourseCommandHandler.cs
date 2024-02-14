@@ -7,7 +7,7 @@ public class UpsertTrainingCourseCommandHandler(ITrainingCourseRespository Train
 {
     public async Task<UpsertTrainingCourseCommandResponse> Handle(UpsertTrainingCourseCommand request, CancellationToken cancellationToken)
     {
-        var result = await TrainingCourseRepository.UpsertTrainingCourse(request.TrainingCourse);
+        var result = await TrainingCourseRepository.UpsertTrainingCourse(request.TrainingCourse, request.CandidateId);
         return new UpsertTrainingCourseCommandResponse
         {
             TrainingCourse = result.Item1,
