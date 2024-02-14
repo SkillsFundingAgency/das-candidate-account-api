@@ -5,8 +5,9 @@ using SFA.DAS.CandidateAccount.Api.ApiRequests;
 using SFA.DAS.CandidateAccount.Api.ApiResponses;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.UpdateWorkHistory;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplicationWorkHistories;
-using SFA.DAS.CandidateAccount.Application.Application.Queries.GetWorkHistoryItem;
+using SFA.DAS.CandidateAccount.Application.Application.Commands.DeleteWorkHistory;
 using SFA.DAS.CandidateAccount.Domain.Application;
+using SFA.DAS.CandidateAccount.Application.Application.Queries.GetWorkHistoryItem;
 
 namespace SFA.DAS.CandidateAccount.Api.Controllers
 {
@@ -94,6 +95,28 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers
             catch (Exception e)
             {
                 logger.LogError(e, "Put WorkHistoryItem : An error occurred");
+                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<IActionResult> DeleteWorkHistory([FromRoute] Guid candidateId, [FromRoute] Guid applicationId, [FromRoute] Guid id)
+        {
+            try
+            {
+                var result = await mediator.Send(new DeleteJobCommand
+                {
+                    ApplicationId = applicationId,
+                    JobId = id,
+                    CandidateId = candidateId
+                });
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, "DeleteJob : An error occurred");
                 return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
             }
         }

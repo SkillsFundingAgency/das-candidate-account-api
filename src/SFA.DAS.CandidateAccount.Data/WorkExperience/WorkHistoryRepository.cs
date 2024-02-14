@@ -8,7 +8,7 @@ namespace SFA.DAS.CandidateAccount.Data.WorkExperience
         Task<Tuple<WorkHistoryEntity, bool>> UpsertWorkHistory(WorkHistory workHistoryEntity, Guid candidateId);
         Task<WorkHistoryEntity?> Get(Guid applicationId, Guid candidateId, Guid id, WorkHistoryType? workHistoryType, CancellationToken cancellationToken);
         Task<List<WorkHistoryEntity>> GetAll(Guid applicationId, Guid candidateId, WorkHistoryType? workHistoryType, CancellationToken cancellationToken);
-
+        Task Delete(Guid applicationId, Guid id, Guid candidateId);
     }
     public class WorkHistoryRepository(ICandidateAccountDataContext dataContext) : IWorkHistoryRepository
     {

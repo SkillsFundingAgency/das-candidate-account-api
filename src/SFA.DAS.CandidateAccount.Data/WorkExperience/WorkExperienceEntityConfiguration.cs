@@ -18,6 +18,12 @@ public class WorkExperienceEntityConfiguration : IEntityTypeConfiguration<WorkHi
         builder.Property(x => x.EndDate).HasColumnName("EndDate").HasColumnType("datetime");
         builder.Property(x => x.ApplicationId).HasColumnName("ApplicationId").HasColumnType("uniqueidentifier").HasMaxLength(50).IsRequired();
         builder.Property(x => x.Description).HasColumnName("Description").HasColumnType("varchar").IsRequired();
+
+        builder
+            .HasOne(c => c.ApplicationEntity)
+            .WithMany(c => c.WorkHistoryEntities)
+            .HasForeignKey(c => c.ApplicationId)
+            .HasPrincipalKey(c => c.Id);
     }
 }
 
