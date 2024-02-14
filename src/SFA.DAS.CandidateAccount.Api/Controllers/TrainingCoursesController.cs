@@ -3,7 +3,6 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.CandidateAccount.Api.ApiRequests;
 using SFA.DAS.CandidateAccount.Api.ApiResponses;
-using SFA.DAS.CandidateAccount.Application.Application.Commands.CreateTrainingCourse;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.UpdateTrainingCourse;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetTrainingCourseItem;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetTrainingCourses;
@@ -25,7 +24,7 @@ public class TrainingCoursesController(IMediator mediator, ILogger<WorkHistoryCo
                 CandidateId = candidateId,
                 ApplicationId = applicationId
             });
-            
+
             if (result is null)
             {
                 return NotFound();
@@ -67,41 +66,27 @@ public class TrainingCoursesController(IMediator mediator, ILogger<WorkHistoryCo
     {
         try
         {
-            await mediator.Send(new UpdateTrainingCourseCommand
+            var result = await mediator.Send(new UpsertTrainingCourseCommand
             {
-                Id = id,
-                ApplicationId = applicationId,
-                CandidateId = candidateId,
-                CourseName = request.CourseName,
-                YearAchieved = (int)request.YearAchieved,
+                TrainingCourse = new Domain.Application.TrainingCourse
+                {
+                    Id = id,
+                    CandidateId = candidateId,
+                    ApplicationId = applicationId,
+                    Title = request.CourseName,
+                    ToYear = (int)request.YearAchieved
+                }
             });
-            return Ok();
+
+            if (result.IsCreated)
+            {
+                return Created($"{result.TrainingCourse.Id}", result.TrainingCourse);
+            }
+            return Ok(result.TrainingCourse);
         }
         catch (Exception e)
         {
             logger.LogError(e, "Put TrainingCourseItem : An error occurred");
-            return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
-        }
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> PostTrainingCourse([FromRoute] Guid candidateId, [FromRoute] Guid applicationId, TrainingCourseRequest request)
-    {
-        try
-        {
-            var result = await mediator.Send(new CreateTrainingCourseCommand
-            {
-                CandidateId = candidateId,
-                ApplicationId = applicationId,
-                CourseName = request.CourseName,
-                YearAchieved = (int)request.YearAchieved
-            });
-
-            return Created($"{result.TrainingCourseId}", result.TrainingCourse);
-        }
-        catch (Exception e)
-        {
-            logger.LogError(e, "PostTrainingCourse : An error occurred");
             return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
         }
     }

@@ -5,8 +5,8 @@ namespace SFA.DAS.CandidateAccount.Data.TrainingCourse
 {
     public interface ITrainingCourseRespository
     {
-        Task<TrainingCourseEntity> Insert(TrainingCourseEntity trainingCourseEntity);
         Task Update(TrainingCourseEntity trainingCourseEntity);
+        Task<Tuple<TrainingCourseEntity, bool>> UpsertTrainingCourse(Domain.Application.TrainingCourse trainingCourseEntity);
         Task<TrainingCourseEntity?> Get(Guid applicationId, Guid candidateId, Guid id, CancellationToken cancellationToken);
         Task<List<TrainingCourseEntity>> GetAll(Guid applicationId, Guid candidateId, CancellationToken cancellationToken);
     }
@@ -38,13 +38,6 @@ namespace SFA.DAS.CandidateAccount.Data.TrainingCourse
             return await query.ToListAsync(cancellationToken);
         }
 
-        public async Task<TrainingCourseEntity> Insert(TrainingCourseEntity trainingCourseEntity)
-        {
-            await dataContext.TrainingCourseEntities.AddAsync(trainingCourseEntity);
-            await dataContext.SaveChangesAsync();
-            return trainingCourseEntity;
-        }
-
         public async Task Update(TrainingCourseEntity trainingCourseEntity)
         {
             var entity = await dataContext.TrainingCourseEntities.SingleAsync(x => x.Id == trainingCourseEntity.Id && x.ApplicationId == trainingCourseEntity.ApplicationId);
@@ -53,6 +46,27 @@ namespace SFA.DAS.CandidateAccount.Data.TrainingCourse
             entity.Title = trainingCourseEntity.Title;
 
             await dataContext.SaveChangesAsync();
+        }
+
+        public async Task<Tuple<TrainingCourseEntity, bool>> UpsertTrainingCourse(Domain.Application.TrainingCourse trainingCourseEntity)
+        {
+            var entity = await dataContext.TrainingCourseEntities
+                .SingleOrDefaultAsync(x => x.Id == trainingCourseEntity.Id
+                && x.ApplicationId == trainingCourseEntity.ApplicationId);
+
+            if (entity is null)
+            {
+                await dataContext.TrainingCourseEntities.AddAsync((TrainingCourseEntity)trainingCourseEntity);
+                await dataContext.SaveChangesAsync();
+                return new Tuple<TrainingCourseEntity, bool>(trainingCourseEntity, true);
+            }
+
+            entity.ToYear = trainingCourseEntity.ToYear;
+            entity.Title = trainingCourseEntity.Title;
+            dataContext.TrainingCourseEntities.Update(entity);
+
+            await dataContext.SaveChangesAsync();
+            return new Tuple<TrainingCourseEntity, bool>(entity, false);
         }
     }
 }

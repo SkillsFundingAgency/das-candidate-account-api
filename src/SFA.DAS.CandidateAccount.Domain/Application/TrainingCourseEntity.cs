@@ -8,5 +8,19 @@
         public int ToYear { get; set; }
         public Guid ApplicationId { get; set; }
         public string Title { get; set; }
+
+        public static implicit operator TrainingCourseEntity(TrainingCourse source)
+        {
+            return new TrainingCourseEntity
+            {
+                Id = source.Id,
+                Provider = source.Provider,
+                FromYear = source.FromYear,
+                ToYear = source.ToYear,
+                ApplicationId = source.ApplicationId,
+                Title = source.Title
+            };
+
+        }
     }
 }
