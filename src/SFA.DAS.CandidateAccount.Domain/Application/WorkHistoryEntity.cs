@@ -11,8 +11,6 @@
         public Guid ApplicationId { get; set; }
         public string Description { get; set; }
 
-        public static implicit operator WorkHistoryEntity(WorkHistory source)
-        {
             return new WorkHistoryEntity
             {
                 Id = source.Id,

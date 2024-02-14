@@ -3,7 +3,6 @@ using System.Net;
 using MediatR;
 using SFA.DAS.CandidateAccount.Api.ApiRequests;
 using SFA.DAS.CandidateAccount.Api.ApiResponses;
-using SFA.DAS.CandidateAccount.Application.Application.Commands.CreateWorkHistory;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.UpdateWorkHistory;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplicationWorkHistories;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.DeleteWorkHistory;
