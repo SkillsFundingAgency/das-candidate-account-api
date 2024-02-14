@@ -56,4 +56,24 @@ public class WhenCallingGetTrainingCourses
             actual?.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
         }
     }
+
+    [Test, MoqAutoData]
+    public async Task And_Response_Is_Null_Then_NotFound_Returned(
+        Guid applicationId,
+        Guid candidateId,
+        GetTrainingCoursesQueryResult response,
+        [Frozen] Mock<IMediator> mediator,
+        [Greedy] TrainingCoursesController controller)
+    {
+        mediator.Setup(x => x.Send(It.Is<GetTrainingCoursesQuery>(
+                c =>
+                    c.ApplicationId.Equals(applicationId) &&
+                    c.CandidateId.Equals(candidateId)
+            ), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(() => null);
+
+        var actual = await controller.GetTrainingCourses(candidateId, applicationId);
+
+        actual.Should().BeOfType<NotFoundResult>();
+    }
 }
