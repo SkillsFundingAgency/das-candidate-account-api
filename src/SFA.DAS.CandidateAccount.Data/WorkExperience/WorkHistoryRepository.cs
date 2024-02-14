@@ -72,5 +72,15 @@ namespace SFA.DAS.CandidateAccount.Data.WorkExperience
             await dataContext.SaveChangesAsync();
             return new Tuple<WorkHistoryEntity, bool>(workHistory, false);
         }
+
+        public async Task Delete(Guid applicationId, Guid id, Guid candidateId)
+        {
+            var workHistory = await dataContext.WorkExperienceEntities
+            .Where(w => w.Id == id && w.ApplicationId == applicationId && w.ApplicationEntity.CandidateId == candidateId)
+            .SingleOrDefaultAsync();
+
+            dataContext.WorkExperienceEntities.Remove(workHistory);
+            await dataContext.SaveChangesAsync();
+        }
     }
 }
