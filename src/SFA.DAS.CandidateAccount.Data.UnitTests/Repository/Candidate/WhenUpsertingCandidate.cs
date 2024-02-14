@@ -30,6 +30,7 @@ public class WhenUpsertingCandidate
         actual.Item1.FirstName.Should().Be(existingCandidate.FirstName);
         actual.Item1.LastName.Should().Be(existingCandidate.LastName);
         actual.Item1.GovUkIdentifier.Should().Be(candidate.GovUkIdentifier);
+        actual.Item1.DateOfBirth.Should().Be(candidate.DateOfBirth);
         actual.Item1.UpdatedOn.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(5));
         actual.Item2.Should().BeFalse();
     }
@@ -56,6 +57,7 @@ public class WhenUpsertingCandidate
         actual.Item1.LastName.Should().Be(candidate.LastName);
         actual.Item1.Email.Should().Be(existingCandidate.Email);
         actual.Item1.GovUkIdentifier.Should().Be(candidate.GovUkIdentifier);
+        actual.Item1.DateOfBirth.Should().Be(candidate.DateOfBirth);
         actual.Item1.UpdatedOn.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(5));
     }
 
