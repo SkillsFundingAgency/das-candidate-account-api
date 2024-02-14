@@ -18,26 +18,62 @@ public class WhenCallingPutWorkHistory
         Guid id,
         Guid candidateId,
         Guid applicationId,
-        PutWorkHIstoryItemRequest workHistoryItemRequest,
+        PutWorkHistoryItemRequest upsertWorkHistoryRequest,
+        UpsertWorkHistoryCommandResponse upsertWorkHistoryCommandResult,
         [Frozen] Mock<IMediator> mediator,
         [Greedy] WorkHistoryController controller)
     {
-        //Arrange
-        mediator.Setup(x => x.Send(It.Is<UpdateWorkHistoryCommand>(c => 
-            c.Id.Equals(id)
-            && c.CandidateId.Equals(candidateId)
-            && c.ApplicationId.Equals(applicationId)
-            && c.EmployerName.Equals(workHistoryItemRequest.Employer)
-            && c.JobTitle.Equals(workHistoryItemRequest.JobTitle)
-            && c.JobDescription.Equals(workHistoryItemRequest.Description)
-            && c.StartDate.Equals(workHistoryItemRequest.StartDate)
-            && c.EndDate.Equals(workHistoryItemRequest.EndDate)
-            ), CancellationToken.None));
-        
-        //Act
-        var actual = await controller.PutWorkHistoryItem(candidateId, applicationId, id, workHistoryItemRequest);
-        
-        //Assert
-        actual.Should().BeOfType<OkResult>();
+        upsertWorkHistoryCommandResult.IsCreated = true;
+        mediator.Setup(x => x.Send(It.Is<UpsertWorkHistoryCommand>(c =>
+                c.WorkHistory.Id == id
+                && c.WorkHistory.ApplicationId.Equals(applicationId)
+            ), CancellationToken.None))
+            .ReturnsAsync(upsertWorkHistoryCommandResult);
+
+        var actual = await controller.PutWorkHistoryItem(candidateId, applicationId, id, upsertWorkHistoryRequest);
+        var result = actual as CreatedResult;
+        var actualResult = result.Value as Domain.Application.WorkHistory;
+
+        actual.Should().BeOfType<CreatedResult>();
+        actualResult.Should().BeEquivalentTo(upsertWorkHistoryCommandResult.WorkHistory);
+    }
+
+    [Test, MoqAutoData]
+    public async Task Then_If_MediatorCall_Returns_NotCreated_Then_Ok_Result_Returned(
+        Guid id,
+        Guid candidateId,
+        Guid applicationId,
+        PutWorkHistoryItemRequest upsertWorkHistoryRequest,
+        UpsertWorkHistoryCommandResponse upsertWorkHistoryCommandResult,
+        [Frozen] Mock<IMediator> mediator,
+        [Greedy] WorkHistoryController controller)
+    {
+        upsertWorkHistoryCommandResult.IsCreated = false;
+        mediator.Setup(x => x.Send(It.Is<UpsertWorkHistoryCommand>(c =>
+                c.WorkHistory.Id == id
+                && c.WorkHistory.ApplicationId.Equals(applicationId)
+            ), CancellationToken.None))
+            .ReturnsAsync(upsertWorkHistoryCommandResult);
+
+        var actual = await controller.PutWorkHistoryItem(candidateId, applicationId, id, upsertWorkHistoryRequest);
+        var result = actual as OkObjectResult;
+        var actualResult = result.Value as Domain.Application.WorkHistory;
+
+        actual.Should().BeOfType<OkObjectResult>();
+        actualResult.Should().BeEquivalentTo(upsertWorkHistoryCommandResult.WorkHistory);
+    }
+
+    [Test, MoqAutoData]
+    public async Task Then_If_Error_Then_InternalServerError_Response_Returned(
+        PutWorkHistoryItemRequest workHistoryRequest,
+        [Frozen] Mock<IMediator> mediator,
+        [Greedy] WorkHistoryController controller)
+    {
+        mediator.Setup(x => x.Send(It.IsAny<UpsertWorkHistoryCommand>(),
+            CancellationToken.None)).ThrowsAsync(new Exception("Error"));
+
+        var actual = await controller.PutWorkHistoryItem(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), workHistoryRequest);
+
+        actual.As<StatusCodeResult>().StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
     }
 }
