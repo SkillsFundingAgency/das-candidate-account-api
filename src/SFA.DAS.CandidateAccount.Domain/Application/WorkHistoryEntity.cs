@@ -13,5 +13,19 @@
 
         public virtual ApplicationEntity ApplicationEntity { get; set; }
 
+        public static implicit operator WorkHistoryEntity(WorkHistory source)
+        {
+            return new WorkHistoryEntity
+            {
+                Id = source.Id,
+                WorkHistoryType = (byte)source.WorkHistoryType,
+                Employer = source.Employer,
+                JobTitle = source.JobTitle,
+                StartDate = source.StartDate,
+                EndDate = source.EndDate,
+                ApplicationId = source.ApplicationId,
+                Description = source.Description
+            };
+        }
     }
 }
