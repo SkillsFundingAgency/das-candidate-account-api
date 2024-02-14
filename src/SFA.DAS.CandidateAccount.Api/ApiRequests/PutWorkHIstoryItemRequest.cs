@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.CandidateAccount.Api.ApiRequests
 {
-    public class PutWorkHIstoryItemRequest
+    public class PutWorkHistoryItemRequest
     {
         public string Employer { get; set; }
         public string JobTitle { get; set; }

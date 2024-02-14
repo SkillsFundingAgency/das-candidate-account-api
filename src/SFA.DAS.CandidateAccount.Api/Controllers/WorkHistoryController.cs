@@ -3,7 +3,6 @@ using System.Net;
 using MediatR;
 using SFA.DAS.CandidateAccount.Api.ApiRequests;
 using SFA.DAS.CandidateAccount.Api.ApiResponses;
-using SFA.DAS.CandidateAccount.Application.Application.Commands.CreateWorkHistory;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.UpdateWorkHistory;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplicationWorkHistories;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetWorkHistoryItem;
@@ -27,37 +26,11 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers
                     ApplicationId = applicationId,
                     WorkHistoryType = workHistoryType
                 });
-                return Ok((GetWorkHistoriesApiResponse) result);
+                return Ok((GetWorkHistoriesApiResponse)result);
             }
             catch (Exception e)
             {
                 logger.LogError(e, "GetWorkHistories : An error occurred");
-                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
-            }
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> PostWorkHistory([FromRoute] Guid candidateId, [FromRoute] Guid applicationId, WorkHistoryRequest request)
-        {
-            try
-            {
-                var result = await mediator.Send(new CreateWorkHistoryCommand
-                {
-                    WorkHistoryType = request.WorkHistoryType,
-                    CandidateId = candidateId,
-                    ApplicationId = applicationId,
-                    EmployerName = request.EmployerName,
-                    JobDescription = request.JobDescription,
-                    JobTitle = request.JobTitle,
-                    StartDate = request.StartDate,
-                    EndDate = request.EndDate
-                });
-
-                return Created($"{result.WorkHistoryId}", result.WorkHistory);
-            }
-            catch (Exception e)
-            {
-                logger.LogError(e, "PostJob : An error occurred");
                 return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
             }
         }
@@ -92,23 +65,31 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers
 
         [HttpPut]
         [Route("{id}")]
-        public async Task<IActionResult> PutWorkHistoryItem([FromRoute] Guid candidateId, [FromRoute] Guid applicationId, [FromRoute] Guid id, PutWorkHIstoryItemRequest request)
+        public async Task<IActionResult> PutWorkHistoryItem([FromRoute] Guid candidateId, [FromRoute] Guid applicationId, [FromRoute] Guid id, PutWorkHistoryItemRequest request)
         {
             try
             {
-                await mediator.Send(new UpdateWorkHistoryCommand
+                var result = await mediator.Send(new UpsertWorkHistoryCommand
                 {
-                    Id = id,
-                    ApplicationId = applicationId,
-                    CandidateId = candidateId,
-                    EmployerName = request.Employer,
-                    JobTitle = request.JobTitle,
-                    JobDescription = request.Description,
-                    StartDate = request.StartDate,
-                    EndDate = request.EndDate,
-                    WorkHistoryType = request.WorkHistoryType
+                    WorkHistory = new WorkHistory
+                    {
+                        Id = id,
+                        ApplicationId = applicationId,
+                        Employer = request.Employer,
+                        JobTitle = request.JobTitle,
+                        Description = request.Description,
+                        EndDate = request.EndDate,
+                        StartDate = request.StartDate,
+                        WorkHistoryType = request.WorkHistoryType
+                    },
+                    CandidateId = candidateId
                 });
-                return Ok();
+
+                if (result.IsCreated)
+                {
+                    return Created($"{result.WorkHistory.Id}", result.WorkHistory);
+                }
+                return Ok(result.WorkHistory);
             }
             catch (Exception e)
             {
