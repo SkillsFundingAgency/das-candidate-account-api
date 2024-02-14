@@ -67,7 +67,7 @@ public class TrainingCoursesController(IMediator mediator, ILogger<WorkHistoryCo
                 ApplicationId = applicationId,
                 CandidateId = candidateId,
                 CourseName = request.CourseName,
-                YearAchieved = request.YearAchieved,
+                YearAchieved = (int)request.YearAchieved,
             });
             return Ok();
         }
@@ -88,7 +88,7 @@ public class TrainingCoursesController(IMediator mediator, ILogger<WorkHistoryCo
                 CandidateId = candidateId,
                 ApplicationId = applicationId,
                 CourseName = request.CourseName,
-                YearAchieved = request.YearAchieved
+                YearAchieved = (int)request.YearAchieved
             });
 
             return Created($"{result.TrainingCourseId}", result.TrainingCourse);

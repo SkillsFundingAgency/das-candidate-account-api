@@ -17,7 +17,7 @@ public class WhenCallingPost
         Guid candidateId,
         Guid applicationId,
         TrainingCourseRequest trainingCourseRequest,
-        CreateTrainingCourseCommandResponse createTrainingCourseCommand,
+        CreateTrainingCourseCommandResponse createTrainingCourseCommandResponse,
         [Frozen] Mock<IMediator> mediator,
         [Greedy] TrainingCoursesController controller)
     {
@@ -25,15 +25,15 @@ public class WhenCallingPost
                 c.CandidateId.Equals(candidateId) &&
                 c.ApplicationId.Equals(applicationId) &&
                 c.CourseName.Equals(trainingCourseRequest.CourseName)
-                && c.YearAchieved.Equals(trainingCourseRequest.YearAchieved)
+                && c.YearAchieved.Equals((int)trainingCourseRequest.YearAchieved)
             ), CancellationToken.None))
-            .ReturnsAsync(createTrainingCourseCommand);
+            .ReturnsAsync(createTrainingCourseCommandResponse);
 
         var actual = await controller.PostTrainingCourse(candidateId, applicationId, trainingCourseRequest);
 
         var result = actual as CreatedResult;
         var actualResult = result.Value as Domain.Application.TrainingCourseEntity;
-        actualResult.Should().BeEquivalentTo(createTrainingCourseCommand.TrainingCourse);
+        actualResult.Should().BeEquivalentTo(createTrainingCourseCommandResponse.TrainingCourse);
     }
 
     [Test, MoqAutoData]
