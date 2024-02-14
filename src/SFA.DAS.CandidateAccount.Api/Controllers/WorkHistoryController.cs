@@ -75,6 +75,12 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers
                     WorkHistoryType = workHistoryType,
                     Id = id
                 });
+
+                if (result is null)
+                {
+                    return NotFound();
+                }
+
                 return Ok((GetWorkHistoryItemApiResponse)result);
             }
             catch (Exception e)
