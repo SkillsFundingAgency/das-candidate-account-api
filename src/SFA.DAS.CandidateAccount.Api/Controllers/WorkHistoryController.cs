@@ -35,32 +35,6 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers
             }
         }
 
-        [HttpPost]
-        public async Task<IActionResult> PostWorkHistory([FromRoute] Guid candidateId, [FromRoute] Guid applicationId, WorkHistoryRequest request)
-        {
-            try
-            {
-                var result = await mediator.Send(new CreateWorkHistoryCommand
-                {
-                    WorkHistoryType = request.WorkHistoryType,
-                    CandidateId = candidateId,
-                    ApplicationId = applicationId,
-                    EmployerName = request.EmployerName,
-                    JobDescription = request.JobDescription,
-                    JobTitle = request.JobTitle,
-                    StartDate = request.StartDate,
-                    EndDate = request.EndDate
-                });
-
-                return Created($"{result.WorkHistoryId}", result.WorkHistory);
-            }
-            catch (Exception e)
-            {
-                logger.LogError(e, "PostJob : An error occurred");
-                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
-            }
-        }
-
         [HttpGet]
         [Route("{id}")]
         public async Task<IActionResult> Get([FromRoute] Guid candidateId, [FromRoute] Guid applicationId, [FromRoute] Guid id, WorkHistoryType? workHistoryType)
