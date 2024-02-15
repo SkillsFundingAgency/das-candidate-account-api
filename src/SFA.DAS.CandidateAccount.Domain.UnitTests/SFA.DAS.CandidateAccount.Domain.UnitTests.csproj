@@ -10,6 +10,12 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Compile Remove="WorkHistory\**" />
+      <EmbeddedResource Remove="WorkHistory\**" />
+      <None Remove="WorkHistory\**" />
+    </ItemGroup>
+
+    <ItemGroup>
         <PackageReference Include="FluentAssertions" Version="6.12.0" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.0" />
         <PackageReference Include="NUnit" Version="3.13.3" />
@@ -22,10 +28,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\SFA.DAS.CandidateAccount.Domain\SFA.DAS.CandidateAccount.Domain.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="WorkHistory\" />
     </ItemGroup>
 
 </Project>

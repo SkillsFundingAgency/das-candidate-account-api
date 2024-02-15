@@ -8,6 +8,7 @@ namespace SFA.DAS.CandidateAccount.Data.TrainingCourse
         Task<Tuple<TrainingCourseEntity, bool>> UpsertTrainingCourse(Domain.Application.TrainingCourse trainingCourseEntity, Guid candidateId);
         Task<TrainingCourseEntity?> Get(Guid applicationId, Guid candidateId, Guid id, CancellationToken cancellationToken);
         Task<List<TrainingCourseEntity>> GetAll(Guid applicationId, Guid candidateId, CancellationToken cancellationToken);
+        Task Delete(Guid applicationId, Guid id, Guid candidateId);
     }
 
     public class TrainingCourseRespository(ICandidateAccountDataContext dataContext) : ITrainingCourseRespository
@@ -61,6 +62,21 @@ namespace SFA.DAS.CandidateAccount.Data.TrainingCourse
 
             await dataContext.SaveChangesAsync();
             return new Tuple<TrainingCourseEntity, bool>(trainingCourse, false);
+        }
+
+        public async Task Delete(Guid applicationId, Guid id, Guid candidateId)
+        {
+            var query = from course in dataContext.TrainingCourseEntities
+                .Where(fil => fil.ApplicationId == applicationId)
+                .OrderBy(a => a.ToYear)
+                   join application in dataContext.ApplicationEntities.Where(fil => fil.CandidateId == candidateId && fil.Id == applicationId)
+                   on course.ApplicationId equals application.Id
+                   select course;
+
+            var trainingCourse = await query.SingleOrDefaultAsync();
+
+            dataContext.TrainingCourseEntities.Remove(trainingCourse);
+            await dataContext.SaveChangesAsync();
         }
     }
 }
