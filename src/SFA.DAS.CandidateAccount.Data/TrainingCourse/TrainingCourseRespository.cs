@@ -68,7 +68,7 @@ namespace SFA.DAS.CandidateAccount.Data.TrainingCourse
         {
 
             var trainingCourse = await dataContext.TrainingCourseEntities
-            .Where(w => w.Id == id && w.ApplicationId == applicationId && w.ApplicationEntity.CandidateId == candidateId)
+            .Where(w => w.Id == trainingCourseId && w.ApplicationId == applicationId && w.ApplicationEntity.CandidateId == candidateId)
             .SingleOrDefaultAsync();
 
             dataContext.TrainingCourseEntities.Remove(trainingCourse);
