@@ -27,7 +27,7 @@ namespace SFA.DAS.CandidateAccount.Data.UnitTests.Repository.TrainingCourse
             context.Setup(x => x.TrainingCourseEntities).ReturnsDbSet(new List<TrainingCourseEntity>());
 
             //Act
-            await repository.Delete(trainingCourseEntity.ApplicationId, trainingCourseEntity.Id, candidateId);
+            await repository.Delete(trainingCourseEntity.ApplicationId, trainingCourseEntity.Id, trainingCourseEntity.ApplicationEntity.Id);
 
             //Assert
             context.Verify(x => x.SaveChangesAsync(CancellationToken.None), Times.Once);

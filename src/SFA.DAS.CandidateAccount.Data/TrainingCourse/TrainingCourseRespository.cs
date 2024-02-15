@@ -66,14 +66,10 @@ namespace SFA.DAS.CandidateAccount.Data.TrainingCourse
 
         public async Task Delete(Guid applicationId, Guid id, Guid candidateId)
         {
-            var query = from course in dataContext.TrainingCourseEntities
-                .Where(fil => fil.ApplicationId == applicationId)
-                .OrderBy(a => a.ToYear)
-                   join application in dataContext.ApplicationEntities.Where(fil => fil.CandidateId == candidateId && fil.Id == applicationId)
-                   on course.ApplicationId equals application.Id
-                   select course;
 
-            var trainingCourse = await query.SingleOrDefaultAsync();
+            var trainingCourse = await dataContext.TrainingCourseEntities
+            .Where(w => w.Id == id && w.ApplicationId == applicationId && w.ApplicationEntity.CandidateId == candidateId)
+            .SingleOrDefaultAsync();
 
             dataContext.TrainingCourseEntities.Remove(trainingCourse);
             await dataContext.SaveChangesAsync();
