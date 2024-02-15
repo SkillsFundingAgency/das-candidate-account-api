@@ -8,7 +8,7 @@ namespace SFA.DAS.CandidateAccount.Application.Application.Commands.DeleteTraini
     {
         public async Task<Unit> Handle(DeleteTrainingCourseCommand command, CancellationToken cancellation)
         {
-            await trainingCourseRespository.Delete(command.ApplicationId, command.JobId, command.CandidateId);
+            await trainingCourseRespository.Delete(command.ApplicationId, command.TrainingCourseid, command.CandidateId);
 
             return Unit.Value;
 
