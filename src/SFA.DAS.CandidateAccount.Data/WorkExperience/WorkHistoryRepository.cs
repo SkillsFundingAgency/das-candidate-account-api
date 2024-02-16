@@ -9,7 +9,7 @@ namespace SFA.DAS.CandidateAccount.Data.WorkExperience
         Task Update(WorkHistoryEntity workHistoryEntity);
         Task<WorkHistoryEntity?> Get(Guid applicationId, Guid candidateId, Guid id, WorkHistoryType? workHistoryType, CancellationToken cancellationToken);
         Task<List<WorkHistoryEntity>> GetAll(Guid applicationId, Guid candidateId, WorkHistoryType? workHistoryType, CancellationToken cancellationToken);
-
+        Task Delete(Guid applicationId, Guid id, Guid candidateId);
     }
     public class WorkHistoryRepository(ICandidateAccountDataContext dataContext) : IWorkHistoryRepository
     {
@@ -57,11 +57,21 @@ namespace SFA.DAS.CandidateAccount.Data.WorkExperience
                     .Where(fil => workHistoryType == null || fil.WorkHistoryType == (byte)workHistoryType)
                     .OrderBy(a => a.StartDate)
                     .ThenBy(a => a.JobTitle)
-                join application in dataContext.ApplicationEntities.Where(fil => fil.CandidateId == candidateId && fil.Id == applicationId)
-                    on wrk.ApplicationId equals application.Id
-                select wrk;
+                        join application in dataContext.ApplicationEntities.Where(fil => fil.CandidateId == candidateId && fil.Id == applicationId)
+                            on wrk.ApplicationId equals application.Id
+                        select wrk;
 
             return await query.SingleOrDefaultAsync(cancellationToken);
+        }
+
+        public async Task Delete(Guid applicationId, Guid id, Guid candidateId)
+        {
+            var workHistory = await dataContext.WorkExperienceEntities
+            .Where(w => w.Id == id && w.ApplicationId == applicationId && w.ApplicationEntity.CandidateId == candidateId)
+            .SingleOrDefaultAsync();
+
+            dataContext.WorkExperienceEntities.Remove(workHistory);
+            await dataContext.SaveChangesAsync();
         }
     }
 }

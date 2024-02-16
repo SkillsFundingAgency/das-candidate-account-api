@@ -24,7 +24,7 @@ public class WhenHandlingGetApplicationWorkHistoriesQueryHandler
         var actual = await handler.Handle(request, CancellationToken.None);
 
         actual.WorkHistories.Should().BeEquivalentTo(entities, options => options
-            .Excluding(ctx => ctx.WorkHistoryType)
+            .Excluding(ctx => ctx.WorkHistoryType).Excluding(ctx => ctx.ApplicationEntity)
         );
     }
 }
