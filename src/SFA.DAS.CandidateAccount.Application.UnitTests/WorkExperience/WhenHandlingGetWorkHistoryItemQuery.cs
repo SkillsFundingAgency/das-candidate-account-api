@@ -24,6 +24,7 @@ namespace SFA.DAS.CandidateAccount.Application.UnitTests.WorkExperience
 
             actual.Should().BeEquivalentTo(entities, options => options
                 .Excluding(ctx => ctx.WorkHistoryType)
+                .Excluding(ctx => ctx.ApplicationEntity)
             );
         }
     }
