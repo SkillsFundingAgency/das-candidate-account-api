@@ -11,6 +11,8 @@
         public Guid ApplicationId { get; set; }
         public string Description { get; set; }
 
+        public virtual ApplicationEntity ApplicationEntity { get; set; }
+
         public static implicit operator WorkHistoryEntity(WorkHistory source)
         {
             return new WorkHistoryEntity
