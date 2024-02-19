@@ -95,7 +95,7 @@ public class TrainingCoursesController(IMediator mediator, ILogger<WorkHistoryCo
     }
 
     [HttpDelete]
-    [Route("{id}")]
+    [Route("{trainingCourseId}")]
     public async Task<IActionResult> DeleteTrainingCourse([FromRoute] Guid candidateId, [FromRoute] Guid applicationId, [FromRoute] Guid TrainingCourseid)
     {
         try
