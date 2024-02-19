@@ -64,11 +64,11 @@ namespace SFA.DAS.CandidateAccount.Data.TrainingCourse
             return new Tuple<TrainingCourseEntity, bool>(trainingCourse, false);
         }
 
-        public async Task Delete(Guid applicationId, Guid trainingCourseId, Guid candidateId)
+        public async Task Delete(Guid applicationId, Guid id, Guid candidateId)
         {
 
             var trainingCourse = await dataContext.TrainingCourseEntities
-            .Where(w => w.Id == trainingCourseId && w.ApplicationId == applicationId && w.ApplicationEntity.CandidateId == candidateId)
+            .Where(w => w.Id == id && w.ApplicationId == applicationId && w.ApplicationEntity.CandidateId == candidateId)
             .SingleOrDefaultAsync();
 
             dataContext.TrainingCourseEntities.Remove(trainingCourse);

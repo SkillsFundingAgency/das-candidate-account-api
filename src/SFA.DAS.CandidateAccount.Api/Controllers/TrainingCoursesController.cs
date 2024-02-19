@@ -95,15 +95,15 @@ public class TrainingCoursesController(IMediator mediator, ILogger<WorkHistoryCo
     }
 
     [HttpDelete]
-    [Route("{trainingCourseId}")]
-    public async Task<IActionResult> DeleteTrainingCourse([FromRoute] Guid candidateId, [FromRoute] Guid applicationId, [FromRoute] Guid TrainingCourseid)
+    [Route("{id}")]
+    public async Task<IActionResult> DeleteTrainingCourse([FromRoute] Guid candidateId, [FromRoute] Guid applicationId, [FromRoute] Guid id)
     {
         try
         {
             var result = await mediator.Send(new DeleteTrainingCourseCommand
             {
                 ApplicationId = applicationId,
-                TrainingCourseid = TrainingCourseid,
+                Id = id,
                 CandidateId = candidateId
             });
 

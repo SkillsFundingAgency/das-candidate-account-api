@@ -19,7 +19,7 @@ namespace SFA.DAS.CandidateAccount.Application.UnitTests.TrainingCourses
         public async Task Handle_Should_Delete_WorkHistory_From_Repository(
          Guid candidateId,
          Guid applicationId,
-         Guid workHistoryId,
+         Guid id,
          [Frozen] Mock<ITrainingCourseRespository> mockRepository,
          DeleteTrainingCourseCommandHandler handler)
         {
@@ -28,7 +28,7 @@ namespace SFA.DAS.CandidateAccount.Application.UnitTests.TrainingCourses
             {
                 CandidateId = candidateId,
                 ApplicationId = applicationId,
-                JobId = workHistoryId
+                Id = id
             };
 
             // Act
@@ -37,7 +37,7 @@ namespace SFA.DAS.CandidateAccount.Application.UnitTests.TrainingCourses
             // Assert
             mockRepository.Verify(
                 x => x.Delete(It.Is<Guid>(a => a.Equals(applicationId)),
-                              It.Is<Guid>(w => w.Equals(workHistoryId)),
+                              It.Is<Guid>(w => w.Equals(id)),
                               It.Is<Guid>(c => c.Equals(candidateId))),
                 Times.Once);
         }

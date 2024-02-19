@@ -31,7 +31,7 @@ namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.TrainingCourses
             mediator.Verify(x => x.Send(It.Is<DeleteTrainingCourseCommand>(c =>
                     c.CandidateId.Equals(candidateId) &&
                     c.ApplicationId.Equals(applicationId) &&
-                    c.JobId.Equals(id)
+                    c.Id.Equals(id)
                 ), CancellationToken.None));
 
         }
