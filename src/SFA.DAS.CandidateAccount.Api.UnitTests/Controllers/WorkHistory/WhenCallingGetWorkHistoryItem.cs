@@ -45,5 +45,29 @@ namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.WorkHistory
             actual?.StatusCode.Should().Be((int)HttpStatusCode.OK);
             actual?.Value.Should().BeEquivalentTo((GetWorkHistoryItemApiResponse)response);
         }
+
+        [Test, MoqAutoData]
+        public async Task And_Response_Is_Null_Then_Return_NotFound(
+            Guid applicationId,
+            Guid candidateId,
+            Guid id,
+            WorkHistoryType workHistoryType,
+            GetWorkHistoryItemQueryResult response,
+            [Frozen] Mock<IMediator> mediator,
+            [Greedy] WorkHistoryController controller)
+        {
+            mediator.Setup(x => x.Send(It.Is<GetWorkHistoryItemQuery>(
+                    c =>
+                        c.ApplicationId.Equals(applicationId) &&
+                        c.CandidateId.Equals(candidateId) &&
+                        c.Id.Equals(id) &&
+                        c.WorkHistoryType.Equals(workHistoryType)
+                ), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() => null);
+
+            var actual = await controller.Get(candidateId, applicationId, id, workHistoryType);
+
+            actual.Should().BeOfType<NotFoundResult>();
+        }
     }
 }
