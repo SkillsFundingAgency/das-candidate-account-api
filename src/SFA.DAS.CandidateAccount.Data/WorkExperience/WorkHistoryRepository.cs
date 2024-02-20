@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using SFA.DAS.CandidateAccount.Domain.Application;
 
 namespace SFA.DAS.CandidateAccount.Data.WorkExperience
@@ -41,30 +42,7 @@ namespace SFA.DAS.CandidateAccount.Data.WorkExperience
             var query = from wrk in dataContext.WorkExperienceEntities
                     .Where(fil => fil.ApplicationId == applicationId)
                     .Where(fil => workHistoryType == null || fil.WorkHistoryType == (byte)workHistoryType)
-                    .OrderBy(a => a.EndDate.HasValue)
-                    .ThenByDescending(a => a.StartDate)
-                    .ThenBy(a => a.JobTitle)
-                        join application in dataContext.ApplicationEntities.Where(fil => fil.CandidateId == candidateId && fil.Id == applicationId)
-                            on wrk.ApplicationId equals application.Id
-                        select wrk;
-
-            return await query.ToListAsync(cancellationToken);
-        }
-
-        public async Task<WorkHistoryEntity?> Get(Guid applicationId, Guid candidateId, Guid id, WorkHistoryType? workHistoryType, CancellationToken cancellationToken)
-        {
-            var query = from wrk in dataContext.WorkExperienceEntities
-                    .Where(fil => fil.ApplicationId == applicationId)
-                    .Where(fil => fil.Id == id)
-                    .Where(fil => workHistoryType == null || fil.WorkHistoryType == (byte)workHistoryType)
-                    .OrderBy(a => a.StartDate)
-                    .ThenBy(a => a.JobTitle)
-                        join application in dataContext.ApplicationEntities.Where(fil => fil.CandidateId == candidateId && fil.Id == applicationId)
-                            on wrk.ApplicationId equals application.Id
-                        select wrk;
-
-            return await query.SingleOrDefaultAsync(cancellationToken);
-        }
+        Task Delete(Guid applicationId, Guid id, Guid candidateId);
         public async Task<Tuple<WorkHistoryEntity, bool>> UpsertWorkHistory(WorkHistory workHistoryEntity, Guid candidateId)
         {
             var query = from wrk in dataContext.WorkExperienceEntities
@@ -104,6 +82,7 @@ namespace SFA.DAS.CandidateAccount.Data.WorkExperience
 
             dataContext.WorkExperienceEntities.Remove(workHistory);
             await dataContext.SaveChangesAsync();
+        }
         }
     }
 }

@@ -30,7 +30,8 @@ namespace SFA.DAS.CandidateAccount.Data.TrainingCourse
         {
             var query = from course in dataContext.TrainingCourseEntities
                     .Where(fil => fil.ApplicationId == applicationId)
-                    .OrderBy(a => a.ToYear)
+                    .OrderByDescending(a => a.ToYear)
+                    .ThenBy(a => a.Title)
                         join application in dataContext.ApplicationEntities.Where(fil => fil.CandidateId == candidateId && fil.Id == applicationId)
                             on course.ApplicationId equals application.Id
                         select course;
