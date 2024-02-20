@@ -6,12 +6,7 @@ using Moq;
 using SFA.DAS.CandidateAccount.Api.Controllers;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.DeleteTrainingCourse;
 using SFA.DAS.Testing.AutoFixture;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.TrainingCourses
 {
