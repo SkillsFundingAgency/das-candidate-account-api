@@ -14,10 +14,10 @@ namespace SFA.DAS.CandidateAccount.Application.UnitTests.WorkExperience
             Guid applicationId,
             Guid workHistoryId,
             [Frozen] Mock<IWorkHistoryRepository> mockRepository,
-            DeleteJobCommandHandler handler)
+            DeleteWorkHistoryCommandHandler handler)
         {
             // Arrange
-            var command = new DeleteJobCommand
+            var command = new DeleteWorkHistoryCommand
             {
                 CandidateId = candidateId,
                 ApplicationId = applicationId,

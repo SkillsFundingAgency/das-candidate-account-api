@@ -105,7 +105,7 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers
         {
             try
             {
-                var result = await mediator.Send(new DeleteJobCommand
+                var result = await mediator.Send(new DeleteWorkHistoryCommand
                 {
                     ApplicationId = applicationId,
                     JobId = id,
