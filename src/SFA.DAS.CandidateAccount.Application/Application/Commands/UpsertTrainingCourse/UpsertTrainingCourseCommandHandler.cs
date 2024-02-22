@@ -2,7 +2,7 @@
 using SFA.DAS.CandidateAccount.Data.TrainingCourse;
 
 namespace SFA.DAS.CandidateAccount.Application.Application.Commands.UpdateTrainingCourse;
-public class UpsertTrainingCourseCommandHandler(ITrainingCourseRespository TrainingCourseRepository) 
+public class UpsertTrainingCourseCommandHandler(ITrainingCourseRepository TrainingCourseRepository) 
     : IRequestHandler<UpsertTrainingCourseCommand, UpsertTrainingCourseCommandResponse>
 {
     public async Task<UpsertTrainingCourseCommandResponse> Handle(UpsertTrainingCourseCommand request, CancellationToken cancellationToken)

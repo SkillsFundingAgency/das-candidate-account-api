@@ -13,7 +13,7 @@ public static class AddServiceRegistrationExtension
         services.AddScoped<IApplicationRepository, ApplicationRepository>();
         services.AddScoped<ICandidateRepository, CandidateRepository>();
         services.AddScoped<IWorkHistoryRepository, WorkHistoryRepository>();
-        services.AddScoped<ITrainingCourseRespository, TrainingCourseRespository>();
+        services.AddScoped<ITrainingCourseRepository, TrainingCourseRepository>();
         services.AddMediatR(configuration => configuration.RegisterServicesFromAssembly(typeof(UpsertApplicationCommand).Assembly));
     }
 }

@@ -3,14 +3,14 @@ using SFA.DAS.CandidateAccount.Domain.Application;
 
 namespace SFA.DAS.CandidateAccount.Data.TrainingCourse
 {
-    public interface ITrainingCourseRespository
+    public interface ITrainingCourseRepository
     {
         Task<Tuple<TrainingCourseEntity, bool>> UpsertTrainingCourse(Domain.Application.TrainingCourse trainingCourseEntity, Guid candidateId);
         Task<TrainingCourseEntity?> Get(Guid applicationId, Guid candidateId, Guid id, CancellationToken cancellationToken);
         Task<List<TrainingCourseEntity>> GetAll(Guid applicationId, Guid candidateId, CancellationToken cancellationToken);
     }
 
-    public class TrainingCourseRespository(ICandidateAccountDataContext dataContext) : ITrainingCourseRespository
+    public class TrainingCourseRepository(ICandidateAccountDataContext dataContext) : ITrainingCourseRepository
     {
         public async Task<TrainingCourseEntity?> Get(Guid applicationId, Guid candidateId, Guid id, CancellationToken cancellationToken)
         {
