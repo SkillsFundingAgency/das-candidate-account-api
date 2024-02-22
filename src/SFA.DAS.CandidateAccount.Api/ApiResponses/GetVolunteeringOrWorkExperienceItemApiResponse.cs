@@ -5,11 +5,11 @@ namespace SFA.DAS.CandidateAccount.Api.ApiResponses;
 public class GetVolunteeringOrWorkExperienceItemApiResponse
 {
     public Guid Id { get; set; }
-    public string Organisation { get; set; }
+    public string? Organisation { get; set; }
     public DateTime StartDate { get; set; }
     public DateTime? EndDate { get; set; }
     public Guid ApplicationId { get; set; }
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     public static implicit operator GetVolunteeringOrWorkExperienceItemApiResponse(GetVolunteeringOrWorkExperienceItemQueryResult source)
     {

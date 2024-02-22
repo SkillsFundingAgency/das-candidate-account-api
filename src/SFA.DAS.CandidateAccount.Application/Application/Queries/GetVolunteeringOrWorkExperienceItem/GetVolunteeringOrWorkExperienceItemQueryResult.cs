@@ -1,14 +1,14 @@
 ﻿using SFA.DAS.CandidateAccount.Domain.Application;
 
 namespace SFA.DAS.CandidateAccount.Application.Application.Queries.GetVolunteeringOrWorkExperienceItem;
-public class GetVolunteeringOrWorkExperienceItemQueryResult
+public record GetVolunteeringOrWorkExperienceItemQueryResult
 {
-    public Guid Id { get; set; }
-    public string Employer { get; set; }
-    public DateTime StartDate { get; set; }
-    public DateTime? EndDate { get; set; }
-    public Guid ApplicationId { get; set; }
-    public string Description { get; set; }
+    public Guid Id { get; private init; }
+    public string? Employer { get; private init; }
+    public DateTime StartDate { get; private init; }
+    public DateTime? EndDate { get; private init; }
+    public Guid ApplicationId { get; private init; }
+    public string? Description { get; private init; }
 
     public static implicit operator GetVolunteeringOrWorkExperienceItemQueryResult(WorkHistoryEntity source)
     {

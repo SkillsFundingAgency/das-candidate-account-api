@@ -3,11 +3,11 @@ using SFA.DAS.CandidateAccount.Data.WorkExperience;
 
 namespace SFA.DAS.CandidateAccount.Application.Application.Commands.DeleteWorkHistory
 {
-    public class DeleteWorkHistoryCommandHandler(IWorkHistoryRepository workHistoryRepository) : IRequestHandler<DeleteWorkHistoryCommand, Unit>
+    public record DeleteWorkHistoryCommandHandler(IWorkHistoryRepository WorkHistoryRepository) : IRequestHandler<DeleteWorkHistoryCommand, Unit>
     {
-        public async Task<Unit> Handle(DeleteWorkHistoryCommand command, CancellationToken cancellation)
+        public async Task<Unit> Handle(DeleteWorkHistoryCommand command, CancellationToken cancellationToken)
         {
-            await workHistoryRepository.Delete(command.ApplicationId, command.JobId, command.CandidateId);
+            await WorkHistoryRepository.Delete(command.ApplicationId, command.JobId, command.CandidateId);
 
             return Unit.Value;
         }
