@@ -79,6 +79,11 @@ namespace SFA.DAS.CandidateAccount.Data.WorkExperience
             .Where(w => w.Id == id && w.ApplicationId == applicationId && w.ApplicationEntity.CandidateId == candidateId)
             .SingleOrDefaultAsync();
 
+            if (workHistory == null) 
+            {  
+                return; 
+            }
+
             dataContext.WorkExperienceEntities.Remove(workHistory);
             await dataContext.SaveChangesAsync();
         }
