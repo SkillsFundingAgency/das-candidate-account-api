@@ -18,7 +18,7 @@
                 Improvements = source.Improvements,
                 HobbiesAndInterests = source.HobbiesAndInterests,
                 Support = source.Support,
-                ApplicationId = source.ApplicationId
+                ApplicationId = (Guid)source.ApplicationId
             };
         }
     }

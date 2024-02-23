@@ -1,18 +1,16 @@
-﻿namespace SFA.DAS.CandidateAccount.Domain.Candidate;
-public class AboutYou
+﻿namespace SFA.DAS.CandidateAccount.Application.Application.Queries.GetAboutYouItem;
+public class GetAboutYouItemQueryResult
 {
-    public Guid Id { get; set; }
     public string? Strengths { get; set; }
     public string? Improvements { get; set; }
     public string? HobbiesAndInterests { get; set; }
     public string? Support { get; set; }
     public Guid? ApplicationId { get; set; }
 
-    public static implicit operator AboutYou(AboutYouEntity? source)
+    public static implicit operator GetAboutYouItemQueryResult(Domain.Candidate.AboutYou source)
     {
-        return new AboutYou
+        return new GetAboutYouItemQueryResult
         {
-            Id = source.Id,
             Strengths = source.Strengths,
             Improvements = source.Improvements,
             HobbiesAndInterests = source.HobbiesAndInterests,

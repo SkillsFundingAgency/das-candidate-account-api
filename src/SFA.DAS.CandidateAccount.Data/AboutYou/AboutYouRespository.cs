@@ -6,10 +6,24 @@ namespace SFA.DAS.CandidateAccount.Data.AboutYou
     public interface IAboutYouRespository
     {
         Task<Tuple<Domain.Candidate.AboutYou, bool>> Upsert(Domain.Candidate.AboutYou aboutYouEntity, Guid candidateId);
+        Task<Domain.Candidate.AboutYou?> Get(Guid applicationId, Guid candidateId);
     }
 
     public class AboutYouRepository(ICandidateAccountDataContext dataContext) : IAboutYouRespository
     {
+        public async Task<Domain.Candidate.AboutYou?> Get(Guid applicationId, Guid candidateId)
+        {
+            var query = from item in dataContext.AboutYouEntities
+                    .Where(tc => tc.ApplicationId == applicationId)
+                        join application in dataContext.ApplicationEntities.Where(app => app.CandidateId == candidateId && app.Id == applicationId)
+                        on item.ApplicationId equals application.Id
+                        select item;
+
+            var aboutYouItem = await query.SingleOrDefaultAsync();
+
+            return aboutYouItem is null ? null : (Domain.Candidate.AboutYou)aboutYouItem;
+        }
+
         public async Task<Tuple<Domain.Candidate.AboutYou, bool>> Upsert(Domain.Candidate.AboutYou aboutYouEntity, Guid candidateId)
         {
             var query = from item in dataContext.AboutYouEntities
