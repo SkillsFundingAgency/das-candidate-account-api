@@ -5,7 +5,7 @@ namespace SFA.DAS.CandidateAccount.Data.AboutYou
 {
     public interface IAboutYouRespository
     {
-        Task<Tuple<Domain.Candidate.AboutYou, bool>> Upsert(Domain.Candidate.AboutYou aboutYouEntity, Guid candidateId);
+        Task<Tuple<Domain.Candidate.AboutYou, bool>> UpsertSkillsAndStrengths(Domain.Candidate.AboutYou aboutYouEntity, Guid candidateId);
         Task<Domain.Candidate.AboutYou?> Get(Guid applicationId, Guid candidateId);
     }
 
@@ -24,10 +24,9 @@ namespace SFA.DAS.CandidateAccount.Data.AboutYou
             return aboutYouItem is null ? null : (Domain.Candidate.AboutYou)aboutYouItem;
         }
 
-        public async Task<Tuple<Domain.Candidate.AboutYou, bool>> Upsert(Domain.Candidate.AboutYou aboutYouEntity, Guid candidateId)
+        public async Task<Tuple<Domain.Candidate.AboutYou, bool>> UpsertSkillsAndStrengths(Domain.Candidate.AboutYou aboutYouEntity, Guid candidateId)
         {
             var query = from item in dataContext.AboutYouEntities
-                    .Where(tc => tc.Id == aboutYouEntity.Id)
                     .Where(tc => tc.ApplicationId == aboutYouEntity.ApplicationId)
                         join application in dataContext.ApplicationEntities.Where(app => app.CandidateId == candidateId && app.Id == aboutYouEntity.ApplicationId)
                         on item.ApplicationId equals application.Id
@@ -43,9 +42,6 @@ namespace SFA.DAS.CandidateAccount.Data.AboutYou
             }
 
             aboutYouItem.Strengths = aboutYouEntity.Strengths;
-            aboutYouItem.Improvements = aboutYouEntity.Improvements;
-            aboutYouItem.HobbiesAndInterests = aboutYouEntity.HobbiesAndInterests;
-            aboutYouItem.Support = aboutYouEntity.Support;
 
             dataContext.AboutYouEntities.Update(aboutYouItem);
 
