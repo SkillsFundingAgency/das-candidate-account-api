@@ -25,7 +25,7 @@ public class WhenCallingPutAboutYou
         upsertAboutYouCommandResult.IsCreated = true;
         mediator.Setup(x => x.Send(It.Is<UpsertAboutYouCommand>(c =>
                 c.AboutYou.Id == id
-                && c.AboutYou.Strengths.Equals(upsertAboutYouRequest.Strengths)
+                && c.AboutYou.Strengths.Equals(upsertAboutYouRequest.SkillsAndStrengths)
             ), CancellationToken.None))
             .ReturnsAsync(upsertAboutYouCommandResult);
 
@@ -50,7 +50,7 @@ public class WhenCallingPutAboutYou
         upsertAboutYouCommandResult.IsCreated = false;
         mediator.Setup(x => x.Send(It.Is<UpsertAboutYouCommand>(c =>
                 c.AboutYou.Id == id
-                && c.AboutYou.Strengths.Equals(upsertAboutYouRequest.Strengths)
+                && c.AboutYou.Strengths.Equals(upsertAboutYouRequest.SkillsAndStrengths)
             ), CancellationToken.None))
             .ReturnsAsync(upsertAboutYouCommandResult);
 
