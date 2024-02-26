@@ -5,8 +5,17 @@
         <SqlServerVersion>SqlAzure</SqlServerVersion>
     </PropertyGroup>
     <ItemGroup>
+      <None Remove="Tables\AdditionalQuestion.sql" />
+    </ItemGroup>
+    <ItemGroup>
         <None Include="Database.publish.xml">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+    </ItemGroup>
+    <ItemGroup>
+      <Content Update="Tables\AdditionalQuestion.sql">
+        <SuppressTSqlWarnings></SuppressTSqlWarnings>
+        <Pack>False</Pack>
+      </Content>
     </ItemGroup>
 </Project>
