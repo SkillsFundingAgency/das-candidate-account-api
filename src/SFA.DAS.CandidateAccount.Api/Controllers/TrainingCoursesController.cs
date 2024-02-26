@@ -3,7 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.CandidateAccount.Api.ApiRequests;
 using SFA.DAS.CandidateAccount.Api.ApiResponses;
-using SFA.DAS.CandidateAccount.Application.Application.Commands.UpdateTrainingCourse;
+using SFA.DAS.CandidateAccount.Application.Application.Commands.UpsertTrainingCourse;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetTrainingCourseItem;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetTrainingCourses;
 
