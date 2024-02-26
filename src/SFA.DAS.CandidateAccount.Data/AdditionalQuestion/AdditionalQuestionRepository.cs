@@ -15,7 +15,8 @@ public class AdditionalQuestionRepository(ICandidateAccountDataContext dataConte
         var query = from question in dataContext.AdditionalQuestionEntities
                 .Where(fil => fil.ApplicationId == additionalQuestion.ApplicationId)
                 .Where(fil => fil.Id == additionalQuestion.Id)
-            join application in dataContext.ApplicationEntities.Where(fil => fil.CandidateId == candidateId && fil.Id == additionalQuestion.ApplicationId)
+            join application in dataContext.ApplicationEntities
+                    .Where(fil => fil.CandidateId == candidateId && fil.Id == additionalQuestion.ApplicationId)
                 on question.ApplicationId equals application.Id
             select question;
 
@@ -23,7 +24,7 @@ public class AdditionalQuestionRepository(ICandidateAccountDataContext dataConte
 
         if (additionalQuestionEntity == null)
         {
-            await dataContext.AdditionalQuestionEntities.AddAsync((AdditionalQuestionEntity)additionalQuestion);
+            await dataContext.AdditionalQuestionEntities.AddAsync(additionalQuestion);
             await dataContext.SaveChangesAsync();
             return new Tuple<AdditionalQuestionEntity, bool>(additionalQuestion, true);
         }

@@ -2,6 +2,6 @@
 
 public record UpsertAdditionalQuestionCommandResponse
 {
-    public required Domain.Application.AdditionalQuestion AdditionalQuestion { get; set; }
-    public bool IsCreated { get; set; }
+    public required Domain.Application.AdditionalQuestion AdditionalQuestion { get; init; }
+    public bool IsCreated { get; init; }
 }

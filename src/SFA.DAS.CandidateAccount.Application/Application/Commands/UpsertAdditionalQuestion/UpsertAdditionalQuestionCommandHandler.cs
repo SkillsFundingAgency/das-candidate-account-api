@@ -3,7 +3,7 @@ using SFA.DAS.CandidateAccount.Data.AdditionalQuestion;
 
 namespace SFA.DAS.CandidateAccount.Application.Application.Commands.UpsertAdditionalQuestion;
 
-public class UpsertAdditionalQuestionCommandHandler(IAdditionalQuestionRepository additionalQuestionRepository)
+public record UpsertAdditionalQuestionCommandHandler(IAdditionalQuestionRepository additionalQuestionRepository)
     : IRequestHandler<UpsertAdditionalQuestionCommand, UpsertAdditionalQuestionCommandResponse>
 {
     public async Task<UpsertAdditionalQuestionCommandResponse> Handle(UpsertAdditionalQuestionCommand request, CancellationToken cancellationToken)
@@ -11,7 +11,7 @@ public class UpsertAdditionalQuestionCommandHandler(IAdditionalQuestionRepositor
         var result = await additionalQuestionRepository.UpsertAdditionalQuestion(request.AdditionalQuestion, request.CandidateId);
         return new UpsertAdditionalQuestionCommandResponse
         {
-             AdditionalQuestion= result.Item1,
+            AdditionalQuestion= result.Item1,
             IsCreated = result.Item2
         };
     }
