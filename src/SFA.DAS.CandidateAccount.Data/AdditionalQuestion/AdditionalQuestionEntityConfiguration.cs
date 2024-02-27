@@ -13,7 +13,7 @@ public class AdditionalQuestionEntityConfiguration : IEntityTypeConfiguration<Ad
 
         builder.Property(x => x.Id).HasColumnName("Id").HasColumnType("uniqueidentifier").IsRequired();
         builder.Property(x => x.Answer).HasColumnName("Answer").HasColumnType("varchar").HasMaxLength(150).IsRequired();
-        builder.Property(x => x.QuestionId).HasColumnName("QuestionId").HasColumnType("uniqueidentifier").IsRequired();
+        builder.Property(x => x.QuestionId).HasColumnName("QuestionId").HasColumnType("varchar").HasMaxLength(150).IsRequired();
         builder.Property(x => x.ApplicationId).HasColumnName("ApplicationId").HasColumnType("uniqueidentifier").IsRequired();
     }
 }
