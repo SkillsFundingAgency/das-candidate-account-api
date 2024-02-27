@@ -20,6 +20,7 @@ namespace SFA.DAS.CandidateAccount.Data.WorkExperience
                     .OrderBy(a => a.EndDate.HasValue)
                     .ThenByDescending(a => a.StartDate)
                     .ThenBy(a => a.JobTitle)
+                    .ThenBy(a => a.Employer)
                         join application in dataContext.ApplicationEntities.Where(fil => fil.CandidateId == candidateId && fil.Id == applicationId)
                             on wrk.ApplicationId equals application.Id
                         select wrk;
