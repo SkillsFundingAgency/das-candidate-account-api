@@ -77,8 +77,12 @@ namespace SFA.DAS.CandidateAccount.Data.WorkExperience
         public async Task Delete(Guid applicationId, Guid id, Guid candidateId)
         {
             var workHistory = await dataContext.WorkExperienceEntities
-            .Where(w => w.Id == id && w.ApplicationId == applicationId && w.ApplicationEntity.CandidateId == candidateId)
-            .SingleOrDefaultAsync();
+         .SingleOrDefaultAsync(w => w.Id == id && w.ApplicationId == applicationId && w.ApplicationEntity.CandidateId == candidateId);
+
+            if (workHistory == null) 
+            {  
+                return; 
+            }
 
             dataContext.WorkExperienceEntities.Remove(workHistory);
             await dataContext.SaveChangesAsync();
