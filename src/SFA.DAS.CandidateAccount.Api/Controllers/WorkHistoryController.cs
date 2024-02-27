@@ -105,7 +105,7 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers
         {
             try
             {
-                var result = await mediator.Send(new DeleteJobCommand
+                var result = await mediator.Send(new DeleteWorkHistoryCommand
                 {
                     ApplicationId = applicationId,
                     JobId = id,
@@ -116,7 +116,7 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers
             }
             catch (Exception e)
             {
-                logger.LogError(e, "DeleteJob : An error occurred");
+                logger.LogError(e, "DeleteWorkHistory : An error occurred");
                 return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
             }
         }

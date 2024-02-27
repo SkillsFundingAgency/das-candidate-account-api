@@ -24,7 +24,7 @@ namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.WorkHistory
             var actual = await controller.DeleteWorkHistory(candidateId, applicationId, id) as OkObjectResult;
 
             actual.Should().BeOfType<OkObjectResult>();
-            mediator.Verify(x => x.Send(It.Is<DeleteJobCommand>(c =>
+            mediator.Verify(x => x.Send(It.Is<DeleteWorkHistoryCommand>(c =>
                     c.CandidateId.Equals(candidateId) &&
                     c.ApplicationId.Equals(applicationId) &&
                     c.JobId.Equals(id)
@@ -41,7 +41,7 @@ namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.WorkHistory
             [Greedy] WorkHistoryController controller)
         {
             // Arrange
-            mediator.Setup(x => x.Send(It.IsAny<DeleteJobCommand>(), CancellationToken.None))
+            mediator.Setup(x => x.Send(It.IsAny<DeleteWorkHistoryCommand>(), CancellationToken.None))
                 .ThrowsAsync(new Exception("Error"));
 
             // Act
