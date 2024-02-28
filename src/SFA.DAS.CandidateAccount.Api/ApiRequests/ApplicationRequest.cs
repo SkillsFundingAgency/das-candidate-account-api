@@ -15,5 +15,7 @@ public class ApplicationRequest
     public SectionStatus IsEducationHistoryComplete { get; set; }
     public SectionStatus IsInterviewAdjustmentsComplete { get; set; }
     public SectionStatus IsWorkHistoryComplete { get; set; }
-    public List<Question> AdditionalQuestions { get; set; } = [];
+    public SectionStatus IsAdditionalQuestion1Complete { get; set; }
+    public SectionStatus IsAdditionalQuestion2Complete { get; set; }
+    public IEnumerable<string?> AdditionalQuestions { get; set; } = [];
 }

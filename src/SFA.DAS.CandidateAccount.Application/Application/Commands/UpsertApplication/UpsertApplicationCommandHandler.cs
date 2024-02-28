@@ -22,18 +22,21 @@ public class UpsertApplicationCommandHandler(
             QualificationsStatus = (short)command.IsEducationHistoryComplete,
             WorkExperienceStatus = (short)command.IsInterviewAdjustmentsComplete,
             TrainingCoursesStatus = (short)command.IsWorkHistoryComplete,
+            AdditionalQuestion1Status = (short)command.IsAdditionalQuestion1Complete,
+            AdditionalQuestion2Status = (short) command.IsAdditionalQuestion2Complete,
             DisabilityStatus = command.DisabilityStatus
         });
 
         foreach (var additionalQuestion in command.AdditionalQuestions)
         {
+            if (additionalQuestion is null) break;
             await additionalQuestionRepository.UpsertAdditionalQuestion(new AdditionalQuestion
             {
                 Answer = string.Empty,
                 ApplicationId = application.Item1.Id,
                 CandidateId = command.CandidateId,
-                Id = additionalQuestion.Id,
-                QuestionId = additionalQuestion.QuestionText
+                Id = Guid.NewGuid(),
+                QuestionId = additionalQuestion
             }, command.CandidateId);
         }
 
