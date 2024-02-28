@@ -3,5 +3,4 @@ namespace SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplicatio
 public class GetApplicationQueryResult
 {
     public Domain.Application.Application? Application { get; set; }
-    public List<Domain.Application.Question> AdditionalQuestions { get; set; } = [];
 }

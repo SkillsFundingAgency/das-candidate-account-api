@@ -32,7 +32,8 @@ public class ApplicationController(IMediator mediator, ILogger<ApplicationContro
                 IsDisabilityConfidenceComplete = applicationRequest.IsDisabilityConfidenceComplete,
                 IsEducationHistoryComplete = applicationRequest.IsEducationHistoryComplete,
                 IsInterviewAdjustmentsComplete = applicationRequest.IsInterviewAdjustmentsComplete,
-                IsWorkHistoryComplete = applicationRequest.IsWorkHistoryComplete 
+                IsWorkHistoryComplete = applicationRequest.IsWorkHistoryComplete,
+                AdditionalQuestions = applicationRequest.AdditionalQuestions
             });
 
             if (result.IsCreated)

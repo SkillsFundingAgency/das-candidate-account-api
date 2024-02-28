@@ -1,7 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.CandidateAccount.Api.ApiRequests;
+using SFA.DAS.CandidateAccount.Api.ApiResponses;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.UpsertAdditionalQuestion;
+using SFA.DAS.CandidateAccount.Application.Application.Queries.GetAdditionalQuestion;
 using SFA.DAS.CandidateAccount.Domain.Application;
 using System.Net;
 
@@ -12,9 +14,36 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers
     [Route("candidates/{candidateId}/applications/{applicationId}/additional-question")]
     public class AdditionalQuestionController(IMediator mediator, ILogger<AdditionalQuestionController> logger) : Controller
     {
-        [HttpPut]
+        [HttpGet]
         [Route("{id}")]
-        public async Task<IActionResult> PutAdditionalQuestionItem([FromRoute] Guid candidateId, [FromRoute] Guid applicationId, [FromRoute] Guid id, AdditionalQuestionRequest request)
+        public async Task<IActionResult> Get([FromRoute] Guid candidateId, [FromRoute] Guid applicationId, [FromRoute] Guid id)
+        {
+            try
+            {
+                var result = await mediator.Send(new GetAdditionalQuestionItemQuery
+                {
+                    CandidateId = candidateId,
+                    ApplicationId = applicationId,
+                    Id = id
+                });
+
+                if (result is null)
+                {
+                    return NotFound();
+                }
+
+                return Ok((GetAdditionalQuestionItemApiResponse)result);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, "GetWorkHistoryItem : An error occurred");
+                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        [HttpPut]
+        [Route("")]
+        public async Task<IActionResult> PutAdditionalQuestionItem([FromRoute] Guid candidateId, [FromRoute] Guid applicationId, AdditionalQuestionRequest request)
         {
             try
             {
@@ -22,7 +51,6 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers
                 {
                     AdditionalQuestion = new AdditionalQuestion
                     {
-                        Id = id,
                         ApplicationId = applicationId,
                         CandidateId = candidateId,
                         Answer = request.Answer,

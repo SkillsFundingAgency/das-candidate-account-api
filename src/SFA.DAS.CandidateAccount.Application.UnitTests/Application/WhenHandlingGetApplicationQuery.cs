@@ -23,7 +23,7 @@ public class WhenHandlingGetApplicationQuery
 
         var actual = await handler.Handle(query, CancellationToken.None);
 
-        actual.Application.Should().BeEquivalentTo((Domain.Application.Application)entity);
+        actual.Application.Should().BeEquivalentTo((Domain.Application.Application)entity, options => options.Excluding(prop => prop.AdditionalQuestions));
     }
     
     [Test, RecursiveMoqAutoData]

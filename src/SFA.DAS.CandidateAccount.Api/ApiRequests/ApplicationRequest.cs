@@ -15,4 +15,5 @@ public class ApplicationRequest
     public SectionStatus IsEducationHistoryComplete { get; set; }
     public SectionStatus IsInterviewAdjustmentsComplete { get; set; }
     public SectionStatus IsWorkHistoryComplete { get; set; }
+    public List<Question> AdditionalQuestions { get; set; } = [];
 }

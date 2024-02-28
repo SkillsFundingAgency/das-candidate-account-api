@@ -32,6 +32,7 @@ public class Application : ApplicationBase
     public Guid CandidateId { get; set; }
     public string? DisabilityStatus { get; set; }
     public required string VacancyReference { get; set; }
+    public List<Question> AdditionalQuestions { get; set; } = [];
 
     public static implicit operator Application(ApplicationEntity source)
     {

@@ -2,8 +2,8 @@
 
 public record Question
 {
-    public Guid Id { get; set; }
-    public required string QuestionText { get; set; }
+    public required Guid Id { get; init; }
+    public required string QuestionText { get; init; }
 
     public static implicit operator Question(AdditionalQuestionEntity source)
     {
