@@ -4,9 +4,9 @@ public class AdditionalQuestion
 {
     public Guid Id { get; init; }
     public Guid CandidateId { get; set; }
-    public string? Answer { get; init; }
     public Guid ApplicationId { get; init; }
-    public required string QuestionId { get; init; }
+    public string QuestionId { get; init; }
+    public string? Answer { get; init; }
 
     public static implicit operator AdditionalQuestion(AdditionalQuestionEntity source)
     {

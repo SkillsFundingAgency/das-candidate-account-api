@@ -42,8 +42,8 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers
         }
 
         [HttpPut]
-        [Route("")]
-        public async Task<IActionResult> PutAdditionalQuestionItem([FromRoute] Guid candidateId, [FromRoute] Guid applicationId, AdditionalQuestionRequest request)
+        [Route("{id}")]
+        public async Task<IActionResult> PutAdditionalQuestionItem([FromRoute] Guid candidateId, [FromRoute] Guid applicationId, [FromRoute] Guid id, AdditionalQuestionRequest request)
         {
             try
             {
@@ -54,7 +54,7 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers
                         ApplicationId = applicationId,
                         CandidateId = candidateId,
                         Answer = request.Answer,
-                        QuestionId = request.QuestionId
+                        Id = id
                     },
                     CandidateId = candidateId
                 });

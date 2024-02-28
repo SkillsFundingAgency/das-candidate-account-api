@@ -40,7 +40,7 @@ public class AdditionalQuestionRepository(ICandidateAccountDataContext dataConte
     {
         var query = from question in dataContext.AdditionalQuestionEntities
                 .Where(fil => fil.ApplicationId == additionalQuestion.ApplicationId)
-                .Where(fil => fil.QuestionId == additionalQuestion.QuestionId)
+                .Where(fil => fil.Id == additionalQuestion.Id)
             join application in dataContext.ApplicationEntities
                     .Where(fil => fil.CandidateId == candidateId && fil.Id == additionalQuestion.ApplicationId)
                 on question.ApplicationId equals application.Id
