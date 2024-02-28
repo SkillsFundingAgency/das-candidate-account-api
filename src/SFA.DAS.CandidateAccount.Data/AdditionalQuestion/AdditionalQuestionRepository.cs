@@ -5,11 +5,24 @@ namespace SFA.DAS.CandidateAccount.Data.AdditionalQuestion;
 
 public interface IAdditionalQuestionRepository
 {
+    Task<List<AdditionalQuestionEntity>> GetAll(Guid applicationId, Guid candidateId, CancellationToken cancellationToken);
     Task<Tuple<AdditionalQuestionEntity, bool>> UpsertAdditionalQuestion(Domain.Application.AdditionalQuestion additionalQuestion, Guid candidateId);
 }
 
 public class AdditionalQuestionRepository(ICandidateAccountDataContext dataContext) : IAdditionalQuestionRepository
 {
+    public async Task<List<AdditionalQuestionEntity>> GetAll(Guid applicationId, Guid candidateId, CancellationToken cancellationToken)
+    {
+        var query = from question in dataContext.AdditionalQuestionEntities
+                .Where(fil => fil.ApplicationId == applicationId)
+            join application in dataContext.ApplicationEntities
+                    .Where(fil => fil.CandidateId == candidateId && fil.Id == applicationId)
+                on question.ApplicationId equals application.Id
+            select question;
+
+        return await query.ToListAsync(cancellationToken);
+    }
+
     public async Task<Tuple<AdditionalQuestionEntity, bool>> UpsertAdditionalQuestion(Domain.Application.AdditionalQuestion additionalQuestion, Guid candidateId)
     {
         var query = from question in dataContext.AdditionalQuestionEntities

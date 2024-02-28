@@ -3,8 +3,8 @@
     public class AdditionalQuestionEntity
     {
         public Guid Id { get; init; }
-        public string QuestionId { get; init; }
-        public string Answer { get; set; }
+        public required string QuestionId { get; init; }
+        public string? Answer { get; set; }
         public Guid ApplicationId { get; init; }
 
         public static implicit operator AdditionalQuestionEntity(AdditionalQuestion source)

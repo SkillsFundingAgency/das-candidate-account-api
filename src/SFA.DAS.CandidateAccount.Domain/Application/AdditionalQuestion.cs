@@ -2,11 +2,11 @@
 
 public class AdditionalQuestion
 {
-    public Guid Id { get; set; }
+    public Guid Id { get; init; }
     public Guid CandidateId { get; set; }
-    public string? Answer { get; set; }
-    public Guid ApplicationId { get; set; }
-    public string? QuestionId { get; set; }
+    public string? Answer { get; init; }
+    public Guid ApplicationId { get; init; }
+    public required string QuestionId { get; init; }
 
     public static implicit operator AdditionalQuestion(AdditionalQuestionEntity source)
     {

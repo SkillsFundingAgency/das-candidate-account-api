@@ -5,7 +5,7 @@ namespace SFA.DAS.CandidateAccount.Application.Application.Commands.UpsertApplic
 
 public class UpsertApplicationCommand : IRequest<UpsertApplicationCommandResponse>
 {
-    public string VacancyReference { get; set; }
+    public required string VacancyReference { get; set; }
     public Guid CandidateId { get; set; }
     public ApplicationStatus Status { get; set; }
     public SectionStatus? IsDisabilityConfidenceComplete { get; set; }
@@ -14,4 +14,5 @@ public class UpsertApplicationCommand : IRequest<UpsertApplicationCommandRespons
     public SectionStatus? IsInterviewAdjustmentsComplete { get; set; }
     public SectionStatus? IsWorkHistoryComplete { get; set; }
     public string? DisabilityStatus { get; set; }
+    public List<Question> AdditionalQuestions { get; set; } = [];
 }
