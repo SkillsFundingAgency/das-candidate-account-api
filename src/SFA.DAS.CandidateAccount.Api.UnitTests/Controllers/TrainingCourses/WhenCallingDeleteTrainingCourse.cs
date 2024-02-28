@@ -3,31 +3,30 @@ using FluentAssertions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using SFA.DAS.CandidateAccount.Api.ApiRequests;
 using SFA.DAS.CandidateAccount.Api.Controllers;
-using SFA.DAS.CandidateAccount.Application.Application.Commands.DeleteWorkHistory;
+using SFA.DAS.CandidateAccount.Application.Application.Commands.DeleteTrainingCourse;
 using SFA.DAS.Testing.AutoFixture;
 using System.Net;
 
-namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.WorkHistory
+namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.TrainingCourses
 {
-    public class WhenCallingDeleteWorkHistory
+    public class WhenCallingDeleteTrainingCourse
     {
         [Test, MoqAutoData]
         public async Task Then_If_MediatorCall_Returns_Ok_Then_Ok_Result_Returned(
-            Guid candidateId,
-            Guid applicationId,
-            Guid id,
-            [Frozen] Mock<IMediator> mediator,
-            [Greedy] WorkHistoryController controller)
+          Guid candidateId,
+          Guid applicationId,
+          Guid id,
+          [Frozen] Mock<IMediator> mediator,
+          [Greedy] TrainingCoursesController controller)
         {
-            var actual = await controller.DeleteWorkHistory(candidateId, applicationId, id) as OkObjectResult;
+            var actual = await controller.DeleteTrainingCourse(candidateId, applicationId, id) as OkObjectResult;
 
             actual.Should().BeOfType<OkObjectResult>();
-            mediator.Verify(x => x.Send(It.Is<DeleteWorkHistoryCommand>(c =>
+            mediator.Verify(x => x.Send(It.Is<DeleteTrainingCourseCommand>(c =>
                     c.CandidateId.Equals(candidateId) &&
                     c.ApplicationId.Equals(applicationId) &&
-                    c.JobId.Equals(id)
+                    c.Id.Equals(id)
                 ), CancellationToken.None));
 
         }
@@ -38,22 +37,20 @@ namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.WorkHistory
             Guid applicationId,
             Guid id,
             [Frozen] Mock<IMediator> mediator,
-            [Greedy] WorkHistoryController controller)
+            [Greedy] TrainingCoursesController controller)
         {
             // Arrange
-            mediator.Setup(x => x.Send(It.IsAny<DeleteWorkHistoryCommand>(), CancellationToken.None))
+            mediator.Setup(x => x.Send(It.IsAny<DeleteTrainingCourseCommand>(), CancellationToken.None))
                 .ThrowsAsync(new Exception("Error"));
 
             // Act
-            var actual = await controller.DeleteWorkHistory(candidateId, applicationId, id);
+            var actual = await controller.DeleteTrainingCourse(candidateId, applicationId, id);
 
             // Assert
             actual.Should().BeOfType<StatusCodeResult>();
             var result = actual as StatusCodeResult;
             result?.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
         }
-
-
 
     }
 }

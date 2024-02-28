@@ -23,6 +23,7 @@ public class WhenHandlingGetTrainingCoursesQuery
         actual.TrainingCourses.Should().BeEquivalentTo(entities, options => options
             .Excluding(ctx => ctx.FromYear)
             .Excluding(ctx => ctx.Provider)
+            .Excluding(ctx => ctx.ApplicationEntity)
         );
     }
 }

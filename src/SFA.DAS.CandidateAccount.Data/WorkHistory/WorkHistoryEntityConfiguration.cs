@@ -4,7 +4,7 @@ using SFA.DAS.CandidateAccount.Domain.Application;
 
 namespace SFA.DAS.CandidateAccount.Data.WorkExperience;
 
-public class WorkExperienceEntityConfiguration : IEntityTypeConfiguration<WorkHistoryEntity>
+public class WorkHistoryEntityConfiguration : IEntityTypeConfiguration<WorkHistoryEntity>
 {
     public void Configure(EntityTypeBuilder<WorkHistoryEntity> builder)
     {
@@ -18,6 +18,7 @@ public class WorkExperienceEntityConfiguration : IEntityTypeConfiguration<WorkHi
         builder.Property(x => x.EndDate).HasColumnName("EndDate").HasColumnType("datetime");
         builder.Property(x => x.ApplicationId).HasColumnName("ApplicationId").HasColumnType("uniqueidentifier").HasMaxLength(50).IsRequired();
         builder.Property(x => x.Description).HasColumnName("Description").HasColumnType("varchar").IsRequired();
+        builder.Property(x => x.WorkHistoryType).HasColumnName("WorkHistoryType").HasColumnType("tinyint").IsRequired();
 
         builder
             .HasOne(c => c.ApplicationEntity)

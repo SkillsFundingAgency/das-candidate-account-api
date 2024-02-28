@@ -78,7 +78,7 @@ public class CandidateAccountDataContext : DbContext, ICandidateAccountDataConte
     {
         modelBuilder.ApplyConfiguration(new CandidateEntityConfiguration());
         modelBuilder.ApplyConfiguration(new ApplicationEntityConfiguration());
-        modelBuilder.ApplyConfiguration(new WorkExperienceEntityConfiguration());
+        modelBuilder.ApplyConfiguration(new WorkHistoryEntityConfiguration());
         modelBuilder.ApplyConfiguration(new TrainingCourseEntityConfiguration());
         modelBuilder.ApplyConfiguration(new AdditionalQuestionEntityConfiguration());
 
