@@ -9,6 +9,8 @@
         public Guid ApplicationId { get; set; }
         public string Title { get; set; }
 
+        public virtual ApplicationEntity ApplicationEntity { get; set; }
+
         public static implicit operator TrainingCourseEntity(TrainingCourse source)
         {
             return new TrainingCourseEntity

@@ -16,10 +16,10 @@ namespace SFA.DAS.CandidateAccount.Data.UnitTests.Repository.WorkExperience
             WorkHistoryRepository repository)
         {
             //Arrange
-            context.Setup(x => x.WorkExperienceEntities).ReturnsDbSet(new List<WorkHistoryEntity>());
+            context.Setup(x => x.WorkExperienceEntities).ReturnsDbSet(new List<WorkHistoryEntity> { workHistory });
 
             //Act
-            await repository.Delete(workHistory.ApplicationId, workHistory.Id, workHistory.ApplicationEntity.Id);
+            await repository.Delete(workHistory.ApplicationId, workHistory.Id, workHistory.ApplicationEntity.CandidateId);
 
             //Assert
             context.Verify(x => x.SaveChangesAsync(CancellationToken.None), Times.Once);

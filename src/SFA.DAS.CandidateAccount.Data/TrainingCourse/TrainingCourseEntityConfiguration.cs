@@ -17,5 +17,11 @@ public class TrainingCourseEntityConfiguration : IEntityTypeConfiguration<Traini
         builder.Property(x => x.ToYear).HasColumnName("ToYear").HasColumnType("smallint").IsRequired();
         builder.Property(x => x.ApplicationId).HasColumnName("ApplicationId").HasColumnType("uniqueidentifier").IsRequired();
         builder.Property(x => x.Title).HasColumnName("Title").HasColumnType("varchar").IsRequired();
+
+        builder
+            .HasOne(c => c.ApplicationEntity)
+            .WithMany(c => c.TrainingCourseEntities)
+            .HasForeignKey(c => c.ApplicationId)
+            .HasPrincipalKey(c => c.Id);
     }
 }

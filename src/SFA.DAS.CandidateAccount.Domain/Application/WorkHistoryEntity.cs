@@ -15,6 +15,9 @@
 
         public static implicit operator WorkHistoryEntity(WorkHistory source)
         {
+            if (source == null)
+                return null;
+
             return new WorkHistoryEntity
             {
                 Id = source.Id,
