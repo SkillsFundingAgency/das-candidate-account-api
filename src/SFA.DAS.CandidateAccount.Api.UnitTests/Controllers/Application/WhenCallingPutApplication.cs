@@ -34,6 +34,9 @@ public class WhenCallingPutApplication
                 && c.IsEducationHistoryComplete.Equals(applicationRequest.IsEducationHistoryComplete)
                 && c.IsInterviewAdjustmentsComplete.Equals(applicationRequest.IsInterviewAdjustmentsComplete)
                 && c.IsWorkHistoryComplete.Equals(applicationRequest.IsWorkHistoryComplete)
+                && c.IsAdditionalQuestion1Complete.Equals(applicationRequest.IsAdditionalQuestion1Complete)
+                && c.IsAdditionalQuestion2Complete.Equals(applicationRequest.IsAdditionalQuestion2Complete)
+                && c.AdditionalQuestions.SequenceEqual(applicationRequest.AdditionalQuestions.ToList())
             ), CancellationToken.None))
             .ReturnsAsync(upsertApplicationCommandResult);
         
@@ -66,6 +69,9 @@ public class WhenCallingPutApplication
                 && c.IsEducationHistoryComplete.Equals(applicationRequest.IsEducationHistoryComplete)
                 && c.IsInterviewAdjustmentsComplete.Equals(applicationRequest.IsInterviewAdjustmentsComplete)
                 && c.IsWorkHistoryComplete.Equals(applicationRequest.IsWorkHistoryComplete)
+                && c.IsAdditionalQuestion1Complete.Equals(applicationRequest.IsAdditionalQuestion1Complete)
+                && c.IsAdditionalQuestion2Complete.Equals(applicationRequest.IsAdditionalQuestion2Complete)
+                && c.AdditionalQuestions.SequenceEqual(applicationRequest.AdditionalQuestions.ToList())
                 ), CancellationToken.None))
             .ReturnsAsync(upsertApplicationCommandResult);
         
