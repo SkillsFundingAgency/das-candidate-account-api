@@ -16,7 +16,8 @@ public class PatchApplication : ApplicationBase
             AdditionalQuestion1Status = ParseValue<SectionStatus>(application.AdditionalQuestion1Status),
             AdditionalQuestion2Status = ParseValue<SectionStatus>(application.AdditionalQuestion2Status),
             InterestsStatus = ParseValue<SectionStatus>(application.InterestsStatus),
-            WorkExperienceStatus = ParseValue<SectionStatus>(application.WorkExperienceStatus)
+            WorkExperienceStatus = ParseValue<SectionStatus>(application.WorkExperienceStatus),
+            WhatIsYourInterest = application.WhatIsYourInterest
         };
     }
 }

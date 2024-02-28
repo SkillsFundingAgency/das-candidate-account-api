@@ -17,6 +17,7 @@ CREATE TABLE dbo.[Application] (
     [AdditionalQuestion2Status]         tinyint             NOT NULL default(0),
     [InterviewAdjustmentsStatus]        tinyint             NOT NULL default(0),
     [DisabilityConfidenceStatus]        tinyint             NOT NULL default(0),
+    [WhatIsYourInterest]                nvarchar(max)       NULL
     CONSTRAINT [PK_Application] PRIMARY KEY (Id),
     INDEX [IX_Application_CandidateIdVacancyReference] NONCLUSTERED(CandidateId, VacancyReference),
     INDEX [IX_Application_CandidateId] NONCLUSTERED(CandidateId),
