@@ -36,7 +36,7 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers
             }
             catch (Exception e)
             {
-                logger.LogError(e, "GetWorkHistoryItem : An error occurred");
+                logger.LogError(e, "Get AdditionalQuestion : An error occurred");
                 return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
             }
         }

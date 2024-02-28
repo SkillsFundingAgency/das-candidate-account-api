@@ -32,11 +32,11 @@ public class UpsertApplicationCommandHandler(
             if (additionalQuestion is null) break;
             await additionalQuestionRepository.UpsertAdditionalQuestion(new AdditionalQuestion
             {
-                Answer = string.Empty,
+                Id = Guid.NewGuid(),
                 ApplicationId = application.Item1.Id,
                 CandidateId = command.CandidateId,
-                Id = Guid.NewGuid(),
-                QuestionId = additionalQuestion
+                QuestionId = additionalQuestion,
+                Answer = string.Empty,
             }, command.CandidateId);
         }
 
