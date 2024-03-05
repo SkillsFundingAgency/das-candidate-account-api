@@ -33,7 +33,7 @@ public class WhenHandlingGetApplicationQuery
         actual.Application!.AdditionalQuestions.Should().BeEquivalentTo(additionalQuestions, options => options
                 .Excluding(prop => prop.Answer)
                 .Excluding(prop => prop.ApplicationId)
-                .Excluding(prop => prop.QuestionId)
+                .Excluding(prop => prop.QuestionText)
         );
     }
     

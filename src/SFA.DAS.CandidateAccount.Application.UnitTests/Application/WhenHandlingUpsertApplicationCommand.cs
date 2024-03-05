@@ -40,7 +40,7 @@ public class WhenHandlingUpsertApplicationCommand
                 c.Id.Equals(Guid.NewGuid())
                 && c.ApplicationId.Equals(applicationEntity.Id)
                 && c.CandidateId.Equals(command.CandidateId)
-                && c.QuestionId.Equals(command.AdditionalQuestions.FirstOrDefault())
+                && c.QuestionText.Equals(command.AdditionalQuestions.FirstOrDefault())
                 && c.Answer.Equals(string.Empty)
                 ), command.CandidateId))
             .ReturnsAsync(new Tuple<AdditionalQuestionEntity, bool>(additionalQuestionEntity, true));
@@ -80,7 +80,7 @@ public class WhenHandlingUpsertApplicationCommand
                     c.Id.Equals(Guid.NewGuid())
                     && c.ApplicationId.Equals(applicationEntity.Id)
                     && c.CandidateId.Equals(command.CandidateId)
-                    && c.QuestionId.Equals(command.AdditionalQuestions.FirstOrDefault())
+                    && c.QuestionText.Equals(command.AdditionalQuestions.FirstOrDefault())
                     && c.Answer.Equals(string.Empty)
                 ), command.CandidateId))
             .ReturnsAsync(new Tuple<AdditionalQuestionEntity, bool>(additionalQuestionEntity, true));

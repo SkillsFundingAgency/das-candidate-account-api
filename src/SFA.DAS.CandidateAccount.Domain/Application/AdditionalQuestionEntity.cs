@@ -3,7 +3,7 @@
     public class AdditionalQuestionEntity
     {
         public Guid Id { get; init; }
-        public required string QuestionId { get; init; }
+        public required string QuestionText { get; init; }
         public string? Answer { get; set; }
         public Guid ApplicationId { get; init; }
 
@@ -12,7 +12,7 @@
             return new AdditionalQuestionEntity
             {
                 Answer = source.Answer,
-                QuestionId = source.QuestionId,
+                QuestionText = source.QuestionText,
                 ApplicationId = source.ApplicationId,
                 Id = source.Id
             };
