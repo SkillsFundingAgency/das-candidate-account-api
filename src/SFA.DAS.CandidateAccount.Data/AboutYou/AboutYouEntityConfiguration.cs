@@ -12,10 +12,10 @@ public class AboutYouEntityConfiguration : IEntityTypeConfiguration<AboutYouEnti
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Id).HasColumnName("Id").HasColumnType("uniqueidentifier").IsRequired();
-        builder.Property(x => x.Strengths).HasColumnName("Strengths").HasColumnType("varchar").IsRequired();
-        builder.Property(x => x.Improvements).HasColumnName("Improvements").HasColumnType("varchar").IsRequired(); 
-        builder.Property(x => x.HobbiesAndInterests).HasColumnName("HobbiesAndInterests").HasColumnType("varchar").IsRequired(); 
-        builder.Property(x => x.Support).HasColumnName("Support").HasColumnType("varchar").IsRequired();
+        builder.Property(x => x.Strengths).HasColumnName("Strengths").HasColumnType("varchar");
+        builder.Property(x => x.Improvements).HasColumnName("Improvements").HasColumnType("varchar");
+        builder.Property(x => x.HobbiesAndInterests).HasColumnName("HobbiesAndInterests").HasColumnType("varchar");
+        builder.Property(x => x.Support).HasColumnName("Support").HasColumnType("varchar");
         builder.Property(x => x.ApplicationId).HasColumnName("ApplicationId").HasColumnType("uniqueidentifier").IsRequired();
     }
 }

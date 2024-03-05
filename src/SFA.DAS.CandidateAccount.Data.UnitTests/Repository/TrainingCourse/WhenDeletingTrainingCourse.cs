@@ -14,7 +14,7 @@ namespace SFA.DAS.CandidateAccount.Data.UnitTests.Repository.TrainingCourse
         public async Task ThenTheJobIsDeleted(
         TrainingCourseEntity trainingCourseEntity,
         [Frozen] Mock<ICandidateAccountDataContext> context,
-        TrainingCourseRespository repository
+        TrainingCourseRepository repository
         )
         {
             //Arrange
