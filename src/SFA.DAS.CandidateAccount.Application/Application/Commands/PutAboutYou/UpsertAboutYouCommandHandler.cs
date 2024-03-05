@@ -7,7 +7,7 @@ public class UpsertAboutYouCommandHandler(IAboutYouRespository aboutYouResposito
 {
     public async Task<UpsertAboutYouCommandResult> Handle(UpsertAboutYouCommand request, CancellationToken cancellationToken)
     {
-        var result = await aboutYouRespository.UpsertSkillsAndStrengths(request.AboutYou, request.CandidateId);
+        var result = await aboutYouRespository.Upsert(request.AboutYou, request.CandidateId);
         return new UpsertAboutYouCommandResult
         {
             AboutYou = result.Item1,
