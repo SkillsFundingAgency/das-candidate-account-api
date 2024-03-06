@@ -1,4 +1,5 @@
 using SFA.DAS.CandidateAccount.Application.Application.Commands.UpsertApplication;
+using SFA.DAS.CandidateAccount.Data.AboutYou;
 using SFA.DAS.CandidateAccount.Data.Application;
 using SFA.DAS.CandidateAccount.Data.Candidate;
 using SFA.DAS.CandidateAccount.Data.TrainingCourse;
@@ -13,7 +14,8 @@ public static class AddServiceRegistrationExtension
         services.AddScoped<IApplicationRepository, ApplicationRepository>();
         services.AddScoped<ICandidateRepository, CandidateRepository>();
         services.AddScoped<IWorkHistoryRepository, WorkHistoryRepository>();
-        services.AddScoped<ITrainingCourseRespository, TrainingCourseRespository>();
+        services.AddScoped<ITrainingCourseRespository, TrainingCourseRepository>();
+        services.AddScoped<IAboutYouRespository, AboutYouRepository>();
         services.AddMediatR(configuration => configuration.RegisterServicesFromAssembly(typeof(UpsertApplicationCommand).Assembly));
     }
 }
