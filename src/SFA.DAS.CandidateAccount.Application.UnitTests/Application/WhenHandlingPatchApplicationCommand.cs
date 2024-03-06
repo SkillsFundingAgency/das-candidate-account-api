@@ -52,6 +52,7 @@ public class WhenHandlingPatchApplicationCommand
         update.InterestsStatus = (short)patch.InterestsStatus;
         update.WorkExperienceStatus = (short)patch.WorkExperienceStatus;
         update.WhatIsYourInterest = patch.WhatIsYourInterest;
+        update.ApplyUnderDisabilityConfidentScheme = patch.ApplyUnderDisabilityConfidentScheme;
         service.Setup(x => x.GetById(command.Id)).ReturnsAsync(applicationEntity);
         service.Setup(x=>x.Update(update)).ReturnsAsync(update);
         

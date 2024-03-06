@@ -39,6 +39,7 @@ public class PatchApplicationCommandHandler (IApplicationRepository applicationR
         application.InterestsStatus = (short)patchedDoc.InterestsStatus;
         application.WorkExperienceStatus = (short)patchedDoc.WorkExperienceStatus;
         application.WhatIsYourInterest = patchedDoc.WhatIsYourInterest;
+        application.ApplyUnderDisabilityConfidentScheme = patchedDoc.ApplyUnderDisabilityConfidentScheme;
         application.UpdatedDate = DateTime.UtcNow;
 
         var updatedApplication = await applicationRepository.Update(application);
