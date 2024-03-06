@@ -40,6 +40,7 @@ public class WhenConvertingFromApplicationEntityToModel
         actual.AdditionalQuestion2Status.Should().Be(SectionStatus.NotStarted);
         actual.AdditionalQuestion1Status.Should().Be(SectionStatus.NotStarted);
         actual.InterestsStatus.Should().Be(SectionStatus.NotStarted);
+        actual.WhatIsYourInterest.Should().Be(source.WhatIsYourInterest);
     }
 
     [TestCase(SectionStatus.NotStarted, SectionStatus.NotStarted, SectionStatus.NotStarted)]

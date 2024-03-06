@@ -33,6 +33,7 @@ public class WhenHandlingPatchApplicationCommand
         patchCommand.Replace(path => path.AdditionalQuestion2Status, patch.AdditionalQuestion2Status);
         patchCommand.Replace(path => path.InterestsStatus, patch.InterestsStatus);
         patchCommand.Replace(path => path.WorkExperienceStatus, patch.WorkExperienceStatus);
+        patchCommand.Replace(path => path.WhatIsYourInterest, patch.WhatIsYourInterest);
         var command = new PatchApplicationCommand
         {
             Id = applicationEntity.Id,
@@ -50,6 +51,7 @@ public class WhenHandlingPatchApplicationCommand
         update.AdditionalQuestion2Status = (short)patch.AdditionalQuestion2Status;
         update.InterestsStatus = (short)patch.InterestsStatus;
         update.WorkExperienceStatus = (short)patch.WorkExperienceStatus;
+        update.WhatIsYourInterest = patch.WhatIsYourInterest;
         service.Setup(x => x.GetById(command.Id)).ReturnsAsync(applicationEntity);
         service.Setup(x=>x.Update(update)).ReturnsAsync(update);
         

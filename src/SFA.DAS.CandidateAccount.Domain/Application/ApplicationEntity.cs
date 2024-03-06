@@ -23,6 +23,7 @@ namespace SFA.DAS.CandidateAccount.Domain.Application
         public short AdditionalQuestion1Status { get; set; }
         public short AdditionalQuestion2Status { get; set; }
         public short InterviewAdjustmentsStatus { get; set; }
+        public string? WhatIsYourInterest { get; set; }
 
         public virtual ICollection<WorkHistoryEntity>? WorkHistoryEntities { get; set; } = null!;
 
