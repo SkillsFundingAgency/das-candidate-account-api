@@ -18,7 +18,8 @@ public abstract class ApplicationBase
     public SectionStatus ApplicationQuestionsSectionStatus { get; set; }
     public SectionStatus InterviewAdjustmentsSectionStatus { get; set; }
     public SectionStatus DisabilityConfidenceSectionStatus { get; set; }
-    
+    public string? WhatIsYourInterest { get; set; }
+
     protected static T ParseValue<T>(short status) where T : struct, Enum
     {
         Enum.TryParse<T>(status.ToString(), true, out var sectionStatus);
@@ -76,7 +77,8 @@ public class Application : ApplicationBase
             DisabilityConfidenceSectionStatus = GetSectionStatus(
             [
                 ParseValue<SectionStatus>(source.DisabilityConfidenceStatus)
-            ])
+            ]),
+            WhatIsYourInterest = source.WhatIsYourInterest
         };
     }
 
