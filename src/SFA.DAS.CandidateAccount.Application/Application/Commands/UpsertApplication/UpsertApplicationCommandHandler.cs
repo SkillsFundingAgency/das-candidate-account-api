@@ -35,7 +35,7 @@ public class UpsertApplicationCommandHandler(
                 Id = Guid.NewGuid(),
                 ApplicationId = application.Item1.Id,
                 CandidateId = command.CandidateId,
-                QuestionId = additionalQuestion,
+                QuestionText = additionalQuestion,
                 Answer = string.Empty,
             }, command.CandidateId);
         }

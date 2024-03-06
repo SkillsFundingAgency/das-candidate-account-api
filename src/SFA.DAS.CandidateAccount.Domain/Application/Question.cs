@@ -10,7 +10,7 @@ public record Question
         return new Question
         {
             Id = source.Id,
-            QuestionText = source.QuestionId
+            QuestionText = source.QuestionText
         };
     }
 }
