@@ -30,14 +30,20 @@ public class UpsertApplicationCommandHandler(
         foreach (var additionalQuestion in command.AdditionalQuestions)
         {
             if (additionalQuestion is null) break;
-            await additionalQuestionRepository.UpsertAdditionalQuestion(new AdditionalQuestion
+            var question =
+                await additionalQuestionRepository.Get(application.Item1.Id, command.CandidateId, additionalQuestion, cancellationToken);
+
+            if (question is null)
             {
-                Id = Guid.NewGuid(),
-                ApplicationId = application.Item1.Id,
-                CandidateId = command.CandidateId,
-                QuestionText = additionalQuestion,
-                Answer = string.Empty,
-            }, command.CandidateId);
+                await additionalQuestionRepository.UpsertAdditionalQuestion(new AdditionalQuestion
+                {
+                    Id = Guid.NewGuid(),
+                    ApplicationId = application.Item1.Id,
+                    CandidateId = command.CandidateId,
+                    QuestionText = additionalQuestion,
+                    Answer = string.Empty,
+                }, command.CandidateId);
+            }
         }
 
         return new UpsertApplicationCommandResponse
