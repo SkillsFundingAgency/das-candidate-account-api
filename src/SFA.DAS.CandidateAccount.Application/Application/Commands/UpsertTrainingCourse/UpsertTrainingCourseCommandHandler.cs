@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using SFA.DAS.CandidateAccount.Data.TrainingCourse;
 
-namespace SFA.DAS.CandidateAccount.Application.Application.Commands.UpdateTrainingCourse;
+namespace SFA.DAS.CandidateAccount.Application.Application.Commands.UpsertTrainingCourse;
 public class UpsertTrainingCourseCommandHandler(ITrainingCourseRespository TrainingCourseRepository) 
     : IRequestHandler<UpsertTrainingCourseCommand, UpsertTrainingCourseCommandResponse>
 {

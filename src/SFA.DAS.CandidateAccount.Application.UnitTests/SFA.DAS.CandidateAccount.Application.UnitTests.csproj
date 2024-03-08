@@ -30,4 +30,8 @@
       <ProjectReference Include="..\SFA.DAS.CandidateAccount.Data\SFA.DAS.CandidateAccount.Data.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="AdditionalQuestion\" />
+    </ItemGroup>
+
 </Project>
