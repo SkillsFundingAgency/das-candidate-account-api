@@ -93,4 +93,37 @@ public class WhenHandlingPatchApplicationCommand
         Assert.ThrowsAsync<ValidationException>(()=> handler.Handle(command, CancellationToken.None));
         
     }
+
+    [Test, RecursiveMoqAutoData]
+    public async Task
+        Then_When_Patching_DisabilityConfident_Then_Its_Status_Is_Set_To_InProgress_If_Previously_NotStarted(
+            ApplicationEntity applicationEntity,
+            PatchApplication patch,
+            [Frozen] Mock<IApplicationRepository> service,
+            PatchApplicationCommandHandler handler)
+    {
+        applicationEntity.ApplyUnderDisabilityConfidentScheme = null;
+        applicationEntity.DisabilityConfidenceStatus = (short)SectionStatus.NotStarted;
+        patch.ApplyUnderDisabilityConfidentScheme = true;
+
+        //Arrange
+        var update = applicationEntity;
+        var patchCommand = new JsonPatchDocument<PatchApplication>();
+        patchCommand.Replace(path => path.ApplyUnderDisabilityConfidentScheme, patch.ApplyUnderDisabilityConfidentScheme);
+        var command = new PatchApplicationCommand
+        {
+            Id = applicationEntity.Id,
+            CandidateId = applicationEntity.CandidateId,
+            Patch = patchCommand
+        };
+
+        service.Setup(x => x.GetById(command.Id)).ReturnsAsync(applicationEntity);
+        service.Setup(x => x.Update(update)).ReturnsAsync(update);
+
+        //Act
+        await handler.Handle(command, CancellationToken.None);
+
+        //Assert
+        service.Verify(x => x.Update(It.Is<ApplicationEntity>(entity => entity.ApplyUnderDisabilityConfidentScheme == true && entity.DisabilityConfidenceStatus == (short) SectionStatus.InProgress)));
+    }
 }
