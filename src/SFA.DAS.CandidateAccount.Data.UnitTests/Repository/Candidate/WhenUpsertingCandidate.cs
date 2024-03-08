@@ -47,6 +47,7 @@ public class WhenUpsertingCandidate
         existingCandidate.GovUkIdentifier = candidate.GovUkIdentifier;
         existingCandidate.FirstName = null;
         existingCandidate.LastName = null;
+        existingCandidate.DateOfBirth = null;
 
         //Act
         var actual = await repository.UpsertCandidate(existingCandidate);
