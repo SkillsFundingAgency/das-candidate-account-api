@@ -3,6 +3,7 @@ using Azure.Identity;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using SFA.DAS.CandidateAccount.Data.AdditionalQuestion;
 using SFA.DAS.CandidateAccount.Data.AboutYou;
 using SFA.DAS.CandidateAccount.Data.Application;
 using SFA.DAS.CandidateAccount.Data.Candidates;
@@ -20,6 +21,7 @@ public interface ICandidateAccountDataContext
     DbSet<ApplicationEntity> ApplicationEntities { get; set; }
     DbSet<WorkHistoryEntity> WorkExperienceEntities { get; set; }
     DbSet<TrainingCourseEntity> TrainingCourseEntities { get; set; }
+    DbSet<AdditionalQuestionEntity> AdditionalQuestionEntities { get; set; }
     DbSet<AboutYouEntity> AboutYouEntities { get; set; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken  = default (CancellationToken));
 }
@@ -32,6 +34,7 @@ public class CandidateAccountDataContext : DbContext, ICandidateAccountDataConte
     public DbSet<ApplicationEntity> ApplicationEntities { get; set; }
     public DbSet<WorkHistoryEntity> WorkExperienceEntities { get; set; }
     public DbSet<TrainingCourseEntity> TrainingCourseEntities { get; set; }
+    public DbSet<AdditionalQuestionEntity> AdditionalQuestionEntities { get; set; }
     public DbSet<AboutYouEntity> AboutYouEntities { get; set; }
 
     private readonly CandidateAccountConfiguration? _configuration;
@@ -80,8 +83,9 @@ public class CandidateAccountDataContext : DbContext, ICandidateAccountDataConte
         modelBuilder.ApplyConfiguration(new ApplicationEntityConfiguration());
         modelBuilder.ApplyConfiguration(new WorkHistoryEntityConfiguration());
         modelBuilder.ApplyConfiguration(new TrainingCourseEntityConfiguration());
+        modelBuilder.ApplyConfiguration(new AdditionalQuestionEntityConfiguration());
         modelBuilder.ApplyConfiguration(new AboutYouEntityConfiguration());
-        
+
         base.OnModelCreating(modelBuilder);
     }
 }
