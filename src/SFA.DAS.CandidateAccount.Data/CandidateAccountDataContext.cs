@@ -23,6 +23,7 @@ public interface ICandidateAccountDataContext
     DbSet<TrainingCourseEntity> TrainingCourseEntities { get; set; }
     DbSet<AdditionalQuestionEntity> AdditionalQuestionEntities { get; set; }
     DbSet<AboutYouEntity> AboutYouEntities { get; set; }
+    DbSet<QualificationReferenceEntity> QualificationReferenceEntities { get; set; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken  = default (CancellationToken));
 }
 public class CandidateAccountDataContext : DbContext, ICandidateAccountDataContext
@@ -36,6 +37,7 @@ public class CandidateAccountDataContext : DbContext, ICandidateAccountDataConte
     public DbSet<TrainingCourseEntity> TrainingCourseEntities { get; set; }
     public DbSet<AdditionalQuestionEntity> AdditionalQuestionEntities { get; set; }
     public DbSet<AboutYouEntity> AboutYouEntities { get; set; }
+    public DbSet<QualificationReferenceEntity> QualificationReferenceEntities { get; set; }
 
     private readonly CandidateAccountConfiguration? _configuration;
     public CandidateAccountDataContext()
