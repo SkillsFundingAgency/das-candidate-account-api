@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace SFA.DAS.CandidateAccount.Application.Application.Commands.UpdateTrainingCourse;
+namespace SFA.DAS.CandidateAccount.Application.Application.Commands.UpsertTrainingCourse;
 public class UpsertTrainingCourseCommand : IRequest<UpsertTrainingCourseCommandResponse>
 {
     public required Guid ApplicationId { get; set; }

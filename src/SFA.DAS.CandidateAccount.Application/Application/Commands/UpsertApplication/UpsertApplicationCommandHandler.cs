@@ -1,16 +1,17 @@
 using MediatR;
+using SFA.DAS.CandidateAccount.Data.AdditionalQuestion;
 using SFA.DAS.CandidateAccount.Data.Application;
 using SFA.DAS.CandidateAccount.Domain.Application;
 
 namespace SFA.DAS.CandidateAccount.Application.Application.Commands.UpsertApplication;
 
 public class UpsertApplicationCommandHandler(
-    IApplicationRepository applicationRepository)
+    IApplicationRepository applicationRepository,
+    IAdditionalQuestionRepository additionalQuestionRepository)
     : IRequestHandler<UpsertApplicationCommand, UpsertApplicationCommandResponse>
 {
     public async Task<UpsertApplicationCommandResponse> Handle(UpsertApplicationCommand command, CancellationToken cancellationToken)
     {
-       
         var application = await applicationRepository.Upsert(new ApplicationEntity
         {
             VacancyReference = command.VacancyReference,
@@ -21,8 +22,29 @@ public class UpsertApplicationCommandHandler(
             QualificationsStatus = (short)command.IsEducationHistoryComplete,
             WorkExperienceStatus = (short)command.IsInterviewAdjustmentsComplete,
             TrainingCoursesStatus = (short)command.IsWorkHistoryComplete,
+            AdditionalQuestion1Status = (short)command.IsAdditionalQuestion1Complete,
+            AdditionalQuestion2Status = (short) command.IsAdditionalQuestion2Complete,
             DisabilityStatus = command.DisabilityStatus
         });
+
+        foreach (var additionalQuestion in command.AdditionalQuestions)
+        {
+            if (additionalQuestion is null) break;
+            var question =
+                await additionalQuestionRepository.Get(application.Item1.Id, command.CandidateId, additionalQuestion, cancellationToken);
+
+            if (question is null)
+            {
+                await additionalQuestionRepository.UpsertAdditionalQuestion(new AdditionalQuestion
+                {
+                    Id = Guid.NewGuid(),
+                    ApplicationId = application.Item1.Id,
+                    CandidateId = command.CandidateId,
+                    QuestionText = additionalQuestion,
+                    Answer = string.Empty,
+                }, command.CandidateId);
+            }
+        }
 
         return new UpsertApplicationCommandResponse
         {

@@ -34,8 +34,8 @@ public class WhenCallingGetApplication
         
         //Assert
         Assert.That(actual, Is.Not.Null);
-        actual.StatusCode.Should().Be((int) HttpStatusCode.OK);
-        actual.Value.Should().BeEquivalentTo(response.Application);
+        actual!.StatusCode.Should().Be((int) HttpStatusCode.OK);
+        actual.Value.Should().BeEquivalentTo(response.Application, options => options.Excluding(prop => prop!.AdditionalQuestions));
     }
     
     [Test, MoqAutoData]

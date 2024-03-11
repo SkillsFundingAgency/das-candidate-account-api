@@ -24,4 +24,9 @@
       <ProjectReference Include="..\SFA.DAS.CandidateAccount.Domain\SFA.DAS.CandidateAccount.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="AdditionalQuestion\" />
+      <Folder Include="WorkHistory\" />
+    </ItemGroup>
+
 </Project>
