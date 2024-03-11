@@ -6,9 +6,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using SFA.DAS.CandidateAccount.Api.AppStart;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.UpsertApplication;
+using SFA.DAS.CandidateAccount.Application.ReferenceData.Queries;
 using SFA.DAS.CandidateAccount.Data.AdditionalQuestion;
 using SFA.DAS.CandidateAccount.Data.Application;
 using SFA.DAS.CandidateAccount.Data.Candidate;
+using SFA.DAS.CandidateAccount.Data.ReferenceData;
 using SFA.DAS.CandidateAccount.Data.TrainingCourse;
 using SFA.DAS.CandidateAccount.Data.WorkExperience;
 using SFA.DAS.CandidateAccount.Domain.Configuration;
@@ -22,7 +24,9 @@ public class WhenAddingServicesToTheContainer
     [TestCase(typeof(IAdditionalQuestionRepository))]
     [TestCase(typeof(IWorkHistoryRepository))]
     [TestCase(typeof(ITrainingCourseRespository))]
+    [TestCase(typeof(IQualificationReferenceRepository))]
     [TestCase(typeof(IRequestHandler<UpsertApplicationCommand, UpsertApplicationCommandResponse>))]
+    [TestCase(typeof(IRequestHandler<GetAvailableQualificationsQuery, GetAvailableQualificationsQueryResult>))]
     public void Then_The_Dependencies_Are_Correctly_Resolved(Type toResolve)
     {
         var serviceCollection = new ServiceCollection();
