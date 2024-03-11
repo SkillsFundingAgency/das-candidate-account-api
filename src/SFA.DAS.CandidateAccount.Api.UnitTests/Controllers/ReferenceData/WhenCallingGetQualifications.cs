@@ -16,7 +16,7 @@ public class WhenCallingGetQualifications
     public async Task Then_The_Query_Is_Handled_And_Data_Returned(
         GetAvailableQualificationsQueryResult result,
         [Frozen] Mock<IMediator> mediator,
-        [Greedy]ReferenceDataController controller)
+        [Greedy] ReferenceDataController controller)
     {
         mediator.Setup(x => x.Send(It.IsAny<GetAvailableQualificationsQuery>(), CancellationToken.None))
             .ReturnsAsync(result);
@@ -24,7 +24,7 @@ public class WhenCallingGetQualifications
         var actual = await controller.GetQualifications() as OkObjectResult;
         
         actual!.StatusCode.Should().Be((int) HttpStatusCode.OK);
-        actual.Value.Should().BeEquivalentTo(result.QualificationReferences);
+        actual.Value.Should().BeEquivalentTo(result.QualificationReferences.OrderBy(c=>c.Order), options=>options.WithStrictOrderingFor(c=>c));
     }
 
     [Test, MoqAutoData]

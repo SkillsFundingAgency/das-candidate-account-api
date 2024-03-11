@@ -26,7 +26,7 @@ public class QualificationEntityConfiguration : IEntityTypeConfiguration<Qualifi
             .HasPrincipalKey(c => c.Id);
 
         builder.HasOne(c => c.QualificationReferenceEntity)
-            .WithMany(c => c.QualificationEntity.Value)
+            .WithMany(c => c.QualificationEntity)
             .HasForeignKey(c => c.QualificationReferenceId)
             .HasPrincipalKey(c => c.Id);
     }

@@ -7,6 +7,7 @@ using SFA.DAS.CandidateAccount.Data.AdditionalQuestion;
 using SFA.DAS.CandidateAccount.Data.AboutYou;
 using SFA.DAS.CandidateAccount.Data.Application;
 using SFA.DAS.CandidateAccount.Data.Candidates;
+using SFA.DAS.CandidateAccount.Data.ReferenceData;
 using SFA.DAS.CandidateAccount.Data.TrainingCourse;
 using SFA.DAS.CandidateAccount.Data.WorkExperience;
 using SFA.DAS.CandidateAccount.Domain.Application;
@@ -87,6 +88,7 @@ public class CandidateAccountDataContext : DbContext, ICandidateAccountDataConte
         modelBuilder.ApplyConfiguration(new TrainingCourseEntityConfiguration());
         modelBuilder.ApplyConfiguration(new AdditionalQuestionEntityConfiguration());
         modelBuilder.ApplyConfiguration(new AboutYouEntityConfiguration());
+        modelBuilder.ApplyConfiguration(new QualificationReferenceEntityConfiguration());
 
         base.OnModelCreating(modelBuilder);
     }
