@@ -10,6 +10,7 @@ using SFA.DAS.CandidateAccount.Application.ReferenceData.Queries;
 using SFA.DAS.CandidateAccount.Data.AdditionalQuestion;
 using SFA.DAS.CandidateAccount.Data.Application;
 using SFA.DAS.CandidateAccount.Data.Candidate;
+using SFA.DAS.CandidateAccount.Data.Qualification;
 using SFA.DAS.CandidateAccount.Data.ReferenceData;
 using SFA.DAS.CandidateAccount.Data.TrainingCourse;
 using SFA.DAS.CandidateAccount.Data.WorkExperience;
@@ -25,6 +26,7 @@ public class WhenAddingServicesToTheContainer
     [TestCase(typeof(IWorkHistoryRepository))]
     [TestCase(typeof(ITrainingCourseRespository))]
     [TestCase(typeof(IQualificationReferenceRepository))]
+    [TestCase(typeof(IQualificationRepository))]
     [TestCase(typeof(IRequestHandler<UpsertApplicationCommand, UpsertApplicationCommandResponse>))]
     [TestCase(typeof(IRequestHandler<GetAvailableQualificationsQuery, GetAvailableQualificationsQueryResult>))]
     public void Then_The_Dependencies_Are_Correctly_Resolved(Type toResolve)
