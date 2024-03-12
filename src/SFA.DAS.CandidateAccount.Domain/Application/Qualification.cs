@@ -10,8 +10,12 @@ public class Qualification
     public bool? IsPredicted { get; set; }
     public Application Application { get; set; }
     public QualificationReference QualificationReference { get; set; }
-    public static implicit operator Qualification(QualificationEntity source)
+    public static implicit operator Qualification?(QualificationEntity? source)
     {
+        if (source == null)
+        {
+            return null;
+        }
         return new Qualification
         {
             Id = source.Id,
