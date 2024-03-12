@@ -17,6 +17,17 @@ public class QualificationRepository(ICandidateAccountDataContext dataContext) :
         return await dataContext.QualificationEntities
             .Where(c => c.ApplicationId == applicationId)
             .Where(c=> c.ApplicationEntity.CandidateId == candidateId)
+            .Include(c=>c.QualificationReferenceEntity)
+            .ToListAsync();
+    }
+    
+    public async Task<IEnumerable<QualificationEntity>> GetCandidateApplicationQualificationsByQualificationReferenceType(Guid candidateId, Guid applicationId, Guid qualificationReferenceId)
+    {
+        return await dataContext.QualificationEntities
+            .Where(c => c.ApplicationId == applicationId)
+            .Where(c=> c.ApplicationEntity.CandidateId == candidateId)
+            .Where(c=>c.QualificationReferenceId == qualificationReferenceId)
+            .Include(c=>c.QualificationReferenceEntity)
             .ToListAsync();
     }
 
