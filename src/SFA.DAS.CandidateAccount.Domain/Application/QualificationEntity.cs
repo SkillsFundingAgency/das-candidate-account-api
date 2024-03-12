@@ -12,8 +12,7 @@
                 ToYear = source.ToYear.Value,
                 AdditionalInformation = source.AdditionalInformation,
                 IsPredicted = source.IsPredicted ?? false,
-                QualificationReferenceId = source.QualificationReference.Id,
-                ApplicationId = source.Application.Id
+                QualificationReferenceId = source.QualificationReference.Id
             };
         }
         public Guid Id { get; set; }

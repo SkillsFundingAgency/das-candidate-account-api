@@ -12,6 +12,8 @@ public class WhenUpsertingQualification
 {
     [Test, RecursiveMoqAutoData]
     public async Task Then_The_Qualification_Is_Inserted_If_Not_Exists(
+        Guid applicationId,
+        Guid candidateId,
         Domain.Application.Qualification qualification,
         [Frozen]Mock<ICandidateAccountDataContext> context,
         QualificationRepository repository)
@@ -20,7 +22,7 @@ public class WhenUpsertingQualification
         context.Setup(x => x.QualificationEntities).ReturnsDbSet(new List<QualificationEntity>());
             
         //Act
-        var actual = await repository.Upsert(qualification);
+        var actual = await repository.Upsert(qualification, candidateId, applicationId);
 
         //Assert
         context.Verify(x => x.QualificationEntities.AddAsync(It.Is<QualificationEntity>(c=>c.Id == qualification.Id), CancellationToken.None), Times.Once);
@@ -30,6 +32,8 @@ public class WhenUpsertingQualification
     
     [Test, RecursiveMoqAutoData]
     public async Task Then_The_Qualification_Is_Updated_If_Exists(
+        Guid applicationId, 
+        Guid candidateId,
         QualificationEntity qualificationEntity,
         Domain.Application.Qualification qualification,
         [Frozen]Mock<ICandidateAccountDataContext> context,
@@ -37,12 +41,12 @@ public class WhenUpsertingQualification
     {
         //Arrange
         qualification.Id = qualificationEntity.Id;
-        qualification.Application.Id = qualificationEntity.ApplicationId;
-        qualification.Application.CandidateId = qualificationEntity.ApplicationEntity.CandidateId; 
+        qualificationEntity.ApplicationId = applicationId;
+        qualificationEntity.ApplicationEntity.CandidateId = candidateId; 
         context.Setup(x => x.QualificationEntities).ReturnsDbSet(new List<QualificationEntity>{qualificationEntity});
             
         //Act
-        var actual = await repository.Upsert(qualification);
+        var actual = await repository.Upsert(qualification, candidateId, applicationId);
 
         //Assert
         context.Verify(x => x.QualificationEntities.AddAsync(It.IsAny<QualificationEntity>(), CancellationToken.None), Times.Never);

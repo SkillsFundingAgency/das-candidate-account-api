@@ -8,7 +8,7 @@ public interface IQualificationRepository
     Task<IEnumerable<QualificationEntity>> GetCandidateApplicationQualifications(Guid candidateId, Guid applicationId);
     Task<QualificationEntity?> GetCandidateApplicationQualificationById(Guid candidateId, Guid applicationId, Guid id);
     Task DeleteCandidateApplicationQualificationById(Guid candidateId, Guid applicationId, Guid id);
-    Task<Tuple<QualificationEntity, bool>> Upsert(Domain.Application.Qualification qualificationEntity);
+    Task<Tuple<QualificationEntity, bool>> Upsert(Domain.Application.Qualification qualificationEntity, Guid candidateId, Guid applicationId);
     Task<IEnumerable<QualificationEntity>> GetCandidateApplicationQualificationsByQualificationReferenceType(Guid candidateId, Guid applicationId, Guid qualificationReferenceId);
 }
 public class QualificationRepository(ICandidateAccountDataContext dataContext) : IQualificationRepository
@@ -56,19 +56,19 @@ public class QualificationRepository(ICandidateAccountDataContext dataContext) :
         }
     }
 
-    public async Task<Tuple<QualificationEntity, bool>> Upsert(Domain.Application.Qualification qualificationEntity)
+    public async Task<Tuple<QualificationEntity, bool>> Upsert(Domain.Application.Qualification qualificationEntity, Guid candidateId, Guid applicationId)
     {
         var existingQualification = await dataContext
             .QualificationEntities
             .FirstOrDefaultAsync(c => c.Id == qualificationEntity.Id 
-                                      && c.ApplicationId == qualificationEntity.Application.Id
-                                      && c.ApplicationEntity.CandidateId == qualificationEntity.Application.CandidateId
+                                      && c.ApplicationId == applicationId
+                                      && c.ApplicationEntity.CandidateId == candidateId
                                       );
 
         if (existingQualification == null)
         {
             var newQualification = (QualificationEntity)qualificationEntity;
-            
+            newQualification.ApplicationId = applicationId;
             await dataContext.QualificationEntities.AddAsync(newQualification);
             await dataContext.SaveChangesAsync();
             return new Tuple<QualificationEntity, bool>(newQualification, true);
