@@ -5,7 +5,9 @@ using Microsoft.Extensions.Configuration.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using SFA.DAS.CandidateAccount.Api.AppStart;
+using SFA.DAS.CandidateAccount.Application.Application.Commands.DeleteQualification;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.UpsertApplication;
+using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplicationQualificationsByType;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetQualification;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetQualifications;
 using SFA.DAS.CandidateAccount.Application.ReferenceData.Queries;
@@ -33,6 +35,8 @@ public class WhenAddingServicesToTheContainer
     [TestCase(typeof(IRequestHandler<GetAvailableQualificationsQuery, GetAvailableQualificationsQueryResult>))]
     [TestCase(typeof(IRequestHandler<GetQualificationQuery, GetQualificationQueryResult>))]
     [TestCase(typeof(IRequestHandler<GetApplicationQualificationsQuery, GetApplicationQualificationsQueryResult>))]
+    [TestCase(typeof(IRequestHandler<GetApplicationQualificationsByTypeQuery, GetApplicationQualificationsByTypeQueryResult>))]
+    [TestCase(typeof(IRequestHandler<DeleteQualificationCommand, Unit>))]
     public void Then_The_Dependencies_Are_Correctly_Resolved(Type toResolve)
     {
         var serviceCollection = new ServiceCollection();
