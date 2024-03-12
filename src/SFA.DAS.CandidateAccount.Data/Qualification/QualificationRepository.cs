@@ -9,6 +9,7 @@ public interface IQualificationRepository
     Task<QualificationEntity?> GetCandidateApplicationQualificationById(Guid candidateId, Guid applicationId, Guid id);
     Task DeleteCandidateApplicationQualificationById(Guid candidateId, Guid applicationId, Guid id);
     Task<Tuple<QualificationEntity, bool>> Upsert(Domain.Application.Qualification qualificationEntity);
+    Task<IEnumerable<QualificationEntity>> GetCandidateApplicationQualificationsByQualificationReferenceType(Guid candidateId, Guid applicationId, Guid qualificationReferenceId);
 }
 public class QualificationRepository(ICandidateAccountDataContext dataContext) : IQualificationRepository
 {
