@@ -7,6 +7,7 @@ using SFA.DAS.CandidateAccount.Data.AdditionalQuestion;
 using SFA.DAS.CandidateAccount.Data.AboutYou;
 using SFA.DAS.CandidateAccount.Data.Application;
 using SFA.DAS.CandidateAccount.Data.Candidates;
+using SFA.DAS.CandidateAccount.Data.Qualification;
 using SFA.DAS.CandidateAccount.Data.ReferenceData;
 using SFA.DAS.CandidateAccount.Data.TrainingCourse;
 using SFA.DAS.CandidateAccount.Data.WorkExperience;
@@ -25,6 +26,7 @@ public interface ICandidateAccountDataContext
     DbSet<AdditionalQuestionEntity> AdditionalQuestionEntities { get; set; }
     DbSet<AboutYouEntity> AboutYouEntities { get; set; }
     DbSet<QualificationReferenceEntity> QualificationReferenceEntities { get; set; }
+    DbSet<QualificationEntity> QualificationEntities { get; set; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken  = default (CancellationToken));
 }
 public class CandidateAccountDataContext : DbContext, ICandidateAccountDataContext
@@ -39,6 +41,7 @@ public class CandidateAccountDataContext : DbContext, ICandidateAccountDataConte
     public DbSet<AdditionalQuestionEntity> AdditionalQuestionEntities { get; set; }
     public DbSet<AboutYouEntity> AboutYouEntities { get; set; }
     public DbSet<QualificationReferenceEntity> QualificationReferenceEntities { get; set; }
+    public DbSet<QualificationEntity> QualificationEntities { get; set; }
 
     private readonly CandidateAccountConfiguration? _configuration;
     public CandidateAccountDataContext()
@@ -89,6 +92,7 @@ public class CandidateAccountDataContext : DbContext, ICandidateAccountDataConte
         modelBuilder.ApplyConfiguration(new AdditionalQuestionEntityConfiguration());
         modelBuilder.ApplyConfiguration(new AboutYouEntityConfiguration());
         modelBuilder.ApplyConfiguration(new QualificationReferenceEntityConfiguration());
+        modelBuilder.ApplyConfiguration(new QualificationEntityConfiguration());
 
         base.OnModelCreating(modelBuilder);
     }
