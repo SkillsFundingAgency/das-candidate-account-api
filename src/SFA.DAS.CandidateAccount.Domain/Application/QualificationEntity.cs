@@ -10,6 +10,7 @@
                 Grade = source.Grade,
                 Subject = source.Subject,
                 ToYear = source.ToYear.Value,
+                AdditionalInformation = source.AdditionalInformation,
                 IsPredicted = source.IsPredicted ?? false,
                 QualificationReferenceId = source.QualificationReference.Id,
                 ApplicationId = source.Application.Id
@@ -18,7 +19,8 @@
         public Guid Id { get; set; }
         public Guid QualificationReferenceId { get; set; }
         public string Subject { get; set; }
-        public string Grade { get; set; }
+        public string? Grade { get; set; }
+        public string? AdditionalInformation { get; set; }
         public int ToYear { get; set; }
         public bool IsPredicted { get; set; }
         public Guid ApplicationId { get; set; }

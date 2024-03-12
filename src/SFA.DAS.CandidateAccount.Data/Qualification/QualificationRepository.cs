@@ -76,6 +76,7 @@ public class QualificationRepository(ICandidateAccountDataContext dataContext) :
         existingQualification.Grade = qualificationEntity.Grade ?? existingQualification.Grade;
         existingQualification.IsPredicted = qualificationEntity.IsPredicted ?? existingQualification.IsPredicted;
         existingQualification.Subject = qualificationEntity.Subject ?? existingQualification.Subject;
+        existingQualification.AdditionalInformation = qualificationEntity.AdditionalInformation ?? existingQualification.AdditionalInformation;
         existingQualification.ToYear = qualificationEntity.ToYear ?? existingQualification.ToYear;
         dataContext.QualificationEntities.Update(existingQualification);
         await dataContext.SaveChangesAsync();

@@ -15,6 +15,7 @@ public class QualificationEntityConfiguration : IEntityTypeConfiguration<Qualifi
         builder.Property(x => x.QualificationReferenceId).HasColumnName("QualificationReferenceId").HasColumnType("uniqueidentifier").IsRequired();
         builder.Property(x => x.Subject).HasColumnName("Subject").HasColumnType("varchar").HasMaxLength(150).IsRequired();
         builder.Property(x => x.Grade).HasColumnName("Grade").HasColumnType("varchar").HasMaxLength(150).IsRequired(false);
+        builder.Property(x => x.AdditionalInformation).HasColumnName("AdditionalInformation").HasColumnType("varchar").HasMaxLength(50).IsRequired(false);
         builder.Property(x => x.ToYear).HasColumnName("ToYear").HasColumnType("smallint").IsRequired(false);
         builder.Property(x => x.IsPredicted).HasColumnName("IsPredicted").HasColumnType("bit").IsRequired();
         builder.Property(x => x.ApplicationId).HasColumnName("ApplicationId").HasColumnType("uniqueidentifier").IsRequired();
