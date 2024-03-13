@@ -1,9 +1,11 @@
 using AutoFixture.NUnit3;
+using Azure.Core;
 using FluentAssertions;
 using Moq;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.UpsertQualification;
 using SFA.DAS.CandidateAccount.Data.Application;
 using SFA.DAS.CandidateAccount.Data.Qualification;
+using SFA.DAS.CandidateAccount.Data.ReferenceData;
 using SFA.DAS.CandidateAccount.Domain.Application;
 using SFA.DAS.Testing.AutoFixture;
 
@@ -12,10 +14,12 @@ namespace SFA.DAS.CandidateAccount.Application.UnitTests.Qualifications;
 public class WhenHandlingUpdateQualificationCommand
 {
     [Test, RecursiveMoqAutoData]
-    public async Task Then_The_Request_Is_Handled_And_TrainingCourse_Created(
+    public async Task Then_The_Request_Is_Handled_And_Qualification_Created(
         UpsertQualificationCommand command,
         QualificationEntity qualificationEntity,
         ApplicationEntity applicationEntity,
+        QualificationReferenceEntity qualificationReferenceEntity,
+        [Frozen] Mock<IQualificationReferenceRepository> qualificationReferenceRepository,
         [Frozen] Mock<IQualificationRepository> qualificationRepository,
         [Frozen] Mock<IApplicationRepository> applicationRepository,
         UpsertQualificationCommandHandler handler)
@@ -23,8 +27,15 @@ public class WhenHandlingUpdateQualificationCommand
         applicationEntity.CandidateId = command.CandidateId;
         applicationEntity.TrainingCoursesStatus = (short)SectionStatus.InProgress;
 
+        qualificationReferenceRepository.Setup(x => x.GetById(command.QualificationReferenceId))
+            .ReturnsAsync(qualificationReferenceEntity);
         qualificationRepository.Setup(x =>
-            x.Upsert(command.Qualification, command.CandidateId, command.ApplicationId)).ReturnsAsync(new Tuple<QualificationEntity, bool>(qualificationEntity, true));
+                x.Upsert(
+                    It.Is<Qualification>(c =>
+                        c.Id == command.Qualification.Id &&
+                        c.QualificationReference.Id == qualificationReferenceEntity.Id),
+                    command.CandidateId, command.ApplicationId))
+            .ReturnsAsync(new Tuple<QualificationEntity, bool>(qualificationEntity, true));
 
         applicationRepository.Setup(x => x.GetById(command.ApplicationId))
             .ReturnsAsync(applicationEntity);
@@ -36,11 +47,69 @@ public class WhenHandlingUpdateQualificationCommand
     }
 
     [Test, RecursiveMoqAutoData]
-    public async Task Then_If_The_TrainingCourse_Exists_It_Is_Updated(
+    public async Task Then_If_The_Qualification_Exists_It_Is_Updated(
+        UpsertQualificationCommand command,
+        QualificationEntity qualificationEntity,
+        ApplicationEntity applicationEntity,
+        QualificationReferenceEntity qualificationReferenceEntity,
+        [Frozen] Mock<IQualificationReferenceRepository> qualificationReferenceRepository,
+        [Frozen] Mock<IQualificationRepository> qualificationRepository,
+        [Frozen] Mock<IApplicationRepository> applicationRepository,
+        UpsertQualificationCommandHandler handler)
+    {
+        applicationEntity.CandidateId = command.CandidateId;
+        applicationEntity.TrainingCoursesStatus = (short)SectionStatus.InProgress;
+
+        qualificationReferenceRepository.Setup(x => x.GetById(command.QualificationReferenceId))
+            .ReturnsAsync(qualificationReferenceEntity);
+        qualificationRepository.Setup(x =>
+                x.Upsert(
+                    It.Is<Qualification>(c =>
+                        c.Id == command.Qualification.Id &&
+                        c.QualificationReference.Id == qualificationReferenceEntity.Id), command.CandidateId,
+                    command.ApplicationId))
+            .ReturnsAsync(new Tuple<QualificationEntity, bool>(qualificationEntity, false));
+
+        applicationRepository.Setup(x => x.GetById(command.ApplicationId))
+            .ReturnsAsync(applicationEntity);
+
+        var actual = await handler.Handle(command, CancellationToken.None);
+
+        actual.Qualification.Id.Should().Be(qualificationEntity.Id);
+        actual.IsCreated.Should().BeFalse();
+    }
+    
+    [Test, RecursiveMoqAutoData]
+    public async Task Then_If_The_QualificationReference_Doe_Not_Exists_ErrorReturned(
         UpsertQualificationCommand command,
         QualificationEntity qualificationEntity,
         ApplicationEntity applicationEntity,
         [Frozen] Mock<IQualificationRepository> qualificationRepository,
+        [Frozen] Mock<IQualificationReferenceRepository> qualificationReferenceRepository,
+        [Frozen] Mock<IApplicationRepository> applicationRepository,
+        UpsertQualificationCommandHandler handler)
+    {
+        applicationEntity.CandidateId = command.CandidateId;
+        applicationEntity.TrainingCoursesStatus = (short)SectionStatus.InProgress;
+
+        qualificationReferenceRepository.Setup(x => x.GetById(command.QualificationReferenceId))
+            .ReturnsAsync((QualificationReferenceEntity?)null);
+        qualificationRepository.Setup(x => x.Upsert(command.Qualification, command.CandidateId, command.ApplicationId))
+            .ReturnsAsync(new Tuple<QualificationEntity, bool>(qualificationEntity, false));
+
+        applicationRepository.Setup(x => x.GetById(command.ApplicationId))
+            .ReturnsAsync(applicationEntity);
+
+        Assert.ThrowsAsync<InvalidOperationException>(() => handler.Handle(command, CancellationToken.None));
+    }
+    
+    [Test, RecursiveMoqAutoData]
+    public async Task Then_If_The_Candidate_And_Application_Do_Not_Match_ErrorReturned(
+        UpsertQualificationCommand command,
+        QualificationEntity qualificationEntity,
+        ApplicationEntity applicationEntity,
+        [Frozen] Mock<IQualificationRepository> qualificationRepository,
+        [Frozen] Mock<IQualificationReferenceRepository> qualificationReferenceRepository,
         [Frozen] Mock<IApplicationRepository> applicationRepository,
         UpsertQualificationCommandHandler handler)
     {
@@ -51,12 +120,9 @@ public class WhenHandlingUpdateQualificationCommand
             .ReturnsAsync(new Tuple<QualificationEntity, bool>(qualificationEntity, false));
 
         applicationRepository.Setup(x => x.GetById(command.ApplicationId))
-            .ReturnsAsync(applicationEntity);
+            .ReturnsAsync((ApplicationEntity?)null);
 
-        var actual = await handler.Handle(command, CancellationToken.None);
-
-        actual.Qualification.Id.Should().Be(qualificationEntity.Id);
-        actual.IsCreated.Should().BeFalse();
+        Assert.ThrowsAsync<InvalidOperationException>(() => handler.Handle(command, CancellationToken.None));
     }
 
     [Test, RecursiveMoqAutoData]

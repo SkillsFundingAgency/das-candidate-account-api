@@ -7,4 +7,5 @@ public class UpsertQualificationCommand : IRequest<UpsertQualificationCommandRes
     public required Guid ApplicationId { get; set; }
     public required Domain.Application.Qualification Qualification { get; set; }
     public required Guid CandidateId { get; set; }
+    public Guid QualificationReferenceId { get; set; }
 }

@@ -8,7 +8,7 @@ using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.CandidateAccount.Data.UnitTests.Repository.QualificationReference;
 
-public class WhenGettingAllQualifcationReferences
+public class WhenGettingAllQualificationReferences
 {
     [Test, RecursiveMoqAutoData]
     public async Task Then_All_The_Data_Is_Returned(
