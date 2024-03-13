@@ -1,13 +1,33 @@
 ﻿using MediatR;
+using SFA.DAS.CandidateAccount.Data.Application;
 using SFA.DAS.CandidateAccount.Data.WorkExperience;
+using SFA.DAS.CandidateAccount.Domain.Application;
 
 namespace SFA.DAS.CandidateAccount.Application.Application.Commands.UpdateWorkHistory;
 
-public class UpsertWorkHistoryCommandHandler(IWorkHistoryRepository repository) : IRequestHandler<UpsertWorkHistoryCommand, UpsertWorkHistoryCommandResponse>
+public class UpsertWorkHistoryCommandHandler(IWorkHistoryRepository repository, IApplicationRepository applicationRepository) : IRequestHandler<UpsertWorkHistoryCommand, UpsertWorkHistoryCommandResponse>
 {
     public async Task<UpsertWorkHistoryCommandResponse> Handle(UpsertWorkHistoryCommand request, CancellationToken cancellationToken)
     {
+        var application = await applicationRepository.GetById(request.ApplicationId);
+        if (application == null || application.CandidateId != request.CandidateId)
+        {
+            throw new InvalidOperationException($"Application {request.ApplicationId} not found");
+        }
+
         var result = await repository.UpsertWorkHistory(request.WorkHistory, request.CandidateId);
+
+        switch (request.WorkHistory.WorkHistoryType)
+        {
+            case WorkHistoryType.Job when application.JobsStatus == (short)SectionStatus.NotStarted:
+                application.JobsStatus = (short)SectionStatus.InProgress;
+                await applicationRepository.Update(application);
+                break;
+            case WorkHistoryType.WorkExperience when application.WorkExperienceStatus == (short)SectionStatus.NotStarted:
+                application.WorkExperienceStatus = (short)SectionStatus.InProgress;
+                await applicationRepository.Update(application);
+                break;
+        }
 
         return new UpsertWorkHistoryCommandResponse
         {

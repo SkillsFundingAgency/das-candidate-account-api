@@ -69,6 +69,7 @@ public class TrainingCoursesController(IMediator mediator, ILogger<WorkHistoryCo
         {
             var result = await mediator.Send(new UpsertTrainingCourseCommand
             {
+                ApplicationId = applicationId,
                 TrainingCourse = new Domain.Application.TrainingCourse
                 {
                     Id = id,

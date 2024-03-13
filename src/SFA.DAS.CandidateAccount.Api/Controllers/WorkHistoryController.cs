@@ -72,6 +72,7 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers
             {
                 var result = await mediator.Send(new UpsertWorkHistoryCommand
                 {
+                    ApplicationId = applicationId,
                     WorkHistory = new WorkHistory
                     {
                         Id = id,
