@@ -9,5 +9,5 @@ public class CreateCandidateCommand : IRequest<CreateCandidateCommandResponse>
     public required string LastName { get; set; }
     public required string GovUkIdentifier { get; set; }
     public Guid Id { get; set; }
-    public DateTime DateOfBirth { get; set; }
+    public DateTime? DateOfBirth { get; set; }
 }

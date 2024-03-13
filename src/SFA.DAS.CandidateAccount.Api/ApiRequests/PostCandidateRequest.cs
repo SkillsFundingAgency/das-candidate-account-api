@@ -14,7 +14,7 @@ public class PutCandidateRequest : CandidateRequest
 
 public abstract class CandidateRequest
 {
-    public DateTime DateOfBirth { get; set; }
+    public DateTime? DateOfBirth { get; set; }
     public DateTime? TermsOfUseAcceptedOn { get; set; }
     public string? PhoneNumber { get; set; }
     public string? MiddleNames { get; set; }

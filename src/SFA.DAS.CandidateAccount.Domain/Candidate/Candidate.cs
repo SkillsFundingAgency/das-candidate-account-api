@@ -34,7 +34,7 @@ public class Candidate
     public string? FirstName { get; set; }
     public string? MiddleNames { get; set; }
     public string? PhoneNumber { get; set; }
-    public DateTime DateOfBirth { get; set; }
+    public DateTime? DateOfBirth { get; set; }
     public DateTime CreatedOn { get; set; }
     public DateTime? UpdatedOn { get; set; }
     public DateTime? TermsOfUseAcceptedOn { get; set; }
