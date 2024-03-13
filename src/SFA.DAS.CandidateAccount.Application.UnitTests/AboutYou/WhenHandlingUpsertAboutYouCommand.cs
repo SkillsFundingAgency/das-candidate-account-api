@@ -16,7 +16,7 @@ public class WhenHandlingUpsertAboutYouCommand
         UpsertAboutYouCommandHandler handler)
     {
         aboutYouRepository.Setup(x =>
-            x.UpsertSkillsAndStrengths(command.AboutYou, command.CandidateId)).ReturnsAsync(new Tuple<Domain.Candidate.AboutYou, bool>(aboutYouEntity, true));
+            x.Upsert(command.AboutYou, command.CandidateId)).ReturnsAsync(new Tuple<Domain.Candidate.AboutYou, bool>(aboutYouEntity, true));
 
         var actual = await handler.Handle(command, CancellationToken.None);
 
@@ -32,7 +32,7 @@ public class WhenHandlingUpsertAboutYouCommand
         UpsertAboutYouCommandHandler handler)
     {
         aboutYouRepository.Setup(x =>
-                    x.UpsertSkillsAndStrengths(command.AboutYou, command.CandidateId)).ReturnsAsync(new Tuple<Domain.Candidate.AboutYou, bool>(aboutYouEntity, false));
+                    x.Upsert(command.AboutYou, command.CandidateId)).ReturnsAsync(new Tuple<Domain.Candidate.AboutYou, bool>(aboutYouEntity, false));
 
         var actual = await handler.Handle(command, CancellationToken.None);
 
