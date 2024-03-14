@@ -38,6 +38,7 @@ public class QualificationRepository(ICandidateAccountDataContext dataContext) :
             .Where(c => c.ApplicationId == applicationId)
             .Where(c=> c.ApplicationEntity.CandidateId == candidateId)
             .Where(c=> c.Id == id)
+            .Include(c=>c.QualificationReferenceEntity)
             .SingleOrDefaultAsync();
     }
 

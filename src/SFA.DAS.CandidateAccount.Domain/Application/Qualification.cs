@@ -8,7 +8,6 @@ public class Qualification
     public string? AdditionalInformation { get; set; }
     public int? ToYear { get; set; }
     public bool? IsPredicted { get; set; }
-    public Application Application { get; set; }
     public QualificationReference QualificationReference { get; set; }
     public static implicit operator Qualification?(QualificationEntity? source)
     {
@@ -24,7 +23,6 @@ public class Qualification
             Grade = source.Grade,
             ToYear = source.ToYear,
             AdditionalInformation = source.AdditionalInformation,
-            Application = source.ApplicationEntity,
             QualificationReference = source.QualificationReferenceEntity
         };
     }
