@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 using SFA.DAS.CandidateAccount.Data.AdditionalQuestion;
 using SFA.DAS.CandidateAccount.Data.AboutYou;
 using SFA.DAS.CandidateAccount.Data.Application;
-using SFA.DAS.CandidateAccount.Data.Candidates;
+using SFA.DAS.CandidateAccount.Data.Candidate;
 using SFA.DAS.CandidateAccount.Data.Qualification;
 using SFA.DAS.CandidateAccount.Data.ReferenceData;
 using SFA.DAS.CandidateAccount.Data.TrainingCourse;
