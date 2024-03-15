@@ -1,20 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SFA.DAS.CandidateAccount.Domain.Candidate
+﻿namespace SFA.DAS.CandidateAccount.Domain.Candidate
 {
     public class AddressEntity
     {
-        public Guid Id { get; set; }
-        public string AddressLine1 { get; set; }
-        public string AddressLine2 { get; set; }
-        public string AddressLine3 { get; set;}
-        public string AddressLine4 { get; set; }
-        public string Postcode { get; set; }
-        public string Uprn { get; set; }
-        public Guid CandidateId { get; set; }
+        public required Guid Id { get; init; }
+        public string AddressLine1 { get; init; }
+        public string? AddressLine2 { get; init; }
+        public string? AddressLine3 { get; init;}
+        public string? AddressLine4 { get; init; }
+        public string Postcode { get; init; }
+        public string? Uprn { get; init; }
+        public required Guid CandidateId { get; init; }
     }
 }
