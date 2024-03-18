@@ -22,7 +22,7 @@ public class AddressController(IMediator mediator, ILogger<AddressController> lo
                 CandidateId = candidateId,
             });
 
-            if (result.Address == null)
+            if (result.Address is null)
             {
                 return NotFound();
             }
