@@ -8,7 +8,7 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers;
 
 [ApiVersion("1.0")]
 [ApiController]
-[Route("api/[controller]s/")]
+[Route("api/[controller]es/")]
 public class AddressController(IMediator mediator, ILogger<AddressController> logger) : Controller
 {
     [HttpGet]
