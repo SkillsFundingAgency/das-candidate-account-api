@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using SFA.DAS.CandidateAccount.Api.ApiRequests;
+using SFA.DAS.CandidateAccount.Api.ApiResponses;
 using SFA.DAS.CandidateAccount.Api.Controllers;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.UpsertQualification;
 using SFA.DAS.CandidateAccount.Domain.Application;
@@ -68,8 +69,8 @@ public class WhenCallingPutOnQualifications
         var actual = await controller.Put(candidateId, applicationId, request) as OkObjectResult;
         
         Assert.That(actual, Is.Not.Null);
-        var actualValue = actual!.Value as Qualification;
-        actualValue.Should().BeEquivalentTo(response.Qualification);
+        var actualValue = actual!.Value as GetQualificationApiResponse;
+        actualValue!.Qualification.Should().BeEquivalentTo(response.Qualification);
     }
 
     [Test, MoqAutoData]

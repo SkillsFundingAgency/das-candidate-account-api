@@ -24,7 +24,7 @@ public class WhenCallingGetQualifications
         var actual = await controller.GetQualifications() as OkObjectResult;
         
         actual!.StatusCode.Should().Be((int) HttpStatusCode.OK);
-        actual.Value.Should().BeEquivalentTo(result.QualificationReferences.OrderBy(c=>c.Order), options=>options.WithStrictOrderingFor(c=>c));
+        actual.Value.Should().BeEquivalentTo(new {QualificationReferences= result.QualificationReferences.OrderBy(c=>c.Order)}, options=>options.WithStrictOrderingFor(c=>c));
     }
 
     [Test, MoqAutoData]

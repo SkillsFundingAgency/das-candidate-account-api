@@ -2,6 +2,7 @@ using System.Net;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.CandidateAccount.Api.ApiRequests;
+using SFA.DAS.CandidateAccount.Api.ApiResponses;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.DeleteQualification;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.UpsertQualification;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplicationQualificationsByType;
@@ -34,7 +35,7 @@ public class QualificationController(IMediator mediator, ILogger<QualificationCo
                 return NotFound();
             }
 
-            return Ok(result.Qualification);
+            return Ok(new GetQualificationApiResponse{Qualification = result.Qualification});
         }
         catch (Exception e)
         {
@@ -91,7 +92,7 @@ public class QualificationController(IMediator mediator, ILogger<QualificationCo
                 response = result.Qualifications;
             }
 
-            return Ok(response);
+            return Ok(new GetQualificationsApiResponse{Qualifications = response});
         }
         catch (Exception e)
         {
@@ -126,7 +127,7 @@ public class QualificationController(IMediator mediator, ILogger<QualificationCo
                 return Created($"api/candidates/{candidateId}/applications/{applicationId}/qualifications/{result.Qualification.Id}", result.Qualification);
             }
 
-            return Ok(result.Qualification);
+            return Ok(new GetQualificationApiResponse{Qualification = result.Qualification});
 
         }
         catch (Exception e)

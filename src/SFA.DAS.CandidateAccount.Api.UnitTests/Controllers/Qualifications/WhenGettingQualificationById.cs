@@ -4,6 +4,7 @@ using FluentAssertions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
+using SFA.DAS.CandidateAccount.Api.ApiResponses;
 using SFA.DAS.CandidateAccount.Api.Controllers;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetQualification;
 using SFA.DAS.CandidateAccount.Domain.Application;
@@ -30,8 +31,8 @@ public class WhenGettingQualificationById
         var actual = await controller.GetById(candidateId, applicationId, id) as OkObjectResult;
         
         Assert.That(actual, Is.Not.Null);
-        var actualModel = actual!.Value as Qualification;
-        actualModel.Should().BeEquivalentTo(response.Qualification);
+        var actualModel = actual!.Value as GetQualificationApiResponse;
+        actualModel!.Qualification.Should().BeEquivalentTo(response.Qualification);
     }
     
     [Test, MoqAutoData]
