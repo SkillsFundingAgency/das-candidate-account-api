@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using MediatR;
 using SFA.DAS.CandidateAccount.Data.Application;
+using SFA.DAS.CandidateAccount.Domain.Application;
 using ValidationResult = SFA.DAS.CandidateAccount.Domain.RequestHandlers.ValidationResult;
 
 namespace SFA.DAS.CandidateAccount.Application.Application.Commands.PatchApplication;
@@ -40,6 +41,15 @@ public class PatchApplicationCommandHandler (IApplicationRepository applicationR
         application.WorkExperienceStatus = (short)patchedDoc.WorkExperienceStatus;
         application.WhatIsYourInterest = patchedDoc.WhatIsYourInterest;
         application.UpdatedDate = DateTime.UtcNow;
+
+        if(application.ApplyUnderDisabilityConfidentScheme != patchedDoc.ApplyUnderDisabilityConfidentScheme)
+        {
+            application.ApplyUnderDisabilityConfidentScheme = patchedDoc.ApplyUnderDisabilityConfidentScheme;
+            if (application.DisabilityConfidenceStatus == (short)SectionStatus.NotStarted)
+            {
+                application.DisabilityConfidenceStatus = (short)SectionStatus.InProgress;
+            }
+        }
 
         var updatedApplication = await applicationRepository.Update(application);
         

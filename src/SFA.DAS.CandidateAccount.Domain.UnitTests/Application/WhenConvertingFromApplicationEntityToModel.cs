@@ -1,4 +1,3 @@
-using AutoFixture.NUnit3;
 using FluentAssertions;
 using SFA.DAS.CandidateAccount.Domain.Application;
 using SFA.DAS.Testing.AutoFixture;
@@ -21,7 +20,7 @@ public class WhenConvertingFromApplicationEntityToModel
         source.AdditionalQuestion2Status = 0;
         source.AdditionalQuestion1Status = 0;
         source.InterestsStatus = 0;
-        
+
         var actual = (Domain.Application.Application)source;
 
         actual.Id.Should().Be(source.Id);
@@ -41,6 +40,7 @@ public class WhenConvertingFromApplicationEntityToModel
         actual.AdditionalQuestion1Status.Should().Be(SectionStatus.NotStarted);
         actual.InterestsStatus.Should().Be(SectionStatus.NotStarted);
         actual.WhatIsYourInterest.Should().Be(source.WhatIsYourInterest);
+        actual.ApplyUnderDisabilityConfidentScheme.Should().Be(source.ApplyUnderDisabilityConfidentScheme);
     }
 
     [TestCase(SectionStatus.NotStarted, SectionStatus.NotStarted, SectionStatus.NotStarted)]
