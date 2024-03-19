@@ -21,14 +21,7 @@ public class WhenHandlingGetAddressQuery
         var actual = await handler.Handle(request, CancellationToken.None);
 
         actual.Address.Should().NotBeNull();
-        actual.Address.Should().BeEquivalentTo(entity, options => options
-            .Excluding(ctx => ctx.CandidateId)
-            .Excluding(ctx => ctx.AddressLine2)
-            .Excluding(ctx => ctx.AddressLine3)
-            .Excluding(ctx => ctx.AddressLine4)
-            .Excluding(ctx => ctx.Postcode)
-            .Excluding(ctx => ctx.Uprn)
-        );
+        actual.Address.Should().BeEquivalentTo(entity);
     }
 
     [Test, RecursiveMoqAutoData]
