@@ -12,6 +12,7 @@ using SFA.DAS.CandidateAccount.Data.WorkExperience;
 using SFA.DAS.CandidateAccount.Domain.Application;
 using SFA.DAS.CandidateAccount.Domain.Candidate;
 using SFA.DAS.CandidateAccount.Domain.Configuration;
+using SFA.DAS.CandidateAccount.Data.Address;
 
 namespace SFA.DAS.CandidateAccount.Data;
 
@@ -23,6 +24,7 @@ public interface ICandidateAccountDataContext
     DbSet<TrainingCourseEntity> TrainingCourseEntities { get; set; }
     DbSet<AdditionalQuestionEntity> AdditionalQuestionEntities { get; set; }
     DbSet<AboutYouEntity> AboutYouEntities { get; set; }
+    DbSet<AddressEntity> AddressEntities { get; set; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken  = default (CancellationToken));
 }
 public class CandidateAccountDataContext : DbContext, ICandidateAccountDataContext
@@ -36,6 +38,7 @@ public class CandidateAccountDataContext : DbContext, ICandidateAccountDataConte
     public DbSet<TrainingCourseEntity> TrainingCourseEntities { get; set; }
     public DbSet<AdditionalQuestionEntity> AdditionalQuestionEntities { get; set; }
     public DbSet<AboutYouEntity> AboutYouEntities { get; set; }
+    public DbSet<AddressEntity> AddressEntities { get; set; }
 
     private readonly CandidateAccountConfiguration? _configuration;
     public CandidateAccountDataContext()
@@ -85,6 +88,7 @@ public class CandidateAccountDataContext : DbContext, ICandidateAccountDataConte
         modelBuilder.ApplyConfiguration(new TrainingCourseEntityConfiguration());
         modelBuilder.ApplyConfiguration(new AdditionalQuestionEntityConfiguration());
         modelBuilder.ApplyConfiguration(new AboutYouEntityConfiguration());
+        modelBuilder.ApplyConfiguration(new AddressEntityConfiguration());
 
         base.OnModelCreating(modelBuilder);
     }
