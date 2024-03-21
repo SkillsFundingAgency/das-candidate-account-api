@@ -1,4 +1,4 @@
-﻿using Azure.Core;
+using Azure.Core;
 using Azure.Identity;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +14,7 @@ using SFA.DAS.CandidateAccount.Data.WorkExperience;
 using SFA.DAS.CandidateAccount.Domain.Application;
 using SFA.DAS.CandidateAccount.Domain.Candidate;
 using SFA.DAS.CandidateAccount.Domain.Configuration;
+using SFA.DAS.CandidateAccount.Data.Address;
 
 namespace SFA.DAS.CandidateAccount.Data;
 
@@ -25,6 +26,7 @@ public interface ICandidateAccountDataContext
     DbSet<TrainingCourseEntity> TrainingCourseEntities { get; set; }
     DbSet<AdditionalQuestionEntity> AdditionalQuestionEntities { get; set; }
     DbSet<AboutYouEntity> AboutYouEntities { get; set; }
+    DbSet<AddressEntity> AddressEntities { get; set; }
     DbSet<QualificationReferenceEntity> QualificationReferenceEntities { get; set; }
     DbSet<QualificationEntity> QualificationEntities { get; set; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken  = default (CancellationToken));
@@ -40,6 +42,7 @@ public class CandidateAccountDataContext : DbContext, ICandidateAccountDataConte
     public DbSet<TrainingCourseEntity> TrainingCourseEntities { get; set; }
     public DbSet<AdditionalQuestionEntity> AdditionalQuestionEntities { get; set; }
     public DbSet<AboutYouEntity> AboutYouEntities { get; set; }
+    public DbSet<AddressEntity> AddressEntities { get; set; }
     public DbSet<QualificationReferenceEntity> QualificationReferenceEntities { get; set; }
     public DbSet<QualificationEntity> QualificationEntities { get; set; }
 
@@ -93,6 +96,7 @@ public class CandidateAccountDataContext : DbContext, ICandidateAccountDataConte
         modelBuilder.ApplyConfiguration(new AboutYouEntityConfiguration());
         modelBuilder.ApplyConfiguration(new QualificationReferenceEntityConfiguration());
         modelBuilder.ApplyConfiguration(new QualificationEntityConfiguration());
+        modelBuilder.ApplyConfiguration(new AddressEntityConfiguration());
 
         base.OnModelCreating(modelBuilder);
     }
