@@ -4,6 +4,7 @@ using FluentAssertions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
+using SFA.DAS.CandidateAccount.Api.ApiResponses;
 using SFA.DAS.CandidateAccount.Api.Controllers;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplicationQualificationsByType;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetQualifications;
@@ -31,8 +32,8 @@ public class WhenGettingAllApplicationQualifications
         var actual = await controller.GetAll(candidateId, applicationId)  as OkObjectResult;
         
         Assert.That(actual, Is.Not.Null);
-        var actualModel = actual.Value as List<Qualification>;
-        actualModel.Should().BeEquivalentTo(response.Qualifications);
+        var actualModel = actual!.Value as GetQualificationsApiResponse;
+        actualModel!.Qualifications.Should().BeEquivalentTo(response.Qualifications);
     }
     
     [Test, MoqAutoData]
@@ -53,8 +54,8 @@ public class WhenGettingAllApplicationQualifications
         var actual = await controller.GetAll(candidateId, applicationId, qualificationReferenceId) as OkObjectResult;
         
         Assert.That(actual, Is.Not.Null);
-        var actualModel = actual!.Value as List<Qualification>;
-        actualModel.Should().BeEquivalentTo(response.Qualifications);
+        var actualModel = actual!.Value as GetQualificationsApiResponse;
+        actualModel!.Qualifications.Should().BeEquivalentTo(response.Qualifications);
 
     }
 

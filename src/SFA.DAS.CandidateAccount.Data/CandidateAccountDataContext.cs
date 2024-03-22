@@ -1,4 +1,4 @@
-﻿using Azure.Core;
+using Azure.Core;
 using Azure.Identity;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +26,7 @@ public interface ICandidateAccountDataContext
     DbSet<TrainingCourseEntity> TrainingCourseEntities { get; set; }
     DbSet<AdditionalQuestionEntity> AdditionalQuestionEntities { get; set; }
     DbSet<AboutYouEntity> AboutYouEntities { get; set; }
+    DbSet<AddressEntity> AddressEntities { get; set; }
     DbSet<QualificationReferenceEntity> QualificationReferenceEntities { get; set; }
     DbSet<QualificationEntity> QualificationEntities { get; set; }
     DbSet<AddressEntity> AddressEntities { get; set; }
@@ -42,6 +43,7 @@ public class CandidateAccountDataContext : DbContext, ICandidateAccountDataConte
     public DbSet<TrainingCourseEntity> TrainingCourseEntities { get; set; }
     public DbSet<AdditionalQuestionEntity> AdditionalQuestionEntities { get; set; }
     public DbSet<AboutYouEntity> AboutYouEntities { get; set; }
+    public DbSet<AddressEntity> AddressEntities { get; set; }
     public DbSet<QualificationReferenceEntity> QualificationReferenceEntities { get; set; }
     public DbSet<QualificationEntity> QualificationEntities { get; set; }
     public DbSet<AddressEntity> AddressEntities { get; set; }

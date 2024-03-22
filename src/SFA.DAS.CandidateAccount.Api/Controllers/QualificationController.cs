@@ -2,7 +2,9 @@ using System.Net;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.CandidateAccount.Api.ApiRequests;
+using SFA.DAS.CandidateAccount.Api.ApiResponses;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.DeleteQualification;
+using SFA.DAS.CandidateAccount.Application.Application.Commands.DeleteQualificationsByReferenceId;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.UpsertQualification;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplicationQualificationsByType;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetQualification;
@@ -34,7 +36,7 @@ public class QualificationController(IMediator mediator, ILogger<QualificationCo
                 return NotFound();
             }
 
-            return Ok(result.Qualification);
+            return Ok(new GetQualificationApiResponse{Qualification = result.Qualification});
         }
         catch (Exception e)
         {
@@ -44,8 +46,29 @@ public class QualificationController(IMediator mediator, ILogger<QualificationCo
     }
 
     [HttpDelete]
+    [Route("")]
+    public async Task<IActionResult> DeleteByReferenceId([FromRoute] Guid candidateId, [FromRoute] Guid applicationId, [FromQuery]Guid qualificationReferenceId)
+    {
+        try
+        {
+            await mediator.Send(new DeleteQualificationsByReferenceIdCommand
+            {
+                CandidateId = candidateId,
+                ApplicationId = applicationId,
+                QualificationReferenceId = qualificationReferenceId
+            });
+            return NoContent();
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e, "Error deleting qualifications");
+            return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+        }
+    }
+
+    [HttpDelete]
     [Route("{id}")]
-    public async Task<IActionResult> Delete([FromRoute] Guid candidateId, [FromRoute] Guid applicationId, [FromRoute]Guid id)
+    public async Task<IActionResult> Delete([FromRoute] Guid candidateId, [FromRoute] Guid applicationId, [FromRoute] Guid id)
     {
         try
         {
@@ -91,7 +114,7 @@ public class QualificationController(IMediator mediator, ILogger<QualificationCo
                 response = result.Qualifications;
             }
 
-            return Ok(response);
+            return Ok(new GetQualificationsApiResponse{Qualifications = response});
         }
         catch (Exception e)
         {
@@ -126,7 +149,7 @@ public class QualificationController(IMediator mediator, ILogger<QualificationCo
                 return Created($"api/candidates/{candidateId}/applications/{applicationId}/qualifications/{result.Qualification.Id}", result.Qualification);
             }
 
-            return Ok(result.Qualification);
+            return Ok(new GetQualificationApiResponse{Qualification = result.Qualification});
 
         }
         catch (Exception e)

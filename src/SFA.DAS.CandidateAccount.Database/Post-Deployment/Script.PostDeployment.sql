@@ -1,17 +1,17 @@
 IF NOT EXISTS(SELECT 1 FROM QualificationReference where Name = 'GCSE')
 BEGIN
 insert into QualificationReference (Id, Name, [Order])
-Values (NEWID(), 'GCSE', 1)
+Values (NEWID(), 'GCSE', 7)
 END
 IF NOT EXISTS(SELECT 1 FROM QualificationReference where Name = 'BTEC')
 BEGIN
 insert into QualificationReference (Id, Name, [Order])
-Values (NEWID(), 'BTEC', 2)
+Values (NEWID(), 'BTEC', 6)
 END
 IF NOT EXISTS(SELECT 1 FROM QualificationReference where Name = 'T level')
 BEGIN
 insert into QualificationReference (Id, Name, [Order])
-Values (NEWID(), 'T level',3)
+Values (NEWID(), 'T level',5)
 END
 IF NOT EXISTS(SELECT 1 FROM QualificationReference where Name = 'AS level')
 BEGIN
@@ -21,17 +21,17 @@ END
 IF NOT EXISTS(SELECT 1 FROM QualificationReference where Name = 'A level')
 BEGIN
 insert into QualificationReference (Id, Name, [Order])
-Values (NEWID(), 'A level',5)
+Values (NEWID(), 'A level',3)
 END
 IF NOT EXISTS(SELECT 1 FROM QualificationReference where Name = 'Apprenticeship')
 BEGIN
 insert into QualificationReference (Id, Name, [Order])
-Values (NEWID(), 'Apprenticeship',6)
+Values (NEWID(), 'Apprenticeship',2)
 END
 IF NOT EXISTS(SELECT 1 FROM QualificationReference where Name = 'Degree')
 BEGIN
 insert into QualificationReference (Id, Name, [Order])
-Values (NEWID(), 'Degree',7)
+Values (NEWID(), 'Degree',1)
 END
 IF NOT EXISTS(SELECT 1 FROM QualificationReference where Name = 'Other')
 BEGIN

@@ -8,6 +8,7 @@ public interface IQualificationRepository
     Task<IEnumerable<QualificationEntity>> GetCandidateApplicationQualifications(Guid candidateId, Guid applicationId);
     Task<QualificationEntity?> GetCandidateApplicationQualificationById(Guid candidateId, Guid applicationId, Guid id);
     Task DeleteCandidateApplicationQualificationById(Guid candidateId, Guid applicationId, Guid id);
+    Task DeleteCandidateApplicationQualificationsByReferenceId(Guid candidateId, Guid applicationId, Guid qualificationReferenceId);
     Task<Tuple<QualificationEntity, bool>> Upsert(Domain.Application.Qualification qualificationEntity, Guid candidateId, Guid applicationId);
     Task<IEnumerable<QualificationEntity>> GetCandidateApplicationQualificationsByQualificationReferenceType(Guid candidateId, Guid applicationId, Guid qualificationReferenceId);
 }
@@ -38,6 +39,7 @@ public class QualificationRepository(ICandidateAccountDataContext dataContext) :
             .Where(c => c.ApplicationId == applicationId)
             .Where(c=> c.ApplicationEntity.CandidateId == candidateId)
             .Where(c=> c.Id == id)
+            .Include(c=>c.QualificationReferenceEntity)
             .SingleOrDefaultAsync();
     }
 
@@ -52,6 +54,26 @@ public class QualificationRepository(ICandidateAccountDataContext dataContext) :
         if (result != null)
         {
             dataContext.QualificationEntities.Remove(result);
+            await dataContext.SaveChangesAsync();
+        }
+    }
+
+    public async Task DeleteCandidateApplicationQualificationsByReferenceId(Guid candidateId, Guid applicationId, Guid qualificationReferenceId)
+    {
+        var result = await dataContext.QualificationEntities
+            .Where(c => c.ApplicationId == applicationId)
+            .Where(c => c.ApplicationEntity.CandidateId == candidateId)
+            .Where(c => c.QualificationReferenceId == qualificationReferenceId)
+            .ToListAsync();
+        
+        if (result.Count == 0)
+        {
+            throw new InvalidOperationException("No qualifications found for deletion");
+        }
+
+        if (result.Count > 0)
+        {
+            dataContext.QualificationEntities.RemoveRange(result);
             await dataContext.SaveChangesAsync();
         }
     }

@@ -12,6 +12,7 @@ using SFA.DAS.CandidateAccount.Application.Application.Queries.GetQualification;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetQualifications;
 using SFA.DAS.CandidateAccount.Application.ReferenceData.Queries;
 using SFA.DAS.CandidateAccount.Data.AdditionalQuestion;
+using SFA.DAS.CandidateAccount.Data.Address;
 using SFA.DAS.CandidateAccount.Data.Application;
 using SFA.DAS.CandidateAccount.Data.Candidate;
 using SFA.DAS.CandidateAccount.Data.Qualification;
@@ -31,6 +32,7 @@ public class WhenAddingServicesToTheContainer
     [TestCase(typeof(ITrainingCourseRespository))]
     [TestCase(typeof(IQualificationReferenceRepository))]
     [TestCase(typeof(IQualificationRepository))]
+    [TestCase(typeof(IAddressRepository))]
     [TestCase(typeof(IRequestHandler<UpsertApplicationCommand, UpsertApplicationCommandResponse>))]
     [TestCase(typeof(IRequestHandler<GetAvailableQualificationsQuery, GetAvailableQualificationsQueryResult>))]
     [TestCase(typeof(IRequestHandler<GetQualificationQuery, GetQualificationQueryResult>))]
