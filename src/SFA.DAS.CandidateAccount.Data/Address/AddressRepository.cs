@@ -2,18 +2,15 @@
 using Microsoft.EntityFrameworkCore;
 
 namespace SFA.DAS.CandidateAccount.Data.Address;
-
-namespace SFA.DAS.CandidateAccount.Data.Address
+public interface IAddressRepository
 {
-    public interface IAddressRepository
-    {
-        Task<AddressEntity> Create(AddressEntity addressEntity);
-        Task<Domain.Candidate.Address?> Get(Guid candidateId);
-    }
+    Task<AddressEntity> Create(AddressEntity addressEntity);
+    Task<Domain.Candidate.Address?> Get(Guid candidateId);
+}
 
-    public class AddressRepository(ICandidateAccountDataContext dataContext) : IAddressRepository
-    {
-        public async Task<AddressEntity> Create(AddressEntity addressEntity)
+public class AddressRepository(ICandidateAccountDataContext dataContext) : IAddressRepository
+{
+    public async Task<Domain.Candidate.Address?> Get(Guid candidateId)
     {
         var query = from item in dataContext.AddressEntities
                 .Where(tc => tc.CandidateId == candidateId)
@@ -23,11 +20,11 @@ namespace SFA.DAS.CandidateAccount.Data.Address
 
         return addressEntity is null ? null : (Domain.Candidate.Address)addressEntity;
     }
-    
-            public async Task<AddressEntity> Create(AddressEntity addressEntity)
-        {
-            await dataContext.AddressEntities.AddAsync(addressEntity);
-            await dataContext.SaveChangesAsync();
-            return addressEntity;
-        }
+
+    public async Task<AddressEntity> Create(AddressEntity addressEntity)
+    {
+        await dataContext.AddressEntities.AddAsync(addressEntity);
+        await dataContext.SaveChangesAsync();
+        return addressEntity;
+    }
 }

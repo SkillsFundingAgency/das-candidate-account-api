@@ -29,7 +29,6 @@ public interface ICandidateAccountDataContext
     DbSet<AddressEntity> AddressEntities { get; set; }
     DbSet<QualificationReferenceEntity> QualificationReferenceEntities { get; set; }
     DbSet<QualificationEntity> QualificationEntities { get; set; }
-    DbSet<AddressEntity> AddressEntities { get; set; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
 }
 public class CandidateAccountDataContext : DbContext, ICandidateAccountDataContext
@@ -46,7 +45,6 @@ public class CandidateAccountDataContext : DbContext, ICandidateAccountDataConte
     public DbSet<AddressEntity> AddressEntities { get; set; }
     public DbSet<QualificationReferenceEntity> QualificationReferenceEntities { get; set; }
     public DbSet<QualificationEntity> QualificationEntities { get; set; }
-    public DbSet<AddressEntity> AddressEntities { get; set; }
 
     private readonly CandidateAccountConfiguration? _configuration;
     public CandidateAccountDataContext()

@@ -5,7 +5,6 @@ using SFA.DAS.CandidateAccount.Api.ApiRequests;
 using SFA.DAS.CandidateAccount.Application.UserAccount.Address;
 using SFA.DAS.CandidateAccount.Api.ApiResponses;
 using SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetAddress;
-using System.Net;
 
 namespace SFA.DAS.CandidateAccount.Api.Controllers;
 

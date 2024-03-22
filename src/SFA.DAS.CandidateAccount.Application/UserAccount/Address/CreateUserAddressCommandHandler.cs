@@ -23,10 +23,9 @@ public class CreateUserAddressCommandHandler : IRequestHandler<CreateUserAddress
             Id = Guid.NewGuid(),
             AddressLine1 = request.AddressLine1,
             AddressLine2 = request.AddressLine2,
-            AddressLine3 = request.AddressLine3,
-            AddressLine4 = request.AddressLine4,
+            Town = request.AddressLine3,
+            County = request.AddressLine4,
             Postcode = request.Postcode,
-            Uprn = request.Uprn,
             CandidateId = candidate.Id
         });
 
