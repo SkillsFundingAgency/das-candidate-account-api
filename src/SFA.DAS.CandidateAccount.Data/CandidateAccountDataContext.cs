@@ -14,6 +14,7 @@ using SFA.DAS.CandidateAccount.Data.WorkExperience;
 using SFA.DAS.CandidateAccount.Domain.Application;
 using SFA.DAS.CandidateAccount.Domain.Candidate;
 using SFA.DAS.CandidateAccount.Domain.Configuration;
+using SFA.DAS.CandidateAccount.Data.Address;
 
 namespace SFA.DAS.CandidateAccount.Data;
 
@@ -27,7 +28,8 @@ public interface ICandidateAccountDataContext
     DbSet<AboutYouEntity> AboutYouEntities { get; set; }
     DbSet<QualificationReferenceEntity> QualificationReferenceEntities { get; set; }
     DbSet<QualificationEntity> QualificationEntities { get; set; }
-    Task<int> SaveChangesAsync(CancellationToken cancellationToken  = default (CancellationToken));
+    DbSet<AddressEntity> AddressEntities { get; set; }
+    Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
 }
 public class CandidateAccountDataContext : DbContext, ICandidateAccountDataContext
 {
@@ -42,6 +44,7 @@ public class CandidateAccountDataContext : DbContext, ICandidateAccountDataConte
     public DbSet<AboutYouEntity> AboutYouEntities { get; set; }
     public DbSet<QualificationReferenceEntity> QualificationReferenceEntities { get; set; }
     public DbSet<QualificationEntity> QualificationEntities { get; set; }
+    public DbSet<AddressEntity> AddressEntities { get; set; }
 
     private readonly CandidateAccountConfiguration? _configuration;
     public CandidateAccountDataContext()
@@ -50,9 +53,9 @@ public class CandidateAccountDataContext : DbContext, ICandidateAccountDataConte
 
     public CandidateAccountDataContext(DbContextOptions options) : base(options)
     {
-            
+
     }
-    public CandidateAccountDataContext(IOptions<CandidateAccountConfiguration> config, DbContextOptions options, ChainedTokenCredential azureServiceTokenProvider, EnvironmentConfiguration environmentConfiguration) :base(options)
+    public CandidateAccountDataContext(IOptions<CandidateAccountConfiguration> config, DbContextOptions options, ChainedTokenCredential azureServiceTokenProvider, EnvironmentConfiguration environmentConfiguration) : base(options)
     {
         _azureServiceTokenProvider = azureServiceTokenProvider;
         _environmentConfiguration = environmentConfiguration;
@@ -61,21 +64,21 @@ public class CandidateAccountDataContext : DbContext, ICandidateAccountDataConte
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseLazyLoadingProxies();
-            
-        if (_configuration == null 
+
+        if (_configuration == null
             || _environmentConfiguration.EnvironmentName.Equals("DEV", StringComparison.CurrentCultureIgnoreCase)
             || _environmentConfiguration.EnvironmentName.Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase))
         {
             return;
         }
-            
+
         var connection = new SqlConnection
         {
             ConnectionString = _configuration.ConnectionString,
             AccessToken = _azureServiceTokenProvider.GetTokenAsync(new TokenRequestContext(scopes: new string[] { AzureResource })).Result.Token,
         };
-            
-        optionsBuilder.UseSqlServer(connection,options=>
+
+        optionsBuilder.UseSqlServer(connection, options =>
             options.EnableRetryOnFailure(
                 5,
                 TimeSpan.FromSeconds(20),
@@ -93,6 +96,7 @@ public class CandidateAccountDataContext : DbContext, ICandidateAccountDataConte
         modelBuilder.ApplyConfiguration(new AboutYouEntityConfiguration());
         modelBuilder.ApplyConfiguration(new QualificationReferenceEntityConfiguration());
         modelBuilder.ApplyConfiguration(new QualificationEntityConfiguration());
+        modelBuilder.ApplyConfiguration(new AddressEntityConfiguration());
 
         base.OnModelCreating(modelBuilder);
     }

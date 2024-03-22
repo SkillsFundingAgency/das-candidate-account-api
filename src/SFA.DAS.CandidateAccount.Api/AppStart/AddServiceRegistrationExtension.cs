@@ -7,6 +7,7 @@ using SFA.DAS.CandidateAccount.Data.Qualification;
 using SFA.DAS.CandidateAccount.Data.ReferenceData;
 using SFA.DAS.CandidateAccount.Data.TrainingCourse;
 using SFA.DAS.CandidateAccount.Data.WorkExperience;
+using SFA.DAS.CandidateAccount.Data.Address;
 
 namespace SFA.DAS.CandidateAccount.Api.AppStart;
 
@@ -22,6 +23,7 @@ public static class AddServiceRegistrationExtension
         services.AddScoped<IQualificationReferenceRepository, QualificationReferenceRepository>();
         services.AddScoped<IQualificationRepository, QualificationRepository>();
         services.AddScoped<IAboutYouRespository, AboutYouRepository>();
+        services.AddScoped<IAddressRepository, AddressRepository>();
         services.AddMediatR(configuration => configuration.RegisterServicesFromAssembly(typeof(UpsertApplicationCommand).Assembly));
     }
 }
