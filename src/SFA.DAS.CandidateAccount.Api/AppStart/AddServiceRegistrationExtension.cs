@@ -8,6 +8,7 @@ using SFA.DAS.CandidateAccount.Data.Qualification;
 using SFA.DAS.CandidateAccount.Data.ReferenceData;
 using SFA.DAS.CandidateAccount.Data.TrainingCourse;
 using SFA.DAS.CandidateAccount.Data.WorkExperience;
+using SFA.DAS.CandidateAccount.Data.Address;
 
 namespace SFA.DAS.CandidateAccount.Api.AppStart;
 

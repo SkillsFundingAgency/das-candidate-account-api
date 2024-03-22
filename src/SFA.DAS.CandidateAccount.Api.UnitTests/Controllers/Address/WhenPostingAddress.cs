@@ -1,0 +1,51 @@
+﻿using AutoFixture.NUnit3;
+using FluentAssertions;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using Moq;
+using SFA.DAS.CandidateAccount.Api.ApiRequests;
+using SFA.DAS.CandidateAccount.Api.Controllers;
+using SFA.DAS.CandidateAccount.Application.UserAccount.Address;
+using SFA.DAS.Testing.AutoFixture;
+using System.Net;
+
+namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.Address;
+public class WhenPostingAddress
+{
+    [Test, MoqAutoData]
+    public async Task Then_If_MediatorCall_Returns_Result_Then_Ok_Result_Returned(
+        string govUkIdentifier,
+        AddressRequest addressRequest,
+        CreateUserAddressCommandResult commandResult,
+        [Frozen] Mock<IMediator> mediator,
+        [Greedy] AddressController controller)
+    {
+        mediator.Setup(x => x.Send(It.Is<CreateUserAddressCommand>(c =>
+                c.Email.Equals(addressRequest.Email)
+            ), CancellationToken.None))
+            .ReturnsAsync(commandResult);
+
+        var actual = await controller.Put(govUkIdentifier, addressRequest);
+
+        actual.Should().BeOfType<OkObjectResult>();
+    }
+
+    [Test, MoqAutoData]
+    public async Task Then_If_Error_Then_InternalServerError_Response_Returned(
+        string govUkIdentifier,
+        AddressRequest addressRequest,
+        CreateUserAddressCommandResult commandResult,
+        [Frozen] Mock<IMediator> mediator,
+        [Greedy] AddressController controller)
+    {
+        mediator.Setup(x => x.Send(It.Is<CreateUserAddressCommand>(c =>
+                c.Email.Equals(addressRequest.Email)
+            ), CancellationToken.None))
+            .ThrowsAsync(new Exception("Error"));
+
+        var actual = await controller.Put(govUkIdentifier, addressRequest);
+
+        var result = actual as StatusCodeResult;
+        result?.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
+    }
+}
