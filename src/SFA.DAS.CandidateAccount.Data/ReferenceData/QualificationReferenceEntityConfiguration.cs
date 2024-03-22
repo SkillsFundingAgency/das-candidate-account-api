@@ -13,7 +13,6 @@ public class QualificationReferenceEntityConfiguration : IEntityTypeConfiguratio
         
         builder.Property(x => x.Id).HasColumnName("Id").HasColumnType("uniqueidentifier").IsRequired();
         builder.Property(x => x.Name).HasColumnName("Name").HasColumnType("varchar").HasMaxLength(500).IsRequired();
-        builder.Property(x => x.Order).HasColumnName("Order").HasColumnType("tinyint").IsRequired();
 
     }
 }

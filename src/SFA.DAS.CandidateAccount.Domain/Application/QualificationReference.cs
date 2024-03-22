@@ -4,14 +4,13 @@ public class QualificationReference
 {
     public Guid Id { get; set; }
     public required string Name { get; set; }
-    public short Order { get; set; }
+    
     public static implicit operator QualificationReference(QualificationReferenceEntity source)
     {
         return new QualificationReference
         {
             Id = source.Id,
-            Name = source.Name,
-            Order = source.Order
+            Name = source.Name
         };
     }
 }

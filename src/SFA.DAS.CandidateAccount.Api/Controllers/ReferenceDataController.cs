@@ -17,7 +17,7 @@ public class ReferenceDataController(IMediator mediator, ILogger<ReferenceDataCo
         try
         {
             var result = await mediator.Send(new GetAvailableQualificationsQuery());
-            return Ok(new {QualificationReferences = result.QualificationReferences.OrderBy(c=>c.Order)});
+            return Ok(new {QualificationReferences = result.QualificationReferences});
         }
         catch (Exception e)
         {
