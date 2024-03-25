@@ -8,6 +8,8 @@ public record Address
     public required string Town { get; init; }
     public string? County { get; init; }
     public required string Postcode { get; init; }
+    public required double Latitude { get; set; }
+    public required double Longitude { get; set; }
     public Guid CandidateId { get; init; }
 
     public static implicit operator Address(AddressEntity source)
@@ -20,6 +22,8 @@ public record Address
             Town = source.Town,
             County = source.County,
             Postcode = source.Postcode,
+            Latitude = source.Latitude,
+            Longitude = source.Longitude,
             CandidateId = source.CandidateId,
         };
     }
