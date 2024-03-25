@@ -10,6 +10,8 @@ public record GetAddressApiResponse
     public string Town { get; set; } = null!;
     public string? County { get; set; }
     public string? Postcode { get; set; }
+    public double Latitude { get; set; }
+    public double Longitude { get; set; }
     public Guid CandidateId { get; set; }
 
     public static implicit operator GetAddressApiResponse(GetAddressQueryResult source)
@@ -24,7 +26,9 @@ public record GetAddressApiResponse
             Town = source.Address.Town,
             County = source.Address.County,
             Postcode = source.Address.Postcode,
-            CandidateId = source.Address.CandidateId,
+            Latitude = source.Address.Latitude,
+            Longitude = source.Address.Longitude,
+            CandidateId = source.Address.CandidateId
         };
     }
 }

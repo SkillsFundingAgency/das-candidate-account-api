@@ -14,7 +14,7 @@ public class WhenPostingAddress
 {
     [Test, MoqAutoData]
     public async Task Then_If_MediatorCall_Returns_Result_Then_Ok_Result_Returned(
-        string govUkIdentifier,
+        Guid candidateId,
         AddressRequest addressRequest,
         CreateUserAddressCommandResult commandResult,
         [Frozen] Mock<IMediator> mediator,
@@ -25,14 +25,14 @@ public class WhenPostingAddress
             ), CancellationToken.None))
             .ReturnsAsync(commandResult);
 
-        var actual = await controller.Put(govUkIdentifier, addressRequest);
+        var actual = await controller.Put(candidateId, addressRequest);
 
         actual.Should().BeOfType<OkObjectResult>();
     }
 
     [Test, MoqAutoData]
     public async Task Then_If_Error_Then_InternalServerError_Response_Returned(
-        string govUkIdentifier,
+        Guid candidateId,
         AddressRequest addressRequest,
         CreateUserAddressCommandResult commandResult,
         [Frozen] Mock<IMediator> mediator,
@@ -43,7 +43,7 @@ public class WhenPostingAddress
             ), CancellationToken.None))
             .ThrowsAsync(new Exception("Error"));
 
-        var actual = await controller.Put(govUkIdentifier, addressRequest);
+        var actual = await controller.Put(candidateId, addressRequest);
 
         var result = actual as StatusCodeResult;
         result?.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
