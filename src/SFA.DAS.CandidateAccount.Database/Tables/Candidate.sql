@@ -5,7 +5,7 @@ CREATE TABLE dbo.[Candidate] (
     [LastName]				nvarchar(150)	    NULL,
     [Email]					varchar(255)	    NOT NULL,
     [PhoneNumber]			varchar(50)	        NULL,
-    [DateOfBirth]			datetime		    NOT NULL,
+    [DateOfBirth]			datetime		    NULL,
     [CreatedOn]			    datetime		    NOT NULL,
     [UpdatedOn]			    datetime		    NULL,
     [TermsOfUseAcceptedOn]	datetime		    NULL,

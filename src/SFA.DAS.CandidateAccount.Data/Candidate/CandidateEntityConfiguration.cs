@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SFA.DAS.CandidateAccount.Domain.Candidate;
 
-namespace SFA.DAS.CandidateAccount.Data.Candidates;
+namespace SFA.DAS.CandidateAccount.Data.Candidate;
 
 public class CandidateEntityConfiguration : IEntityTypeConfiguration<CandidateEntity>
 {

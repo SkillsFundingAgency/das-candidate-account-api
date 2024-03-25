@@ -12,11 +12,23 @@ public class QualificationEntityConfiguration : IEntityTypeConfiguration<Qualifi
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Id).HasColumnName("Id").HasColumnType("uniqueidentifier").IsRequired();
-        builder.Property(x => x.Type).HasColumnName("Type").HasColumnType("varchar").HasMaxLength(150).IsRequired();
+        builder.Property(x => x.QualificationReferenceId).HasColumnName("QualificationReferenceId").HasColumnType("uniqueidentifier").IsRequired();
         builder.Property(x => x.Subject).HasColumnName("Subject").HasColumnType("varchar").HasMaxLength(150).IsRequired();
-        builder.Property(x => x.Grade).HasColumnName("Grade").HasColumnType("varchar").HasMaxLength(150).IsRequired();
-        builder.Property(x => x.ToYear).HasColumnName("ToYear").HasColumnType("smallint").IsRequired();
+        builder.Property(x => x.Grade).HasColumnName("Grade").HasColumnType("varchar").HasMaxLength(150).IsRequired(false);
+        builder.Property(x => x.AdditionalInformation).HasColumnName("AdditionalInformation").HasColumnType("varchar").HasMaxLength(50).IsRequired(false);
+        builder.Property(x => x.ToYear).HasColumnName("ToYear").HasColumnType("smallint").IsRequired(false);
         builder.Property(x => x.IsPredicted).HasColumnName("IsPredicted").HasColumnType("bit").IsRequired();
         builder.Property(x => x.ApplicationId).HasColumnName("ApplicationId").HasColumnType("uniqueidentifier").IsRequired();
+        
+        builder
+            .HasOne(c => c.ApplicationEntity)
+            .WithMany(c => c.QualificationEntities)
+            .HasForeignKey(c => c.ApplicationId)
+            .HasPrincipalKey(c => c.Id);
+
+        builder.HasOne(c => c.QualificationReferenceEntity)
+            .WithMany(c => c.QualificationEntity)
+            .HasForeignKey(c => c.QualificationReferenceId)
+            .HasPrincipalKey(c => c.Id);
     }
 }

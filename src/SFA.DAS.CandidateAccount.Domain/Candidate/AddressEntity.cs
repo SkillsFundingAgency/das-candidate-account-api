@@ -8,6 +8,8 @@
         public string Town { get; init; } = null!;
         public string? County { get; init; }
         public string Postcode { get; init; } = null!;
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
         public required Guid CandidateId { get; init; }
     }
 }
