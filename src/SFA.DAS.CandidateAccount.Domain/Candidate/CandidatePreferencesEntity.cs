@@ -9,5 +9,17 @@
         public DateTime CreatedOn { get; set; }
         public DateTime? UpdatedOn { get; set; }
         public string ContactMethod { get; set; }
+
+        public static implicit operator CandidatePreferencesEntity(CandidatePreference source)
+        {
+            return new CandidatePreferencesEntity
+            {
+                Id = source.Id,
+                CandidateId = source.CandidateId,
+                PreferenceId = source.PreferenceId,
+                Status = source.Status,
+                ContactMethod = source.ContactMethod
+            };
+        }
     }
 }

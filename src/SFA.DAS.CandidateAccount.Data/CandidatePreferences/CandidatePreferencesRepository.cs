@@ -7,6 +7,7 @@ namespace SFA.DAS.CandidateAccount.Data.CandidatePreferences
     {
         Task<List<CandidatePreferencesEntity>> Create(Guid candidateId);
         Task<List<CandidatePreferencesEntity?>> GetAllByCandidate(Guid candidateId);
+        Task<List<Tuple<bool, CandidatePreferencesEntity>>> Upsert(List<CandidatePreference> candidatePreferences);
     }
 
     public class CandidatePreferencesRepository(ICandidateAccountDataContext dataContext) : ICandidatePreferencesRepository
@@ -54,6 +55,38 @@ namespace SFA.DAS.CandidateAccount.Data.CandidatePreferences
             await dataContext.SaveChangesAsync();
 
             return await dataContext.CandidatePreferencesEntities.Where(x => x.CandidateId == candidateId).ToListAsync();
+        }
+
+        public async Task<List<Tuple<bool, CandidatePreferencesEntity>>> Upsert(List<CandidatePreference> candidatePreferences)
+        {
+            var result = new List<Tuple<bool, CandidatePreferencesEntity>>();
+
+            foreach (var candidatePreference in candidatePreferences)
+            {
+                var existingCandidatePreference = await dataContext.CandidatePreferencesEntities
+                    .Where(cp => cp.CandidateId.Equals(candidatePreference.CandidateId) &&
+                    cp.PreferenceId.Equals(candidatePreference.PreferenceId) &&
+                    cp.ContactMethod == candidatePreference.ContactMethod)
+                    .FirstOrDefaultAsync();
+
+                if (existingCandidatePreference != null)
+                {
+                    existingCandidatePreference.Status = candidatePreference.Status;
+                    existingCandidatePreference.UpdatedOn = DateTime.UtcNow;
+                    dataContext.CandidatePreferencesEntities.Update(existingCandidatePreference);
+                    await dataContext.SaveChangesAsync();
+                    result.Add(new Tuple<bool, CandidatePreferencesEntity>(false, existingCandidatePreference));
+                }
+                else
+                {
+                    var newCandidatePreference = (CandidatePreferencesEntity)candidatePreference;
+                    newCandidatePreference.CreatedOn = DateTime.UtcNow;
+                    await dataContext.CandidatePreferencesEntities.AddAsync(newCandidatePreference);
+                    await dataContext.SaveChangesAsync();
+                    result.Add(new Tuple<bool, CandidatePreferencesEntity>(true, newCandidatePreference));
+                }
+            }
+            return result;
         }
     }
 }

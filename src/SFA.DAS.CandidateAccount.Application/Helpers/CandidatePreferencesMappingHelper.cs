@@ -14,7 +14,7 @@ public static class CandidatePreferencesMappingHelper
                             on p.PreferenceId equals cp.PreferenceId into gj
                             from cp in gj.DefaultIfEmpty()
                             group new { p, cp } by p.PreferenceId into grouped
-                            select new CandidatePreference
+                            select new GetCandidatePreferencesQueryResult.CandidatePreference
                             {
                                 PreferenceId = grouped.Key,
                                 PreferenceMeaning = grouped.First().p.PreferenceMeaning,
@@ -29,7 +29,7 @@ public static class CandidatePreferencesMappingHelper
         //Adds preferences that did not match any candidatePreferences in the join.
         var allPreferences = preferences.Select(p => p.PreferenceId).ToList();
         var missingPreferences = allPreferences.Except(groupedQuery.Select(gp => gp.PreferenceId).ToList()).ToList();
-        var missingPreferenceResults = missingPreferences.Select(p => new CandidatePreference
+        var missingPreferenceResults = missingPreferences.Select(p => new GetCandidatePreferencesQueryResult.CandidatePreference
         {
             PreferenceId = p,
             PreferenceMeaning = preferences.FirstOrDefault(preference => preference.PreferenceId == p)?.PreferenceMeaning,
