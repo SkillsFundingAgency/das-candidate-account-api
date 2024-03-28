@@ -15,6 +15,8 @@ using SFA.DAS.CandidateAccount.Domain.Application;
 using SFA.DAS.CandidateAccount.Domain.Candidate;
 using SFA.DAS.CandidateAccount.Domain.Configuration;
 using SFA.DAS.CandidateAccount.Data.Address;
+using SFA.DAS.CandidateAccount.Data.CandidatePreferences;
+using SFA.DAS.CandidateAccount.Data.Preference;
 
 namespace SFA.DAS.CandidateAccount.Data;
 
@@ -29,6 +31,8 @@ public interface ICandidateAccountDataContext
     DbSet<AddressEntity> AddressEntities { get; set; }
     DbSet<QualificationReferenceEntity> QualificationReferenceEntities { get; set; }
     DbSet<QualificationEntity> QualificationEntities { get; set; }
+    DbSet<CandidatePreferencesEntity> CandidatePreferencesEntities { get; set; }
+    DbSet<PreferenceEntity> PreferenceEntities { get; set; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
 }
 public class CandidateAccountDataContext : DbContext, ICandidateAccountDataContext
@@ -45,6 +49,8 @@ public class CandidateAccountDataContext : DbContext, ICandidateAccountDataConte
     public DbSet<AddressEntity> AddressEntities { get; set; }
     public DbSet<QualificationReferenceEntity> QualificationReferenceEntities { get; set; }
     public DbSet<QualificationEntity> QualificationEntities { get; set; }
+    public DbSet<CandidatePreferencesEntity> CandidatePreferencesEntities { get; set; }
+    public DbSet<PreferenceEntity> PreferenceEntities { get; set; }
 
     private readonly CandidateAccountConfiguration? _configuration;
     public CandidateAccountDataContext()
@@ -97,6 +103,8 @@ public class CandidateAccountDataContext : DbContext, ICandidateAccountDataConte
         modelBuilder.ApplyConfiguration(new QualificationReferenceEntityConfiguration());
         modelBuilder.ApplyConfiguration(new QualificationEntityConfiguration());
         modelBuilder.ApplyConfiguration(new AddressEntityConfiguration());
+        modelBuilder.ApplyConfiguration(new CandidatePreferencesEntityConfiguration());
+        modelBuilder.ApplyConfiguration(new PreferenceEntityConfiguration());
 
         base.OnModelCreating(modelBuilder);
     }
