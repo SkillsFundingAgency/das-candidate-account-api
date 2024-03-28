@@ -5,7 +5,7 @@ namespace SFA.DAS.CandidateAccount.Data.CandidatePreferences
 {
     public interface ICandidatePreferencesRepository
     {
-        Task<CandidatePreferencesEntity> Create(CandidatePreferencesEntity candidatePreferenceEntity);
+        Task<List<CandidatePreferencesEntity>> Create(Guid candidateId);
         Task<List<CandidatePreferencesEntity?>> GetAllByCandidate(Guid candidateId);
     }
 
@@ -20,11 +20,40 @@ namespace SFA.DAS.CandidateAccount.Data.CandidatePreferences
             return await query.ToListAsync();
         }
 
-        public async Task<CandidatePreferencesEntity> Create(CandidatePreferencesEntity candidatePreferenceEntity)
+        public async Task<List<CandidatePreferencesEntity>> Create(Guid candidateId)
         {
-            await dataContext.CandidatePreferencesEntities.AddAsync(candidatePreferenceEntity);
+            var preferences = await dataContext.PreferenceEntities.ToListAsync();
+
+            foreach (var item in preferences)
+            {
+                var textCandidatePreference = new CandidatePreferencesEntity
+                {
+                    Id = Guid.NewGuid(),
+                    CandidateId = candidateId,
+                    PreferenceId = item.PreferenceId,
+                    ContactMethod = "Text",
+                    Status = null,
+                    CreatedOn = DateTime.UtcNow,
+                    UpdatedOn = null
+                };
+                dataContext.CandidatePreferencesEntities.Add(textCandidatePreference);
+
+                var emailCandidatePreference = new CandidatePreferencesEntity
+                {
+                    Id = Guid.NewGuid(),
+                    CandidateId = candidateId,
+                    PreferenceId = item.PreferenceId,
+                    ContactMethod = "Email",
+                    Status = null,
+                    CreatedOn = DateTime.UtcNow,
+                    UpdatedOn = null
+                };
+                dataContext.CandidatePreferencesEntities.Add(emailCandidatePreference);
+            }
+
             await dataContext.SaveChangesAsync();
-            return candidatePreferenceEntity;
+
+            return await dataContext.CandidatePreferencesEntities.Where(x => x.CandidateId == candidateId).ToListAsync();
         }
     }
 }
