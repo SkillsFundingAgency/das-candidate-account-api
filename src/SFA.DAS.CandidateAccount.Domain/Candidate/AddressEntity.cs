@@ -2,14 +2,14 @@
 {
     public class AddressEntity
     {
-        public required Guid Id { get; init; }
-        public string AddressLine1 { get; init; } = null!;
-        public string? AddressLine2 { get; init; }
-        public string Town { get; init; } = null!;
-        public string? County { get; init; }
-        public string Postcode { get; init; } = null!;
+        public required Guid Id { get; set; }
+        public string AddressLine1 { get; set; } = null!;
+        public string? AddressLine2 { get; set; }
+        public string Town { get; set; } = null!;
+        public string? County { get; set; }
+        public string Postcode { get; set; } = null!;
         public double Latitude { get; set; }
         public double Longitude { get; set; }
-        public required Guid CandidateId { get; init; }
+        public required Guid CandidateId { get; set; }
     }
 }
