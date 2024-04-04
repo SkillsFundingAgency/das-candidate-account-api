@@ -12,7 +12,6 @@
 
 
 -   .net6 and any supported IDE for DEV running.
--   _If you are not wishing to run the in memory database then_
 -   SQL Server database.
 -   Azure Storage Account
 
