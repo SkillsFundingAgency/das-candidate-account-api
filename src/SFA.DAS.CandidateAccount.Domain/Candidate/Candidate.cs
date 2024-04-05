@@ -1,3 +1,5 @@
+using SFA.DAS.CandidateAccount.Domain.Application;
+
 namespace SFA.DAS.CandidateAccount.Domain.Candidate;
 
 public class Candidate
@@ -21,6 +23,7 @@ public class Candidate
             CreatedOn = source.CreatedOn,
             UpdatedOn = source.UpdatedOn,
             TermsOfUseAcceptedOn = source.TermsOfUseAcceptedOn,
+            Status = (CandidateStatus) source.Status,
             Applications = source.Applications?.Select(c=>(Application.Application)c)
         };
     }
@@ -38,6 +41,7 @@ public class Candidate
     public DateTime CreatedOn { get; set; }
     public DateTime? UpdatedOn { get; set; }
     public DateTime? TermsOfUseAcceptedOn { get; set; }
+    public CandidateStatus? Status { get; set; }
 
     public string Email { get; set; }
 

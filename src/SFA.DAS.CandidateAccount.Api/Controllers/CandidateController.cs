@@ -80,7 +80,8 @@ public class CandidateController(IMediator mediator, ILogger<ApplicationControll
                     LastName = postCandidateRequest.LastName,
                     MiddleNames = postCandidateRequest.MiddleNames,
                     PhoneNumber = postCandidateRequest.PhoneNumber,
-                    TermsOfUseAcceptedOn = postCandidateRequest.TermsOfUseAcceptedOn
+                    TermsOfUseAcceptedOn = postCandidateRequest.TermsOfUseAcceptedOn,
+                    Status = postCandidateRequest.Status
                 }
             });
 

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SFA.DAS.CandidateAccount.Domain.Application;
 using SFA.DAS.CandidateAccount.Domain.Candidate;
 
 namespace SFA.DAS.CandidateAccount.Data.Candidate;
@@ -69,6 +70,7 @@ public class CandidateRepository(ICandidateAccountDataContext dataContext) : ICa
         existingCandidate.UpdatedOn = DateTime.UtcNow;
         existingCandidate.DateOfBirth = candidate.DateOfBirth ?? existingCandidate.DateOfBirth;
         existingCandidate.PhoneNumber = candidate.PhoneNumber ?? existingCandidate.PhoneNumber;
+        existingCandidate.Status = candidate.Status.HasValue ? (short)candidate.Status : existingCandidate.Status;
         dataContext.CandidateEntities.Update(existingCandidate);
         await dataContext.SaveChangesAsync();
     

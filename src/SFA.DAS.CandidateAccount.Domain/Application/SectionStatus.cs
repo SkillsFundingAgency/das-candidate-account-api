@@ -15,3 +15,9 @@ public enum ApplicationStatus
     Submitted = 1,
     Withdrawn = 2
 }
+
+public enum CandidateStatus
+{
+    Incomplete = 0,
+    Completed = 1
+}

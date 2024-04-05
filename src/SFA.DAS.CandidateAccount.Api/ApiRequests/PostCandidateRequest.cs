@@ -1,3 +1,5 @@
+using SFA.DAS.CandidateAccount.Domain.Application;
+
 namespace SFA.DAS.CandidateAccount.Api.ApiRequests;
 
 public class PostCandidateRequest : CandidateRequest
@@ -21,4 +23,5 @@ public abstract class CandidateRequest
     public required string Email { get; set; }
     public string? FirstName { get; set; }
     public string? LastName { get; set; }
+    public CandidateStatus? Status { get; set; }
 }

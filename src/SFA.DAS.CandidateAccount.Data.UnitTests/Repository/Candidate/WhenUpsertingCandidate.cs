@@ -3,6 +3,7 @@ using FluentAssertions;
 using Moq;
 using SFA.DAS.CandidateAccount.Data.Candidate;
 using SFA.DAS.CandidateAccount.Data.UnitTests.DatabaseMock;
+using SFA.DAS.CandidateAccount.Domain.Application;
 using SFA.DAS.CandidateAccount.Domain.Candidate;
 using SFA.DAS.Testing.AutoFixture;
 
@@ -65,15 +66,17 @@ public class WhenUpsertingCandidate
     [Test, RecursiveMoqAutoData]
     public async Task AndIdDoesNotExistThenNoUpdateIsMadeAndInserted(
         CandidateEntity candidate,
+        CandidateStatus status,
         [Frozen]Mock<ICandidateAccountDataContext> context,
         CandidateRepository repository)
     {
         //Arrange
+        candidate.Status = (short)status;
         context.Setup(x => x.CandidateEntities)
             .ReturnsDbSet(new List<CandidateEntity> { candidate });
         var noCandidateExists = new Domain.Candidate.Candidate
         {
-            Id=Guid.NewGuid(), FirstName = "testName", LastName = "testName2", Email = "test@test.com", GovUkIdentifier = "someidentifier"
+            Id=Guid.NewGuid(), FirstName = "testName", LastName = "testName2", Email = "test@test.com", GovUkIdentifier = "someidentifier", Status = CandidateStatus.Incomplete
         };
         
         //Act
@@ -83,7 +86,8 @@ public class WhenUpsertingCandidate
         context.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
         Assert.IsNotNull(actual);
         actual.Item2.Should().BeTrue();
-        actual.Item1.Should().BeEquivalentTo(noCandidateExists, options => options.Excluding(c=>c.CreatedOn).Excluding(c=>c.UpdatedOn));
+        actual.Item1.Should().BeEquivalentTo(noCandidateExists, options => options.Excluding(c=>c.CreatedOn).Excluding(c=>c.UpdatedOn).Excluding(c => c.Status));
+        actual.Item1.Status.Should().Be((short)candidate.Status);
         actual.Item1.CreatedOn.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(5));
     }
 }
