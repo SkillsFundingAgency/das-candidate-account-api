@@ -43,7 +43,7 @@ public class Candidate
     public DateTime? TermsOfUseAcceptedOn { get; set; }
     public CandidateStatus? Status { get; set; }
 
-    public string Email { get; set; }
+    public string? Email { get; set; }
 
     public Guid Id { get; set; }
 }

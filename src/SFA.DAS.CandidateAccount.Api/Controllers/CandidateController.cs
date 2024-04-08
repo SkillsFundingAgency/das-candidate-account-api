@@ -22,11 +22,10 @@ public class CandidateController(IMediator mediator, ILogger<ApplicationControll
         {
             var result = await mediator.Send(new CreateCandidateCommand
             {
-                Id = id,
                 Email = request.Email,
                 FirstName = request.FirstName,
                 LastName = request.LastName,
-                GovUkIdentifier = request.GovUkIdentifier,
+                GovUkIdentifier = id.ToString(),
                 DateOfBirth = request.DateOfBirth
             });
 

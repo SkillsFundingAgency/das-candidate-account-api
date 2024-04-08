@@ -13,7 +13,7 @@ public class CreateCandidateCommandHandler(ICandidateRepository candidateReposit
     {
         var candidate = await candidateRepository.Insert(new CandidateEntity
         {
-            Id = command.Id,
+            Id = Guid.NewGuid(),
             Email = command.Email,
             FirstName = command.FirstName,
             LastName = command.LastName,
