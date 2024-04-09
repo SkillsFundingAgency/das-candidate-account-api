@@ -21,7 +21,7 @@ public class WhenUpsertingCandidate
         //Arrange
         context.Setup(x => x.CandidateEntities)
             .ReturnsDbSet(new List<CandidateEntity> { candidate });
-        existingCandidate.GovUkIdentifier = candidate.GovUkIdentifier;
+        existingCandidate.Id = candidate.Id;
 
         //Act
         var actual = await repository.UpsertCandidate(existingCandidate);
@@ -45,7 +45,7 @@ public class WhenUpsertingCandidate
         //Arrange
         context.Setup(x => x.CandidateEntities)
             .ReturnsDbSet(new List<CandidateEntity> { candidate });
-        existingCandidate.GovUkIdentifier = candidate.GovUkIdentifier;
+        existingCandidate.Id = candidate.Id;
         existingCandidate.FirstName = null;
         existingCandidate.LastName = null;
         existingCandidate.DateOfBirth = null;

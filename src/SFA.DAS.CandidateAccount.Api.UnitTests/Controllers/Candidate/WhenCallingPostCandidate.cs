@@ -25,11 +25,10 @@ public class WhenCallingPostCandidate
         //Arrange
         mediator.Setup(x => x.Send(It.Is<CreateCandidateCommand>(c => 
                 c.Email.Equals(postCandidateRequest.Email)
-                && c.GovUkIdentifier.Equals(postCandidateRequest.GovUkIdentifier)
+                && c.GovUkIdentifier.Equals(id)
                 && c.FirstName.Equals(postCandidateRequest.FirstName)
                 && c.LastName.Equals(postCandidateRequest.LastName)
                 && c.DateOfBirth.Equals(postCandidateRequest.DateOfBirth)
-                && c.Id.Equals(id)
             ), CancellationToken.None))
             .ReturnsAsync(createCandidateCommandResponse);
         
