@@ -1,6 +1,6 @@
 CREATE TABLE dbo.[AdditionalQuestion] (
     [Id]					uniqueidentifier	NOT NULL,
-    [QuestionText]   			nvarchar(150)       NOT NULL,
+    [QuestionText]   		nvarchar(500)       NOT NULL,
     [Answer] 			    nvarchar(max)       NULL,
     [ApplicationId]         uniqueidentifier    NOT NULL
     CONSTRAINT [PK_AdditionalQuestion] PRIMARY KEY (Id),
