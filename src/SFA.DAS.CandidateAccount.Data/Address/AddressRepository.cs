@@ -34,6 +34,7 @@ public class AddressRepository(ICandidateAccountDataContext dataContext) : IAddr
             existingAddress.County = addressEntity.County;
             existingAddress.Latitude = addressEntity.Latitude;
             existingAddress.Longitude = addressEntity.Longitude;
+            existingAddress.Uprn = addressEntity.Uprn;
 
             dataContext.AddressEntities.Update(existingAddress);
             await dataContext.SaveChangesAsync();

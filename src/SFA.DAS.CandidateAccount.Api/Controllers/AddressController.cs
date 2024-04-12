@@ -44,6 +44,7 @@ public class AddressController(IMediator mediator, ILogger<AddressController> lo
             var result = await mediator.Send(new CreateUserAddressCommand
             {
                 CandidateId = candidateId,
+                Uprn = request.Uprn,
                 Email = request.Email,
                 AddressLine1 = request.AddressLine1,
                 AddressLine2 = request.AddressLine2,

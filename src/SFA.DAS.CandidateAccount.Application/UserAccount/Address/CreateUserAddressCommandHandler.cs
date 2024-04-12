@@ -16,6 +16,7 @@ public class CreateUserAddressCommandHandler : IRequestHandler<CreateUserAddress
         var result = await _addressRepository.Upsert(new Domain.Candidate.AddressEntity()
         {
             Id = Guid.NewGuid(),
+            Uprn = request.Uprn,
             AddressLine1 = request.AddressLine1,
             AddressLine2 = request.AddressLine2,
             Town = request.AddressLine3,

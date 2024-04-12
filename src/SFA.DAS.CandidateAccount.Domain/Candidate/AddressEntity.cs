@@ -3,6 +3,7 @@
     public class AddressEntity
     {
         public required Guid Id { get; set; }
+        public string? Uprn { get; set; }
         public string AddressLine1 { get; set; } = null!;
         public string? AddressLine2 { get; set; }
         public string Town { get; set; } = null!;
