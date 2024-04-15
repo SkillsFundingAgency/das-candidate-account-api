@@ -19,6 +19,7 @@ public abstract class ApplicationBase
     public SectionStatus InterviewAdjustmentsSectionStatus { get; set; }
     public SectionStatus DisabilityConfidenceSectionStatus { get; set; }
     public string? WhatIsYourInterest { get; set; }
+    public bool? ApplyUnderDisabilityConfidentScheme { get; set; }
 
     protected static T ParseValue<T>(short status) where T : struct, Enum
     {
@@ -79,7 +80,8 @@ public class Application : ApplicationBase
             [
                 ParseValue<SectionStatus>(source.DisabilityConfidenceStatus)
             ]),
-            WhatIsYourInterest = source.WhatIsYourInterest
+            WhatIsYourInterest = source.WhatIsYourInterest,
+            ApplyUnderDisabilityConfidentScheme = source.ApplyUnderDisabilityConfidentScheme
         };
     }
 

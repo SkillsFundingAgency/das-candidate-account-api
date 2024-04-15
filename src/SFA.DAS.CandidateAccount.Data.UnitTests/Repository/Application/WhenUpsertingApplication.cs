@@ -29,7 +29,7 @@ public class WhenUpsertingApplication
     }
     
     [Test, RecursiveMoqAutoData]
-    public async Task Then_The_Application_Is_Updated_If_Not_Exists(
+    public async Task Then_The_Application_Is_Updated_If_Exists(
         ApplicationEntity applicationEntity,
         [Frozen]Mock<ICandidateAccountDataContext> context,
         ApplicationRepository repository)

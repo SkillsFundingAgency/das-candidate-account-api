@@ -1,4 +1,4 @@
-﻿using Azure.Core;
+using Azure.Core;
 using Azure.Identity;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -6,7 +6,9 @@ using Microsoft.Extensions.Options;
 using SFA.DAS.CandidateAccount.Data.AdditionalQuestion;
 using SFA.DAS.CandidateAccount.Data.AboutYou;
 using SFA.DAS.CandidateAccount.Data.Application;
-using SFA.DAS.CandidateAccount.Data.Candidates;
+using SFA.DAS.CandidateAccount.Data.Candidate;
+using SFA.DAS.CandidateAccount.Data.Qualification;
+using SFA.DAS.CandidateAccount.Data.ReferenceData;
 using SFA.DAS.CandidateAccount.Data.TrainingCourse;
 using SFA.DAS.CandidateAccount.Data.WorkExperience;
 using SFA.DAS.CandidateAccount.Domain.Application;
@@ -25,7 +27,9 @@ public interface ICandidateAccountDataContext
     DbSet<AdditionalQuestionEntity> AdditionalQuestionEntities { get; set; }
     DbSet<AboutYouEntity> AboutYouEntities { get; set; }
     DbSet<AddressEntity> AddressEntities { get; set; }
-    Task<int> SaveChangesAsync(CancellationToken cancellationToken  = default (CancellationToken));
+    DbSet<QualificationReferenceEntity> QualificationReferenceEntities { get; set; }
+    DbSet<QualificationEntity> QualificationEntities { get; set; }
+    Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
 }
 public class CandidateAccountDataContext : DbContext, ICandidateAccountDataContext
 {
@@ -39,6 +43,8 @@ public class CandidateAccountDataContext : DbContext, ICandidateAccountDataConte
     public DbSet<AdditionalQuestionEntity> AdditionalQuestionEntities { get; set; }
     public DbSet<AboutYouEntity> AboutYouEntities { get; set; }
     public DbSet<AddressEntity> AddressEntities { get; set; }
+    public DbSet<QualificationReferenceEntity> QualificationReferenceEntities { get; set; }
+    public DbSet<QualificationEntity> QualificationEntities { get; set; }
 
     private readonly CandidateAccountConfiguration? _configuration;
     public CandidateAccountDataContext()
@@ -47,9 +53,9 @@ public class CandidateAccountDataContext : DbContext, ICandidateAccountDataConte
 
     public CandidateAccountDataContext(DbContextOptions options) : base(options)
     {
-            
+
     }
-    public CandidateAccountDataContext(IOptions<CandidateAccountConfiguration> config, DbContextOptions options, ChainedTokenCredential azureServiceTokenProvider, EnvironmentConfiguration environmentConfiguration) :base(options)
+    public CandidateAccountDataContext(IOptions<CandidateAccountConfiguration> config, DbContextOptions options, ChainedTokenCredential azureServiceTokenProvider, EnvironmentConfiguration environmentConfiguration) : base(options)
     {
         _azureServiceTokenProvider = azureServiceTokenProvider;
         _environmentConfiguration = environmentConfiguration;
@@ -58,21 +64,21 @@ public class CandidateAccountDataContext : DbContext, ICandidateAccountDataConte
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseLazyLoadingProxies();
-            
-        if (_configuration == null 
+
+        if (_configuration == null
             || _environmentConfiguration.EnvironmentName.Equals("DEV", StringComparison.CurrentCultureIgnoreCase)
             || _environmentConfiguration.EnvironmentName.Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase))
         {
             return;
         }
-            
+
         var connection = new SqlConnection
         {
             ConnectionString = _configuration.ConnectionString,
             AccessToken = _azureServiceTokenProvider.GetTokenAsync(new TokenRequestContext(scopes: new string[] { AzureResource })).Result.Token,
         };
-            
-        optionsBuilder.UseSqlServer(connection,options=>
+
+        optionsBuilder.UseSqlServer(connection, options =>
             options.EnableRetryOnFailure(
                 5,
                 TimeSpan.FromSeconds(20),
@@ -88,6 +94,8 @@ public class CandidateAccountDataContext : DbContext, ICandidateAccountDataConte
         modelBuilder.ApplyConfiguration(new TrainingCourseEntityConfiguration());
         modelBuilder.ApplyConfiguration(new AdditionalQuestionEntityConfiguration());
         modelBuilder.ApplyConfiguration(new AboutYouEntityConfiguration());
+        modelBuilder.ApplyConfiguration(new QualificationReferenceEntityConfiguration());
+        modelBuilder.ApplyConfiguration(new QualificationEntityConfiguration());
         modelBuilder.ApplyConfiguration(new AddressEntityConfiguration());
 
         base.OnModelCreating(modelBuilder);

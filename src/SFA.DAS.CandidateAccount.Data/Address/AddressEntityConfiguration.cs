@@ -17,6 +17,8 @@ public class AddressEntityConfiguration : IEntityTypeConfiguration<AddressEntity
         builder.Property(x => x.Town).HasColumnName("Town").HasColumnType("varchar").HasMaxLength(150).IsRequired();
         builder.Property(x => x.County).HasColumnName("County").HasColumnType("varchar").HasMaxLength(150);
         builder.Property(x => x.Postcode).HasColumnName("Postcode").HasColumnType("varchar").HasMaxLength(50).IsRequired();
+        builder.Property(x => x.Latitude).HasColumnName("Latitude").HasColumnType("varchar").HasMaxLength(150).IsRequired();
+        builder.Property(x => x.Longitude).HasColumnName("Longitude").HasColumnType("varchar").HasMaxLength(150).IsRequired();
         builder.Property(x => x.CandidateId).HasColumnName("CandidateId").HasColumnType("uniqueidentifier").IsRequired();
     }
 }
