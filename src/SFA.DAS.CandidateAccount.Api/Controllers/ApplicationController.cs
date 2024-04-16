@@ -7,6 +7,7 @@ using SFA.DAS.CandidateAccount.Api.ApiRequests;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.PatchApplication;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.UpsertApplication;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplication;
+using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplications;
 using SFA.DAS.CandidateAccount.Domain.Application;
 
 namespace SFA.DAS.CandidateAccount.Api.Controllers;
@@ -113,6 +114,31 @@ public class ApplicationController(IMediator mediator, ILogger<ApplicationContro
         {
             logger.LogError(e,"Unable to get application");
             return new StatusCodeResult((int) HttpStatusCode.InternalServerError);
+        }
+    }
+
+    [HttpGet]
+    [Route("Candidates/{candidateId}/[controller]s")]
+    public async Task<IActionResult> GetApplications([FromRoute] Guid candidateId, [FromQuery] ApplicationStatus? status)
+    {
+        try
+        {
+            var result = await mediator.Send(new GetApplicationsQuery
+            {
+                CandidateId = candidateId,
+                Status = status
+            });
+
+            return Ok(result);
+        }
+        catch (ValidationException e)
+        {
+            return BadRequest(e.ValidationResult.ErrorMessage);
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e, "Unable to get applications");
+            return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
         }
     }
 }
