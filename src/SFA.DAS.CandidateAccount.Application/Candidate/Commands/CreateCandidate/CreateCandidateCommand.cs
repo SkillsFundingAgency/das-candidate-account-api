@@ -4,10 +4,9 @@ namespace SFA.DAS.CandidateAccount.Application.Candidate.Commands.CreateCandidat
 
 public class CreateCandidateCommand : IRequest<CreateCandidateCommandResponse>
 {
-    public required string Email { get; set; }
-    public required string FirstName { get; set; }
-    public required string LastName { get; set; }
     public required string GovUkIdentifier { get; set; }
-    public Guid Id { get; set; }
+    public required string Email { get; set; }
+    public string? FirstName { get; set; }
+    public string? LastName { get; set; }
     public DateTime? DateOfBirth { get; set; }
 }

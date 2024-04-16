@@ -5,6 +5,7 @@ namespace SFA.DAS.CandidateAccount.Api.ApiResponses;
 public record GetAddressApiResponse
 {
     public Guid Id { get; set; }
+    public string? Uprn { get; set; }
     public string AddressLine1 { get; set; } = null!;
     public string? AddressLine2 { get; set; }
     public string Town { get; set; } = null!;
@@ -21,6 +22,7 @@ public record GetAddressApiResponse
         return new GetAddressApiResponse
         {
             Id = source.Address.Id,
+            Uprn = source.Address.Uprn,
             AddressLine1 = source.Address.AddressLine1,
             AddressLine2 = source.Address.AddressLine2,
             Town = source.Address.Town,

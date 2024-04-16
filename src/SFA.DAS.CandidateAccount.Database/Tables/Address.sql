@@ -1,5 +1,6 @@
 CREATE TABLE dbo.[Address] (
     [Id]					uniqueidentifier	NOT NULL,
+    [Uprn]                  nvarchar(12)        NULL,
     [AddressLine1]			nvarchar(150)	    NOT NULL,
     [AddressLine2]			nvarchar(150)	    NULL,
     [Town]      			nvarchar(150)	    NOT NULL,

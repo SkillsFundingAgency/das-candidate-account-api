@@ -14,8 +14,9 @@ public class CandidatePreferencesEntityConfiguration : IEntityTypeConfiguration<
         builder.Property(x => x.Id).HasColumnName("Id").HasColumnType("uniqueidentifier").IsRequired();
         builder.Property(x => x.CandidateId).HasColumnName("CandidateId").HasColumnType("uniqueidentifier").IsRequired();
         builder.Property(x => x.PreferenceId).HasColumnName("PreferenceId").HasColumnType("uniqueidentifier").IsRequired();
-        builder.Property(x => x.Status).HasColumnName("Status").HasColumnType("varchar").HasMaxLength(150).IsRequired();
+        builder.Property(x => x.Status).HasColumnName("Status").HasColumnType("tinyint");
         builder.Property(x => x.CreatedOn).HasColumnName("CreatedOn").HasColumnType("DateTime").IsRequired();
         builder.Property(x => x.UpdatedOn).HasColumnName("UpdatedOn").HasColumnType("DateTime").IsRequired(false);
+        builder.Property(x => x.ContactMethod).HasColumnName("ContactMethod").HasColumnType("varchar").HasMaxLength(50).IsRequired();
     }
 }

@@ -3,6 +3,7 @@
 public record Address
 {
     public required Guid Id { get; init; }
+    public string? Uprn { get; set; }
     public required string AddressLine1 { get; init; }
     public string? AddressLine2 { get; init; }
     public required string Town { get; init; }
@@ -17,6 +18,7 @@ public record Address
         return new Address
         {
             Id = source.Id,
+            Uprn = source.Uprn,
             AddressLine1 = source.AddressLine1,
             AddressLine2 = source.AddressLine2,
             Town = source.Town,

@@ -22,11 +22,10 @@ public class CandidateController(IMediator mediator, ILogger<ApplicationControll
         {
             var result = await mediator.Send(new CreateCandidateCommand
             {
-                Id = id,
                 Email = request.Email,
                 FirstName = request.FirstName,
                 LastName = request.LastName,
-                GovUkIdentifier = request.GovUkIdentifier,
+                GovUkIdentifier = id.ToString(),
                 DateOfBirth = request.DateOfBirth
             });
 
@@ -63,8 +62,8 @@ public class CandidateController(IMediator mediator, ILogger<ApplicationControll
     }
 
     [HttpPut]
-    [Route("{id}")]
-    public async Task<IActionResult> PutCandidate([FromRoute]string id, PutCandidateRequest postCandidateRequest)
+    [Route("{candidateId}")]
+    public async Task<IActionResult> PutCandidate([FromRoute] Guid candidateId, PutCandidateRequest postCandidateRequest)
     {
         try
         {
@@ -72,15 +71,15 @@ public class CandidateController(IMediator mediator, ILogger<ApplicationControll
             {
                 Candidate = new Candidate
                 {
-                    Id = Guid.Empty,
-                    GovUkIdentifier = id,
+                    Id = candidateId,
                     DateOfBirth = postCandidateRequest.DateOfBirth,
                     Email = postCandidateRequest.Email,
                     FirstName = postCandidateRequest.FirstName,
                     LastName = postCandidateRequest.LastName,
                     MiddleNames = postCandidateRequest.MiddleNames,
                     PhoneNumber = postCandidateRequest.PhoneNumber,
-                    TermsOfUseAcceptedOn = postCandidateRequest.TermsOfUseAcceptedOn
+                    TermsOfUseAcceptedOn = postCandidateRequest.TermsOfUseAcceptedOn,
+                    Status = postCandidateRequest.Status
                 }
             });
 

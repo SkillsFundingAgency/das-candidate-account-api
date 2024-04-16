@@ -16,7 +16,7 @@ public class WhenHandlingCreateUserAddressCommand
         [Frozen] Mock<IAddressRepository> addressRepository,
         [Greedy] CreateUserAddressCommandHandler handler)
     {
-        addressRepository.Setup(x => x.Create(It.Is<AddressEntity>(x => x.CandidateId == command.CandidateId))).ReturnsAsync(addressEntity);
+        addressRepository.Setup(x => x.Upsert(It.Is<AddressEntity>(x => x.CandidateId == command.CandidateId))).ReturnsAsync(addressEntity);
 
         var actual = await handler.Handle(command, CancellationToken.None);
 
