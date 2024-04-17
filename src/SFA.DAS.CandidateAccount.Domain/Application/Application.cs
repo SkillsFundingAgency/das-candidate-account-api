@@ -18,6 +18,7 @@ public abstract class ApplicationBase
     public SectionStatus ApplicationQuestionsSectionStatus { get; set; }
     public SectionStatus InterviewAdjustmentsSectionStatus { get; set; }
     public SectionStatus DisabilityConfidenceSectionStatus { get; set; }
+    public SectionStatus ApplicationAllSectionStatus { get; set; }
     public string? WhatIsYourInterest { get; set; }
     public bool? ApplyUnderDisabilityConfidentScheme { get; set; }
 
@@ -80,10 +81,25 @@ public class Application : ApplicationBase
             [
                 ParseValue<SectionStatus>(source.DisabilityConfidenceStatus)
             ]),
+            ApplicationAllSectionStatus = GetSectionStatus(
+            [
+                ParseValue<SectionStatus>(source.QualificationsStatus),
+                ParseValue<SectionStatus>(source.TrainingCoursesStatus),
+                ParseValue<SectionStatus>(source.JobsStatus),
+                ParseValue<SectionStatus>(source.WorkExperienceStatus),
+                ParseValue<SectionStatus>(source.SkillsAndStrengthStatus),
+                ParseValue<SectionStatus>(source.InterestsStatus),
+                ParseValue<SectionStatus>(source.AdditionalQuestion1Status),
+                ParseValue<SectionStatus>(source.AdditionalQuestion2Status),
+                ParseValue<SectionStatus>(source.InterviewAdjustmentsStatus),
+                ParseValue<SectionStatus>(source.DisabilityConfidenceStatus)
+            ]),
             WhatIsYourInterest = source.WhatIsYourInterest,
             ApplyUnderDisabilityConfidentScheme = source.ApplyUnderDisabilityConfidentScheme
         };
     }
+
+    
 
     private static SectionStatus GetSectionStatus(params SectionStatus[] sections)
     {
