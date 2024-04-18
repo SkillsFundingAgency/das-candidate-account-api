@@ -16,6 +16,12 @@ public class AboutYouEntityConfiguration : IEntityTypeConfiguration<AboutYouEnti
         builder.Property(x => x.Improvements).HasColumnName("Improvements").HasColumnType("varchar");
         builder.Property(x => x.HobbiesAndInterests).HasColumnName("HobbiesAndInterests").HasColumnType("varchar");
         builder.Property(x => x.Support).HasColumnName("Support").HasColumnType("varchar");
+        builder.Property(x => x.Sex).HasColumnName("Sex").HasColumnType("tinyint");
+        builder.Property(x => x.EthnicGroup).HasColumnName("EthnicGroup").HasColumnType("tinyint");
+        builder.Property(x => x.EthnicSubGroup).HasColumnName("EthnicSubGroup").HasColumnType("tinyint");
+        builder.Property(x => x.IsGenderIdentifySameSexAtBirth).HasColumnName("IsGenderIdentifySameSexAtBirth").HasColumnType("varchar");
+        builder.Property(x => x.OtherEthnicSubGroupAnswer).HasColumnName("OtherEthnicSubGroupAnswer").HasColumnType("varchar");
+        builder.Property(x => x.Support).HasColumnName("Support").HasColumnType("varchar");
         builder.Property(x => x.ApplicationId).HasColumnName("ApplicationId").HasColumnType("uniqueidentifier").IsRequired();
     }
 }

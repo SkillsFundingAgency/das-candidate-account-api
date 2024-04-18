@@ -45,6 +45,11 @@ namespace SFA.DAS.CandidateAccount.Data.AboutYou
             aboutYouItem.Improvements = aboutYouEntity.Improvements;
             aboutYouItem.HobbiesAndInterests = aboutYouEntity.HobbiesAndInterests;
             aboutYouItem.Support = aboutYouEntity.Support;
+            aboutYouItem.Sex = aboutYouEntity.Sex;
+            aboutYouItem.EthnicGroup = aboutYouEntity.EthnicGroup; 
+            aboutYouItem.EthnicSubGroup = aboutYouEntity.EthnicSubGroup; 
+            aboutYouItem.IsGenderIdentifySameSexAtBirth = aboutYouEntity.IsGenderIdentifySameSexAtBirth;
+            aboutYouItem.OtherEthnicSubGroupAnswer = aboutYouEntity.OtherEthnicSubGroupAnswer;
 
             dataContext.AboutYouEntities.Update(aboutYouItem);
 
