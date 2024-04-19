@@ -32,6 +32,7 @@ public record CandidateEntity
     public DateTime? UpdatedOn { get; set; }
     public DateTime? TermsOfUseAcceptedOn { get; set; }
     public required string GovUkIdentifier { get; set; }
+    public short Status { get; set; }
     
     public virtual ICollection<ApplicationEntity>? Applications { get; set; } = null!;
 }

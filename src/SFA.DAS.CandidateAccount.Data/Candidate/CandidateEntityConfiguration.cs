@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SFA.DAS.CandidateAccount.Domain.Candidate;
 
-namespace SFA.DAS.CandidateAccount.Data.Candidates;
+namespace SFA.DAS.CandidateAccount.Data.Candidate;
 
 public class CandidateEntityConfiguration : IEntityTypeConfiguration<CandidateEntity>
 {
@@ -22,8 +22,8 @@ public class CandidateEntityConfiguration : IEntityTypeConfiguration<CandidateEn
         builder.Property(x => x.UpdatedOn).HasColumnName("UpdatedOn").HasColumnType("DateTime").IsRequired(false);
         builder.Property(x => x.TermsOfUseAcceptedOn).HasColumnName("TermsOfUseAcceptedOn").HasColumnType("DateTime").IsRequired(false);
         builder.Property(x => x.GovUkIdentifier).HasColumnName("GovUkIdentifier").HasColumnType("varchar").HasMaxLength(150).IsRequired();
-        
-        
+        builder.Property(x => x.Status).HasColumnName("Status").HasColumnType("tinyint").IsRequired().HasDefaultValue(0);
+
         builder.HasIndex(x => x.GovUkIdentifier).IsUnique();
         builder.HasIndex(x => x.Email).IsUnique();
     }

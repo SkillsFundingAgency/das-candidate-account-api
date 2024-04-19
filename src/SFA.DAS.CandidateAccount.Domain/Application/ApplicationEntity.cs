@@ -1,4 +1,4 @@
-﻿using SFA.DAS.CandidateAccount.Domain.Candidate;
+using SFA.DAS.CandidateAccount.Domain.Candidate;
 
 namespace SFA.DAS.CandidateAccount.Domain.Application
 {
@@ -11,7 +11,6 @@ namespace SFA.DAS.CandidateAccount.Domain.Application
         public short Status { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
-        
         public virtual CandidateEntity CandidateEntity { get; set; } = null!;
         public short QualificationsStatus { get; set; }
         public short TrainingCoursesStatus { get; set; }
@@ -27,7 +26,7 @@ namespace SFA.DAS.CandidateAccount.Domain.Application
         public bool? ApplyUnderDisabilityConfidentScheme { get; set; }
 
         public virtual ICollection<WorkHistoryEntity>? WorkHistoryEntities { get; set; } = null!;
-
         public virtual ICollection<TrainingCourseEntity>? TrainingCourseEntities { get; set; } = null!;
+        public virtual ICollection<QualificationEntity>? QualificationEntities { get; set; } = null!;
     }
 }

@@ -32,6 +32,7 @@
 
     <ItemGroup>
       <Folder Include="AdditionalQuestion\" />
+      <Folder Include="Address\" />
     </ItemGroup>
 
 </Project>

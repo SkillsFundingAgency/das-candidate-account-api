@@ -26,7 +26,6 @@
 
     <ItemGroup>
       <Folder Include="AdditionalQuestion\" />
-      <Folder Include="WorkHistory\" />
     </ItemGroup>
 
 </Project>
