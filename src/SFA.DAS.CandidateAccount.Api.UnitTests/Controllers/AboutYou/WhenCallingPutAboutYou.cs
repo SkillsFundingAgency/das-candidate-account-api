@@ -24,8 +24,13 @@ public class WhenCallingPutAboutYou
     {
         upsertAboutYouCommandResult.IsCreated = true;
         mediator.Setup(x => x.Send(It.Is<UpsertAboutYouCommand>(c =>
-                c.AboutYou.Id == id
-                && c.AboutYou.Strengths.Equals(upsertAboutYouRequest.SkillsAndStrengths)
+        c.AboutYou.Id == id
+            && c.AboutYou.Strengths!.Equals(upsertAboutYouRequest.SkillsAndStrengths)
+            && c.AboutYou.Sex!.Equals(upsertAboutYouRequest.Sex)
+            && c.AboutYou.EthnicGroup!.Equals(upsertAboutYouRequest.EthnicGroup)
+            && c.AboutYou.EthnicSubGroup!.Equals(upsertAboutYouRequest.EthnicSubGroup)
+            && c.AboutYou.IsGenderIdentifySameSexAtBirth!.Equals(upsertAboutYouRequest.IsGenderIdentifySameSexAtBirth)
+            && c.AboutYou.OtherEthnicSubGroupAnswer!.Equals(upsertAboutYouRequest.OtherEthnicSubGroupAnswer)
             ), CancellationToken.None))
             .ReturnsAsync(upsertAboutYouCommandResult);
 
@@ -50,7 +55,12 @@ public class WhenCallingPutAboutYou
         upsertAboutYouCommandResult.IsCreated = false;
         mediator.Setup(x => x.Send(It.Is<UpsertAboutYouCommand>(c =>
                 c.AboutYou.Id == id
-                && c.AboutYou.Strengths.Equals(upsertAboutYouRequest.SkillsAndStrengths)
+                && c.AboutYou.Strengths!.Equals(upsertAboutYouRequest.SkillsAndStrengths)
+                && c.AboutYou.Sex!.Equals(upsertAboutYouRequest.Sex)
+                && c.AboutYou.EthnicGroup!.Equals(upsertAboutYouRequest.EthnicGroup)
+                && c.AboutYou.EthnicSubGroup!.Equals(upsertAboutYouRequest.EthnicSubGroup)
+                && c.AboutYou.IsGenderIdentifySameSexAtBirth!.Equals(upsertAboutYouRequest.IsGenderIdentifySameSexAtBirth)
+                && c.AboutYou.OtherEthnicSubGroupAnswer!.Equals(upsertAboutYouRequest.OtherEthnicSubGroupAnswer)
             ), CancellationToken.None))
             .ReturnsAsync(upsertAboutYouCommandResult);
 
