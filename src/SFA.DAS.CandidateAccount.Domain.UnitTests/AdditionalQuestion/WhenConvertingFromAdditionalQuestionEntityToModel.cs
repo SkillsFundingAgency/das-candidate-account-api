@@ -11,6 +11,6 @@ public class WhenConvertingFromAdditionalQuestionEntityToModel
     public void Then_The_Fields_Are_Mapped(AdditionalQuestionEntity source)
     {
         var actual = (Domain.Application.AdditionalQuestion)source;
-        actual.Should().BeEquivalentTo(source);
+        actual.Should().BeEquivalentTo(source, options => options.Excluding(c=>c.ApplicationEntity));
     }
 }

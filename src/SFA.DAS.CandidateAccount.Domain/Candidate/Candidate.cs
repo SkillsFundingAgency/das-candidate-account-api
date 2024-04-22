@@ -23,12 +23,10 @@ public class Candidate
             CreatedOn = source.CreatedOn,
             UpdatedOn = source.UpdatedOn,
             TermsOfUseAcceptedOn = source.TermsOfUseAcceptedOn,
-            Status = (CandidateStatus) source.Status,
-            Applications = source.Applications?.Select(c=>(Application.Application)c)
+            Status = (CandidateStatus) source.Status
         };
     }
 
-    public IEnumerable<Application.Application>? Applications { get; set; }
 
     public string GovUkIdentifier { get; set; } = null!;
 

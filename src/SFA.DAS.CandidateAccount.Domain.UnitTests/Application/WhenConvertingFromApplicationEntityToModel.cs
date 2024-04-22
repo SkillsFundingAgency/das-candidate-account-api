@@ -56,7 +56,8 @@ public class WhenConvertingFromApplicationEntityToModel
         var source = new ApplicationEntity
         {
             QualificationsStatus = (short)qualificationStatus,
-            TrainingCoursesStatus = (short)trainingCourseStatus
+            TrainingCoursesStatus = (short)trainingCourseStatus,
+            AdditionalQuestionEntities = new List<AdditionalQuestionEntity>()
         };
 
         var actual = (Domain.Application.Application)source;

@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.CandidateAccount.Domain.Candidate
+﻿using SFA.DAS.CandidateAccount.Domain.Application;
+
+namespace SFA.DAS.CandidateAccount.Domain.Candidate
 {
     public class AboutYouEntity
     {
@@ -13,6 +15,7 @@
         public string? IsGenderIdentifySameSexAtBirth { get; set; }
         public string? OtherEthnicSubGroupAnswer { get; set; }
         public Guid ApplicationId { get; set; }
+        public virtual ApplicationEntity ApplicationEntity { get; set; }
 
         public static implicit operator AboutYouEntity(AboutYou source)
         {
