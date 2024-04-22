@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SFA.DAS.CandidateAccount.Domain.Application;
+using SFA.DAS.CandidateAccount.Domain.Candidate;
 
 namespace SFA.DAS.CandidateAccount.Data.Application;
 
@@ -38,5 +39,33 @@ public class ApplicationEntityConfiguration : IEntityTypeConfiguration<Applicati
             .HasForeignKey(c => c.CandidateId)
             .HasPrincipalKey(c => c.Id);
         
+        builder
+            .HasMany(c => c.QualificationEntities)
+            .WithOne(c => c.ApplicationEntity)
+            .HasForeignKey(c => c.ApplicationId)
+            .HasPrincipalKey(c => c.Id);
+        
+        builder
+            .HasMany(c => c.WorkHistoryEntities)
+            .WithOne(c => c.ApplicationEntity)
+            .HasForeignKey(c => c.ApplicationId)
+            .HasPrincipalKey(c => c.Id);
+        
+        builder
+            .HasMany(c => c.TrainingCourseEntities)
+            .WithOne(c => c.ApplicationEntity)
+            .HasForeignKey(c => c.ApplicationId)
+            .HasPrincipalKey(c => c.Id);
+        builder
+            .HasMany(c => c.AdditionalQuestionEntities)
+            .WithOne(c => c.ApplicationEntity)
+            .HasForeignKey(c => c.ApplicationId)
+            .HasPrincipalKey(c => c.Id);
+        
+        builder
+            .HasOne(c => c.AboutYouEntity)
+            .WithOne(c => c.ApplicationEntity)
+            .HasForeignKey<AboutYouEntity>(c => c.ApplicationId)
+            .HasPrincipalKey<ApplicationEntity>(c => c.Id);
     }
 }
