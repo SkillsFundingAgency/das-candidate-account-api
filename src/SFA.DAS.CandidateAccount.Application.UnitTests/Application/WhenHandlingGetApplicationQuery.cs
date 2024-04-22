@@ -16,24 +16,43 @@ public class WhenHandlingGetApplicationQuery
     public async Task Then_The_Application_Is_Found_By_Id_And_Returned(
         GetApplicationQuery query,
         ApplicationEntity entity,
-        List<AdditionalQuestionEntity> additionalQuestions,
         [Frozen] Mock<IApplicationRepository> repository,
-        [Frozen] Mock<IAdditionalQuestionRepository> additionalQuestionRepository,
         GetApplicationQueryHandler handler)
     {
         query.CandidateId = entity.CandidateId;
-        repository.Setup(x => x.GetById(query.ApplicationId)).ReturnsAsync(entity);
-        additionalQuestionRepository
-            .Setup(x => x.GetAll(query.ApplicationId, query.CandidateId, CancellationToken.None))
-            .ReturnsAsync(additionalQuestions);
-
+        query.IncludeDetail = false;
+        repository.Setup(x => x.GetById(query.ApplicationId, query.IncludeDetail)).ReturnsAsync(entity);
+        
         var actual = await handler.Handle(query, CancellationToken.None);
 
         actual.Application.Should().BeEquivalentTo((Domain.Application.Application)entity, options => options.Excluding(prop => prop.AdditionalQuestions));
-        actual.Application!.AdditionalQuestions.Should().BeEquivalentTo(additionalQuestions, options => options
+        ((Domain.Application.Application)actual.Application!).AdditionalQuestions.Should().BeEquivalentTo(entity.AdditionalQuestionEntities, options => options
                 .Excluding(prop => prop.Answer)
                 .Excluding(prop => prop.ApplicationId)
                 .Excluding(prop => prop.QuestionText)
+                .Excluding(prop => prop.ApplicationEntity)
+        );
+    }
+    [Test, RecursiveMoqAutoData]
+    public async Task Then_The_Application_Is_Found_By_Id_And_Returns_Detail_If_In_Query(
+        GetApplicationQuery query,
+        ApplicationEntity entity,
+        [Frozen] Mock<IApplicationRepository> repository,
+        GetApplicationQueryHandler handler)
+    {
+        query.CandidateId = entity.CandidateId;
+        query.IncludeDetail = true;
+        repository.Setup(x => x.GetById(query.ApplicationId, query.IncludeDetail)).ReturnsAsync(entity);
+        
+
+        var actual = await handler.Handle(query, CancellationToken.None);
+
+        actual.Application.Should().BeEquivalentTo((ApplicationDetail)entity, options => options.Excluding(prop => prop.AdditionalQuestions));
+        ((ApplicationDetail)actual.Application!).AdditionalQuestions.Should().BeEquivalentTo(entity.AdditionalQuestionEntities, options => options
+            .Excluding(prop => prop.Answer)
+            .Excluding(prop => prop.ApplicationId)
+            .Excluding(prop => prop.QuestionText)
+            .Excluding(prop => prop.ApplicationEntity)
         );
     }
     
@@ -43,7 +62,7 @@ public class WhenHandlingGetApplicationQuery
         [Frozen] Mock<IApplicationRepository> repository,
         GetApplicationQueryHandler handler)
     {
-        repository.Setup(x => x.GetById(query.ApplicationId)).ReturnsAsync((ApplicationEntity)null!);
+        repository.Setup(x => x.GetById(query.ApplicationId, query.IncludeDetail)).ReturnsAsync((ApplicationEntity)null!);
 
         var actual = await handler.Handle(query, CancellationToken.None);
 
@@ -57,7 +76,7 @@ public class WhenHandlingGetApplicationQuery
         [Frozen] Mock<IApplicationRepository> repository,
         GetApplicationQueryHandler handler)
     {
-        repository.Setup(x => x.GetById(query.ApplicationId)).ReturnsAsync(entity);
+        repository.Setup(x => x.GetById(query.ApplicationId, query.IncludeDetail)).ReturnsAsync(entity);
         
         Assert.ThrowsAsync<ValidationException>(()=> handler.Handle(query, CancellationToken.None));
     }

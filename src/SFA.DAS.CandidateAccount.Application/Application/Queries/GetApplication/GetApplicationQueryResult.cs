@@ -2,5 +2,5 @@ namespace SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplicatio
 
 public class GetApplicationQueryResult
 {
-    public Domain.Application.Application? Application { get; set; }
+    public Domain.Application.ApplicationBase? Application { get; set; }
 }

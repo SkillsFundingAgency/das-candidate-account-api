@@ -89,14 +89,15 @@ public class ApplicationController(IMediator mediator, ILogger<ApplicationContro
 
     [HttpGet]
     [Route("Candidates/{candidateId}/[controller]s/{id}")]
-    public async Task<IActionResult> GetApplication([FromRoute] Guid id, [FromRoute] Guid candidateId)
+    public async Task<IActionResult> GetApplication([FromRoute] Guid id, [FromRoute] Guid candidateId, [FromQuery]bool includeDetail = false)
     {
         try
         {
             var result = await mediator.Send(new GetApplicationQuery
             {
                 CandidateId = candidateId,
-                ApplicationId = id
+                ApplicationId = id,
+                IncludeDetail = includeDetail
             });
 
             if (result.Application == null)
