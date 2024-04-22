@@ -3,7 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.CandidateAccount.Api.ApiRequests;
 using SFA.DAS.CandidateAccount.Api.ApiResponses;
-using SFA.DAS.CandidateAccount.Application.Application.Commands.UpdateSkillsAndStrengths;
+using SFA.DAS.CandidateAccount.Application.Application.Commands.PutAboutYou;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetAboutYouItem;
 using SFA.DAS.CandidateAccount.Domain.Candidate;
 
@@ -29,7 +29,12 @@ public class AboutYouController(IMediator mediator, ILogger<AboutYouController> 
                     Strengths = request.SkillsAndStrengths,
                     HobbiesAndInterests = request.HobbiesAndInterests,
                     Improvements = request.Improvements,
-                    Support = request.Support
+                    Support = request.Support,
+                    Sex = request.Sex,
+                    EthnicGroup = request.EthnicGroup,
+                    EthnicSubGroup = request.EthnicSubGroup,
+                    IsGenderIdentifySameSexAtBirth = request.IsGenderIdentifySameSexAtBirth,
+                    OtherEthnicSubGroupAnswer = request.OtherEthnicSubGroupAnswer,
                 },
                 CandidateId = candidateId
             });
