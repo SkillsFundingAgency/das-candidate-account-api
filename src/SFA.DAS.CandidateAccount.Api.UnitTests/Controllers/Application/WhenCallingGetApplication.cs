@@ -41,6 +41,39 @@ public class WhenCallingGetApplication
     }
     
     [Test, MoqAutoData]
+    public async Task Then_The_Command_Is_Sent_To_Mediator_And_Ok_Returned_With_Detail(
+        Guid id,
+        Guid candidateId,
+        Domain.Application.ApplicationDetail application,
+        GetApplicationQueryResult response,
+        [Frozen] Mock<IMediator> mediator,
+        [Greedy] ApplicationController controller)
+    {
+        //Arrange
+        response.Application = application;
+        mediator.Setup(x => x.Send(It.Is<GetApplicationQuery>(
+                c=> 
+                    c.ApplicationId.Equals(id)
+                    && c.CandidateId.Equals(candidateId)
+            ), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(response);
+        
+        //Act
+        var actual = await controller.GetApplication(id, candidateId, true) as OkObjectResult;
+        
+        //Assert
+        Assert.That(actual, Is.Not.Null);
+        actual!.StatusCode.Should().Be((int) HttpStatusCode.OK);
+        actual.Value.Should().BeEquivalentTo((Domain.Application.ApplicationDetail)response.Application, options => 
+            options
+                .Excluding(prop => prop!.AdditionalQuestions)
+                .Excluding(prop => prop!.AboutYou)
+                .Excluding(prop => prop!.TrainingCourses)
+            );
+    }
+    
+    
+    [Test, MoqAutoData]
     public async Task Then_If_Null_Returned_From_Mediator_Then_NotFound_Is_Returned(
         Guid id,
         Guid candidateId,

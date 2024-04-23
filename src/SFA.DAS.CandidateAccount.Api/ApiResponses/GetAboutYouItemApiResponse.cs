@@ -6,7 +6,7 @@ public class GetAboutYouItemApiResponse
 {
     public AboutYouItem? AboutYou { get; set; }
 
-    public static implicit operator GetAboutYouItemApiResponse(GetAboutYouItemQueryResult source)
+    public static implicit operator GetAboutYouItemApiResponse(Domain.Candidate.AboutYou source)
     {
         return new GetAboutYouItemApiResponse
         {
@@ -23,7 +23,7 @@ public class AboutYouItem
     public string? Support { get; set; }
     public Guid? ApplicationId { get; set; }
 
-    public static implicit operator AboutYouItem(GetAboutYouItemQueryResult source)
+    public static implicit operator AboutYouItem(Domain.Candidate.AboutYou source)
     {
         return new AboutYouItem
         {

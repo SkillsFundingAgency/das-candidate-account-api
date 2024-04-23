@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.CandidateAccount.Api.ApiRequests;
+using SFA.DAS.CandidateAccount.Api.ApiResponses;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.PatchApplication;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.UpsertApplication;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplication;
@@ -105,7 +106,9 @@ public class ApplicationController(IMediator mediator, ILogger<ApplicationContro
                 return NotFound();
             }
 
-            return Ok(result.Application);
+            var getApplicationApiResponse =includeDetail ? (GetApplicationApiResponse)((ApplicationDetail)result.Application) 
+                :  (Domain.Application.Application)result.Application;
+            return Ok(getApplicationApiResponse);
         }
         catch (ValidationException e)
         {
