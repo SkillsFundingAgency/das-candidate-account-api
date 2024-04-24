@@ -11,6 +11,7 @@ namespace SFA.DAS.CandidateAccount.Domain.Application
         public short Status { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
+        public DateTime? SubmittedDate { get; set; }
         public virtual CandidateEntity CandidateEntity { get; set; } = null!;
         public short QualificationsStatus { get; set; }
         public short TrainingCoursesStatus { get; set; }
