@@ -28,6 +28,7 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
         
         application.UpdatedDate = DateTime.UtcNow;
         application.Status = applicationEntity.Status;
+        application.SubmittedDate = applicationEntity.Status == 1 ? DateTime.UtcNow : null;
         application.QualificationsStatus = applicationEntity.QualificationsStatus != 0 ? applicationEntity.QualificationsStatus : application.QualificationsStatus;
         application.TrainingCoursesStatus = applicationEntity.TrainingCoursesStatus != 0 ? applicationEntity.TrainingCoursesStatus : application.TrainingCoursesStatus;
         application.JobsStatus = applicationEntity.JobsStatus != 0 ? applicationEntity.JobsStatus : application.JobsStatus;

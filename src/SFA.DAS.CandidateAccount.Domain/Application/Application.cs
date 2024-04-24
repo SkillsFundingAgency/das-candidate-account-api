@@ -134,6 +134,8 @@ public class Application : ApplicationBase
 {
     public Guid Id { get; set; }
     public Guid CandidateId { get; set; }
+    public DateTime CreatedDate { get; set; }
+    public DateTime? SubmittedDate { get; set; }
     public string? DisabilityStatus { get; set; }
     public required string VacancyReference { get; set; }
     public List<AdditionalQuestion>? AdditionalQuestions { get; set; } = [];
@@ -145,6 +147,8 @@ public class Application : ApplicationBase
         {
             Id = source.Id,
             CandidateId = source.CandidateId,
+            CreatedDate = source.CreatedDate,
+            SubmittedDate = source.SubmittedDate,
             DisabilityStatus = source.DisabilityStatus,
             VacancyReference = source.VacancyReference,
             Status = ParseValue<ApplicationStatus>(source.Status),

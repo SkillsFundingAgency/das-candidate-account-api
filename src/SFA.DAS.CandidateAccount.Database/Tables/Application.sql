@@ -6,6 +6,7 @@ CREATE TABLE dbo.[Application] (
     [Status]                                tinyint             NOT NULL default(0),
     [CreatedDate]                           DateTime            NOT NULL default(GETDATE()), 
     [UpdatedDate]                           DateTime            NULL,
+    [SubmittedDate]                         DateTime            NULL,
     [WithdrawnDate]                         DateTime            NULL,
     [QualificationsStatus]                  tinyint             NOT NULL default(0),
     [TrainingCoursesStatus]                 tinyint             NOT NULL default(0),
