@@ -28,6 +28,8 @@ public class GetApplicationApiResponse
     public Guid CandidateId { get; set; }
     public string? DisabilityStatus { get; set; }
     public required string VacancyReference { get; set; }
+    public DateTime? SubmittedDate { get; set; }
+    public DateTime CreatedDate { get; set; }
     public List<AdditionalQuestion>? AdditionalQuestions { get; set; } = [];
     public AboutYouItem AboutYou { get; set; }
     public List<Qualification> Qualifications { get; set; }
@@ -63,10 +65,14 @@ public class GetApplicationApiResponse
             CandidateId = application.CandidateId,
             DisabilityStatus = application.DisabilityStatus,
             VacancyReference = application.VacancyReference,
-            AdditionalQuestions = application.AdditionalQuestions
+            AdditionalQuestions = application.AdditionalQuestions,
+            SubmittedDate = application.SubmittedDate,
+            CreatedDate = application.CreatedDate
         };
     }
-    
+
+
+
     public static implicit operator GetApplicationApiResponse(ApplicationDetail applicationDetail)
     {
         
@@ -100,7 +106,9 @@ public class GetApplicationApiResponse
             AdditionalQuestions = applicationDetail.AdditionalQuestions,
             WorkHistory = applicationDetail.WorkHistory.Select(c=>(WorkHistoryItem)c).ToList(),
             AboutYou = applicationDetail.AboutYou,
-            Candidate = applicationDetail.Candidate
+            Candidate = applicationDetail.Candidate,
+            SubmittedDate = applicationDetail.SubmittedDate,
+            CreatedDate = applicationDetail.CreatedDate
         };
     }
 }

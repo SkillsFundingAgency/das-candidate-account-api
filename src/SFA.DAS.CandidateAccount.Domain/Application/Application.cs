@@ -125,7 +125,9 @@ public class ApplicationDetail : Application
             Candidate = source.CandidateEntity,
             Qualifications = source.QualificationEntities.Select(c=>(Qualification)c).ToList(),
             WorkHistory = source.WorkHistoryEntities.Select(c=>(WorkHistory)c).ToList(),
-            TrainingCourses = source.TrainingCourseEntities.Select(c=>(TrainingCourse)c).ToList()
+            TrainingCourses = source.TrainingCourseEntities.Select(c=>(TrainingCourse)c).ToList(),
+            SubmittedDate = source.SubmittedDate,
+            CreatedDate = source.CreatedDate
         };
     }
 }
