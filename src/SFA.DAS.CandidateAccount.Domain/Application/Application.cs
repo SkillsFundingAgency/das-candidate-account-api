@@ -120,7 +120,7 @@ public class ApplicationDetail : Application
             ]),
             WhatIsYourInterest = source.WhatIsYourInterest,
             ApplyUnderDisabilityConfidentScheme = source.ApplyUnderDisabilityConfidentScheme,
-            AdditionalQuestions = source.AdditionalQuestionEntities.Select(c=>(Question)c).ToList(),
+            AdditionalQuestions = source.AdditionalQuestionEntities?.Select(c=>(AdditionalQuestion)c).ToList(),
             AboutYou = source.AboutYouEntity,
             Candidate = source.CandidateEntity,
             Qualifications = source.QualificationEntities.Select(c=>(Qualification)c).ToList(),
@@ -136,7 +136,7 @@ public class Application : ApplicationBase
     public Guid CandidateId { get; set; }
     public string? DisabilityStatus { get; set; }
     public required string VacancyReference { get; set; }
-    public List<Question>? AdditionalQuestions { get; set; } = [];
+    public List<AdditionalQuestion>? AdditionalQuestions { get; set; } = [];
     
 
     public static implicit operator Application(ApplicationEntity source)
@@ -198,7 +198,7 @@ public class Application : ApplicationBase
             ]),
             WhatIsYourInterest = source.WhatIsYourInterest,
             ApplyUnderDisabilityConfidentScheme = source.ApplyUnderDisabilityConfidentScheme,
-            AdditionalQuestions = source.AdditionalQuestionEntities?.Select(c=>(Question)c).ToList()!
+            AdditionalQuestions = source.AdditionalQuestionEntities?.Select(c=>(AdditionalQuestion)c).ToList()!
         };
     }
 }

@@ -28,7 +28,7 @@ public class GetApplicationApiResponse
     public Guid CandidateId { get; set; }
     public string? DisabilityStatus { get; set; }
     public required string VacancyReference { get; set; }
-    public List<Question>? AdditionalQuestions { get; set; } = [];
+    public List<AdditionalQuestion>? AdditionalQuestions { get; set; } = [];
     public AboutYouItem AboutYou { get; set; }
     public List<Qualification> Qualifications { get; set; }
     public List<WorkHistoryItem> WorkHistory { get; set; }
