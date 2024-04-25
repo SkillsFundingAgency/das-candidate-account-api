@@ -8,6 +8,7 @@ public interface IApplicationRepository
     Task<Tuple<ApplicationEntity,bool>> Upsert(ApplicationEntity applicationEntity);
     Task<ApplicationEntity?> GetById(Guid applicationId);
     Task<ApplicationEntity> Update(ApplicationEntity application);
+    Task<IEnumerable<ApplicationEntity>> GetByCandidateId(Guid candidateId, short? statusId);
 }
 
 public class ApplicationRepository(ICandidateAccountDataContext dataContext) : IApplicationRepository
@@ -53,5 +54,12 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
         dataContext.ApplicationEntities.Update(application);
         await dataContext.SaveChangesAsync();
         return application;
+    }
+
+    public async Task<IEnumerable<ApplicationEntity>> GetByCandidateId(Guid candidateId, short? statusId)
+    {
+        return await dataContext.ApplicationEntities
+            .Where(x => x.CandidateId == candidateId && (statusId == null || x.Status == statusId.Value))
+            .ToListAsync();
     }
 }

@@ -15,7 +15,7 @@ public class WhenCallingPutCandidate
 {
     [Test, MoqAutoData]
     public async Task Then_If_MediatorCall_Returns_Created_Then_Created_Result_Returned(
-        string id,
+        Guid id,
         PutCandidateRequest postCandidateRequest,
         UpsertCandidateCommandResponse upsertCandidateCommandResult,
         [Frozen] Mock<IMediator> mediator,
@@ -25,8 +25,7 @@ public class WhenCallingPutCandidate
         upsertCandidateCommandResult.IsCreated = true;
         mediator.Setup(x => x.Send(It.Is<UpsertCandidateCommand>(c => 
                 c.Candidate.Email.Equals(postCandidateRequest.Email)
-                && c.Candidate.GovUkIdentifier.Equals(id)
-                && c.Candidate.Id == Guid.Empty
+                && c.Candidate.Id == id
                 && c.Candidate.FirstName.Equals(postCandidateRequest.FirstName)
                 && c.Candidate.LastName.Equals(postCandidateRequest.LastName)
                 && c.Candidate.MiddleNames.Equals(postCandidateRequest.MiddleNames)
@@ -47,7 +46,7 @@ public class WhenCallingPutCandidate
     
     [Test, MoqAutoData]
     public async Task Then_If_MediatorCall_Returns_NotCreated_Then_Ok_Result_Returned(
-        string id,
+        Guid id,
         PutCandidateRequest postCandidateRequest,
         UpsertCandidateCommandResponse upsertCandidateCommandResult,
         [Frozen] Mock<IMediator> mediator,
@@ -57,8 +56,7 @@ public class WhenCallingPutCandidate
         upsertCandidateCommandResult.IsCreated = false;
         mediator.Setup(x => x.Send(It.Is<UpsertCandidateCommand>(c => 
                 c.Candidate.Email.Equals(postCandidateRequest.Email)
-                && c.Candidate.GovUkIdentifier.Equals(id)
-                && c.Candidate.Id.Equals(Guid.Empty)
+                && c.Candidate.Id.Equals(id)
                 && c.Candidate.FirstName.Equals(postCandidateRequest.FirstName)
                 && c.Candidate.LastName.Equals(postCandidateRequest.LastName)
                 && c.Candidate.MiddleNames.Equals(postCandidateRequest.MiddleNames)

@@ -3,7 +3,7 @@ using FluentAssertions;
 using Moq;
 using SFA.DAS.CandidateAccount.Application.Candidate.Commands.UpsertCandidate;
 using SFA.DAS.CandidateAccount.Data.Candidate;
-using SFA.DAS.CandidateAccount.Domain.Application;
+using SFA.DAS.CandidateAccount.Data.CandidatePreferences;
 using SFA.DAS.CandidateAccount.Domain.Candidate;
 using SFA.DAS.Testing.AutoFixture;
 
@@ -14,7 +14,8 @@ public class WhenHandlingUpsertCandidateCommand
     [Test, RecursiveMoqAutoData]
     public async Task Then_The_Request_Is_Handled_And_Candidate_Created(
         UpsertCandidateCommand command,
-        CandidateEntity candidateEntity, 
+        CandidateEntity candidateEntity,
+        [Frozen] Mock<ICandidatePreferencesRepository> candidatePreferencesRepository,
         [Frozen] Mock<ICandidateRepository> candidateRepository, 
         UpsertCandidateCommandHandler handler)
     {
@@ -25,12 +26,15 @@ public class WhenHandlingUpsertCandidateCommand
 
         actual.Candidate.Id.Should().Be(candidateEntity.Id);
         actual.IsCreated.Should().BeTrue();
+        candidatePreferencesRepository.Verify(x => x.Create(candidateEntity.Id), Times.Once);
+
     }
 
     [Test, RecursiveMoqAutoData]
     public async Task Then_If_The_Candidate_And_Application_Exist_It_Is_Updated(
         UpsertCandidateCommand command,
         CandidateEntity candidateEntity,
+        [Frozen] Mock<ICandidatePreferencesRepository> candidatePreferencesRepository,
         [Frozen] Mock<ICandidateRepository> candidateRepository, 
         UpsertCandidateCommandHandler handler)
     {
@@ -41,5 +45,6 @@ public class WhenHandlingUpsertCandidateCommand
 
         actual.Candidate.Id.Should().Be(candidateEntity.Id);
         actual.IsCreated.Should().BeFalse();
+        candidatePreferencesRepository.Verify(x => x.Create(candidateEntity.Id), Times.Never);
     }
 }

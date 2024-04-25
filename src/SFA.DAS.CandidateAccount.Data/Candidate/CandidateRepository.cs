@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SFA.DAS.CandidateAccount.Domain.Application;
 using SFA.DAS.CandidateAccount.Domain.Candidate;
 
 namespace SFA.DAS.CandidateAccount.Data.Candidate;
@@ -51,13 +52,16 @@ public class CandidateRepository(ICandidateAccountDataContext dataContext) : ICa
     {
         var existingCandidate = await dataContext
             .CandidateEntities
-            .FirstOrDefaultAsync(c => c.GovUkIdentifier == candidate.GovUkIdentifier);
+            .FirstOrDefaultAsync(c => c.Id == candidate.Id);
 
         if (existingCandidate == null)
         {
             var newCandidate = (CandidateEntity)candidate;
             newCandidate.CreatedOn = DateTime.UtcNow;
             newCandidate.UpdatedOn = null;
+            newCandidate.FirstName = candidate.FirstName;
+            newCandidate.LastName = candidate.LastName;
+            newCandidate.DateOfBirth = candidate.DateOfBirth;
             await dataContext.CandidateEntities.AddAsync(newCandidate);
             await dataContext.SaveChangesAsync();
             return new Tuple<CandidateEntity, bool>(newCandidate, true);
@@ -65,9 +69,11 @@ public class CandidateRepository(ICandidateAccountDataContext dataContext) : ICa
         
         existingCandidate.FirstName = candidate.FirstName ?? existingCandidate.FirstName;
         existingCandidate.LastName = candidate.LastName ?? existingCandidate.LastName;
-        existingCandidate.Email = candidate.Email;
+        existingCandidate.Email = candidate.Email ?? existingCandidate.Email;
         existingCandidate.UpdatedOn = DateTime.UtcNow;
         existingCandidate.DateOfBirth = candidate.DateOfBirth ?? existingCandidate.DateOfBirth;
+        existingCandidate.PhoneNumber = candidate.PhoneNumber ?? existingCandidate.PhoneNumber;
+        existingCandidate.Status = candidate.Status.HasValue ? (short)candidate.Status : existingCandidate.Status;
         dataContext.CandidateEntities.Update(existingCandidate);
         await dataContext.SaveChangesAsync();
     

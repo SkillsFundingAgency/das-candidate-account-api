@@ -81,4 +81,24 @@ public class WhenConvertingFromApplicationEntityToModel
 
         actual.ApplicationQuestionsSectionStatus.Should().Be(expectedStatus);
     }
+
+    [Test,RecursiveMoqAutoData]
+    public void Then_If_All_Sections_Completed_Then_ApplicationAllSectionStatus_Is_Complete(ApplicationEntity source)
+    {
+        source.JobsStatus = 4;
+        source.QualificationsStatus = 3;
+        source.WorkExperienceStatus = 4;
+        source.TrainingCoursesStatus = 3;
+        source.DisabilityConfidenceStatus = 4;
+        source.Status = 3;
+        source.SkillsAndStrengthStatus = 4;
+        source.InterviewAdjustmentsStatus = 3;
+        source.AdditionalQuestion2Status = 4;
+        source.AdditionalQuestion1Status = 4;
+        source.InterestsStatus = 3;
+
+        var actual = (Domain.Application.Application)source;
+
+        actual.ApplicationAllSectionStatus.Should().Be(SectionStatus.Completed);
+    }
 }

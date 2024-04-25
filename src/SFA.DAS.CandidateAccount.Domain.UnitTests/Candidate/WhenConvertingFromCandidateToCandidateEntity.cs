@@ -11,6 +11,7 @@ public class WhenConvertingFromCandidateToCandidateEntity
     {
         var actual = (CandidateEntity)source;
 
-        actual.Should().BeEquivalentTo(source, options=>options.Excluding(c=>c.Applications));
+        actual.Should().BeEquivalentTo(source, options=>options.Excluding(c=>c.Applications).Excluding(c => c.Status));
+        actual.Status.Should().Be((short)source.Status.Value);
     }
 }
