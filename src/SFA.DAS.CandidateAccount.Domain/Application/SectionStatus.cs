@@ -15,7 +15,7 @@ public enum ApplicationStatus
     Submitted = 1,
     Withdrawn = 2,
     Successful = 3,
-    Rejected = 4,
+    UnSuccessful = 4,
 }
 
 public enum CandidateStatus
