@@ -57,6 +57,7 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
                 .Include(c=>c.WorkHistoryEntities)
                 .Include(c=>c.AdditionalQuestionEntities)
                 .Include(c=>c.CandidateEntity)
+                    .ThenInclude(c=>c.Address)
                 .Include(c=>c.AboutYouEntity)
                 .IgnoreAutoIncludes()
                 .SingleOrDefaultAsync(c=>c.Id == applicationId);

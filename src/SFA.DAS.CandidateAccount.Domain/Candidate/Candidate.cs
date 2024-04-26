@@ -23,10 +23,12 @@ public class Candidate
             CreatedOn = source.CreatedOn,
             UpdatedOn = source.UpdatedOn,
             TermsOfUseAcceptedOn = source.TermsOfUseAcceptedOn,
-            Status = (CandidateStatus) source.Status
+            Status = (CandidateStatus) source.Status,
+            Address = source.Address
         };
     }
 
+    public Address? Address { get; set; }
 
     public string GovUkIdentifier { get; set; } = null!;
 
