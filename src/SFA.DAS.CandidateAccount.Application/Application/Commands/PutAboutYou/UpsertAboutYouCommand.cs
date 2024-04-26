@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace SFA.DAS.CandidateAccount.Application.Application.Commands.UpdateSkillsAndStrengths;
+namespace SFA.DAS.CandidateAccount.Application.Application.Commands.PutAboutYou;
 public class UpsertAboutYouCommand : IRequest<UpsertAboutYouCommandResult>
 {
     public Guid CandidateId { get; set; }
