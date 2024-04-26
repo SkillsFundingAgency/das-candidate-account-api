@@ -1,14 +1,17 @@
 using Microsoft.EntityFrameworkCore;
 using SFA.DAS.CandidateAccount.Domain.Application;
+using Exception = System.Exception;
 
 namespace SFA.DAS.CandidateAccount.Data.Application;
 
 public interface IApplicationRepository
 {
+    Task<bool> Exists(Guid candidateId, string vacancyReference);
     Task<Tuple<ApplicationEntity,bool>> Upsert(ApplicationEntity applicationEntity);
     Task<ApplicationEntity?> GetById(Guid applicationId);
     Task<ApplicationEntity> Update(ApplicationEntity application);
     Task<IEnumerable<ApplicationEntity>> GetByCandidateId(Guid candidateId, short? statusId);
+    Task<ApplicationEntity> Clone(Guid applicationId);
 }
 
 public class ApplicationRepository(ICandidateAccountDataContext dataContext) : IApplicationRepository
@@ -56,10 +59,49 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
         return application;
     }
 
+    public async Task<bool> Exists(Guid candidateId, string vacancyReference)
+    {
+        var existing = await dataContext.ApplicationEntities
+            .Where(x => x.CandidateId == candidateId && x.VacancyReference == vacancyReference)
+            .SingleOrDefaultAsync();
+
+        return existing != null;
+    }
+
     public async Task<IEnumerable<ApplicationEntity>> GetByCandidateId(Guid candidateId, short? statusId)
     {
         return await dataContext.ApplicationEntities
             .Where(x => x.CandidateId == candidateId && (statusId == null || x.Status == statusId.Value))
             .ToListAsync();
     }
+
+    public async Task<ApplicationEntity> Clone(Guid applicationId)
+    {
+        try
+        {
+            var original = await dataContext.ApplicationEntities
+                .Include(x => x.TrainingCourseEntities)
+                .AsNoTracking()
+                .SingleAsync(x => x.Id == applicationId);
+
+            original.Id = Guid.NewGuid();
+            foreach (var tc in original.TrainingCourseEntities)
+            {
+                tc.Id = Guid.NewGuid();
+            }
+
+            dataContext.ApplicationEntities.Add(original);
+
+            await dataContext.SaveChangesAsync();
+
+            return original;
+
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
+
+    }
+
 }

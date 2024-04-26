@@ -12,6 +12,20 @@ public class UpsertApplicationCommandHandler(
 {
     public async Task<UpsertApplicationCommandResponse> Handle(UpsertApplicationCommand command, CancellationToken cancellationToken)
     {
+        if(! await applicationRepository.Exists(command.CandidateId, command.VacancyReference))
+        {
+            var previousApplications = await applicationRepository.GetByCandidateId(command.CandidateId, null);
+            var lastSubmitted = previousApplications.MaxBy(x => x.CreatedDate);
+
+            var result = await applicationRepository.Clone(lastSubmitted.Id);
+
+            return new UpsertApplicationCommandResponse
+            {
+                Application = result,
+                IsCreated = true
+            };
+        }
+
         var application = await applicationRepository.Upsert(new ApplicationEntity
         {
             VacancyReference = command.VacancyReference,
