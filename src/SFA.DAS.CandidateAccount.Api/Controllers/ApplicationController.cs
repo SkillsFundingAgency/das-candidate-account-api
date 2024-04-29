@@ -155,7 +155,12 @@ public class ApplicationController(IMediator mediator, ILogger<ApplicationContro
                 VacancyReference = vacancyReference
             });
 
-            return Ok(result);
+            if (result.Application == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(result.Application);
         }
         catch (ValidationException e)
         {
