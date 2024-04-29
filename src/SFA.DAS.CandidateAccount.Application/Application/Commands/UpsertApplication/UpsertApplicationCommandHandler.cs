@@ -17,7 +17,8 @@ public class UpsertApplicationCommandHandler(
             var previousApplications = await applicationRepository.GetByCandidateId(command.CandidateId, null);
             var lastSubmitted = previousApplications.MaxBy(x => x.CreatedDate);
 
-            var result = await applicationRepository.Clone(lastSubmitted.Id);
+            var requiresDisabilityConfidence = command.IsDisabilityConfidenceComplete == SectionStatus.NotStarted;
+            var result = await applicationRepository.Clone(lastSubmitted.Id, requiresDisabilityConfidence);
 
             return new UpsertApplicationCommandResponse
             {

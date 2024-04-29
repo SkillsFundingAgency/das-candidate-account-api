@@ -1,3 +1,4 @@
+using System.Collections.Specialized;
 using Microsoft.EntityFrameworkCore;
 using SFA.DAS.CandidateAccount.Domain.Application;
 using Exception = System.Exception;
@@ -11,7 +12,7 @@ public interface IApplicationRepository
     Task<ApplicationEntity?> GetById(Guid applicationId);
     Task<ApplicationEntity> Update(ApplicationEntity application);
     Task<IEnumerable<ApplicationEntity>> GetByCandidateId(Guid candidateId, short? statusId);
-    Task<ApplicationEntity> Clone(Guid applicationId);
+    Task<ApplicationEntity> Clone(Guid applicationId, bool requiresDisabilityConfidence);
 }
 
 public class ApplicationRepository(ICandidateAccountDataContext dataContext) : IApplicationRepository
@@ -63,7 +64,7 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
     {
         var existing = await dataContext.ApplicationEntities
             .Where(x => x.CandidateId == candidateId && x.VacancyReference == vacancyReference)
-            .SingleOrDefaultAsync();
+            .FirstOrDefaultAsync();
 
         return existing != null;
     }
@@ -75,12 +76,15 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
             .ToListAsync();
     }
 
-    public async Task<ApplicationEntity> Clone(Guid applicationId)
+    public async Task<ApplicationEntity> Clone(Guid applicationId, bool requiresDisabilityConfidence)
     {
         try
         {
             var original = await dataContext.ApplicationEntities
                 .Include(x => x.TrainingCourseEntities)
+                .Include(x => x.QualificationEntities)
+                .Include(x => x.WorkHistoryEntities)
+                //.Include(x => x.AboutYouEntity)
                 .AsNoTracking()
                 .SingleAsync(x => x.Id == applicationId);
 
@@ -88,6 +92,44 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
             foreach (var tc in original.TrainingCourseEntities)
             {
                 tc.Id = Guid.NewGuid();
+            }
+
+            foreach (var q in original.QualificationEntities)
+            {
+                q.Id = Guid.NewGuid();
+            }
+
+            foreach (var w in original.WorkHistoryEntities)
+            {
+                w.Id = Guid.NewGuid();
+            }
+
+            original.JobsStatus = (short)SectionStatus.PreviousAnswer;
+            original.AdditionalQuestion1Status = (short)SectionStatus.PreviousAnswer;
+            original.AdditionalQuestion2Status = (short)SectionStatus.PreviousAnswer;
+            original.InterestsStatus = (short)SectionStatus.PreviousAnswer;
+            original.QualificationsStatus = (short)SectionStatus.PreviousAnswer;
+            original.WorkExperienceStatus = (short)SectionStatus.PreviousAnswer;
+            original.SkillsAndStrengthStatus = (short)SectionStatus.PreviousAnswer;
+            original.TrainingCoursesStatus = (short)SectionStatus.PreviousAnswer;
+            original.InterviewAdjustmentsStatus = (short)SectionStatus.PreviousAnswer;
+            //if(original.AboutYouEntity != null) original.AboutYouEntity.Id = Guid.NewGuid(); //todo: put this back in
+
+            if (requiresDisabilityConfidence)
+            {
+                if(original.DisabilityConfidenceStatus == (short)SectionStatus.NotRequired)
+                {
+                    original.DisabilityConfidenceStatus = (short)SectionStatus.NotStarted;
+                    original.ApplyUnderDisabilityConfidentScheme = null;
+                }
+                else
+                {
+                    original.DisabilityConfidenceStatus = (short)SectionStatus.PreviousAnswer;
+                }
+            }
+            else
+            {
+                original.DisabilityConfidenceStatus = (short)SectionStatus.NotRequired;
             }
 
             dataContext.ApplicationEntities.Add(original);
