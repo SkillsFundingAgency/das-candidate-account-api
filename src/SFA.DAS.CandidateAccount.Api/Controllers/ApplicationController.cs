@@ -7,6 +7,7 @@ using SFA.DAS.CandidateAccount.Api.ApiRequests;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.PatchApplication;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.UpsertApplication;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplication;
+using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplicationByVacancyReference;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplications;
 using SFA.DAS.CandidateAccount.Domain.Application;
 
@@ -138,6 +139,31 @@ public class ApplicationController(IMediator mediator, ILogger<ApplicationContro
         catch (Exception e)
         {
             logger.LogError(e, "Unable to get applications");
+            return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+        }
+    }
+
+    [HttpGet]
+    [Route("Candidates/{candidateId}/[controller]s/GetByReference/{vacancyReference:required}")]
+    public async Task<IActionResult> GetApplicationByVacancyReference([FromRoute] Guid candidateId, [FromRoute] string vacancyReference)
+    {
+        try
+        {
+            var result = await mediator.Send(new GetApplicationByVacancyReferenceQuery
+            {
+                CandidateId = candidateId,
+                VacancyReference = vacancyReference
+            });
+
+            return Ok(result);
+        }
+        catch (ValidationException e)
+        {
+            return BadRequest(e.ValidationResult.ErrorMessage);
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e, "Unable to get application by reference");
             return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
         }
     }
