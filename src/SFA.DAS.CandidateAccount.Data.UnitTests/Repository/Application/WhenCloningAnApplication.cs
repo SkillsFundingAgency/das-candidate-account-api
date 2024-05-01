@@ -16,6 +16,8 @@ namespace SFA.DAS.CandidateAccount.Data.UnitTests.Repository.Application
             [Frozen] Mock<ICandidateAccountDataContext> context,
             ApplicationRepository repository)
         {
+            var originalId = originalApplication.Id;
+
             context.Setup(x => x.ApplicationEntities)
                 .ReturnsDbSet(new List<ApplicationEntity>{originalApplication});
 
@@ -37,6 +39,8 @@ namespace SFA.DAS.CandidateAccount.Data.UnitTests.Repository.Application
             actual.SkillsAndStrengthStatus.Should().Be((short)SectionStatus.PreviousAnswer);
             actual.TrainingCoursesStatus.Should().Be((short)SectionStatus.PreviousAnswer);
             actual.InterviewAdjustmentsStatus.Should().Be((short)SectionStatus.PreviousAnswer);
+
+            actual.PreviousAnswersSourceId.Should().Be(originalId);
         }
     }
 }

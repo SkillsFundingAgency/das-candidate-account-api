@@ -12,7 +12,7 @@ public interface IApplicationRepository
     Task<ApplicationEntity?> GetById(Guid applicationId);
     Task<ApplicationEntity> Update(ApplicationEntity application);
     Task<IEnumerable<ApplicationEntity>> GetByCandidateId(Guid candidateId, short? statusId);
-    Task<ApplicationEntity> Clone(Guid applicationId, bool requiresDisabilityConfidence);
+    Task<ApplicationEntity> Clone(Guid applicationId, string vacancyReference, bool requiresDisabilityConfidence);
 }
 
 public class ApplicationRepository(ICandidateAccountDataContext dataContext) : IApplicationRepository
@@ -76,7 +76,7 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
             .ToListAsync();
     }
 
-    public async Task<ApplicationEntity> Clone(Guid applicationId, bool requiresDisabilityConfidence)
+    public async Task<ApplicationEntity> Clone(Guid applicationId, string vacancyReference, bool requiresDisabilityConfidence)
     {
         try
         {
@@ -89,6 +89,8 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
                 .SingleAsync(x => x.Id == applicationId);
 
             original.Id = Guid.NewGuid();
+            original.VacancyReference = vacancyReference;
+            original.PreviousAnswersSourceId = applicationId;
             foreach (var tc in original.TrainingCourseEntities)
             {
                 tc.Id = Guid.NewGuid();

@@ -24,6 +24,7 @@ namespace SFA.DAS.CandidateAccount.Domain.Application
         public short InterviewAdjustmentsStatus { get; set; }
         public string? WhatIsYourInterest { get; set; }
         public bool? ApplyUnderDisabilityConfidentScheme { get; set; }
+        public Guid? PreviousAnswersSourceId { get; set; }
 
         public virtual ICollection<WorkHistoryEntity>? WorkHistoryEntities { get; set; } = null!;
         public virtual ICollection<TrainingCourseEntity>? TrainingCourseEntities { get; set; } = null!;

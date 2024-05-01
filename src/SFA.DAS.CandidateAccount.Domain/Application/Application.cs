@@ -36,6 +36,7 @@ public class Application : ApplicationBase
     public string? DisabilityStatus { get; set; }
     public required string VacancyReference { get; set; }
     public List<Question> AdditionalQuestions { get; set; } = [];
+    public Guid? PreviousAnswersSourceId { get; set; }
 
     public static implicit operator Application(ApplicationEntity source)
     {
@@ -95,7 +96,8 @@ public class Application : ApplicationBase
                 ParseValue<SectionStatus>(source.DisabilityConfidenceStatus)
             ]),
             WhatIsYourInterest = source.WhatIsYourInterest,
-            ApplyUnderDisabilityConfidentScheme = source.ApplyUnderDisabilityConfidentScheme
+            ApplyUnderDisabilityConfidentScheme = source.ApplyUnderDisabilityConfidentScheme,
+            PreviousAnswersSourceId = source.PreviousAnswersSourceId
         };
     }
 
