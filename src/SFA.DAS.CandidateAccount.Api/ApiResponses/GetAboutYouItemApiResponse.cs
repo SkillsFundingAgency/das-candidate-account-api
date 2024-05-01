@@ -18,8 +18,6 @@ public class GetAboutYouItemApiResponse
 public class AboutYouItem
 {
     public string? SkillsAndStrengths { get; set; }
-    public string? Improvements { get; set; }
-    public string? HobbiesAndInterests { get; set; }
     public string? Support { get; set; }
     public Guid? ApplicationId { get; set; }
 
@@ -28,8 +26,6 @@ public class AboutYouItem
         return new AboutYouItem
         {
             SkillsAndStrengths = source.Strengths,
-            Improvements = source.Improvements,
-            HobbiesAndInterests = source.HobbiesAndInterests,
             Support = source.Support,
             ApplicationId = source.ApplicationId
         };

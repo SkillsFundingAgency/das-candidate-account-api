@@ -27,8 +27,6 @@ public class AboutYouController(IMediator mediator, ILogger<AboutYouController> 
                     Id = id,
                     ApplicationId = applicationId,
                     Strengths = request.SkillsAndStrengths,
-                    HobbiesAndInterests = request.HobbiesAndInterests,
-                    Improvements = request.Improvements,
                     Support = request.Support,
                     Sex = request.Sex,
                     EthnicGroup = request.EthnicGroup,

@@ -13,8 +13,6 @@ public class AboutYouEntityConfiguration : IEntityTypeConfiguration<AboutYouEnti
 
         builder.Property(x => x.Id).HasColumnName("Id").HasColumnType("uniqueidentifier").IsRequired();
         builder.Property(x => x.Strengths).HasColumnName("Strengths").HasColumnType("varchar");
-        builder.Property(x => x.Improvements).HasColumnName("Improvements").HasColumnType("varchar");
-        builder.Property(x => x.HobbiesAndInterests).HasColumnName("HobbiesAndInterests").HasColumnType("varchar");
         builder.Property(x => x.Support).HasColumnName("Support").HasColumnType("varchar");
         builder.Property(x => x.Sex).HasColumnName("Sex").HasColumnType("tinyint");
         builder.Property(x => x.EthnicGroup).HasColumnName("EthnicGroup").HasColumnType("tinyint");

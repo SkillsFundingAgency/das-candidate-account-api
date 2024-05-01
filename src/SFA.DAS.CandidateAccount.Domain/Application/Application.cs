@@ -23,6 +23,8 @@ public abstract class ApplicationBase
     public SectionStatus ApplicationAllSectionStatus { get; set; }
     public string? WhatIsYourInterest { get; set; }
     public bool? ApplyUnderDisabilityConfidentScheme { get; set; }
+    public DateTime? ResponseDate { get; set; }
+    public string? ResponseNotes { get; set; }
 
     protected static T ParseValue<T>(short status) where T : struct, Enum
     {
@@ -127,7 +129,9 @@ public class ApplicationDetail : Application
             WorkHistory = source.WorkHistoryEntities.Select(c=>(WorkHistory)c).ToList(),
             TrainingCourses = source.TrainingCourseEntities.Select(c=>(TrainingCourse)c).ToList(),
             SubmittedDate = source.SubmittedDate,
-            CreatedDate = source.CreatedDate
+            CreatedDate = source.CreatedDate,
+            ResponseNotes = source.ResponseNotes,
+            ResponseDate = source.ResponseDate
         };
     }
 }
@@ -138,8 +142,6 @@ public class Application : ApplicationBase
     public Guid CandidateId { get; set; }
     public DateTime CreatedDate { get; set; }
     public DateTime? SubmittedDate { get; set; }
-    public DateTime? ResponseDate { get; set; }
-    public string? ResponseNotes { get; set; }
     public string? DisabilityStatus { get; set; }
     public required string VacancyReference { get; set; }
     public List<AdditionalQuestion>? AdditionalQuestions { get; set; } = [];
@@ -153,8 +155,6 @@ public class Application : ApplicationBase
             CandidateId = source.CandidateId,
             CreatedDate = source.CreatedDate,
             SubmittedDate = source.SubmittedDate,
-            ResponseDate = source.ResponseDate,
-            ResponseNotes = source.ResponseNotes,
             DisabilityStatus = source.DisabilityStatus,
             VacancyReference = source.VacancyReference,
             Status = ParseValue<ApplicationStatus>(source.Status),
@@ -208,7 +208,9 @@ public class Application : ApplicationBase
             ]),
             WhatIsYourInterest = source.WhatIsYourInterest,
             ApplyUnderDisabilityConfidentScheme = source.ApplyUnderDisabilityConfidentScheme,
-            AdditionalQuestions = source.AdditionalQuestionEntities?.Select(c=>(AdditionalQuestion)c).ToList()!
+            AdditionalQuestions = source.AdditionalQuestionEntities?.Select(c=>(AdditionalQuestion)c).ToList()!,
+            ResponseNotes = source.ResponseNotes,
+            ResponseDate = source.ResponseDate
         };
     }
 }

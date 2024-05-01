@@ -36,6 +36,9 @@ public class GetApplicationApiResponse
     public List<WorkHistoryItem> WorkHistory { get; set; }
     public List<TrainingCourseItem> TrainingCourses { get; set; }
     public Candidate Candidate { get; set; }
+    public string? ResponseNotes { get; set; }
+
+    public DateTime? ResponseDate { get; set; }
     
     public static implicit operator GetApplicationApiResponse(Domain.Application.Application application)
     {
@@ -67,7 +70,9 @@ public class GetApplicationApiResponse
             VacancyReference = application.VacancyReference,
             AdditionalQuestions = application.AdditionalQuestions,
             SubmittedDate = application.SubmittedDate,
-            CreatedDate = application.CreatedDate
+            CreatedDate = application.CreatedDate,
+            ResponseDate = application.ResponseDate,
+            ResponseNotes = application.ResponseNotes
         };
     }
 
@@ -108,7 +113,9 @@ public class GetApplicationApiResponse
             AboutYou = applicationDetail.AboutYou,
             Candidate = applicationDetail.Candidate,
             SubmittedDate = applicationDetail.SubmittedDate,
-            CreatedDate = applicationDetail.CreatedDate
+            CreatedDate = applicationDetail.CreatedDate,
+            ResponseDate = applicationDetail.ResponseDate,
+            ResponseNotes = applicationDetail.ResponseNotes
         };
     }
 }
