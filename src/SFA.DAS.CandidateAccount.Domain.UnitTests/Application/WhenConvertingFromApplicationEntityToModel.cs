@@ -41,6 +41,10 @@ public class WhenConvertingFromApplicationEntityToModel
         actual.InterestsStatus.Should().Be(SectionStatus.NotStarted);
         actual.WhatIsYourInterest.Should().Be(source.WhatIsYourInterest);
         actual.ApplyUnderDisabilityConfidentScheme.Should().Be(source.ApplyUnderDisabilityConfidentScheme);
+        actual.CreatedDate.Should().Be(source.CreatedDate);
+        actual.SubmittedDate.Should().Be(source.SubmittedDate);
+        actual.ResponseDate.Should().Be(source.ResponseDate);
+        actual.ResponseNotes.Should().Be(source.ResponseNotes);
     }
 
     [TestCase(SectionStatus.NotStarted, SectionStatus.NotStarted, SectionStatus.NotStarted)]
@@ -100,5 +104,18 @@ public class WhenConvertingFromApplicationEntityToModel
         var actual = (Domain.Application.Application)source;
 
         actual.ApplicationAllSectionStatus.Should().Be(SectionStatus.Completed);
+    }
+
+    [Test, RecursiveMoqAutoData]
+    public void Then_If_Application_Status_Returned_As_Expected(ApplicationStatus status)
+    {
+        var source = new ApplicationEntity
+        {
+            Status = (short)status
+        };
+
+        var actual = (Domain.Application.Application)source;
+
+        actual.Status.Should().Be(status);
     }
 }
