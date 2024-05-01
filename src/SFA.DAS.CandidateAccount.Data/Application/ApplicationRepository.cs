@@ -90,6 +90,7 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
                 .SingleAsync(x => x.Id == applicationId);
 
             original.Id = Guid.NewGuid();
+            original.Status = 0;
             original.VacancyReference = vacancyReference;
             original.PreviousAnswersSourceId = applicationId;
             foreach (var tc in original.TrainingCourseEntities)
