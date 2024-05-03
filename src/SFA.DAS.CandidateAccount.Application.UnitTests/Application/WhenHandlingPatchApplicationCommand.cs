@@ -34,6 +34,7 @@ public class WhenHandlingPatchApplicationCommand
         patchCommand.Replace(path => path.InterestsStatus, patch.InterestsStatus);
         patchCommand.Replace(path => path.WorkExperienceStatus, patch.WorkExperienceStatus);
         patchCommand.Replace(path => path.WhatIsYourInterest, patch.WhatIsYourInterest);
+        patchCommand.Replace(path => path.ResponseNotes, patch.ResponseNotes);
         var command = new PatchApplicationCommand
         {
             Id = applicationEntity.Id,
@@ -53,6 +54,7 @@ public class WhenHandlingPatchApplicationCommand
         update.WorkExperienceStatus = (short)patch.WorkExperienceStatus;
         update.WhatIsYourInterest = patch.WhatIsYourInterest;
         update.ApplyUnderDisabilityConfidentScheme = patch.ApplyUnderDisabilityConfidentScheme;
+        update.ResponseNotes = patch.ResponseNotes;
         service.Setup(x => x.GetById(command.Id, false)).ReturnsAsync(applicationEntity);
         service.Setup(x=>x.Update(update)).ReturnsAsync(update);
         
