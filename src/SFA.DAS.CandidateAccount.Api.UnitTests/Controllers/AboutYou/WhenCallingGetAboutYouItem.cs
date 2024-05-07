@@ -37,6 +37,29 @@ public class WhenCallingGetAboutYouItem
             actual?.Value.Should().BeEquivalentTo((GetAboutYouItemApiResponse)response.AboutYou);
         }
     }
+    
+    [Test, MoqAutoData]
+    public async Task Then_The_Command_Is_Sent_To_Mediator_And_NotFound_Returned_When_Result_Is_Null(
+        Guid applicationId,
+        Guid candidateId,
+        [Frozen] Mock<IMediator> mediator,
+        [Greedy] AboutYouController controller)
+    {
+        mediator.Setup(x => x.Send(It.Is<GetAboutYouItemQuery>(
+                c =>
+                    c.ApplicationId.Equals(applicationId) &&
+                    c.CandidateId.Equals(candidateId)
+            ), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new GetAboutYouItemQueryResult());
+
+        var actual = await controller.Get(candidateId, applicationId) as NotFoundResult;
+
+        using (new AssertionScope())
+        {
+            actual.Should().NotBeNull();
+            actual?.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
+        }
+    }
 
     [Test, MoqAutoData]
     public async Task Then_If_Exception_Returned_From_Mediator_Then_InternalServerError_Is_Returned(

@@ -16,7 +16,7 @@ public class CandidateController(IMediator mediator, ILogger<ApplicationControll
 {
     [HttpPost]
     [Route("{id}")]
-    public async Task<IActionResult> PostCandidate(Guid id, PostCandidateRequest request)
+    public async Task<IActionResult> PostCandidate(string id, PostCandidateRequest request)
     {
         try
         {
@@ -25,7 +25,7 @@ public class CandidateController(IMediator mediator, ILogger<ApplicationControll
                 Email = request.Email,
                 FirstName = request.FirstName,
                 LastName = request.LastName,
-                GovUkIdentifier = id.ToString(),
+                GovUkIdentifier = id,
                 DateOfBirth = request.DateOfBirth
             });
 

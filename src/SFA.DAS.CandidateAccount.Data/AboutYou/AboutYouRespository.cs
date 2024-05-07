@@ -13,27 +13,17 @@ namespace SFA.DAS.CandidateAccount.Data.AboutYou
     {
         public async Task<Domain.Candidate.AboutYou?> Get(Guid applicationId, Guid candidateId)
         {
-            var query = from item in dataContext.AboutYouEntities
-                    .Where(tc => tc.ApplicationId == applicationId)
-                        join application in dataContext.ApplicationEntities.Where(app => app.CandidateId == candidateId && app.Id == applicationId)
-                        on item.ApplicationId equals application.Id
-                        select item;
-
-            var aboutYouItem = await query.SingleOrDefaultAsync();
+            var aboutYouItem = await dataContext.AboutYouEntities
+                .Include(c=>c.ApplicationEntity).AsNoTracking().SingleOrDefaultAsync(x =>
+                x.ApplicationId == applicationId && x.ApplicationEntity.CandidateId == candidateId);
 
             return aboutYouItem is null ? null : (Domain.Candidate.AboutYou)aboutYouItem;
         }
 
         public async Task<Tuple<Domain.Candidate.AboutYou, bool>> Upsert(Domain.Candidate.AboutYou aboutYouEntity, Guid candidateId)
         {
-            var query = from item in dataContext.AboutYouEntities
-                    .Where(tc => tc.ApplicationId == aboutYouEntity.ApplicationId)
-                        join application in dataContext.ApplicationEntities.Where(app => app.CandidateId == candidateId && app.Id == aboutYouEntity.ApplicationId)
-                        on item.ApplicationId equals application.Id
-                        select item;
-
-            var aboutYouItem = await query.SingleOrDefaultAsync();
-
+            var aboutYouItem = await Get(aboutYouEntity.ApplicationId!.Value, candidateId);
+            
             if (aboutYouItem is null)
             {
                 await dataContext.AboutYouEntities.AddAsync((AboutYouEntity)aboutYouEntity);
@@ -41,6 +31,7 @@ namespace SFA.DAS.CandidateAccount.Data.AboutYou
                 return new Tuple<Domain.Candidate.AboutYou, bool>(aboutYouEntity, true);
             }
 
+            aboutYouItem.Id = aboutYouEntity.Id;
             aboutYouItem.Strengths = aboutYouEntity.Strengths;
             aboutYouItem.Support = aboutYouEntity.Support;
             aboutYouItem.Sex = aboutYouEntity.Sex;

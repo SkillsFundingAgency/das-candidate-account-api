@@ -60,6 +60,10 @@ public class AboutYouController(IMediator mediator, ILogger<AboutYouController> 
                 CandidateId = candidateId,
                 ApplicationId = applicationId
             });
+            if (result.AboutYou == null)
+            {
+                return NotFound();
+            }
             return Ok((GetAboutYouItemApiResponse)result.AboutYou);
         }
         catch (Exception e)
