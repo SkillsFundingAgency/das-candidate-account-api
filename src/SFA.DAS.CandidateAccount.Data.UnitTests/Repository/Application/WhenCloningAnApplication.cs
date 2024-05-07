@@ -21,7 +21,7 @@ namespace SFA.DAS.CandidateAccount.Data.UnitTests.Repository.Application
             context.Setup(x => x.ApplicationEntities)
                 .ReturnsDbSet(new List<ApplicationEntity>{originalApplication});
 
-            var actual = await repository.Clone(originalApplication.Id, true);
+            var actual = await repository.Clone(originalApplication.Id, originalApplication.VacancyReference, true);
 
             context.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
 

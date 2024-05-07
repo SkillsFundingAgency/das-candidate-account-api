@@ -108,7 +108,7 @@ public class WhenHandlingUpsertApplicationCommand
             .ReturnsAsync(previousApplications);
 
         applicationRepository.Setup(x =>
-            x.Clone(previousApplication.Id, command.IsDisabilityConfidenceComplete == SectionStatus.NotStarted))
+            x.Clone(previousApplication.Id, previousApplication.VacancyReference, command.IsDisabilityConfidenceComplete == SectionStatus.NotStarted))
             .ReturnsAsync(cloneResult);
 
         var actual = await handler.Handle(command, CancellationToken.None);

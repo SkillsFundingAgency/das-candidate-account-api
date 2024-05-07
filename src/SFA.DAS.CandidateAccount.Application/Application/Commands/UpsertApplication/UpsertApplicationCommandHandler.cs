@@ -15,10 +15,10 @@ public class UpsertApplicationCommandHandler(
         if(! await applicationRepository.Exists(command.CandidateId, command.VacancyReference))
         {
             var previousApplications = await applicationRepository.GetByCandidateId(command.CandidateId, null);
-            var lastSubmitted = previousApplications.MaxBy(x => x.CreatedDate);
+            var previousApplication = previousApplications.MaxBy(x => x.CreatedDate);
 
             var requiresDisabilityConfidence = command.IsDisabilityConfidenceComplete == SectionStatus.NotStarted;
-            var result = await applicationRepository.Clone(lastSubmitted.Id, command.VacancyReference, requiresDisabilityConfidence);
+            var result = await applicationRepository.Clone(previousApplication.Id, previousApplication.VacancyReference, requiresDisabilityConfidence);
 
             return new UpsertApplicationCommandResponse
             {

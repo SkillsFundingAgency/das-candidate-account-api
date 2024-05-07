@@ -131,7 +131,8 @@ public class ApplicationDetail : Application
             SubmittedDate = source.SubmittedDate,
             CreatedDate = source.CreatedDate,
             ResponseNotes = source.ResponseNotes,
-            ResponseDate = source.ResponseDate
+            ResponseDate = source.ResponseDate,
+            PreviousAnswersSourceId = source.PreviousAnswersSourceId
         };
     }
 }
