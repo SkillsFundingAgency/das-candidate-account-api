@@ -9,6 +9,7 @@ public interface IApplicationRepository
     Task<ApplicationEntity?> GetById(Guid applicationId, bool includeDetail = false);
     Task<ApplicationEntity> Update(ApplicationEntity application);
     Task<IEnumerable<ApplicationEntity>> GetByCandidateId(Guid candidateId, short? statusId);
+    Task<ApplicationEntity?> GetByVacancyReference(Guid candidateId, string vacancyReference);
 }
 
 public class ApplicationRepository(ICandidateAccountDataContext dataContext) : IApplicationRepository
@@ -76,5 +77,14 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
         return await dataContext.ApplicationEntities
             .Where(x => x.CandidateId == candidateId && (statusId == null || x.Status == statusId.Value))
             .ToListAsync();
+    }
+
+    public async Task<ApplicationEntity?> GetByVacancyReference(Guid candidateId, string vacancyReference)
+    {
+        var application = await dataContext.ApplicationEntities.SingleOrDefaultAsync(c =>
+            c.VacancyReference == vacancyReference &&
+            c.CandidateId == candidateId);
+
+        return application ?? null;
     }
 }
