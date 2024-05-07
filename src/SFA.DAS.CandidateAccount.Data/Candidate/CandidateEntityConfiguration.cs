@@ -26,5 +26,11 @@ public class CandidateEntityConfiguration : IEntityTypeConfiguration<CandidateEn
 
         builder.HasIndex(x => x.GovUkIdentifier).IsUnique();
         builder.HasIndex(x => x.Email).IsUnique();
+        
+        builder
+            .HasOne(c => c.Address)
+            .WithOne(c => c.Candidate)
+            .HasForeignKey<AddressEntity>(c => c.CandidateId)
+            .HasPrincipalKey<CandidateEntity>(c => c.Id);
     }
 }

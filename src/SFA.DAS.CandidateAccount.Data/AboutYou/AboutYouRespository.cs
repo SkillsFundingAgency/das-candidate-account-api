@@ -42,8 +42,6 @@ namespace SFA.DAS.CandidateAccount.Data.AboutYou
             }
 
             aboutYouItem.Strengths = aboutYouEntity.Strengths;
-            aboutYouItem.Improvements = aboutYouEntity.Improvements;
-            aboutYouItem.HobbiesAndInterests = aboutYouEntity.HobbiesAndInterests;
             aboutYouItem.Support = aboutYouEntity.Support;
             aboutYouItem.Sex = aboutYouEntity.Sex;
             aboutYouItem.EthnicGroup = aboutYouEntity.EthnicGroup; 

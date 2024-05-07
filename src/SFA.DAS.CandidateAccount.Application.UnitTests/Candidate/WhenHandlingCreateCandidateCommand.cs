@@ -27,6 +27,12 @@ public class WhenHandlingCreateCandidateCommand
         
         var actual = await handler.Handle(command, CancellationToken.None);
 
-        actual.Candidate.Should().BeEquivalentTo(entity, options => options.Excluding(c=>c.Applications).Excluding(c => c.Status));
+        actual.Candidate.Should().BeEquivalentTo(entity, options => options
+            .Excluding(c=>c.Applications)
+            .Excluding(c => c.Status)
+            .Excluding(c => c.Address)
+        );
+
+        actual.Candidate.Address.Should().BeEquivalentTo(entity.Address, options=>options.Excluding(c=>c.Candidate));
     }
 }

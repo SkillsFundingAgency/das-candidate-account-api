@@ -18,7 +18,8 @@ public class PatchApplication : ApplicationBase
             InterestsStatus = ParseValue<SectionStatus>(application.InterestsStatus),
             WorkExperienceStatus = ParseValue<SectionStatus>(application.WorkExperienceStatus),
             WhatIsYourInterest = application.WhatIsYourInterest,
-            ApplyUnderDisabilityConfidentScheme = application.ApplyUnderDisabilityConfidentScheme
+            ApplyUnderDisabilityConfidentScheme = application.ApplyUnderDisabilityConfidentScheme,
+            ResponseNotes = application.ResponseNotes
         };
     }
 }

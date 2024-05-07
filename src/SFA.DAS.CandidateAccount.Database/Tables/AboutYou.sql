@@ -1,8 +1,6 @@
 CREATE TABLE dbo.[AboutYou] (
     [Id]					        uniqueidentifier	NOT NULL,
     [Strengths]   			        nvarchar(max)	    NULL,
-    [Improvements] 			        nvarchar(max)       NULL,
-    [HobbiesAndInterests]           nvarchar(max)       NULL,
     [Support]  		    	        nvarchar(max)       NULL,
     [Sex]  		    	            tinyint             NULL,
     [IsGenderIdentifySameSexAtBirth]nvarchar(max)       NULL,

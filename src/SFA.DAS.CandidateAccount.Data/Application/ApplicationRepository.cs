@@ -9,7 +9,7 @@ public interface IApplicationRepository
 {
     Task<bool> Exists(Guid candidateId, string vacancyReference);
     Task<Tuple<ApplicationEntity,bool>> Upsert(ApplicationEntity applicationEntity);
-    Task<ApplicationEntity?> GetById(Guid applicationId);
+    Task<ApplicationEntity?> GetById(Guid applicationId, bool includeDetail = false);
     Task<ApplicationEntity> Update(ApplicationEntity application);
     Task<IEnumerable<ApplicationEntity>> GetByCandidateId(Guid candidateId, short? statusId);
     Task<ApplicationEntity> Clone(Guid applicationId, string vacancyReference, bool requiresDisabilityConfidence);
@@ -49,9 +49,23 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
         return new Tuple<ApplicationEntity, bool>(application, false);
     }
 
-    public async Task<ApplicationEntity?> GetById(Guid applicationId)
+    public async Task<ApplicationEntity?> GetById(Guid applicationId, bool includeDetail)
     {
-        return await dataContext.ApplicationEntities.FindAsync(applicationId);
+        var applicationEntity = !includeDetail ? 
+            await dataContext.ApplicationEntities.Include(c=>c.AdditionalQuestionEntities).IgnoreAutoIncludes()
+                .SingleOrDefaultAsync(c=>c.Id == applicationId) :
+            await dataContext.ApplicationEntities
+                .Include(c=>c.QualificationEntities)
+                    .ThenInclude(c=>c.QualificationReferenceEntity)
+                .Include(c=>c.TrainingCourseEntities)
+                .Include(c=>c.WorkHistoryEntities)
+                .Include(c=>c.AdditionalQuestionEntities)
+                .Include(c=>c.CandidateEntity)
+                    .ThenInclude(c=>c.Address)
+                .Include(c=>c.AboutYouEntity)
+                .IgnoreAutoIncludes()
+                .SingleOrDefaultAsync(c=>c.Id == applicationId);
+        return applicationEntity;
     }
 
     public async Task<ApplicationEntity> Update(ApplicationEntity application)

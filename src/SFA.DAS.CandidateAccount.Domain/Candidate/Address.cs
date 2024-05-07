@@ -13,8 +13,12 @@ public record Address
     public required double Longitude { get; set; }
     public Guid CandidateId { get; init; }
 
-    public static implicit operator Address(AddressEntity source)
+    public static implicit operator Address?(AddressEntity? source)
     {
+        if (source == null)
+        {
+            return null;
+        }
         return new Address
         {
             Id = source.Id,

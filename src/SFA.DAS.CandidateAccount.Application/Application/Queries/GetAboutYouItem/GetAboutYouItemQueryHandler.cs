@@ -10,6 +10,9 @@ public class GetAboutYouItemQueryHandler(IAboutYouRespository aboutYouRespositor
 
         if (aboutYou is null) return new GetAboutYouItemQueryResult();
 
-        return aboutYou;
+        return new GetAboutYouItemQueryResult
+        {
+            AboutYou = aboutYou
+        };
     }
 }

@@ -26,7 +26,7 @@ public class WhenHandlingUpdateTrainingCourseCommand
         trainingCourseRepository.Setup(x =>
             x.UpsertTrainingCourse(command.TrainingCourse, command.CandidateId)).ReturnsAsync(new Tuple<TrainingCourseEntity, bool>(trainingCourseEntity, true));
 
-        applicationRepository.Setup(x => x.GetById(command.ApplicationId))
+        applicationRepository.Setup(x => x.GetById(command.ApplicationId, false))
             .ReturnsAsync(applicationEntity);
 
         var actual = await handler.Handle(command, CancellationToken.None);
@@ -50,7 +50,7 @@ public class WhenHandlingUpdateTrainingCourseCommand
         trainingCourseRepository.Setup(x => x.UpsertTrainingCourse(command.TrainingCourse, command.CandidateId))
             .ReturnsAsync(new Tuple<TrainingCourseEntity, bool>(trainingCourseEntity, false));
 
-        applicationRepository.Setup(x => x.GetById(command.ApplicationId))
+        applicationRepository.Setup(x => x.GetById(command.ApplicationId, false))
             .ReturnsAsync(applicationEntity);
 
         var actual = await handler.Handle(command, CancellationToken.None);
@@ -74,7 +74,7 @@ public class WhenHandlingUpdateTrainingCourseCommand
         trainingCourseRepository.Setup(x => x.UpsertTrainingCourse(command.TrainingCourse, command.CandidateId))
             .ReturnsAsync(new Tuple<TrainingCourseEntity, bool>(trainingCourseEntity, false));
 
-        applicationRepository.Setup(x => x.GetById(command.ApplicationId))
+        applicationRepository.Setup(x => x.GetById(command.ApplicationId, false))
             .ReturnsAsync(applicationEntity);
 
         applicationRepository.Setup(x => x.Update(It.IsAny<ApplicationEntity>())).ReturnsAsync(applicationEntity);

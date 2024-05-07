@@ -34,7 +34,7 @@ public class WhenCallingGetAboutYouItem
         {
             actual.Should().NotBeNull();
             actual?.StatusCode.Should().Be((int)HttpStatusCode.OK);
-            actual?.Value.Should().BeEquivalentTo((GetAboutYouItemApiResponse)response);
+            actual?.Value.Should().BeEquivalentTo((GetAboutYouItemApiResponse)response.AboutYou);
         }
     }
 

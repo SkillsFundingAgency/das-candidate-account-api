@@ -19,7 +19,7 @@ public class WhenHandlingGetAboutYouItemQuery
 
         var actual = await handler.Handle(request, CancellationToken.None);
 
-        actual.Should().BeEquivalentTo(entity, options => options
+        actual.AboutYou.Should().BeEquivalentTo(entity, options => options
             .Excluding(ctx => ctx.Id)
         );
     }
@@ -30,7 +30,7 @@ public class WhenHandlingGetAboutYouItemQuery
         [Frozen] Mock<IAboutYouRespository> aboutYouRepository,
         GetAboutYouItemQueryHandler handler)
     {
-        aboutYouRepository.Setup(x => x.Get(request.ApplicationId, request.CandidateId)).ReturnsAsync(new Domain.Candidate.AboutYou());
+        aboutYouRepository.Setup(x => x.Get(request.ApplicationId, request.CandidateId)).ReturnsAsync((Domain.Candidate.AboutYou)null);
 
         var actual = await handler.Handle(request, CancellationToken.None);
 
