@@ -29,6 +29,7 @@ public class GetApplicationApiResponse
     public string? DisabilityStatus { get; set; }
     public required string VacancyReference { get; set; }
     public DateTime? SubmittedDate { get; set; }
+    public DateTime? WithdrawnDate { get; set; }
     public DateTime CreatedDate { get; set; }
     public List<AdditionalQuestion>? AdditionalQuestions { get; set; } = [];
     public AboutYouItem AboutYou { get; set; }
@@ -70,6 +71,7 @@ public class GetApplicationApiResponse
             VacancyReference = application.VacancyReference,
             AdditionalQuestions = application.AdditionalQuestions,
             SubmittedDate = application.SubmittedDate,
+            WithdrawnDate = application.WithdrawnDate,
             CreatedDate = application.CreatedDate,
             ResponseDate = application.ResponseDate,
             ResponseNotes = application.ResponseNotes
@@ -113,6 +115,7 @@ public class GetApplicationApiResponse
             AboutYou = applicationDetail.AboutYou,
             Candidate = applicationDetail.Candidate,
             SubmittedDate = applicationDetail.SubmittedDate,
+            WithdrawnDate = applicationDetail.WithdrawnDate,
             CreatedDate = applicationDetail.CreatedDate,
             ResponseDate = applicationDetail.ResponseDate,
             ResponseNotes = applicationDetail.ResponseNotes
