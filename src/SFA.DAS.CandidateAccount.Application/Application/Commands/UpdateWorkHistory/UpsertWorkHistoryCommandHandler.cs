@@ -19,11 +19,11 @@ public class UpsertWorkHistoryCommandHandler(IWorkHistoryRepository repository, 
 
         switch (request.WorkHistory.WorkHistoryType)
         {
-            case WorkHistoryType.Job when application.JobsStatus == (short)SectionStatus.NotStarted:
+            case WorkHistoryType.Job when application.JobsStatus is (short)SectionStatus.NotStarted or (short) SectionStatus.PreviousAnswer:
                 application.JobsStatus = (short)SectionStatus.InProgress;
                 await applicationRepository.Update(application);
                 break;
-            case WorkHistoryType.WorkExperience when application.WorkExperienceStatus == (short)SectionStatus.NotStarted:
+            case WorkHistoryType.WorkExperience when application.WorkExperienceStatus is (short)SectionStatus.NotStarted or (short)SectionStatus.PreviousAnswer:
                 application.WorkExperienceStatus = (short)SectionStatus.InProgress;
                 await applicationRepository.Update(application);
                 break;
