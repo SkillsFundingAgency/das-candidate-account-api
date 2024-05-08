@@ -12,6 +12,7 @@ public interface IApplicationRepository
     Task<ApplicationEntity?> GetById(Guid applicationId, bool includeDetail = false);
     Task<ApplicationEntity> Update(ApplicationEntity application);
     Task<IEnumerable<ApplicationEntity>> GetByCandidateId(Guid candidateId, short? statusId);
+    Task<ApplicationEntity?> GetByVacancyReference(Guid candidateId, string vacancyReference);
     Task<ApplicationEntity> Clone(Guid applicationId, string vacancyReference, bool requiresDisabilityConfidence);
 }
 
@@ -91,7 +92,16 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
             .ToListAsync();
     }
 
-    public async Task<ApplicationEntity> Clone(Guid applicationId, string vacancyReference, bool requiresDisabilityConfidence)
+    public async Task<ApplicationEntity?> GetByVacancyReference(Guid candidateId, string vacancyReference)
+    {
+        var application = await dataContext.ApplicationEntities.SingleOrDefaultAsync(c =>
+            c.VacancyReference == vacancyReference &&
+            c.CandidateId == candidateId);
+
+        return application ?? null;
+    }
+	
+	public async Task<ApplicationEntity> Clone(Guid applicationId, string vacancyReference, bool requiresDisabilityConfidence)
     {
         var original = await dataContext.ApplicationEntities
             .Include(x => x.TrainingCourseEntities)

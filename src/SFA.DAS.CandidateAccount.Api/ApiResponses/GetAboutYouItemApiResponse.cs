@@ -20,6 +20,7 @@ public class AboutYouItem
     public string? SkillsAndStrengths { get; set; }
     public string? Support { get; set; }
     public Guid? ApplicationId { get; set; }
+    public Guid? Id { get; set; }
 
     public static implicit operator AboutYouItem(Domain.Candidate.AboutYou source)
     {
@@ -27,7 +28,8 @@ public class AboutYouItem
         {
             SkillsAndStrengths = source.Strengths,
             Support = source.Support,
-            ApplicationId = source.ApplicationId
+            ApplicationId = source.ApplicationId,
+            Id = source.Id
         };
     }
 }
