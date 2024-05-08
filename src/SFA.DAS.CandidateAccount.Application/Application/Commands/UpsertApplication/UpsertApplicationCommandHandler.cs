@@ -15,16 +15,19 @@ public class UpsertApplicationCommandHandler(
         if(! await applicationRepository.Exists(command.CandidateId, command.VacancyReference))
         {
             var previousApplications = await applicationRepository.GetByCandidateId(command.CandidateId, null);
-            var previousApplication = previousApplications.MaxBy(x => x.CreatedDate);
+            var previousApplication = previousApplications.Where(x => x.Status != (short)ApplicationStatus.Draft).MaxBy(x => x.CreatedDate);
 
-            var requiresDisabilityConfidence = command.IsDisabilityConfidenceComplete == SectionStatus.NotStarted;
-            var result = await applicationRepository.Clone(previousApplication.Id, previousApplication.VacancyReference, requiresDisabilityConfidence);
-
-            return new UpsertApplicationCommandResponse
+            if (previousApplication != null)
             {
-                Application = result,
-                IsCreated = true
-            };
+                var requiresDisabilityConfidence = command.IsDisabilityConfidenceComplete == SectionStatus.NotStarted;
+                var result = await applicationRepository.Clone(previousApplication.Id, command.VacancyReference, requiresDisabilityConfidence);
+
+                return new UpsertApplicationCommandResponse
+                {
+                    Application = result,
+                    IsCreated = true
+                };
+            }
         }
 
         var application = await applicationRepository.Upsert(new ApplicationEntity

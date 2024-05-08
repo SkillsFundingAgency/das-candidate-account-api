@@ -43,7 +43,7 @@ public abstract class ApplicationBase
             return SectionStatus.InProgress;
         }
 
-        if (sectionStatus.All(c => c is SectionStatus.Completed or SectionStatus.NotRequired))
+        if (sectionStatus.All(c => c is SectionStatus.Completed or SectionStatus.NotRequired or SectionStatus.PreviousAnswer))
         {
             return SectionStatus.Completed;
         }

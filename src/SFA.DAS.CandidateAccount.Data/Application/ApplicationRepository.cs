@@ -93,75 +93,60 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
 
     public async Task<ApplicationEntity> Clone(Guid applicationId, string vacancyReference, bool requiresDisabilityConfidence)
     {
-        try
+        var original = await dataContext.ApplicationEntities
+            .Include(x => x.TrainingCourseEntities)
+            .Include(x => x.QualificationEntities)
+            .Include(x => x.WorkHistoryEntities)
+            .Include(x => x.AboutYouEntity)
+            .AsNoTracking()
+            .SingleAsync(x => x.Id == applicationId);
+
+        original.Id = Guid.NewGuid();
+        original.Status = 0;
+        original.CreatedDate = DateTime.UtcNow;
+        original.UpdatedDate = null;
+        original.SubmittedDate = null;
+        original.ResponseDate = null;
+        original.ResponseNotes = null;
+        original.VacancyReference = vacancyReference;
+        original.PreviousAnswersSourceId = applicationId;
+
+        original.TrainingCourseEntities.ToList().ForEach(x => x.Id = Guid.NewGuid());
+        original.QualificationEntities.ToList().ForEach(x => x.Id = Guid.NewGuid());
+        original.WorkHistoryEntities.ToList().ForEach(x => x.Id = Guid.NewGuid());
+        if (original.AboutYouEntity != null) { original.AboutYouEntity.Id = Guid.NewGuid(); }
+        
+        original.JobsStatus = (short)SectionStatus.PreviousAnswer;
+        original.AdditionalQuestion1Status = (short)SectionStatus.PreviousAnswer;
+        original.AdditionalQuestion2Status = (short)SectionStatus.PreviousAnswer;
+        original.InterestsStatus = (short)SectionStatus.PreviousAnswer;
+        original.QualificationsStatus = (short)SectionStatus.PreviousAnswer;
+        original.WorkExperienceStatus = (short)SectionStatus.PreviousAnswer;
+        original.SkillsAndStrengthStatus = (short)SectionStatus.PreviousAnswer;
+        original.TrainingCoursesStatus = (short)SectionStatus.PreviousAnswer;
+        original.InterviewAdjustmentsStatus = (short)SectionStatus.PreviousAnswer;
+
+        if (requiresDisabilityConfidence)
         {
-            var original = await dataContext.ApplicationEntities
-                .Include(x => x.TrainingCourseEntities)
-                .Include(x => x.QualificationEntities)
-                .Include(x => x.WorkHistoryEntities)
-                //.Include(x => x.AboutYouEntity)
-                .AsNoTracking()
-                .SingleAsync(x => x.Id == applicationId);
-
-            original.Id = Guid.NewGuid();
-            original.Status = 0;
-            original.VacancyReference = vacancyReference;
-            original.PreviousAnswersSourceId = applicationId;
-            foreach (var tc in original.TrainingCourseEntities)
+            if(original.DisabilityConfidenceStatus == (short)SectionStatus.NotRequired)
             {
-                tc.Id = Guid.NewGuid();
-            }
-
-            foreach (var q in original.QualificationEntities)
-            {
-                q.Id = Guid.NewGuid();
-            }
-
-            foreach (var w in original.WorkHistoryEntities)
-            {
-                w.Id = Guid.NewGuid();
-            }
-
-            original.JobsStatus = (short)SectionStatus.PreviousAnswer;
-            original.AdditionalQuestion1Status = (short)SectionStatus.PreviousAnswer;
-            original.AdditionalQuestion2Status = (short)SectionStatus.PreviousAnswer;
-            original.InterestsStatus = (short)SectionStatus.PreviousAnswer;
-            original.QualificationsStatus = (short)SectionStatus.PreviousAnswer;
-            original.WorkExperienceStatus = (short)SectionStatus.PreviousAnswer;
-            original.SkillsAndStrengthStatus = (short)SectionStatus.PreviousAnswer;
-            original.TrainingCoursesStatus = (short)SectionStatus.PreviousAnswer;
-            original.InterviewAdjustmentsStatus = (short)SectionStatus.PreviousAnswer;
-            //if(original.AboutYouEntity != null) original.AboutYouEntity.Id = Guid.NewGuid(); //todo: put this back in
-
-            if (requiresDisabilityConfidence)
-            {
-                if(original.DisabilityConfidenceStatus == (short)SectionStatus.NotRequired)
-                {
-                    original.DisabilityConfidenceStatus = (short)SectionStatus.NotStarted;
-                    original.ApplyUnderDisabilityConfidentScheme = null;
-                }
-                else
-                {
-                    original.DisabilityConfidenceStatus = (short)SectionStatus.PreviousAnswer;
-                }
+                original.DisabilityConfidenceStatus = (short)SectionStatus.NotStarted;
+                original.ApplyUnderDisabilityConfidentScheme = null;
             }
             else
             {
-                original.DisabilityConfidenceStatus = (short)SectionStatus.NotRequired;
+                original.DisabilityConfidenceStatus = (short)SectionStatus.PreviousAnswer;
             }
-
-            dataContext.ApplicationEntities.Add(original);
-
-            await dataContext.SaveChangesAsync();
-
-            return original;
-
         }
-        catch (Exception ex)
+        else
         {
-            throw;
+            original.DisabilityConfidenceStatus = (short)SectionStatus.NotRequired;
         }
 
+        dataContext.ApplicationEntities.Add(original);
+        await dataContext.SaveChangesAsync();
+
+        return original;
     }
 
 }
