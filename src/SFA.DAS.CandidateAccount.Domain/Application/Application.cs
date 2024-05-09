@@ -131,7 +131,6 @@ public class ApplicationDetail : Application
             SubmittedDate = source.SubmittedDate,
             WithdrawnDate = source.WithdrawnDate,
             CreatedDate = source.CreatedDate,
-            WithdrawnDate = source.WithdrawnDate,
             ResponseNotes = source.ResponseNotes,
             ResponseDate = source.ResponseDate
         };
@@ -215,7 +214,6 @@ public class Application : ApplicationBase
             AdditionalQuestions = source.AdditionalQuestionEntities?.Select(c=>(AdditionalQuestion)c).ToList()!,
             ResponseNotes = source.ResponseNotes,
             ResponseDate = source.ResponseDate,
-            WithdrawnDate = source.WithdrawnDate
         };
     }
 }
