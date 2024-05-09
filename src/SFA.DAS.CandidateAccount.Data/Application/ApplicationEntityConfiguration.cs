@@ -19,6 +19,7 @@ public class ApplicationEntityConfiguration : IEntityTypeConfiguration<Applicati
         builder.Property(x => x.Status).HasColumnName("Status").HasColumnType("tinyint").IsRequired().HasDefaultValue(0);
         builder.Property(x => x.CreatedDate).HasColumnName("CreatedDate").HasColumnType("datetime").IsRequired().HasDefaultValue();
         builder.Property(x => x.SubmittedDate).HasColumnName("SubmittedDate").HasColumnType("datetime").IsRequired(false);
+        builder.Property(x => x.WithdrawnDate).HasColumnName("WithdrawnDate").HasColumnType("datetime").IsRequired(false);
         builder.Property(x => x.ResponseDate).HasColumnName("ResponseDate").HasColumnType("datetime").IsRequired(false);
         builder.Property(x => x.UpdatedDate).HasColumnName("UpdatedDate").HasColumnType("datetime").IsRequired(false);
         builder.Property(x => x.WithdrawnDate).HasColumnName("WithdrawnDate").HasColumnType("datetime").IsRequired(false);
