@@ -130,6 +130,7 @@ public class ApplicationDetail : Application
             TrainingCourses = source.TrainingCourseEntities.Select(c=>(TrainingCourse)c).ToList(),
             SubmittedDate = source.SubmittedDate,
             CreatedDate = source.CreatedDate,
+            WithdrawnDate = source.WithdrawnDate,
             ResponseNotes = source.ResponseNotes,
             ResponseDate = source.ResponseDate
         };
@@ -142,6 +143,7 @@ public class Application : ApplicationBase
     public Guid CandidateId { get; set; }
     public DateTime CreatedDate { get; set; }
     public DateTime? SubmittedDate { get; set; }
+    public DateTime? WithdrawnDate { get; set; }
     public string? DisabilityStatus { get; set; }
     public required string VacancyReference { get; set; }
     public List<AdditionalQuestion>? AdditionalQuestions { get; set; } = [];
@@ -210,7 +212,8 @@ public class Application : ApplicationBase
             ApplyUnderDisabilityConfidentScheme = source.ApplyUnderDisabilityConfidentScheme,
             AdditionalQuestions = source.AdditionalQuestionEntities?.Select(c=>(AdditionalQuestion)c).ToList()!,
             ResponseNotes = source.ResponseNotes,
-            ResponseDate = source.ResponseDate
+            ResponseDate = source.ResponseDate,
+            WithdrawnDate = source.WithdrawnDate
         };
     }
 }

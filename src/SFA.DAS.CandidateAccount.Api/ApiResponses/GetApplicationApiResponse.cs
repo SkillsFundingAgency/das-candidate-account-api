@@ -30,6 +30,7 @@ public class GetApplicationApiResponse
     public required string VacancyReference { get; set; }
     public DateTime? SubmittedDate { get; set; }
     public DateTime CreatedDate { get; set; }
+    public DateTime? WithdrawnDate { get; set; }
     public List<AdditionalQuestion>? AdditionalQuestions { get; set; } = [];
     public AboutYouItem AboutYou { get; set; }
     public List<Qualification> Qualifications { get; set; }
@@ -71,6 +72,7 @@ public class GetApplicationApiResponse
             AdditionalQuestions = application.AdditionalQuestions,
             SubmittedDate = application.SubmittedDate,
             CreatedDate = application.CreatedDate,
+            WithdrawnDate = application.WithdrawnDate,
             ResponseDate = application.ResponseDate,
             ResponseNotes = application.ResponseNotes
         };
@@ -114,6 +116,7 @@ public class GetApplicationApiResponse
             Candidate = applicationDetail.Candidate,
             SubmittedDate = applicationDetail.SubmittedDate,
             CreatedDate = applicationDetail.CreatedDate,
+            WithdrawnDate = applicationDetail.WithdrawnDate,
             ResponseDate = applicationDetail.ResponseDate,
             ResponseNotes = applicationDetail.ResponseNotes
         };
