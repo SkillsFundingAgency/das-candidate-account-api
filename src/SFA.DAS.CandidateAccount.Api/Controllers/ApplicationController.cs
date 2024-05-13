@@ -5,12 +5,14 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.CandidateAccount.Api.ApiRequests;
 using SFA.DAS.CandidateAccount.Api.ApiResponses;
+using SFA.DAS.CandidateAccount.Application.Application.Commands.AddLegacyApplication;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.PatchApplication;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.UpsertApplication;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplication;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplicationByVacancyReference;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplications;
 using SFA.DAS.CandidateAccount.Domain.Application;
+using SFA.DAS.CandidateAccount.Domain.Candidate;
 
 namespace SFA.DAS.CandidateAccount.Api.Controllers;
 
@@ -181,6 +183,19 @@ public class ApplicationController(IMediator mediator, ILogger<ApplicationContro
     [Route("[controller]s")]
     public async Task<IActionResult> PostApplication(PostApplicationRequest applicationRequest)
     {
-        return Ok();
+        try
+        {
+            var result = await mediator.Send(new AddLegacyApplicationCommand
+            {
+                LegacyApplication   = applicationRequest.LegacyApplication
+            });
+
+            return Ok(result);
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e, "Post Application : An error occurred");
+            return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+        }
     }
 }
