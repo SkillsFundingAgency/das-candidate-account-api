@@ -1,7 +1,5 @@
-using System.Collections.Specialized;
 using Microsoft.EntityFrameworkCore;
 using SFA.DAS.CandidateAccount.Domain.Application;
-using Exception = System.Exception;
 
 namespace SFA.DAS.CandidateAccount.Data.Application;
 
@@ -14,6 +12,7 @@ public interface IApplicationRepository
     Task<IEnumerable<ApplicationEntity>> GetByCandidateId(Guid candidateId, short? statusId);
     Task<ApplicationEntity?> GetByVacancyReference(Guid candidateId, string vacancyReference);
     Task<ApplicationEntity> Clone(Guid applicationId, string vacancyReference, bool requiresDisabilityConfidence);
+    Task<ApplicationEntity> InsertLegacyApplication(LegacyApplication  legacyApplication);
 }
 
 public class ApplicationRepository(ICandidateAccountDataContext dataContext) : IApplicationRepository
@@ -159,4 +158,8 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
         return original;
     }
 
+    public Task<ApplicationEntity> InsertLegacyApplication(LegacyApplication legacyApplication)
+    {
+        throw new NotImplementedException();
+    }
 }
