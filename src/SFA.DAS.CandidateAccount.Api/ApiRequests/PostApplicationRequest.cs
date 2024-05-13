@@ -1,0 +1,24 @@
+using System.ComponentModel.DataAnnotations;
+using SFA.DAS.CandidateAccount.Domain.Application;
+
+namespace SFA.DAS.CandidateAccount.Api.ApiRequests;
+
+public class PostApplicationRequest
+{
+    [Required]
+    public required Guid CandidateId { get; set; }
+
+    [Required]
+    public required string VacancyReference { get; set; }
+    
+    public ApplicationStatus Status { get; set; }
+    public string? DisabilityStatus { get; set; }
+    public SectionStatus IsApplicationQuestionsComplete { get; set; }
+    public SectionStatus IsDisabilityConfidenceComplete { get; set; }
+    public SectionStatus IsEducationHistoryComplete { get; set; }
+    public SectionStatus IsInterviewAdjustmentsComplete { get; set; }
+    public SectionStatus IsWorkHistoryComplete { get; set; }
+    public SectionStatus IsAdditionalQuestion1Complete { get; set; }
+    public SectionStatus IsAdditionalQuestion2Complete { get; set; }
+    public IEnumerable<string?> AdditionalQuestions { get; set; } = [];
+}

@@ -176,4 +176,11 @@ public class ApplicationController(IMediator mediator, ILogger<ApplicationContro
             return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
         }
     }
+
+    [HttpPost]
+    [Route("[controller]s")]
+    public async Task<IActionResult> PostApplication(PostApplicationRequest applicationRequest)
+    {
+        return Ok();
+    }
 }
