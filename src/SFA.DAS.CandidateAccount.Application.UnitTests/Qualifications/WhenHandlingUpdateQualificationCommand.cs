@@ -37,7 +37,7 @@ public class WhenHandlingUpdateQualificationCommand
                     command.CandidateId, command.ApplicationId))
             .ReturnsAsync(new Tuple<QualificationEntity, bool>(qualificationEntity, true));
 
-        applicationRepository.Setup(x => x.GetById(command.ApplicationId))
+        applicationRepository.Setup(x => x.GetById(command.ApplicationId, false))
             .ReturnsAsync(applicationEntity);
 
         var actual = await handler.Handle(command, CancellationToken.None);
@@ -70,7 +70,7 @@ public class WhenHandlingUpdateQualificationCommand
                     command.ApplicationId))
             .ReturnsAsync(new Tuple<QualificationEntity, bool>(qualificationEntity, false));
 
-        applicationRepository.Setup(x => x.GetById(command.ApplicationId))
+        applicationRepository.Setup(x => x.GetById(command.ApplicationId, false))
             .ReturnsAsync(applicationEntity);
 
         var actual = await handler.Handle(command, CancellationToken.None);
@@ -97,7 +97,7 @@ public class WhenHandlingUpdateQualificationCommand
         qualificationRepository.Setup(x => x.Upsert(command.Qualification, command.CandidateId, command.ApplicationId))
             .ReturnsAsync(new Tuple<QualificationEntity, bool>(qualificationEntity, false));
 
-        applicationRepository.Setup(x => x.GetById(command.ApplicationId))
+        applicationRepository.Setup(x => x.GetById(command.ApplicationId, false))
             .ReturnsAsync(applicationEntity);
 
         Assert.ThrowsAsync<InvalidOperationException>(() => handler.Handle(command, CancellationToken.None));
@@ -119,7 +119,7 @@ public class WhenHandlingUpdateQualificationCommand
         qualificationRepository.Setup(x => x.Upsert(command.Qualification, command.CandidateId, command.ApplicationId))
             .ReturnsAsync(new Tuple<QualificationEntity, bool>(qualificationEntity, false));
 
-        applicationRepository.Setup(x => x.GetById(command.ApplicationId))
+        applicationRepository.Setup(x => x.GetById(command.ApplicationId, false))
             .ReturnsAsync((ApplicationEntity?)null);
 
         Assert.ThrowsAsync<InvalidOperationException>(() => handler.Handle(command, CancellationToken.None));
@@ -141,7 +141,7 @@ public class WhenHandlingUpdateQualificationCommand
         qualificationRepository.Setup(x => x.Upsert(command.Qualification, command.CandidateId, command.ApplicationId))
             .ReturnsAsync(new Tuple<QualificationEntity, bool>(qualificationEntity, false));
 
-        applicationRepository.Setup(x => x.GetById(command.ApplicationId))
+        applicationRepository.Setup(x => x.GetById(command.ApplicationId, false))
             .ReturnsAsync(applicationEntity);
 
         applicationRepository.Setup(x => x.Update(It.IsAny<ApplicationEntity>())).ReturnsAsync(applicationEntity);

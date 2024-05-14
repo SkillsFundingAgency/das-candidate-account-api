@@ -34,6 +34,7 @@ public class WhenHandlingPatchApplicationCommand
         patchCommand.Replace(path => path.InterestsStatus, patch.InterestsStatus);
         patchCommand.Replace(path => path.WorkExperienceStatus, patch.WorkExperienceStatus);
         patchCommand.Replace(path => path.WhatIsYourInterest, patch.WhatIsYourInterest);
+        patchCommand.Replace(path => path.ResponseNotes, patch.ResponseNotes);
         var command = new PatchApplicationCommand
         {
             Id = applicationEntity.Id,
@@ -53,7 +54,8 @@ public class WhenHandlingPatchApplicationCommand
         update.WorkExperienceStatus = (short)patch.WorkExperienceStatus;
         update.WhatIsYourInterest = patch.WhatIsYourInterest;
         update.ApplyUnderDisabilityConfidentScheme = patch.ApplyUnderDisabilityConfidentScheme;
-        service.Setup(x => x.GetById(command.Id)).ReturnsAsync(applicationEntity);
+        update.ResponseNotes = patch.ResponseNotes;
+        service.Setup(x => x.GetById(command.Id, false)).ReturnsAsync(applicationEntity);
         service.Setup(x=>x.Update(update)).ReturnsAsync(update);
         
         //Act
@@ -70,7 +72,7 @@ public class WhenHandlingPatchApplicationCommand
         PatchApplicationCommandHandler handler)
     {
         //Arrange
-        service.Setup(x => x.GetById(command.Id)).ReturnsAsync((ApplicationEntity)null);
+        service.Setup(x => x.GetById(command.Id, false)).ReturnsAsync((ApplicationEntity)null!);
         
         //Act
         var actual = await handler.Handle(command, CancellationToken.None);
@@ -81,14 +83,14 @@ public class WhenHandlingPatchApplicationCommand
     }
     
     [Test, RecursiveMoqAutoData]
-    public async Task Then_If_The_Application_Does_Not_Belong_To_The_Candidate_Validation_Error_Returned(
+    public void Then_If_The_Application_Does_Not_Belong_To_The_Candidate_Validation_Error_Returned(
         ApplicationEntity entity,
         PatchApplicationCommand command,
         [Frozen] Mock<IApplicationRepository> service,
         PatchApplicationCommandHandler handler)
     {
         //Arrange
-        service.Setup(x => x.GetById(command.Id)).ReturnsAsync(entity);
+        service.Setup(x => x.GetById(command.Id, false)).ReturnsAsync(entity);
         
         Assert.ThrowsAsync<ValidationException>(()=> handler.Handle(command, CancellationToken.None));
         
@@ -117,7 +119,7 @@ public class WhenHandlingPatchApplicationCommand
             Patch = patchCommand
         };
 
-        service.Setup(x => x.GetById(command.Id)).ReturnsAsync(applicationEntity);
+        service.Setup(x => x.GetById(command.Id, false)).ReturnsAsync(applicationEntity);
         service.Setup(x => x.Update(update)).ReturnsAsync(update);
 
         //Act

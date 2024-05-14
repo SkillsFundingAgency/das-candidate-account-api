@@ -24,11 +24,11 @@ public class Candidate
             UpdatedOn = source.UpdatedOn,
             TermsOfUseAcceptedOn = source.TermsOfUseAcceptedOn,
             Status = (CandidateStatus) source.Status,
-            Applications = source.Applications?.Select(c=>(Application.Application)c)
+            Address = source.Address
         };
     }
 
-    public IEnumerable<Application.Application>? Applications { get; set; }
+    public Address? Address { get; set; }
 
     public string GovUkIdentifier { get; set; } = null!;
 

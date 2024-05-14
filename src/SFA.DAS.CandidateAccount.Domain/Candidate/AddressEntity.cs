@@ -12,5 +12,7 @@
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public required Guid CandidateId { get; set; }
+        
+        public virtual CandidateEntity Candidate { get; set; }
     }
 }

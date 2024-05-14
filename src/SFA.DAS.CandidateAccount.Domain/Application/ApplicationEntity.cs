@@ -11,6 +11,9 @@ namespace SFA.DAS.CandidateAccount.Domain.Application
         public short Status { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
+        public DateTime? SubmittedDate { get; set; }
+        public DateTime? ResponseDate { get; set; }
+        public string? ResponseNotes { get; set; }
         public virtual CandidateEntity CandidateEntity { get; set; } = null!;
         public short QualificationsStatus { get; set; }
         public short TrainingCoursesStatus { get; set; }
@@ -25,8 +28,10 @@ namespace SFA.DAS.CandidateAccount.Domain.Application
         public string? WhatIsYourInterest { get; set; }
         public bool? ApplyUnderDisabilityConfidentScheme { get; set; }
 
-        public virtual ICollection<WorkHistoryEntity>? WorkHistoryEntities { get; set; } = null!;
-        public virtual ICollection<TrainingCourseEntity>? TrainingCourseEntities { get; set; } = null!;
-        public virtual ICollection<QualificationEntity>? QualificationEntities { get; set; } = null!;
+        public virtual ICollection<WorkHistoryEntity> WorkHistoryEntities { get; set; } = null!;
+        public virtual ICollection<TrainingCourseEntity> TrainingCourseEntities { get; set; } = null!;
+        public virtual ICollection<QualificationEntity> QualificationEntities { get; set; } = null!;
+        public virtual ICollection<AdditionalQuestionEntity>? AdditionalQuestionEntities { get; set; } = null!;
+        public virtual AboutYouEntity? AboutYouEntity { get; set; } = null;
     }
 }

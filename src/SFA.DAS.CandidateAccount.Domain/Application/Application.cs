@@ -1,3 +1,5 @@
+using SFA.DAS.CandidateAccount.Domain.Candidate;
+
 namespace SFA.DAS.CandidateAccount.Domain.Application;
 
 public abstract class ApplicationBase
@@ -21,25 +23,49 @@ public abstract class ApplicationBase
     public SectionStatus ApplicationAllSectionStatus { get; set; }
     public string? WhatIsYourInterest { get; set; }
     public bool? ApplyUnderDisabilityConfidentScheme { get; set; }
+    public DateTime? ResponseDate { get; set; }
+    public string? ResponseNotes { get; set; }
 
     protected static T ParseValue<T>(short status) where T : struct, Enum
     {
         Enum.TryParse<T>(status.ToString(), true, out var sectionStatus);
         return sectionStatus;
     }
+    protected static SectionStatus GetSectionStatus(params SectionStatus[] sections)
+    {
+        var sectionStatus = sections.ToList();
+        if (sectionStatus.TrueForAll(c => c == SectionStatus.NotStarted))
+        {
+            return SectionStatus.NotStarted;
+        }
+        if (sectionStatus.TrueForAll(c => c == SectionStatus.InProgress))
+        {
+            return SectionStatus.InProgress;
+        }
+
+        if (sectionStatus.All(c => c is SectionStatus.Completed or SectionStatus.NotRequired))
+        {
+            return SectionStatus.Completed;
+        }
+        if (sectionStatus.All(c => c is SectionStatus.NotStarted or SectionStatus.InProgress or SectionStatus.NotRequired))
+        {
+            return SectionStatus.InProgress;
+        }
+        
+        return SectionStatus.NotStarted;
+    }
 }
 
-public class Application : ApplicationBase
+public class ApplicationDetail : Application
 {
-    public Guid Id { get; set; }
-    public Guid CandidateId { get; set; }
-    public string? DisabilityStatus { get; set; }
-    public required string VacancyReference { get; set; }
-    public List<Question> AdditionalQuestions { get; set; } = [];
-
-    public static implicit operator Application(ApplicationEntity source)
+    public AboutYou AboutYou { get; set; }
+    public List<Qualification> Qualifications { get; set; }
+    public List<WorkHistory> WorkHistory { get; set; }
+    public List<TrainingCourse> TrainingCourses { get; set; }
+    public Candidate.Candidate Candidate { get; set; }
+    public static implicit operator ApplicationDetail(ApplicationEntity source)
     {
-        return new Application
+        return new ApplicationDetail
         {
             Id = source.Id,
             CandidateId = source.CandidateId,
@@ -95,35 +121,96 @@ public class Application : ApplicationBase
                 ParseValue<SectionStatus>(source.DisabilityConfidenceStatus)
             ]),
             WhatIsYourInterest = source.WhatIsYourInterest,
-            ApplyUnderDisabilityConfidentScheme = source.ApplyUnderDisabilityConfidentScheme
+            ApplyUnderDisabilityConfidentScheme = source.ApplyUnderDisabilityConfidentScheme,
+            AdditionalQuestions = source.AdditionalQuestionEntities?.Select(c=>(AdditionalQuestion)c).ToList(),
+            AboutYou = source.AboutYouEntity,
+            Candidate = source.CandidateEntity,
+            Qualifications = source.QualificationEntities.Select(c=>(Qualification)c).ToList(),
+            WorkHistory = source.WorkHistoryEntities.Select(c=>(WorkHistory)c).ToList(),
+            TrainingCourses = source.TrainingCourseEntities.Select(c=>(TrainingCourse)c).ToList(),
+            SubmittedDate = source.SubmittedDate,
+            CreatedDate = source.CreatedDate,
+            ResponseNotes = source.ResponseNotes,
+            ResponseDate = source.ResponseDate
         };
     }
+}
 
+public class Application : ApplicationBase
+{
+    public Guid Id { get; set; }
+    public Guid CandidateId { get; set; }
+    public DateTime CreatedDate { get; set; }
+    public DateTime? SubmittedDate { get; set; }
+    public string? DisabilityStatus { get; set; }
+    public required string VacancyReference { get; set; }
+    public List<AdditionalQuestion>? AdditionalQuestions { get; set; } = [];
     
 
-    private static SectionStatus GetSectionStatus(params SectionStatus[] sections)
+    public static implicit operator Application(ApplicationEntity source)
     {
-        var sectionStatus = sections.ToList();
-        if (sectionStatus.TrueForAll(c => c == SectionStatus.NotStarted))
+        return new Application
         {
-            return SectionStatus.NotStarted;
-        }
-        if (sectionStatus.TrueForAll(c => c == SectionStatus.InProgress))
-        {
-            return SectionStatus.InProgress;
-        }
-
-        if (sectionStatus.All(c => c is SectionStatus.Completed or SectionStatus.NotRequired))
-        {
-            return SectionStatus.Completed;
-        }
-        if (sectionStatus.All(c => c is SectionStatus.NotStarted or SectionStatus.InProgress or SectionStatus.NotRequired))
-        {
-            return SectionStatus.InProgress;
-        }
-        
-        return SectionStatus.NotStarted;
+            Id = source.Id,
+            CandidateId = source.CandidateId,
+            CreatedDate = source.CreatedDate,
+            SubmittedDate = source.SubmittedDate,
+            DisabilityStatus = source.DisabilityStatus,
+            VacancyReference = source.VacancyReference,
+            Status = ParseValue<ApplicationStatus>(source.Status),
+            DisabilityConfidenceStatus = ParseValue<SectionStatus>(source.DisabilityConfidenceStatus),
+            JobsStatus = ParseValue<SectionStatus>(source.JobsStatus),
+            QualificationsStatus = ParseValue<SectionStatus>(source.QualificationsStatus),
+            WorkExperienceStatus = ParseValue<SectionStatus>(source.WorkExperienceStatus),
+            TrainingCoursesStatus = ParseValue<SectionStatus>(source.TrainingCoursesStatus),
+            InterestsStatus = ParseValue<SectionStatus>(source.InterestsStatus),
+            AdditionalQuestion1Status = ParseValue<SectionStatus>(source.AdditionalQuestion1Status),
+            AdditionalQuestion2Status = ParseValue<SectionStatus>(source.AdditionalQuestion2Status),
+            InterviewAdjustmentsStatus = ParseValue<SectionStatus>(source.InterviewAdjustmentsStatus),
+            SkillsAndStrengthStatus = ParseValue<SectionStatus>(source.SkillsAndStrengthStatus),
+            EducationHistorySectionStatus = GetSectionStatus(
+            [
+                ParseValue<SectionStatus>(source.QualificationsStatus),
+                ParseValue<SectionStatus>(source.TrainingCoursesStatus)
+            ]),
+            WorkHistorySectionStatus = GetSectionStatus(
+            [
+                ParseValue<SectionStatus>(source.JobsStatus),
+                ParseValue<SectionStatus>(source.WorkExperienceStatus)
+            ]),
+            ApplicationQuestionsSectionStatus = GetSectionStatus(
+            [
+                ParseValue<SectionStatus>(source.SkillsAndStrengthStatus),
+                ParseValue<SectionStatus>(source.InterestsStatus),
+                ParseValue<SectionStatus>(source.AdditionalQuestion1Status),
+                ParseValue<SectionStatus>(source.AdditionalQuestion2Status)
+            ]),
+            InterviewAdjustmentsSectionStatus = GetSectionStatus(
+            [
+                ParseValue<SectionStatus>(source.InterviewAdjustmentsStatus)
+            ]),
+            DisabilityConfidenceSectionStatus = GetSectionStatus(
+            [
+                ParseValue<SectionStatus>(source.DisabilityConfidenceStatus)
+            ]),
+            ApplicationAllSectionStatus = GetSectionStatus(
+            [
+                ParseValue<SectionStatus>(source.QualificationsStatus),
+                ParseValue<SectionStatus>(source.TrainingCoursesStatus),
+                ParseValue<SectionStatus>(source.JobsStatus),
+                ParseValue<SectionStatus>(source.WorkExperienceStatus),
+                ParseValue<SectionStatus>(source.SkillsAndStrengthStatus),
+                ParseValue<SectionStatus>(source.InterestsStatus),
+                ParseValue<SectionStatus>(source.AdditionalQuestion1Status),
+                ParseValue<SectionStatus>(source.AdditionalQuestion2Status),
+                ParseValue<SectionStatus>(source.InterviewAdjustmentsStatus),
+                ParseValue<SectionStatus>(source.DisabilityConfidenceStatus)
+            ]),
+            WhatIsYourInterest = source.WhatIsYourInterest,
+            ApplyUnderDisabilityConfidentScheme = source.ApplyUnderDisabilityConfidentScheme,
+            AdditionalQuestions = source.AdditionalQuestionEntities?.Select(c=>(AdditionalQuestion)c).ToList()!,
+            ResponseNotes = source.ResponseNotes,
+            ResponseDate = source.ResponseDate
+        };
     }
-
-    
 }

@@ -41,6 +41,17 @@ public class PatchApplicationCommandHandler (IApplicationRepository applicationR
         application.WorkExperienceStatus = (short)patchedDoc.WorkExperienceStatus;
         application.WhatIsYourInterest = patchedDoc.WhatIsYourInterest;
         application.UpdatedDate = DateTime.UtcNow;
+        application.ResponseNotes = patchedDoc.ResponseNotes;
+        
+        switch (patchedDoc.Status)
+        {
+            case ApplicationStatus.Successful or ApplicationStatus.UnSuccessful:
+                application.ResponseDate = DateTime.UtcNow;
+                break;
+            case ApplicationStatus.Submitted:
+                application.SubmittedDate = DateTime.UtcNow;
+                break;
+        }
 
         if(application.ApplyUnderDisabilityConfidentScheme != patchedDoc.ApplyUnderDisabilityConfidentScheme)
         {

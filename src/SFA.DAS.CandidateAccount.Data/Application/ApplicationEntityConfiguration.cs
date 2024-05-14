@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SFA.DAS.CandidateAccount.Domain.Application;
+using SFA.DAS.CandidateAccount.Domain.Candidate;
 
 namespace SFA.DAS.CandidateAccount.Data.Application;
 
@@ -17,7 +18,10 @@ public class ApplicationEntityConfiguration : IEntityTypeConfiguration<Applicati
         builder.Property(x => x.VacancyReference).HasColumnName("VacancyReference").HasColumnType("varchar").HasMaxLength(150).IsRequired();
         builder.Property(x => x.Status).HasColumnName("Status").HasColumnType("tinyint").IsRequired().HasDefaultValue(0);
         builder.Property(x => x.CreatedDate).HasColumnName("CreatedDate").HasColumnType("datetime").IsRequired().HasDefaultValue();
+        builder.Property(x => x.SubmittedDate).HasColumnName("SubmittedDate").HasColumnType("datetime").IsRequired(false);
+        builder.Property(x => x.ResponseDate).HasColumnName("ResponseDate").HasColumnType("datetime").IsRequired(false);
         builder.Property(x => x.UpdatedDate).HasColumnName("UpdatedDate").HasColumnType("datetime").IsRequired(false);
+        builder.Property(x => x.ResponseNotes).HasColumnName("ResponseNotes").HasColumnType("varchar").IsRequired(false);
         builder.Property(x => x.QualificationsStatus).HasColumnName("QualificationsStatus").HasColumnType("tinyint").IsRequired().HasDefaultValue(0);
         builder.Property(x => x.TrainingCoursesStatus).HasColumnName("TrainingCoursesStatus").HasColumnType("tinyint").IsRequired().HasDefaultValue(0);
         builder.Property(x => x.JobsStatus).HasColumnName("JobsStatus").HasColumnType("tinyint").IsRequired().HasDefaultValue(0);
@@ -38,5 +42,33 @@ public class ApplicationEntityConfiguration : IEntityTypeConfiguration<Applicati
             .HasForeignKey(c => c.CandidateId)
             .HasPrincipalKey(c => c.Id);
         
+        builder
+            .HasMany(c => c.QualificationEntities)
+            .WithOne(c => c.ApplicationEntity)
+            .HasForeignKey(c => c.ApplicationId)
+            .HasPrincipalKey(c => c.Id);
+        
+        builder
+            .HasMany(c => c.WorkHistoryEntities)
+            .WithOne(c => c.ApplicationEntity)
+            .HasForeignKey(c => c.ApplicationId)
+            .HasPrincipalKey(c => c.Id);
+        
+        builder
+            .HasMany(c => c.TrainingCourseEntities)
+            .WithOne(c => c.ApplicationEntity)
+            .HasForeignKey(c => c.ApplicationId)
+            .HasPrincipalKey(c => c.Id);
+        builder
+            .HasMany(c => c.AdditionalQuestionEntities)
+            .WithOne(c => c.ApplicationEntity)
+            .HasForeignKey(c => c.ApplicationId)
+            .HasPrincipalKey(c => c.Id);
+        
+        builder
+            .HasOne(c => c.AboutYouEntity)
+            .WithOne(c => c.ApplicationEntity)
+            .HasForeignKey<AboutYouEntity>(c => c.ApplicationId)
+            .HasPrincipalKey<ApplicationEntity>(c => c.Id);
     }
 }

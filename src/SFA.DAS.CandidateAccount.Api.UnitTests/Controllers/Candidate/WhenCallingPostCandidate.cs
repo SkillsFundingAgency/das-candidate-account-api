@@ -16,7 +16,7 @@ public class WhenCallingPostCandidate
 {
     [Test, MoqAutoData]
     public async Task Then_If_MediatorCall_Returns_Created_Then_Created_Result_Returned(
-        Guid id,
+        string id,
         PostCandidateRequest postCandidateRequest,
         CreateCandidateCommandResponse createCandidateCommandResponse,
         [Frozen] Mock<IMediator> mediator,
@@ -42,7 +42,7 @@ public class WhenCallingPostCandidate
     }
     [Test, MoqAutoData]
     public async Task Then_If_Error_Then_InternalServerError_Response_Returned(
-        Guid id,
+        string id,
         PostCandidateRequest postCandidateRequest,
         [Frozen] Mock<IMediator> mediator,
         [Greedy] CandidateController controller)

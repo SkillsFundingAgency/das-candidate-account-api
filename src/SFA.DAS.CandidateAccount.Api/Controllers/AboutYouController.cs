@@ -27,8 +27,6 @@ public class AboutYouController(IMediator mediator, ILogger<AboutYouController> 
                     Id = id,
                     ApplicationId = applicationId,
                     Strengths = request.SkillsAndStrengths,
-                    HobbiesAndInterests = request.HobbiesAndInterests,
-                    Improvements = request.Improvements,
                     Support = request.Support,
                     Sex = request.Sex,
                     EthnicGroup = request.EthnicGroup,
@@ -62,7 +60,11 @@ public class AboutYouController(IMediator mediator, ILogger<AboutYouController> 
                 CandidateId = candidateId,
                 ApplicationId = applicationId
             });
-            return Ok((GetAboutYouItemApiResponse)result);
+            if (result.AboutYou == null)
+            {
+                return NotFound();
+            }
+            return Ok((GetAboutYouItemApiResponse)result.AboutYou);
         }
         catch (Exception e)
         {

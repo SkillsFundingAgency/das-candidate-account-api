@@ -6,6 +6,7 @@
         public required string QuestionText { get; init; }
         public string? Answer { get; set; }
         public Guid ApplicationId { get; init; }
+        public virtual ApplicationEntity ApplicationEntity { get; set; }
 
         public static implicit operator AdditionalQuestionEntity(AdditionalQuestion source)
         {

@@ -13,20 +13,23 @@ public class WhenConvertingFromCandidateEntityToModel
         source.Status = (short)status;
         var actual = (Domain.Candidate.Candidate)source;
 
-        actual.Should().BeEquivalentTo(source, options=>options.Excluding(c=>c.Applications).Excluding(c => c.Status));
+        actual.Should().BeEquivalentTo(source, options=>options
+            .Excluding(c=> c.Applications)
+            .Excluding(c => c.Status)
+            .Excluding(c=> c.Address)
+        );
         actual.Status.Should().Be(status);
-        actual.Applications.Should().BeEquivalentTo(source.Applications!.Select(c => (Domain.Application.Application)c));
     }
     [Test, RecursiveMoqAutoData]
-    public void Then_The_Fields_Are_Mapped_With_No_Applications(CandidateEntity source, CandidateStatus status)
+    public void Then_The_Fields_Are_Mapped_With_No_Applications_And_No_Address(CandidateEntity source, CandidateStatus status)
     {
         source.Status = (short)status;
         source.Applications = null;
+        source.Address = null;
         
         var actual = (Domain.Candidate.Candidate)source;
 
         actual.Should().BeEquivalentTo(source, options=>options.Excluding(c=>c.Applications).Excluding(c => c.Status));
         actual.Status.Should().Be(status);
-        actual.Applications.Should().BeNull();
     }
 }

@@ -27,7 +27,7 @@ public class WhenHandlingUpdateWorkHistoryCommand
         workHistoryRepository.Setup(x =>
             x.UpsertWorkHistory(command.WorkHistory, command.CandidateId)).ReturnsAsync(new Tuple<WorkHistoryEntity, bool>(workHistoryEntity, true));
 
-        applicationRepository.Setup(x => x.GetById(command.ApplicationId))
+        applicationRepository.Setup(x => x.GetById(command.ApplicationId, false))
             .ReturnsAsync(applicationEntity);
 
         var actual = await handler.Handle(command, CancellationToken.None);
@@ -51,7 +51,7 @@ public class WhenHandlingUpdateWorkHistoryCommand
         workHistoryRepository.Setup(x => x.UpsertWorkHistory(command.WorkHistory, command.CandidateId))
             .ReturnsAsync(new Tuple<WorkHistoryEntity, bool>(workHistoryEntity, false));
 
-        applicationRepository.Setup(x => x.GetById(command.ApplicationId))
+        applicationRepository.Setup(x => x.GetById(command.ApplicationId, false))
             .ReturnsAsync(applicationEntity);
 
         var actual = await handler.Handle(command, CancellationToken.None);
@@ -77,7 +77,7 @@ public class WhenHandlingUpdateWorkHistoryCommand
         workHistoryRepository.Setup(x => x.UpsertWorkHistory(command.WorkHistory, command.CandidateId))
             .ReturnsAsync(new Tuple<WorkHistoryEntity, bool>(workHistoryEntity, false));
 
-        applicationRepository.Setup(x => x.GetById(command.ApplicationId))
+        applicationRepository.Setup(x => x.GetById(command.ApplicationId, false))
             .ReturnsAsync(applicationEntity);
 
         applicationRepository.Setup(x => x.Update(It.IsAny<ApplicationEntity>())).ReturnsAsync(applicationEntity);

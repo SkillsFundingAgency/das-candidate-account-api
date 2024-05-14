@@ -15,31 +15,32 @@ namespace SFA.DAS.CandidateAccount.Api.ApiResponses
             };
         }
 
-        public class WorkHistoryItem
-        {
-            public Guid Id { get; set; }
-            public WorkHistoryType WorkHistoryType { get; set; }
-            public string? Employer { get; set; }
-            public string? JobTitle { get; set; }
-            public DateTime StartDate { get; set; }
-            public DateTime? EndDate { get; set; }
-            public Guid ApplicationId { get; set; }
-            public string? Description { get; set; }
+        
+    }
+    public class WorkHistoryItem
+    {
+        public Guid Id { get; set; }
+        public WorkHistoryType WorkHistoryType { get; set; }
+        public string? Employer { get; set; }
+        public string? JobTitle { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+        public Guid ApplicationId { get; set; }
+        public string? Description { get; set; }
 
-            public static implicit operator WorkHistoryItem(GetApplicationWorkHistoriesQueryResult.WorkHistoryItem source)
+        public static implicit operator WorkHistoryItem(WorkHistory source)
+        {
+            return new WorkHistoryItem
             {
-                return new WorkHistoryItem
-                {
-                    Id = source.Id,
-                    WorkHistoryType = source.WorkHistoryType,
-                    Employer = source.Employer,
-                    JobTitle = source.JobTitle,
-                    StartDate = source.StartDate,
-                    EndDate = source.EndDate,
-                    ApplicationId = source.ApplicationId,
-                    Description = source.Description,
-                };
-            }
+                Id = source.Id,
+                WorkHistoryType = source.WorkHistoryType,
+                Employer = source.Employer,
+                JobTitle = source.JobTitle,
+                StartDate = source.StartDate,
+                EndDate = source.EndDate,
+                ApplicationId = source.ApplicationId,
+                Description = source.Description,
+            };
         }
     }
 }
