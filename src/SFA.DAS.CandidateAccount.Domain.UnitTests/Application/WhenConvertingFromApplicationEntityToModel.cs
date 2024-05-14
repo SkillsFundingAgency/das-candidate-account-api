@@ -45,6 +45,7 @@ public class WhenConvertingFromApplicationEntityToModel
         actual.SubmittedDate.Should().Be(source.SubmittedDate);
         actual.ResponseDate.Should().Be(source.ResponseDate);
         actual.ResponseNotes.Should().Be(source.ResponseNotes);
+        actual.WithdrawnDate.Should().Be(source.WithdrawnDate);
     }
 
     [TestCase(SectionStatus.NotStarted, SectionStatus.NotStarted, SectionStatus.NotStarted)]

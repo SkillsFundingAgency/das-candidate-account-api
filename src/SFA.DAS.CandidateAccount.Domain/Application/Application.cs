@@ -213,7 +213,7 @@ public class Application : ApplicationBase
             ApplyUnderDisabilityConfidentScheme = source.ApplyUnderDisabilityConfidentScheme,
             AdditionalQuestions = source.AdditionalQuestionEntities?.Select(c=>(AdditionalQuestion)c).ToList()!,
             ResponseNotes = source.ResponseNotes,
-            ResponseDate = source.ResponseDate
+            ResponseDate = source.ResponseDate,
         };
     }
 }
