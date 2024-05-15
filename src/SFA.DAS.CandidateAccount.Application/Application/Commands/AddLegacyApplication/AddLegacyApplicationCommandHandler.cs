@@ -29,7 +29,7 @@ public class AddLegacyApplicationCommandHandler(IApplicationRepository applicati
         {
             CandidateId = legacyApplication.CandidateId,
             VacancyReference = legacyApplication.VacancyReference,
-            Status = (short) legacyApplication.Status,
+            Status = (short)legacyApplication.Status,
             AboutYouEntity = new AboutYouEntity
             {
                 Strengths = legacyApplication.SkillsAndStrengths
@@ -41,8 +41,12 @@ public class AddLegacyApplicationCommandHandler(IApplicationRepository applicati
             QualificationsStatus = (short)SectionStatus.Incomplete,
             TrainingCoursesStatus = (short)SectionStatus.Incomplete,
             //WorkExperienceStatus = (short)SectionStatus.Incomplete,
-            AdditionalQuestion1Status = legacyApplication.HasAdditionalQuestion1 ? (short)SectionStatus.NotStarted : (short)SectionStatus.NotRequired,
-            AdditionalQuestion2Status = legacyApplication.HasAdditionalQuestion2 ? (short)SectionStatus.NotStarted : (short)SectionStatus.NotRequired,
+            AdditionalQuestion1Status = legacyApplication.HasAdditionalQuestion1
+                ? (short)SectionStatus.NotStarted
+                : (short)SectionStatus.NotRequired,
+            AdditionalQuestion2Status = legacyApplication.HasAdditionalQuestion2
+                ? (short)SectionStatus.NotStarted
+                : (short)SectionStatus.NotRequired,
             //DisabilityStatus = legacyApplication.DisabilityStatus,
             TrainingCourseEntities = legacyApplication.TrainingCourses.Select(x => new TrainingCourseEntity
             {
@@ -59,29 +63,55 @@ public class AddLegacyApplicationCommandHandler(IApplicationRepository applicati
                 StartDate = x.FromDate == DateTime.MinValue ? DateTime.UtcNow : x.FromDate, //todo: what should zero be?
                 EndDate = x.ToDate == DateTime.MinValue ? null : x.ToDate
             }).ToList(),
-            QualificationEntities = legacyApplication.Qualifications.Select(x => new QualificationEntity
-            {
-                AdditionalInformation = string.Empty,
-                Grade = x.Grade,
-                IsPredicted = x.IsPredicted,
-                Subject = x.Subject,
-                //ToYear = x.Year,
-                //todo: check/improve this lookup
-                QualificationReferenceId = GetQualificationType(qualificationReferences, x.QualificationType)
-            }).ToList()
-
+            QualificationEntities = legacyApplication.Qualifications
+                .Select(x => MapQualification(x, qualificationReferences)).ToList()
         };
+    }
+
+    private QualificationEntity MapQualification(LegacyApplication.Qualification source, List<QualificationReferenceEntity> qualificationReferences)
+    {
+        var result = new QualificationEntity
+        {
+            QualificationReferenceId = GetQualificationType(qualificationReferences, source.QualificationType),
+            Subject = source.Subject,
+            Grade = source.Grade
+        };
+
+        switch (source.QualificationType)
+        {
+            case "GCSE":
+            case "AS Level":
+            case "A Level":
+            case "BTEC":
+                result.AdditionalInformation = string.Empty;
+                result.IsPredicted = source.IsPredicted;
+                break;
+            default:
+                result.Subject = source.QualificationType;
+                result.AdditionalInformation = source.Subject;
+                break;
+        }
+
+        return result;
     }
 
     private Guid GetQualificationType(List<QualificationReferenceEntity> qualificationReferences, string source)
     {
-        var qualificationReference = qualificationReferences.SingleOrDefault(y => y.Name == source);
-
-        if (qualificationReference == null)
+        switch (source)
         {
-            return qualificationReferences.SingleOrDefault(y => y.Name == "Other").Id;
+            case "GCSE":
+                return qualificationReferences.Single(x => string.Equals(x.Name, "GCSE", StringComparison.OrdinalIgnoreCase)).Id;
+            case "AS Level":
+                return qualificationReferences.Single(x => string.Equals(x.Name, "AS LEVEL", StringComparison.OrdinalIgnoreCase)).Id;
+            case "A Level":
+                return qualificationReferences.Single(x => string.Equals(x.Name, "A LEVEL", StringComparison.OrdinalIgnoreCase)).Id;
+            case "BTEC":
+                return qualificationReferences.Single(x => string.Equals(x.Name, "BTEC", StringComparison.OrdinalIgnoreCase)).Id;
+            case "NVQ or SVQ Level 1":
+            case "NVQ or SVQ Level 2":
+            case "NVQ or SVQ Level 3":
+            default:
+                return qualificationReferences.Single(x => string.Equals(x.Name, "OTHER", StringComparison.OrdinalIgnoreCase)).Id;
         }
-
-        return qualificationReference.Id;
     }
 }
