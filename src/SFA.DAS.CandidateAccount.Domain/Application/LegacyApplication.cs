@@ -7,6 +7,7 @@
 
         public ApplicationStatus Status { get; set; }
         public string SkillsAndStrengths { get; set; }
+        public string Support { get; set; }
 
         public bool HasAdditionalQuestion1 { get; set; }
         public bool HasAdditionalQuestion2 { get; set; }
