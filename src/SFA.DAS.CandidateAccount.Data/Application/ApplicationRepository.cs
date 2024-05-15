@@ -12,7 +12,6 @@ public interface IApplicationRepository
     Task<IEnumerable<ApplicationEntity>> GetByCandidateId(Guid candidateId, short? statusId);
     Task<ApplicationEntity?> GetByVacancyReference(Guid candidateId, string vacancyReference);
     Task<ApplicationEntity> Clone(Guid applicationId, string vacancyReference, bool requiresDisabilityConfidence);
-    Task<ApplicationEntity> InsertLegacyApplication(LegacyApplication  legacyApplication);
 }
 
 public class ApplicationRepository(ICandidateAccountDataContext dataContext) : IApplicationRepository
@@ -156,10 +155,5 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
         await dataContext.SaveChangesAsync();
 
         return original;
-    }
-
-    public Task<ApplicationEntity> InsertLegacyApplication(LegacyApplication legacyApplication)
-    {
-        throw new NotImplementedException();
     }
 }
