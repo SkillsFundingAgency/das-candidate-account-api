@@ -8,9 +8,13 @@
         public ApplicationStatus Status { get; set; }
         public string SkillsAndStrengths { get; set; }
         public string Support { get; set; }
-
-        public bool HasAdditionalQuestion1 { get; set; }
-        public bool HasAdditionalQuestion2 { get; set; }
+        public DateTime? DateApplied { get; set; }
+        public DateTime? SuccessfulDateTime { get; set; }
+        public DateTime? UnsuccessfulDateTime { get; set; }
+        public string? AdditionalQuestion1 { get; set; }
+        public string? AdditionalQuestion2 { get; set; }
+        public string? AdditionalQuestion1Answer { get; set; }
+        public string? AdditionalQuestion2Answer { get; set; }
         public List<Qualification> Qualifications { get; set; } = [];
         public List<TrainingCourse> TrainingCourses { get; set; } = [];
         public List<WorkExperienceItem> WorkExperience { get; set; } = [];

@@ -24,27 +24,53 @@ public class AddLegacyApplicationCommandHandler(IApplicationRepository applicati
     {
         var qualificationReferences = (await qualificationReferenceRepository.GetAll()).ToList();
 
+        var additionalQuestions = new List<AdditionalQuestionEntity>();
+        if (legacyApplication.AdditionalQuestion1 != null)
+        {
+            additionalQuestions.Add(new AdditionalQuestionEntity
+            {
+                QuestionText = legacyApplication.AdditionalQuestion1,
+                Answer = legacyApplication.AdditionalQuestion1Answer
+            });
+        }
+        if (legacyApplication.AdditionalQuestion2 != null)
+        {
+            additionalQuestions.Add(new AdditionalQuestionEntity
+            {
+                QuestionText = legacyApplication.AdditionalQuestion2,
+                Answer = legacyApplication.AdditionalQuestion2Answer
+            });
+        }
+
         return new ApplicationEntity
         {
             CandidateId = legacyApplication.CandidateId,
             VacancyReference = legacyApplication.VacancyReference,
             Status = (short)legacyApplication.Status,
+            SubmittedDate = legacyApplication.DateApplied,
+            ResponseDate = legacyApplication.Status switch
+            {
+                ApplicationStatus.Successful => legacyApplication.SuccessfulDateTime,
+                ApplicationStatus.UnSuccessful => legacyApplication.UnsuccessfulDateTime,
+                _ => null
+            },
             MigrationDate = DateTime.UtcNow,
             AboutYouEntity = new AboutYouEntity
             {
                 Strengths = legacyApplication.SkillsAndStrengths,
                 Support = legacyApplication.Support,
             },
+            AdditionalQuestionEntities = additionalQuestions,
             SkillsAndStrengthStatus = (short)SectionStatus.Incomplete,
             InterviewAdjustmentsStatus = (short)SectionStatus.Incomplete,
             JobsStatus = (short)SectionStatus.Incomplete,
             QualificationsStatus = (short)SectionStatus.Incomplete,
             TrainingCoursesStatus = (short)SectionStatus.Incomplete,
-            AdditionalQuestion1Status = legacyApplication.HasAdditionalQuestion1
-                ? (short)SectionStatus.NotStarted
+            AdditionalQuestion1Status = additionalQuestions.Count > 0
+                ? (short)SectionStatus.Incomplete
                 : (short)SectionStatus.NotRequired,
-            AdditionalQuestion2Status = legacyApplication.HasAdditionalQuestion2
-                ? (short)SectionStatus.NotStarted
+            AdditionalQuestion2Status = additionalQuestions.Count > 1
+                ? (short)SectionStatus.Incomplete
                 : (short)SectionStatus.NotRequired,
             TrainingCourseEntities = legacyApplication.TrainingCourses.Select(x => new TrainingCourseEntity
             {
