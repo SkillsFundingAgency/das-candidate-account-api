@@ -29,6 +29,7 @@ public class AddLegacyApplicationCommandHandler(IApplicationRepository applicati
             CandidateId = legacyApplication.CandidateId,
             VacancyReference = legacyApplication.VacancyReference,
             Status = (short)legacyApplication.Status,
+            MigrationDate = DateTime.UtcNow,
             AboutYouEntity = new AboutYouEntity
             {
                 Strengths = legacyApplication.SkillsAndStrengths,
