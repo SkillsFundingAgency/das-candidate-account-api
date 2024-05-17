@@ -1,5 +1,6 @@
 ﻿using AutoFixture.NUnit3;
 using FluentAssertions;
+using FluentAssertions.Execution;
 using Moq;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.AddLegacyApplication;
 using SFA.DAS.CandidateAccount.Data.Application;
@@ -47,6 +48,28 @@ namespace SFA.DAS.CandidateAccount.Application.UnitTests.Application
 
             // Assert
             result.Id.Should().Be(_applicationId);
+        }
+
+        [Test, MoqAutoData]
+        public async Task Then_The_Application_Details_Are_Migrated_Correctly(
+            AddLegacyApplicationCommand command,
+            [Frozen] Mock<IApplicationRepository> applicationRepository,
+            [Frozen] Mock<IQualificationReferenceRepository> qualificationReferenceRepository,
+            AddLegacyApplicationCommandHandler handler)
+        {
+            // Arrange
+            SetupTestData(command, qualificationReferenceRepository, applicationRepository);
+
+            // Act
+            var result = await handler.Handle(command, CancellationToken.None);
+
+            // Assert
+            using var scope = new AssertionScope();
+            _capturedApplicationEntity.Status.Should().Be((short)command.LegacyApplication.Status);
+            _capturedApplicationEntity.MigrationDate.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(1));
+            _capturedApplicationEntity.AboutYouEntity.Should().NotBeNull();
+            _capturedApplicationEntity.AboutYouEntity.Strengths.Should().Be(command.LegacyApplication.SkillsAndStrengths);
+            _capturedApplicationEntity.AboutYouEntity.Support.Should().Be(command.LegacyApplication.Support);
         }
 
         [Test, MoqAutoData]
