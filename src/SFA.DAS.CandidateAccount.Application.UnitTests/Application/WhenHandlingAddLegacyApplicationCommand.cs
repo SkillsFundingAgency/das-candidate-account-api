@@ -1,5 +1,4 @@
-﻿using AutoFixture;
-using AutoFixture.NUnit3;
+﻿using AutoFixture.NUnit3;
 using FluentAssertions;
 using Moq;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.AddLegacyApplication;
@@ -11,8 +10,28 @@ using SFA.DAS.Testing.AutoFixture;
 namespace SFA.DAS.CandidateAccount.Application.UnitTests.Application
 {
     [TestFixture]
+    [NonParallelizable]
     public class WhenHandlingAddLegacyApplicationCommand
     {
+        private ApplicationEntity _capturedApplicationEntity = null!;
+        private List<QualificationReferenceEntity> _qualificationReferenceEntities = null!;
+        private Guid _applicationId = Guid.NewGuid();
+
+        [SetUp]
+        public void Setup()
+        {
+            _applicationId = Guid.NewGuid();
+
+            _capturedApplicationEntity = new ApplicationEntity();
+
+            _qualificationReferenceEntities =
+            [
+                new() { Id = Guid.NewGuid(), Name = "GCSE" },
+                new() { Id = Guid.NewGuid(), Name = "BTEC" },
+                new() { Id = Guid.NewGuid(), Name = "OTHER" }
+            ];
+        }
+
         [Test, MoqAutoData]
         public async Task Then_The_Application_Is_Created_And_The_Application_Id_Is_Returned(
             AddLegacyApplicationCommand command,
@@ -20,46 +39,123 @@ namespace SFA.DAS.CandidateAccount.Application.UnitTests.Application
             [Frozen] Mock<IQualificationReferenceRepository> qualificationReferenceRepository,
             AddLegacyApplicationCommandHandler handler)
         {
-            var applicationEntity = new ApplicationEntity
-            {
-                Id = Guid.NewGuid()
-            };
-            
-            var qualificationReferenceEntities = new List<QualificationReferenceEntity>
-            {
-                new()
-                {
-                    Id = Guid.NewGuid(),
-                    Name = "GCSE"
-                },
-                new()
-                {
-                    Id = Guid.NewGuid(),
-                    Name = "BTEC"
-                },
-                new()
-                {
-                    Id = Guid.NewGuid(),
-                    Name = "Other"
-                }
-            };
+            // Arrange
+            SetupTestData(command, qualificationReferenceRepository, applicationRepository);
 
+            // Act
+            var result = await handler.Handle(command, CancellationToken.None);
+
+            // Assert
+            result.Id.Should().Be(_applicationId);
+        }
+
+        [Test, MoqAutoData]
+        public async Task Then_The_Training_Courses_Are_Migrated_Correctly(
+            AddLegacyApplicationCommand command,
+            [Frozen] Mock<IApplicationRepository> applicationRepository,
+            [Frozen] Mock<IQualificationReferenceRepository> qualificationReferenceRepository,
+            AddLegacyApplicationCommandHandler handler)
+        {
+            // Arrange
+            SetupTestData(command, qualificationReferenceRepository, applicationRepository);
+
+            // Act
+            await handler.Handle(command, CancellationToken.None);
+
+            // Assert
+            _capturedApplicationEntity.TrainingCourseEntities.Count.Should().Be(command.LegacyApplication.TrainingCourses.Count);
+
+            var expectedTrainingCourses = command.LegacyApplication.TrainingCourses.Select(x => new TrainingCourseEntity
+            {
+                Title = x.Title,
+                ToYear = x.ToDate.Year
+            }).ToList();
+
+            _capturedApplicationEntity.TrainingCourseEntities.Should().BeEquivalentTo(expectedTrainingCourses);
+        }
+
+        [Test, MoqAutoData]
+        public async Task Then_The_Job_History_Is_Migrated_Correctly(
+            AddLegacyApplicationCommand command,
+            [Frozen] Mock<IApplicationRepository> applicationRepository,
+            [Frozen] Mock<IQualificationReferenceRepository> qualificationReferenceRepository,
+            AddLegacyApplicationCommandHandler handler)
+        {
+            // Arrange
+            SetupTestData(command, qualificationReferenceRepository, applicationRepository);
+
+            // Act
+            await handler.Handle(command, CancellationToken.None);
+
+            // Assert
+            _capturedApplicationEntity.WorkHistoryEntities.Count.Should().Be(command.LegacyApplication.WorkExperience.Count);
+
+            var expectedWorkHistory = command.LegacyApplication.WorkExperience.Select(x => new WorkHistoryEntity
+            {
+                WorkHistoryType = (byte)WorkHistoryType.Job,
+                Employer = x.Employer,
+                JobTitle = x.JobTitle,
+                Description = x.Description,
+                StartDate = x.FromDate == DateTime.MinValue ? DateTime.UtcNow : x.FromDate,
+                EndDate = x.ToDate == DateTime.MinValue ? null : x.ToDate,
+            }).ToList();
+
+            _capturedApplicationEntity.WorkHistoryEntities.Should().BeEquivalentTo(expectedWorkHistory);
+        }
+
+        [Test, MoqAutoData]
+        public async Task Then_The_Qualifications_Are_Migrated_Correctly(
+            AddLegacyApplicationCommand command,
+            [Frozen] Mock<IApplicationRepository> applicationRepository,
+            [Frozen] Mock<IQualificationReferenceRepository> qualificationReferenceRepository,
+            AddLegacyApplicationCommandHandler handler)
+        {
+            // Arrange
+            SetupTestData(command, qualificationReferenceRepository, applicationRepository);
+
+            // Act
+            await handler.Handle(command, CancellationToken.None);
+
+            // Assert
+            _capturedApplicationEntity.QualificationEntities.Count.Should().Be(command.LegacyApplication.Qualifications.Count);
+
+            var expectedQualifications = command.LegacyApplication.Qualifications.Select(x => new QualificationEntity
+            {
+                QualificationReferenceId = _qualificationReferenceEntities.Single(q => q.Name == x.QualificationType).Id,
+                Subject = x.QualificationType == "OTHER" ? x.QualificationType : x.Subject,
+                IsPredicted = x.QualificationType != "OTHER" && x.IsPredicted,
+                AdditionalInformation = x.QualificationType == "OTHER" ? x.Subject : string.Empty,
+                Grade = x.Grade
+            }).ToList();
+
+            _capturedApplicationEntity.QualificationEntities.Should().BeEquivalentTo(expectedQualifications);
+        }
+
+        private void SetupTestData(
+            AddLegacyApplicationCommand command,
+            Mock<IQualificationReferenceRepository> qualificationReferenceRepository,
+            Mock<IApplicationRepository> applicationRepository)
+        {
             for (var i = 0; i < command.LegacyApplication.Qualifications.Count; i++)
             {
                 var qualification = command.LegacyApplication.Qualifications[i];
-                qualification.QualificationType = qualificationReferenceEntities.ToArray()[i].Id.ToString();
+                qualification.QualificationType = _qualificationReferenceEntities[i].Name.ToString();
             }
 
             qualificationReferenceRepository.Setup(x => x.GetAll())
-                .ReturnsAsync(qualificationReferenceEntities);
+                .ReturnsAsync(_qualificationReferenceEntities);
 
-            applicationRepository.Setup(x =>
-                    x.Upsert(It.IsAny<ApplicationEntity>()))
-                .ReturnsAsync(new Tuple<ApplicationEntity, bool>(applicationEntity, true));
+            var returnedApplication = new ApplicationEntity
+            {
+                Id = _applicationId
+            };
 
-            var result = await handler.Handle(command, CancellationToken.None);
-
-            result.Id.Should().Be(applicationEntity.Id);
+            applicationRepository.Setup(x => x.Upsert(It.IsAny<ApplicationEntity>()))
+                .Callback<ApplicationEntity>(entity =>
+                {
+                    _capturedApplicationEntity = entity;
+                })
+                .ReturnsAsync(new Tuple<ApplicationEntity, bool>(returnedApplication, true));
         }
     }
 }

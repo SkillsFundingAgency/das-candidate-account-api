@@ -30,7 +30,7 @@ public class AddLegacyApplicationCommandHandler(IApplicationRepository applicati
             additionalQuestions.Add(new AdditionalQuestionEntity
             {
                 QuestionText = legacyApplication.AdditionalQuestion1,
-                Answer = legacyApplication.AdditionalQuestion1Answer
+                Answer = legacyApplication.AdditionalQuestion1Answer ?? string.Empty
             });
         }
         if (legacyApplication.AdditionalQuestion2 != null)
@@ -38,7 +38,7 @@ public class AddLegacyApplicationCommandHandler(IApplicationRepository applicati
             additionalQuestions.Add(new AdditionalQuestionEntity
             {
                 QuestionText = legacyApplication.AdditionalQuestion2,
-                Answer = legacyApplication.AdditionalQuestion2Answer
+                Answer = legacyApplication.AdditionalQuestion2Answer ?? string.Empty
             });
         }
 
@@ -63,6 +63,9 @@ public class AddLegacyApplicationCommandHandler(IApplicationRepository applicati
             AdditionalQuestionEntities = additionalQuestions,
             SkillsAndStrengthStatus = (short)SectionStatus.Incomplete,
             InterviewAdjustmentsStatus = (short)SectionStatus.Incomplete,
+            DisabilityConfidenceStatus = legacyApplication.IsDisabilityConfident
+                ? (short) SectionStatus.NotStarted
+                : (short) SectionStatus.NotRequired,
             JobsStatus = (short)SectionStatus.Incomplete,
             QualificationsStatus = (short)SectionStatus.Incomplete,
             TrainingCoursesStatus = (short)SectionStatus.Incomplete,

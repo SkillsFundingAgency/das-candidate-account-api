@@ -15,6 +15,7 @@
         public string? AdditionalQuestion2 { get; set; }
         public string? AdditionalQuestion1Answer { get; set; }
         public string? AdditionalQuestion2Answer { get; set; }
+        public bool IsDisabilityConfident { get; set; }
         public List<Qualification> Qualifications { get; set; } = [];
         public List<TrainingCourse> TrainingCourses { get; set; } = [];
         public List<WorkExperienceItem> WorkExperience { get; set; } = [];
