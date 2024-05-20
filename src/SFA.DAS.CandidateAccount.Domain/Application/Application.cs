@@ -129,6 +129,7 @@ public class ApplicationDetail : Application
             WorkHistory = source.WorkHistoryEntities.Select(c=>(WorkHistory)c).ToList(),
             TrainingCourses = source.TrainingCourseEntities.Select(c=>(TrainingCourse)c).ToList(),
             SubmittedDate = source.SubmittedDate,
+            WithdrawnDate = source.WithdrawnDate,
             CreatedDate = source.CreatedDate,
             ResponseNotes = source.ResponseNotes,
             ResponseDate = source.ResponseDate,
@@ -143,6 +144,7 @@ public class Application : ApplicationBase
     public Guid CandidateId { get; set; }
     public DateTime CreatedDate { get; set; }
     public DateTime? SubmittedDate { get; set; }
+    public DateTime? WithdrawnDate { get; set; }
     public string? DisabilityStatus { get; set; }
     public required string VacancyReference { get; set; }
     public List<AdditionalQuestion>? AdditionalQuestions { get; set; } = [];
@@ -157,6 +159,7 @@ public class Application : ApplicationBase
             CandidateId = source.CandidateId,
             CreatedDate = source.CreatedDate,
             SubmittedDate = source.SubmittedDate,
+            WithdrawnDate = source.WithdrawnDate,
             DisabilityStatus = source.DisabilityStatus,
             VacancyReference = source.VacancyReference,
             Status = ParseValue<ApplicationStatus>(source.Status),
