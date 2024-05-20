@@ -51,6 +51,9 @@ public class PatchApplicationCommandHandler (IApplicationRepository applicationR
             case ApplicationStatus.Submitted:
                 application.SubmittedDate = DateTime.UtcNow;
                 break;
+            case ApplicationStatus.Withdrawn:
+                application.WithdrawnDate = DateTime.UtcNow;
+                break;
         }
 
         if(application.ApplyUnderDisabilityConfidentScheme != patchedDoc.ApplyUnderDisabilityConfidentScheme)
