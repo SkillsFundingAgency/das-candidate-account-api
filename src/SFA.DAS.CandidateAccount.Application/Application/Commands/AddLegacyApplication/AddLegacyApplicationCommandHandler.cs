@@ -54,6 +54,8 @@ public class AddLegacyApplicationCommandHandler(IApplicationRepository applicati
                 ApplicationStatus.UnSuccessful => legacyApplication.UnsuccessfulDateTime,
                 _ => null
             },
+            ResponseNotes = legacyApplication.Status == ApplicationStatus.UnSuccessful ?
+                legacyApplication.UnsuccessfulReason : string.Empty,
             MigrationDate = DateTime.UtcNow,
             AboutYouEntity = new AboutYouEntity
             {
