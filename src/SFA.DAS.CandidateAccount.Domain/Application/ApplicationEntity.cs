@@ -12,6 +12,7 @@ namespace SFA.DAS.CandidateAccount.Domain.Application
         public DateTime CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
         public DateTime? SubmittedDate { get; set; }
+        public DateTime? WithdrawnDate { get; set; }
         public DateTime? ResponseDate { get; set; }
         public string? ResponseNotes { get; set; }
         public virtual CandidateEntity CandidateEntity { get; set; } = null!;
@@ -29,11 +30,11 @@ namespace SFA.DAS.CandidateAccount.Domain.Application
         public bool? ApplyUnderDisabilityConfidentScheme { get; set; }
         public Guid? PreviousAnswersSourceId { get; set; }
         public DateTime? MigrationDate { get; set; }
-
         public virtual ICollection<WorkHistoryEntity> WorkHistoryEntities { get; set; } = null!;
         public virtual ICollection<TrainingCourseEntity> TrainingCourseEntities { get; set; } = null!;
         public virtual ICollection<QualificationEntity> QualificationEntities { get; set; } = null!;
         public virtual ICollection<AdditionalQuestionEntity>? AdditionalQuestionEntities { get; set; } = null!;
         public virtual AboutYouEntity? AboutYouEntity { get; set; } = null;
+        
     }
 }
