@@ -41,6 +41,26 @@ public class WhenCallingGet
     }
 
     [Test, MoqAutoData]
+    public async Task Then_If_NotFound_Returned_From_Mediator_Then_NotFound_Is_Returned(
+        Guid applicationId,
+        Guid candidateId,
+        Guid id,
+        [Frozen] Mock<IMediator> mediator,
+        [Greedy] TrainingCoursesController controller)
+    {
+        mediator.Setup(x => x.Send(It.IsAny<GetTrainingCourseItemQuery>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync((GetTrainingCourseItemQueryResult)null!);
+
+        var actual = await controller.Get(candidateId, applicationId, id) as StatusCodeResult;
+
+        using (new AssertionScope())
+        {
+            actual.Should().NotBeNull();
+            actual?.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
+        }
+    }
+
+    [Test, MoqAutoData]
     public async Task Then_If_Exception_Returned_From_Mediator_Then_InternalServerError_Is_Returned(
         Guid applicationId,
         Guid candidateId,

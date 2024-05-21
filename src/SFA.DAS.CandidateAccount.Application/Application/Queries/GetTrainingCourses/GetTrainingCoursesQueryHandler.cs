@@ -2,7 +2,7 @@
 using SFA.DAS.CandidateAccount.Data.TrainingCourse;
 
 namespace SFA.DAS.CandidateAccount.Application.Application.Queries.GetTrainingCourses;
-public class GetTrainingCoursesQueryHandler(ITrainingCourseRespository TrainingCourseRespository) : IRequestHandler<GetTrainingCoursesQuery, GetTrainingCoursesQueryResult>
+public class GetTrainingCoursesQueryHandler(ITrainingCourseRepository TrainingCourseRespository) : IRequestHandler<GetTrainingCoursesQuery, GetTrainingCoursesQueryResult>
 {
     public async Task<GetTrainingCoursesQueryResult> Handle(GetTrainingCoursesQuery request, CancellationToken cancellationToken)
     {
