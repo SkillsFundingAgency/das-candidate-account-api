@@ -12,7 +12,7 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers;
 
 [ApiVersion("1.0")]
 [ApiController]
-[Route("candidates/{candidateId}/applications/{applicationId}/trainingcourses")]
+[Route("api/candidates/{candidateId}/applications/{applicationId}/trainingcourses")]
 public class TrainingCoursesController(IMediator mediator, ILogger<WorkHistoryController> logger) : Controller
 {
     [HttpGet]

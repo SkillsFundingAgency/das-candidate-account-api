@@ -11,7 +11,7 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers;
 
 [ApiVersion("1.0")]
 [ApiController]
-[Route("candidates/{candidateId}/applications/{applicationId}/about-you")]
+[Route("api/candidates/{candidateId}/applications/{applicationId}/about-you")]
 public class AboutYouController(IMediator mediator, ILogger<AboutYouController> logger) : Controller
 {
     [HttpPut]
