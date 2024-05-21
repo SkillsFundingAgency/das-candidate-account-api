@@ -71,8 +71,11 @@ namespace SFA.DAS.CandidateAccount.Data.TrainingCourse
             .Where(w => w.Id == id && w.ApplicationId == applicationId && w.ApplicationEntity.CandidateId == candidateId)
             .SingleOrDefaultAsync();
 
-            if (trainingCourse != null) dataContext.TrainingCourseEntities.Remove(trainingCourse);
-            await dataContext.SaveChangesAsync();
+            if (trainingCourse != null)
+            {
+                dataContext.TrainingCourseEntities.Remove(trainingCourse);
+                await dataContext.SaveChangesAsync();
+            }
         }
     }
 }
