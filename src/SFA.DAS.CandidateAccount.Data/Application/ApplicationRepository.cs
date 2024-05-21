@@ -13,7 +13,7 @@ public interface IApplicationRepository
     Task<ApplicationEntity> Update(ApplicationEntity application);
     Task<IEnumerable<ApplicationEntity>> GetByCandidateId(Guid candidateId, short? statusId);
     Task<ApplicationEntity?> GetByVacancyReference(Guid candidateId, string vacancyReference);
-    Task<ApplicationEntity> Clone(Guid applicationId, string vacancyReference, bool requiresDisabilityConfidence);
+    Task<ApplicationEntity> Clone(Guid applicationId, string vacancyReference, bool requiresDisabilityConfidence, SectionStatus? additionalQuestion1Status, SectionStatus? additionalQuestion2Status);
 }
 
 public class ApplicationRepository(ICandidateAccountDataContext dataContext) : IApplicationRepository
@@ -102,7 +102,7 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
         return application ?? null;
     }
 	
-	public async Task<ApplicationEntity> Clone(Guid applicationId, string vacancyReference, bool requiresDisabilityConfidence)
+	public async Task<ApplicationEntity> Clone(Guid applicationId, string vacancyReference, bool requiresDisabilityConfidence, SectionStatus? additionalQuestion1Status, SectionStatus? additionalQuestion2Status)
     {
         var original = await dataContext.ApplicationEntities
             .Include(x => x.TrainingCourseEntities)
@@ -126,16 +126,16 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
         original.QualificationEntities.ToList().ForEach(x => x.Id = Guid.NewGuid());
         original.WorkHistoryEntities.ToList().ForEach(x => x.Id = Guid.NewGuid());
         if (original.AboutYouEntity != null) { original.AboutYouEntity.Id = Guid.NewGuid(); }
-        
         original.JobsStatus = (short)SectionStatus.PreviousAnswer;
-        original.AdditionalQuestion1Status = (short)SectionStatus.PreviousAnswer;
-        original.AdditionalQuestion2Status = (short)SectionStatus.PreviousAnswer;
         original.InterestsStatus = (short)SectionStatus.PreviousAnswer;
         original.QualificationsStatus = (short)SectionStatus.PreviousAnswer;
         original.WorkExperienceStatus = (short)SectionStatus.PreviousAnswer;
         original.SkillsAndStrengthStatus = (short)SectionStatus.PreviousAnswer;
         original.TrainingCoursesStatus = (short)SectionStatus.PreviousAnswer;
         original.InterviewAdjustmentsStatus = (short)SectionStatus.PreviousAnswer;
+        original.AdditionalQuestion1Status = (short)additionalQuestion1Status;
+        original.AdditionalQuestion2Status = (short)additionalQuestion2Status;
+
 
         if (requiresDisabilityConfidence)
         {
