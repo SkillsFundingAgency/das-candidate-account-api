@@ -58,23 +58,24 @@ public class UpsertApplicationCommandHandler(
 
     private async Task UpsertAdditionalQuestions(UpsertApplicationCommand command, CancellationToken cancellationToken, ApplicationEntity application)
     {
+        var hasAdditionalQuestions =
+            await additionalQuestionRepository.GetAll(application.Id, command.CandidateId, cancellationToken);
+
+        if (hasAdditionalQuestions.Count > 0)
+        {
+            return;
+        }
+
         foreach (var additionalQuestion in command.AdditionalQuestions)
         {
-            if (additionalQuestion is null) break;
-            var question =
-                await additionalQuestionRepository.Get(application.Id, command.CandidateId, additionalQuestion, cancellationToken);
-
-            if (question is null)
+            await additionalQuestionRepository.UpsertAdditionalQuestion(new AdditionalQuestion
             {
-                await additionalQuestionRepository.UpsertAdditionalQuestion(new AdditionalQuestion
-                {
-                    Id = Guid.NewGuid(),
-                    ApplicationId = application.Id,
-                    CandidateId = command.CandidateId,
-                    QuestionText = additionalQuestion,
-                    Answer = string.Empty,
-                }, command.CandidateId);
-            }
+                Id = Guid.NewGuid(),
+                ApplicationId = application.Id,
+                CandidateId = command.CandidateId,
+                QuestionText = additionalQuestion,
+                Answer = string.Empty,
+            }, command.CandidateId);
         }
     }
 }

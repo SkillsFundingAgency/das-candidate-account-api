@@ -6,7 +6,6 @@ namespace SFA.DAS.CandidateAccount.Data.AdditionalQuestion;
 public interface IAdditionalQuestionRepository
 {
     Task<AdditionalQuestionEntity?> Get(Guid applicationId, Guid candidateId, Guid id, CancellationToken cancellationToken);
-    Task<AdditionalQuestionEntity?> Get(Guid applicationId, Guid candidateId, string questionText, CancellationToken cancellationToken);
     Task<List<AdditionalQuestionEntity>> GetAll(Guid applicationId, Guid candidateId, CancellationToken cancellationToken);
     Task<Tuple<AdditionalQuestionEntity, bool>> UpsertAdditionalQuestion(Domain.Application.AdditionalQuestion additionalQuestion, Guid candidateId);
 }
@@ -18,18 +17,6 @@ public class AdditionalQuestionRepository(ICandidateAccountDataContext dataConte
         var query = from question in dataContext.AdditionalQuestionEntities
                 .Where(fil => fil.ApplicationId == applicationId)
                 .Where(fil => fil.Id == id)
-            join application in dataContext.ApplicationEntities.Where(fil => fil.CandidateId == candidateId && fil.Id == applicationId)
-                on question.ApplicationId equals application.Id
-            select question;
-
-        return await query.SingleOrDefaultAsync(cancellationToken);
-    }
-
-    public async Task<AdditionalQuestionEntity?> Get(Guid applicationId, Guid candidateId, string questionText, CancellationToken cancellationToken)
-    {
-        var query = from question in dataContext.AdditionalQuestionEntities
-                .Where(fil => fil.ApplicationId == applicationId)
-                .Where(fil => fil.QuestionText == questionText)
             join application in dataContext.ApplicationEntities.Where(fil => fil.CandidateId == candidateId && fil.Id == applicationId)
                 on question.ApplicationId equals application.Id
             select question;
