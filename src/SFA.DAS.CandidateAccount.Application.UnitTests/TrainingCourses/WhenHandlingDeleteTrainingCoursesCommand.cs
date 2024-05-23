@@ -14,7 +14,7 @@ namespace SFA.DAS.CandidateAccount.Application.UnitTests.TrainingCourses
          Guid candidateId,
          Guid applicationId,
          Guid id,
-         [Frozen] Mock<ITrainingCourseRespository> mockRepository,
+         [Frozen] Mock<ITrainingCourseRepository> mockRepository,
          DeleteTrainingCourseCommandHandler handler)
         {
             // Arrange

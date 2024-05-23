@@ -52,6 +52,11 @@ public class TrainingCoursesController(IMediator mediator, ILogger<WorkHistoryCo
                 ApplicationId = applicationId,
                 Id = id
             });
+
+            if (result is null)
+            {
+                return NotFound();
+            }
             return Ok((GetTrainingCourseItemApiResponse)result);
         }
         catch (Exception e)
