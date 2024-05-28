@@ -36,5 +36,7 @@ public record CandidateEntity
     
     public virtual AddressEntity? Address { get; set; }
     
+    public virtual ICollection<CandidatePreferencesEntity> CandidatePreferences { get; set; }
+    
     public virtual ICollection<ApplicationEntity>? Applications { get; set; } = null!;
 }
