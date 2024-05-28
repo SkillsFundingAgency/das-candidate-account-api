@@ -10,6 +10,7 @@ public interface IApplicationRepository
     Task<ApplicationEntity> Update(ApplicationEntity application);
     Task<IEnumerable<ApplicationEntity>> GetByCandidateId(Guid candidateId, short? statusId);
     Task<ApplicationEntity?> GetByVacancyReference(Guid candidateId, string vacancyReference);
+    Task<IEnumerable<ApplicationEntity>> GetApplicationsByVacancyReference(string vacancyReference, short? statusId = null, Guid? preferenceId = null, bool canEmailOnly = false);
 }
 
 public class ApplicationRepository(ICandidateAccountDataContext dataContext) : IApplicationRepository
@@ -87,5 +88,13 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
             c.CandidateId == candidateId);
 
         return application ?? null;
+    }
+
+    public async Task<IEnumerable<ApplicationEntity>> GetApplicationsByVacancyReference(string vacancyReference, short? statusId = null, Guid? preferenceId = null, bool canEmailOnly = false)
+    {
+        return await dataContext.ApplicationEntities.Include(c => c.CandidateEntity)
+            .ThenInclude(c => c.CandidatePreferences
+                .Where(x => (preferenceId == null || x.PreferenceId == preferenceId) && (!canEmailOnly || x.ContactMethod == "email")))
+            .Where(c => c.VacancyReference == vacancyReference && (statusId== null || c.Status == statusId)).ToListAsync();
     }
 }
