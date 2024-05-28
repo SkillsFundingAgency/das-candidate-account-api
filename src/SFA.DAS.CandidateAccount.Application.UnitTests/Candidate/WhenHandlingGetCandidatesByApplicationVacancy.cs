@@ -8,7 +8,7 @@ using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.CandidateAccount.Application.UnitTests.Candidate;
 
-public class WhenHandlingetCandidatesByApplicationVacancy
+public class WhenHandlingGetCandidatesByApplicationVacancy
 {
     [Test, RecursiveMoqAutoData]
     public async Task Then_The_Query_Is_Handled_And_Applications_Returned(
