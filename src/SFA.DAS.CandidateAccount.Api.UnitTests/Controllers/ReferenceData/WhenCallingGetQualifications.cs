@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using SFA.DAS.CandidateAccount.Api.Controllers;
 using SFA.DAS.CandidateAccount.Application.ReferenceData.Queries;
+using SFA.DAS.CandidateAccount.Application.ReferenceData.Queries.GetAvailableQualifications;
 using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.ReferenceData;
