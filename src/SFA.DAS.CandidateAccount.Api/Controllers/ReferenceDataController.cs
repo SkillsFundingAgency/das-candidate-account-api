@@ -2,6 +2,8 @@ using System.Net;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.CandidateAccount.Application.ReferenceData.Queries;
+using SFA.DAS.CandidateAccount.Application.ReferenceData.Queries.GetAvailablePreferences;
+using SFA.DAS.CandidateAccount.Application.ReferenceData.Queries.GetAvailableQualifications;
 
 namespace SFA.DAS.CandidateAccount.Api.Controllers;
 
@@ -22,6 +24,22 @@ public class ReferenceDataController(IMediator mediator, ILogger<ReferenceDataCo
         catch (Exception e)
         {
             logger.LogError(e, "GetQualifications : An error occurred");
+            return new StatusCodeResult((int) HttpStatusCode.InternalServerError);
+        }
+    }
+
+    [HttpGet]
+    [Route("preferences")]
+    public async Task<IActionResult> GetPreferences()
+    {
+        try
+        {
+            var result = await mediator.Send(new GetAvailablePreferencesQuery());
+            return Ok(new {Preferences = result.Preferences});
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e, "GetPreferences : An error occurred");
             return new StatusCodeResult((int) HttpStatusCode.InternalServerError);
         }
     }
