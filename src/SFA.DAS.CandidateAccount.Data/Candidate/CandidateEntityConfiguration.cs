@@ -23,6 +23,7 @@ public class CandidateEntityConfiguration : IEntityTypeConfiguration<CandidateEn
         builder.Property(x => x.TermsOfUseAcceptedOn).HasColumnName("TermsOfUseAcceptedOn").HasColumnType("DateTime").IsRequired(false);
         builder.Property(x => x.GovUkIdentifier).HasColumnName("GovUkIdentifier").HasColumnType("varchar").HasMaxLength(150).IsRequired();
         builder.Property(x => x.Status).HasColumnName("Status").HasColumnType("tinyint").IsRequired().HasDefaultValue(0);
+        builder.Property(x => x.MigratedEmail).HasColumnName("MigratedEmail").HasColumnType("varchar").HasMaxLength(255).IsRequired(false);
 
         builder.HasIndex(x => x.GovUkIdentifier).IsUnique();
         builder.HasIndex(x => x.Email).IsUnique();
