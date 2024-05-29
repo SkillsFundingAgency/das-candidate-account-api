@@ -5,6 +5,7 @@ public class Preference
     public Guid PreferenceId { get; set; }
     public string PreferenceMeaning { get; set; }
     public string PreferenceHint { get; set; }
+    public string PreferenceType { get; set; }
     
     public static implicit operator Preference(PreferenceEntity source)
     {
@@ -12,7 +13,8 @@ public class Preference
         {
             PreferenceHint = source.PreferenceHint,
             PreferenceId = source.PreferenceId,
-            PreferenceMeaning = source.PreferenceMeaning
+            PreferenceMeaning = source.PreferenceMeaning,
+            PreferenceType = source.PreferenceType
         };
     }
 }
