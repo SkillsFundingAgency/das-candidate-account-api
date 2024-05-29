@@ -11,7 +11,7 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers;
 
 [ApiVersion("1.0")]
 [ApiController]
-[Route("api/{controller}/")]
+[Route("api/[controller]/")]
 public class VacanciesController(IMediator mediator, ILogger<VacanciesController> logger) : ControllerBase
 {
     [HttpGet]

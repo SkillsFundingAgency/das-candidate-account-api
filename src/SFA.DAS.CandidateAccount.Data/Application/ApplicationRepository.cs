@@ -92,9 +92,12 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
 
     public async Task<IEnumerable<ApplicationEntity>> GetApplicationsByVacancyReference(string vacancyReference, short? statusId = null, Guid? preferenceId = null, bool canEmailOnly = false)
     {
-        return await dataContext.ApplicationEntities.Include(c => c.CandidateEntity)
-            .ThenInclude(c => c.CandidatePreferences
-                .Where(x => (preferenceId == null || x.PreferenceId == preferenceId) && (!canEmailOnly || x.ContactMethod == "email")))
-            .Where(c => c.VacancyReference == vacancyReference && (statusId== null || c.Status == statusId)).ToListAsync();
+        return await dataContext.ApplicationEntities
+            .Include(c => c.CandidateEntity)
+                .ThenInclude(c => c.CandidatePreferences)
+            .Include(c=>c.CandidateEntity)
+                .ThenInclude(c=>c.Address)
+            .Where(c => c.VacancyReference == vacancyReference && (statusId== null || c.Status == statusId) && c.CandidateEntity.CandidatePreferences.Count(x=>(preferenceId == null || x.PreferenceId == preferenceId) 
+                && (!canEmailOnly || (x.ContactMethod == "email" && x.Status!.Value))) >= 1).ToListAsync();
     }
 }
