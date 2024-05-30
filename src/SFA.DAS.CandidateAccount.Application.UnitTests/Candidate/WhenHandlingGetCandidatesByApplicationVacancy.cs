@@ -23,8 +23,7 @@ public class WhenHandlingGetCandidatesByApplicationVacancy
 
         var actual = await handler.Handle(query, CancellationToken.None);
         
-        var expectedCandidates = applicationEntities.Select(applicationEntity => applicationEntity.CandidateEntity).ToList();
-        actual.Candidates.Should().BeEquivalentTo(expectedCandidates);
+        actual.Candidates.Should().BeEquivalentTo(applicationEntities);
     }
 
     [Test, RecursiveMoqAutoData]

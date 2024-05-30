@@ -38,12 +38,16 @@ public class WhenCallingGetCandidateApplications
         actual.Should().NotBeNull();
         var actualModel = actual!.Value as GetCandidatesApiResponse;
         actualModel.Should().NotBeNull();
-        actualModel!.Candidates.Should().BeEquivalentTo(queryResult.Candidates, options=> options
-            .Excluding(c=>c.Address)
-            .Excluding(c=>c.CandidatePreferences)
-            .Excluding(c=>c.Applications)
-            .Excluding(c=>c.Status)
-        );
+        actualModel.Candidates.Select(c => c.Candidate).ToList().Should()
+            .BeEquivalentTo(queryResult.Candidates.Select(x => x.CandidateEntity).ToList(), options => 
+                options
+                    .Excluding(c=>c.Status)
+                    .Excluding(c=>c.Address)
+                    .Excluding(c=>c.CandidatePreferences)
+                    .Excluding(c=>c.Applications)
+                );
+        actualModel.Candidates.Select(c => c.ApplicationId).ToList().Should()
+            .BeEquivalentTo(queryResult.Candidates.Select(x => x.Id).ToList());
     }
 
     [Test, RecursiveMoqAutoData]

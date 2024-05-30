@@ -4,5 +4,11 @@ namespace SFA.DAS.CandidateAccount.Api.ApiResponses;
 
 public class GetCandidatesApiResponse
 {
-    public List<Candidate> Candidates { get; set; }
+    public List<CandidateApplication> Candidates { get; set; }
+}
+
+public class CandidateApplication
+{
+    public Guid ApplicationId { get; set; }
+    public Candidate Candidate { get; set; }
 }

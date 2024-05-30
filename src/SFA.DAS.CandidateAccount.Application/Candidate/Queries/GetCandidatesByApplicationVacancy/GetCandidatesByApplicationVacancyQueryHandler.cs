@@ -9,10 +9,10 @@ public class GetCandidatesByApplicationVacancyQueryHandler (IApplicationReposito
     {
         var applications = await applicationRepository.GetApplicationsByVacancyReference(request.VacancyReference,
             request.StatusId, request.PreferenceId, request.CanEmailOnly);
-
+        
         return new GetCandidatesByApplicationVacancyQueryResult
         {
-            Candidates = applications.Select(x => x.CandidateEntity).ToList()
+            Candidates = applications.ToList()
         };
     }
 }

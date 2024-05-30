@@ -29,7 +29,11 @@ public class VacanciesController(IMediator mediator, ILogger<VacanciesController
             });
             return Ok(new GetCandidatesApiResponse
             {
-                Candidates = result.Candidates.Select(c=>(Candidate)c!).ToList()
+                Candidates = result.Candidates.Select(c=>new CandidateApplication
+                {
+                    Candidate = c.CandidateEntity,
+                    ApplicationId = c.Id
+                }).ToList()
             });
         }
         catch (Exception e)
