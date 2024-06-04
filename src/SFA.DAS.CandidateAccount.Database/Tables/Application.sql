@@ -21,9 +21,11 @@ CREATE TABLE dbo.[Application] (
     [InterviewAdjustmentsStatus]            tinyint             NOT NULL default(0),
     [DisabilityConfidenceStatus]            tinyint             NOT NULL default(0),
     [WhatIsYourInterest]                    nvarchar(max)       NULL,
-    [ApplyUnderDisabilityConfidentScheme]   bit             NULL    
+    [ApplyUnderDisabilityConfidentScheme]   bit                 NULL,
+    [PreviousAnswersSourceId]               uniqueidentifier    NULL
     CONSTRAINT [PK_Application] PRIMARY KEY (Id),
     INDEX [IX_Application_CandidateIdVacancyReference] NONCLUSTERED(CandidateId, VacancyReference),
     INDEX [IX_Application_CandidateId] NONCLUSTERED(CandidateId),
-    CONSTRAINT [FK_Application_CandidateId] FOREIGN KEY (CandidateId) REFERENCES [Candidate](Id)
+    CONSTRAINT [FK_Application_CandidateId] FOREIGN KEY (CandidateId) REFERENCES [Candidate](Id),
+    CONSTRAINT [FK_Application_PreviousAnswersSourceId] FOREIGN KEY (PreviousAnswersSourceId) REFERENCES [Application](Id)
 )

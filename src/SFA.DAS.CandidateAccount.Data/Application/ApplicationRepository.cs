@@ -1,15 +1,19 @@
+using System.Collections.Specialized;
 using Microsoft.EntityFrameworkCore;
 using SFA.DAS.CandidateAccount.Domain.Application;
+using Exception = System.Exception;
 
 namespace SFA.DAS.CandidateAccount.Data.Application;
 
 public interface IApplicationRepository
 {
+    Task<bool> Exists(Guid candidateId, string vacancyReference);
     Task<Tuple<ApplicationEntity,bool>> Upsert(ApplicationEntity applicationEntity);
     Task<ApplicationEntity?> GetById(Guid applicationId, bool includeDetail = false);
     Task<ApplicationEntity> Update(ApplicationEntity application);
     Task<IEnumerable<ApplicationEntity>> GetByCandidateId(Guid candidateId, short? statusId);
     Task<ApplicationEntity?> GetByVacancyReference(Guid candidateId, string vacancyReference);
+    Task<ApplicationEntity> Clone(Guid applicationId, string vacancyReference, bool requiresDisabilityConfidence, SectionStatus? additionalQuestion1Status, SectionStatus? additionalQuestion2Status);
     Task<IEnumerable<ApplicationEntity>> GetApplicationsByVacancyReference(string vacancyReference, short? statusId = null, Guid? preferenceId = null, bool canEmailOnly = false);
 }
 
@@ -74,6 +78,15 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
         return application;
     }
 
+    public async Task<bool> Exists(Guid candidateId, string vacancyReference)
+    {
+        var existing = await dataContext.ApplicationEntities
+            .Where(x => x.CandidateId == candidateId && x.VacancyReference == vacancyReference)
+            .FirstOrDefaultAsync();
+
+        return existing != null;
+    }
+
     public async Task<IEnumerable<ApplicationEntity>> GetByCandidateId(Guid candidateId, short? statusId)
     {
         return await dataContext.ApplicationEntities
@@ -89,6 +102,65 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
 
         return application ?? null;
     }
+	
+	public async Task<ApplicationEntity> Clone(Guid applicationId, string vacancyReference, bool requiresDisabilityConfidence, SectionStatus? additionalQuestion1Status, SectionStatus? additionalQuestion2Status)
+    {
+        var original = await dataContext.ApplicationEntities
+            .Include(x => x.TrainingCourseEntities)
+            .Include(x => x.QualificationEntities)
+            .Include(x => x.WorkHistoryEntities)
+            .Include(x => x.AboutYouEntity)
+            .AsNoTracking()
+            .SingleAsync(x => x.Id == applicationId);
+
+        original.Id = Guid.NewGuid();
+        original.Status = 0;
+        original.CreatedDate = DateTime.UtcNow;
+        original.UpdatedDate = null;
+        original.SubmittedDate = null;
+        original.ResponseDate = null;
+        original.ResponseNotes = null;
+        original.VacancyReference = vacancyReference;
+        original.PreviousAnswersSourceId = applicationId;
+
+        original.TrainingCourseEntities.ToList().ForEach(x => x.Id = Guid.NewGuid());
+        original.QualificationEntities.ToList().ForEach(x => x.Id = Guid.NewGuid());
+        original.WorkHistoryEntities.ToList().ForEach(x => x.Id = Guid.NewGuid());
+        if (original.AboutYouEntity != null) { original.AboutYouEntity.Id = Guid.NewGuid(); }
+        original.JobsStatus = (short)SectionStatus.PreviousAnswer;
+        original.InterestsStatus = (short)SectionStatus.PreviousAnswer;
+        original.QualificationsStatus = (short)SectionStatus.PreviousAnswer;
+        original.WorkExperienceStatus = (short)SectionStatus.PreviousAnswer;
+        original.SkillsAndStrengthStatus = (short)SectionStatus.PreviousAnswer;
+        original.TrainingCoursesStatus = (short)SectionStatus.PreviousAnswer;
+        original.InterviewAdjustmentsStatus = (short)SectionStatus.PreviousAnswer;
+        original.AdditionalQuestion1Status = (short)additionalQuestion1Status;
+        original.AdditionalQuestion2Status = (short)additionalQuestion2Status;
+
+
+        if (requiresDisabilityConfidence)
+        {
+            if(original.DisabilityConfidenceStatus == (short)SectionStatus.NotRequired)
+            {
+                original.DisabilityConfidenceStatus = (short)SectionStatus.NotStarted;
+                original.ApplyUnderDisabilityConfidentScheme = null;
+            }
+            else
+            {
+                original.DisabilityConfidenceStatus = (short)SectionStatus.PreviousAnswer;
+            }
+        }
+        else
+        {
+            original.DisabilityConfidenceStatus = (short)SectionStatus.NotRequired;
+        }
+
+        dataContext.ApplicationEntities.Add(original);
+        await dataContext.SaveChangesAsync();
+
+        return original;
+    }
+
 
     public async Task<IEnumerable<ApplicationEntity>> GetApplicationsByVacancyReference(string vacancyReference, short? statusId = null, Guid? preferenceId = null, bool canEmailOnly = false)
     {

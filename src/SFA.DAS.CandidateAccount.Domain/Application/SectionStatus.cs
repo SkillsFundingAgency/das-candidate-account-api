@@ -6,7 +6,8 @@ public enum SectionStatus
     InProgress = 1,
     Incomplete = 2,
     Completed = 3,
-    NotRequired = 4
+    NotRequired = 4,
+    PreviousAnswer = 5
 }
 
 public enum ApplicationStatus

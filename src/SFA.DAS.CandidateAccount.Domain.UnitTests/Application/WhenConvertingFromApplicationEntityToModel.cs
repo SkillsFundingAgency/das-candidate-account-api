@@ -93,7 +93,7 @@ public class WhenConvertingFromApplicationEntityToModel
     {
         source.JobsStatus = 4;
         source.QualificationsStatus = 3;
-        source.WorkExperienceStatus = 4;
+        source.WorkExperienceStatus = 5;
         source.TrainingCoursesStatus = 3;
         source.DisabilityConfidenceStatus = 4;
         source.Status = 3;

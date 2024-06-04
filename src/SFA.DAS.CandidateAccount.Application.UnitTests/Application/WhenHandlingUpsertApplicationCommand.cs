@@ -90,4 +90,30 @@ public class WhenHandlingUpsertApplicationCommand
         actual.Application.Id.Should().Be(applicationEntity.Id);
         actual.IsCreated.Should().BeFalse();
     }
+
+    [Test, RecursiveMoqAutoData]
+    public async Task Then_The_Request_Is_Handled_Application_Is_Cloned_If_Previous_Application_Exists(
+        UpsertApplicationCommand command,
+        ApplicationEntity previousApplication,
+        ApplicationEntity cloneResult,
+        [Frozen] Mock<IApplicationRepository> applicationRepository,
+        UpsertApplicationCommandHandler handler)
+    {
+        var previousApplications = new List<ApplicationEntity>{ previousApplication };
+
+        applicationRepository.Setup(x => x.Exists(command.CandidateId, command.VacancyReference))
+            .ReturnsAsync(false);
+
+        applicationRepository.Setup(x => x.GetByCandidateId(command.CandidateId, null))
+            .ReturnsAsync(previousApplications);
+
+        applicationRepository.Setup(x =>
+            x.Clone(previousApplication.Id, command.VacancyReference, command.IsDisabilityConfidenceComplete == SectionStatus.NotStarted, command.IsAdditionalQuestion1Complete, command.IsAdditionalQuestion2Complete))
+            .ReturnsAsync(cloneResult);
+
+        var actual = await handler.Handle(command, CancellationToken.None);
+
+        actual.Application.Id.Should().Be(cloneResult.Id);
+        actual.IsCreated.Should().BeTrue();
+    }
 }
