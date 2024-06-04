@@ -5,7 +5,7 @@ using SFA.DAS.CandidateAccount.Domain.Candidate;
 namespace SFA.DAS.CandidateAccount.Data.Candidate;
 public interface ICandidateRepository
 {
-    Task<CandidateEntity> Insert(CandidateEntity candidate);
+    Task<Tuple<CandidateEntity, bool>> Insert(CandidateEntity candidate);
     Task<CandidateEntity?> GetCandidateByEmail(string email);
     Task<CandidateEntity?> GetById(Guid id);
     Task<CandidateEntity?> GetByGovIdentifier(string id);
@@ -13,12 +13,17 @@ public interface ICandidateRepository
 }
 public class CandidateRepository(ICandidateAccountDataContext dataContext) : ICandidateRepository
 {
-    public async Task<CandidateEntity> Insert(CandidateEntity candidate)
+    public async Task<Tuple<CandidateEntity, bool>> Insert(CandidateEntity candidate)
     {
-        await dataContext.CandidateEntities.AddAsync(candidate);
+        var existingCandidate = await dataContext
+            .CandidateEntities
+            .FirstOrDefaultAsync(c => c.GovUkIdentifier == candidate.GovUkIdentifier);
 
+        if (existingCandidate != null) return new Tuple<CandidateEntity, bool>(existingCandidate, false);
+
+        await dataContext.CandidateEntities.AddAsync(candidate);
         await dataContext.SaveChangesAsync();
-        return candidate;
+        return new Tuple<CandidateEntity, bool>(candidate, true); ;
     }
 
     public async Task<CandidateEntity?> GetCandidateByEmail(string email)

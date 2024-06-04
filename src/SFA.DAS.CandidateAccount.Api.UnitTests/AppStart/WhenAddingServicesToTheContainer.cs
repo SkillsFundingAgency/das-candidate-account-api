@@ -29,7 +29,7 @@ public class WhenAddingServicesToTheContainer
     [TestCase(typeof(IApplicationRepository))]
     [TestCase(typeof(IAdditionalQuestionRepository))]
     [TestCase(typeof(IWorkHistoryRepository))]
-    [TestCase(typeof(ITrainingCourseRespository))]
+    [TestCase(typeof(ITrainingCourseRepository))]
     [TestCase(typeof(IQualificationReferenceRepository))]
     [TestCase(typeof(IQualificationRepository))]
     [TestCase(typeof(IAddressRepository))]
