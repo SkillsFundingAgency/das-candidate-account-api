@@ -1,4 +1,4 @@
-﻿using AutoFixture.NUnit3;
+using AutoFixture.NUnit3;
 using Moq;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.DeleteQualificationsByReferenceId;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.DeleteTrainingCourse;
@@ -18,7 +18,7 @@ namespace SFA.DAS.CandidateAccount.Application.UnitTests.TrainingCourses
          Guid applicationId,
          Guid id,
          [Frozen] Mock<IApplicationRepository> applicationRepository,
-         [Frozen] Mock<ITrainingCourseRespository> mockRepository,
+         [Frozen] Mock<ITrainingCourseRepository> mockRepository,
          DeleteTrainingCourseCommandHandler handler)
         {
             // Arrange

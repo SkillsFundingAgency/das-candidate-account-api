@@ -11,7 +11,7 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers
 {
     [ApiVersion("1.0")]
     [ApiController]
-    [Route("candidates/{candidateId}/applications/{applicationId}/additional-question")]
+    [Route("api/candidates/{candidateId}/applications/{applicationId}/additional-question")]
     public class AdditionalQuestionController(IMediator mediator, ILogger<AdditionalQuestionController> logger) : Controller
     {
         [HttpGet]
