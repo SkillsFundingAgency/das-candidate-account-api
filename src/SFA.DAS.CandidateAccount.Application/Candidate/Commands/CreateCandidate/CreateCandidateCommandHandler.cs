@@ -8,10 +8,9 @@ namespace SFA.DAS.CandidateAccount.Application.Candidate.Commands.CreateCandidat
 public class CreateCandidateCommandHandler(ICandidateRepository candidateRepository, ICandidatePreferencesRepository candidatePreferencesRepository)
     : IRequestHandler<CreateCandidateCommand, CreateCandidateCommandResponse>
 {
-
     public async Task<CreateCandidateCommandResponse> Handle(CreateCandidateCommand command, CancellationToken cancellationToken)
     {
-        var candidate = await candidateRepository.Insert(new CandidateEntity
+        var result= await candidateRepository.Insert(new CandidateEntity
         {
             Id = Guid.NewGuid(),
             Email = command.Email,
@@ -23,11 +22,14 @@ public class CreateCandidateCommandHandler(ICandidateRepository candidateReposit
             MigratedEmail = command.MigratedEmail
         });
 
-        await candidatePreferencesRepository.Create(candidate.Id);
+        if (result.Item2)
+        {
+            await candidatePreferencesRepository.Create(result.Item1.Id);
+        }
 
         return new CreateCandidateCommandResponse
         {
-            Candidate = candidate!
+            Candidate = result.Item1!
         };
     }
 }

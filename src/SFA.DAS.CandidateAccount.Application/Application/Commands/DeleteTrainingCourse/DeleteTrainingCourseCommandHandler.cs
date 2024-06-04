@@ -1,4 +1,4 @@
-﻿using MediatR;
+using MediatR;
 using SFA.DAS.CandidateAccount.Data.Application;
 using SFA.DAS.CandidateAccount.Data.TrainingCourse;
 using SFA.DAS.CandidateAccount.Domain.Application;
@@ -6,7 +6,7 @@ using SFA.DAS.CandidateAccount.Domain.Application;
 
 namespace SFA.DAS.CandidateAccount.Application.Application.Commands.DeleteTrainingCourse
 {
-    public class DeleteTrainingCourseCommandHandler (ITrainingCourseRespository trainingCourseRepository, IApplicationRepository applicationRepository) : IRequestHandler<DeleteTrainingCourseCommand, Unit>
+    public class DeleteTrainingCourseCommandHandler (ITrainingCourseRepository trainingCourseRepository, IApplicationRepository applicationRepository) : IRequestHandler<DeleteTrainingCourseCommand, Unit>
     {
         public async Task<Unit> Handle(DeleteTrainingCourseCommand command, CancellationToken cancellation)
         {
