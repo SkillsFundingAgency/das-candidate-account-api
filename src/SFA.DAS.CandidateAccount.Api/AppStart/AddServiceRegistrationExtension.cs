@@ -20,7 +20,7 @@ public static class AddServiceRegistrationExtension
         services.AddScoped<IApplicationRepository, ApplicationRepository>();
         services.AddScoped<ICandidateRepository, CandidateRepository>();
         services.AddScoped<IWorkHistoryRepository, WorkHistoryRepository>();
-        services.AddScoped<ITrainingCourseRespository, TrainingCourseRepository>();
+        services.AddScoped<ITrainingCourseRepository, TrainingCourseRepository>();
         services.AddScoped<IAdditionalQuestionRepository, AdditionalQuestionRepository>();
         services.AddScoped<IQualificationReferenceRepository, QualificationReferenceRepository>();
         services.AddScoped<IQualificationRepository, QualificationRepository>();

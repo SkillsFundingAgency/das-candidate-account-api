@@ -1,7 +1,6 @@
 using AutoFixture.NUnit3;
 using FluentAssertions;
 using Moq;
-using SFA.DAS.CandidateAccount.Application.Application.Commands.UpdateTrainingCourse;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.UpsertTrainingCourse;
 using SFA.DAS.CandidateAccount.Data.Application;
 using SFA.DAS.CandidateAccount.Data.TrainingCourse;
@@ -16,7 +15,7 @@ public class WhenHandlingUpdateTrainingCourseCommand
         UpsertTrainingCourseCommand command,
         TrainingCourseEntity trainingCourseEntity,
         ApplicationEntity applicationEntity,
-        [Frozen] Mock<ITrainingCourseRespository> trainingCourseRepository,
+        [Frozen] Mock<ITrainingCourseRepository> trainingCourseRepository,
         [Frozen] Mock<IApplicationRepository> applicationRepository,
         UpsertTrainingCourseCommandHandler handler)
     {
@@ -40,7 +39,7 @@ public class WhenHandlingUpdateTrainingCourseCommand
         UpsertTrainingCourseCommand command,
         TrainingCourseEntity trainingCourseEntity,
         ApplicationEntity applicationEntity,
-        [Frozen] Mock<ITrainingCourseRespository> trainingCourseRepository,
+        [Frozen] Mock<ITrainingCourseRepository> trainingCourseRepository,
         [Frozen] Mock<IApplicationRepository> applicationRepository,
         UpsertTrainingCourseCommandHandler handler)
     {
@@ -64,7 +63,7 @@ public class WhenHandlingUpdateTrainingCourseCommand
         UpsertTrainingCourseCommand command,
         TrainingCourseEntity trainingCourseEntity,
         ApplicationEntity applicationEntity,
-        [Frozen] Mock<ITrainingCourseRespository> trainingCourseRepository,
+        [Frozen] Mock<ITrainingCourseRepository> trainingCourseRepository,
         [Frozen] Mock<IApplicationRepository> applicationRepository,
         UpsertTrainingCourseCommandHandler handler)
     {

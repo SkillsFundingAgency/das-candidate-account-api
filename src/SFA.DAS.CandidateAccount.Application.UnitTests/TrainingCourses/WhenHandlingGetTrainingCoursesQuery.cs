@@ -13,7 +13,7 @@ public class WhenHandlingGetTrainingCoursesQuery
     public async Task Then_Request_Is_Handled_And_Entities_Returned(
         GetTrainingCoursesQuery request,
         List<TrainingCourseEntity> entities,
-        [Frozen] Mock<ITrainingCourseRespository> trainingCoursesRepository,
+        [Frozen] Mock<ITrainingCourseRepository> trainingCoursesRepository,
         GetTrainingCoursesQueryHandler handler)
     {
         trainingCoursesRepository.Setup(x => x.GetAll(request.ApplicationId, request.CandidateId, CancellationToken.None)).ReturnsAsync(entities);
