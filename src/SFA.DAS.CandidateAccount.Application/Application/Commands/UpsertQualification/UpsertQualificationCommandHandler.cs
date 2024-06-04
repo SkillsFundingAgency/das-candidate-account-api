@@ -28,7 +28,7 @@ public class UpsertQualificationCommandHandler(IQualificationRepository qualific
         
         var result = await qualificationRepository.Upsert(request.Qualification, request.CandidateId, request.ApplicationId);
 
-        if (application.QualificationsStatus == (short)SectionStatus.NotStarted)
+        if (application.QualificationsStatus is (short)SectionStatus.NotStarted or (short)SectionStatus.PreviousAnswer)
         {
             application.QualificationsStatus = (short)SectionStatus.InProgress;
             await applicationRepository.Update(application);

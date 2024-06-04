@@ -59,7 +59,7 @@ public class PatchApplicationCommandHandler (IApplicationRepository applicationR
         if(application.ApplyUnderDisabilityConfidentScheme != patchedDoc.ApplyUnderDisabilityConfidentScheme)
         {
             application.ApplyUnderDisabilityConfidentScheme = patchedDoc.ApplyUnderDisabilityConfidentScheme;
-            if (application.DisabilityConfidenceStatus == (short)SectionStatus.NotStarted)
+            if (application.DisabilityConfidenceStatus is (short)SectionStatus.NotStarted or (short)SectionStatus.PreviousAnswer)
             {
                 application.DisabilityConfidenceStatus = (short)SectionStatus.InProgress;
             }

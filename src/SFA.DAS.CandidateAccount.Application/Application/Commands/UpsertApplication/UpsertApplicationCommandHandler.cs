@@ -12,6 +12,26 @@ public class UpsertApplicationCommandHandler(
 {
     public async Task<UpsertApplicationCommandResponse> Handle(UpsertApplicationCommand command, CancellationToken cancellationToken)
     {
+        if(! await applicationRepository.Exists(command.CandidateId, command.VacancyReference))
+        {
+            var previousApplications = await applicationRepository.GetByCandidateId(command.CandidateId, null);
+            var previousApplication = previousApplications.Where(x => x.Status != (short)ApplicationStatus.Draft).MaxBy(x => x.CreatedDate);
+
+            if (previousApplication != null)
+            {
+                var requiresDisabilityConfidence = command.IsDisabilityConfidenceComplete == SectionStatus.NotStarted;
+                var result = await applicationRepository.Clone(previousApplication.Id, command.VacancyReference, requiresDisabilityConfidence, command.IsAdditionalQuestion1Complete, command.IsAdditionalQuestion2Complete);
+
+                await UpsertAdditionalQuestions(command, cancellationToken, result);
+
+                return new UpsertApplicationCommandResponse
+                {
+                    Application = result,
+                    IsCreated = true
+                };
+            }
+        }
+
         var application = await applicationRepository.Upsert(new ApplicationEntity
         {
             VacancyReference = command.VacancyReference,
@@ -27,29 +47,35 @@ public class UpsertApplicationCommandHandler(
             DisabilityStatus = command.DisabilityStatus
         });
 
-        foreach (var additionalQuestion in command.AdditionalQuestions)
-        {
-            if (additionalQuestion is null) break;
-            var question =
-                await additionalQuestionRepository.Get(application.Item1.Id, command.CandidateId, additionalQuestion, cancellationToken);
-
-            if (question is null)
-            {
-                await additionalQuestionRepository.UpsertAdditionalQuestion(new AdditionalQuestion
-                {
-                    Id = Guid.NewGuid(),
-                    ApplicationId = application.Item1.Id,
-                    CandidateId = command.CandidateId,
-                    QuestionText = additionalQuestion,
-                    Answer = string.Empty,
-                }, command.CandidateId);
-            }
-        }
+        await UpsertAdditionalQuestions(command, cancellationToken, application.Item1);
 
         return new UpsertApplicationCommandResponse
         {
             Application = application.Item1,
             IsCreated = application.Item2
         };
+    }
+
+    private async Task UpsertAdditionalQuestions(UpsertApplicationCommand command, CancellationToken cancellationToken, ApplicationEntity application)
+    {
+        var hasAdditionalQuestions =
+            await additionalQuestionRepository.GetAll(application.Id, command.CandidateId, cancellationToken);
+
+        if (hasAdditionalQuestions.Count > 0)
+        {
+            return;
+        }
+
+        foreach (var additionalQuestion in command.AdditionalQuestions)
+        {
+            await additionalQuestionRepository.UpsertAdditionalQuestion(new AdditionalQuestion
+            {
+                Id = Guid.NewGuid(),
+                ApplicationId = application.Id,
+                CandidateId = command.CandidateId,
+                QuestionText = additionalQuestion,
+                Answer = string.Empty,
+            }, command.CandidateId);
+        }
     }
 }

@@ -17,7 +17,7 @@ public class UpsertTrainingCourseCommandHandler(ITrainingCourseRepository traini
 
         var result = await trainingCourseRepository.UpsertTrainingCourse(request.TrainingCourse, request.CandidateId);
 
-        if (application.TrainingCoursesStatus == (short)SectionStatus.NotStarted)
+        if (application.TrainingCoursesStatus is (short)SectionStatus.NotStarted or (short)SectionStatus.PreviousAnswer)
         {
             application.TrainingCoursesStatus = (short)SectionStatus.InProgress;
             await applicationRepository.Update(application);

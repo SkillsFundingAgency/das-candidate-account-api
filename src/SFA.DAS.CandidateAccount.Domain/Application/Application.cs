@@ -43,7 +43,7 @@ public abstract class ApplicationBase
             return SectionStatus.InProgress;
         }
 
-        if (sectionStatus.All(c => c is SectionStatus.Completed or SectionStatus.NotRequired))
+        if (sectionStatus.All(c => c is SectionStatus.Completed or SectionStatus.NotRequired or SectionStatus.PreviousAnswer))
         {
             return SectionStatus.Completed;
         }
@@ -132,7 +132,8 @@ public class ApplicationDetail : Application
             WithdrawnDate = source.WithdrawnDate,
             CreatedDate = source.CreatedDate,
             ResponseNotes = source.ResponseNotes,
-            ResponseDate = source.ResponseDate
+            ResponseDate = source.ResponseDate,
+            PreviousAnswersSourceId = source.PreviousAnswersSourceId
         };
     }
 }
@@ -147,7 +148,8 @@ public class Application : ApplicationBase
     public string? DisabilityStatus { get; set; }
     public required string VacancyReference { get; set; }
     public List<AdditionalQuestion>? AdditionalQuestions { get; set; } = [];
-    
+    public Guid? PreviousAnswersSourceId { get; set; }
+
 
     public static implicit operator Application(ApplicationEntity source)
     {
@@ -214,6 +216,7 @@ public class Application : ApplicationBase
             AdditionalQuestions = source.AdditionalQuestionEntities?.Select(c=>(AdditionalQuestion)c).ToList()!,
             ResponseNotes = source.ResponseNotes,
             ResponseDate = source.ResponseDate,
+            PreviousAnswersSourceId = source.PreviousAnswersSourceId
         };
     }
 }

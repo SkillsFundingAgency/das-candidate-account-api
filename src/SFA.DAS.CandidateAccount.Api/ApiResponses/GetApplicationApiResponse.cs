@@ -40,6 +40,7 @@ public class GetApplicationApiResponse
     public string? ResponseNotes { get; set; }
 
     public DateTime? ResponseDate { get; set; }
+    public Guid? PreviousAnswersSourceId { get; set; }
     
     public static implicit operator GetApplicationApiResponse(Domain.Application.Application application)
     {
@@ -74,7 +75,8 @@ public class GetApplicationApiResponse
             CreatedDate = application.CreatedDate,
             WithdrawnDate = application.WithdrawnDate,
             ResponseDate = application.ResponseDate,
-            ResponseNotes = application.ResponseNotes
+            ResponseNotes = application.ResponseNotes,
+            PreviousAnswersSourceId = application.PreviousAnswersSourceId
         };
     }
 
@@ -118,7 +120,8 @@ public class GetApplicationApiResponse
             WithdrawnDate = applicationDetail.WithdrawnDate,
             CreatedDate = applicationDetail.CreatedDate,
             ResponseDate = applicationDetail.ResponseDate,
-            ResponseNotes = applicationDetail.ResponseNotes
+            ResponseNotes = applicationDetail.ResponseNotes,
+            PreviousAnswersSourceId = applicationDetail.PreviousAnswersSourceId
         };
     }
 }
