@@ -48,6 +48,8 @@ public class WhenCallingGetCandidateApplications
                 );
         actualModel.Candidates.Select(c => c.ApplicationId).ToList().Should()
             .BeEquivalentTo(queryResult.Candidates.Select(x => x.Id).ToList());
+        actualModel.Candidates.Select(c => c.ApplicationCreatedDate).ToList().Should()
+            .BeEquivalentTo(queryResult.Candidates.Select(x => x.CreatedDate).ToList());
     }
 
     [Test, RecursiveMoqAutoData]

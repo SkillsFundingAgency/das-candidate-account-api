@@ -10,5 +10,6 @@ public class GetCandidatesApiResponse
 public class CandidateApplication
 {
     public Guid ApplicationId { get; set; }
+    public DateTime ApplicationCreatedDate { get; set; }
     public Candidate Candidate { get; set; }
 }

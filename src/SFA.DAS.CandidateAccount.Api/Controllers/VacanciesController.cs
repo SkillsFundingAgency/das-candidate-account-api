@@ -32,7 +32,8 @@ public class VacanciesController(IMediator mediator, ILogger<VacanciesController
                 Candidates = result.Candidates.Select(c=>new CandidateApplication
                 {
                     Candidate = c.CandidateEntity,
-                    ApplicationId = c.Id
+                    ApplicationId = c.Id,
+                    ApplicationCreatedDate = c.CreatedDate
                 }).ToList()
             });
         }
