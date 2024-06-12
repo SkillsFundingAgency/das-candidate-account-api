@@ -123,8 +123,9 @@ public class GetApplicationApiResponse
             ResponseDate = applicationDetail.ResponseDate,
             ResponseNotes = applicationDetail.ResponseNotes,
             PreviousAnswersSourceId = applicationDetail.PreviousAnswersSourceId,
+            Strengths = applicationDetail.Strengths,
             Support = applicationDetail.Support,
-            MigrationDate = application.MigrationDate
+            MigrationDate = applicationDetail.MigrationDate
         };
     }
 }
