@@ -22,7 +22,9 @@ CREATE TABLE dbo.[Application] (
     [DisabilityConfidenceStatus]            tinyint             NOT NULL default(0),
     [WhatIsYourInterest]                    nvarchar(max)       NULL,
     [ApplyUnderDisabilityConfidentScheme]   bit                 NULL,
-    [PreviousAnswersSourceId]               uniqueidentifier    NULL
+    [PreviousAnswersSourceId]               uniqueidentifier    NULL,
+    [Strengths]   			                nvarchar(max)	    NULL,
+    [Support]  		    	                nvarchar(max)       NULL,
     CONSTRAINT [PK_Application] PRIMARY KEY (Id),
     INDEX [IX_Application_CandidateIdVacancyReference] NONCLUSTERED(CandidateId, VacancyReference),
     INDEX [IX_Application_CandidateId] NONCLUSTERED(CandidateId),

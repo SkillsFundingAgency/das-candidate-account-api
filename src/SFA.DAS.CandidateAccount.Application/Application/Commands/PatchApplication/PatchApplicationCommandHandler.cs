@@ -42,6 +42,8 @@ public class PatchApplicationCommandHandler (IApplicationRepository applicationR
         application.WhatIsYourInterest = patchedDoc.WhatIsYourInterest;
         application.UpdatedDate = DateTime.UtcNow;
         application.ResponseNotes = patchedDoc.ResponseNotes;
+        application.Support = patchedDoc.Support;
+        application.Strengths = patchedDoc.Strengths;
         
         switch (patchedDoc.Status)
         {

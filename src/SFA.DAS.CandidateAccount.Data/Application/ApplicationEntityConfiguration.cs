@@ -34,6 +34,9 @@ public class ApplicationEntityConfiguration : IEntityTypeConfiguration<Applicati
         builder.Property(x => x.InterviewAdjustmentsStatus).HasColumnName("InterviewAdjustmentsStatus").HasColumnType("tinyint").IsRequired().HasDefaultValue(0);
         builder.Property(x => x.DisabilityConfidenceStatus).HasColumnName("DisabilityConfidenceStatus").HasColumnType("tinyint").IsRequired().HasDefaultValue(0);
         builder.Property(x => x.PreviousAnswersSourceId).HasColumnName("PreviousAnswersSourceId").HasColumnType("uniqueidentifier");
+        builder.Property(x => x.Strengths).HasColumnName("Strengths").HasColumnType("varchar");
+        builder.Property(x => x.Support).HasColumnName("Support").HasColumnType("varchar");
+
 
         builder.HasIndex(c =>  new { c.VacancyReference, c.CandidateId});
         builder.HasIndex(c =>  new { c.CandidateId});
@@ -66,11 +69,5 @@ public class ApplicationEntityConfiguration : IEntityTypeConfiguration<Applicati
             .WithOne(c => c.ApplicationEntity)
             .HasForeignKey(c => c.ApplicationId)
             .HasPrincipalKey(c => c.Id);
-        
-        builder
-            .HasOne(c => c.AboutYouEntity)
-            .WithOne(c => c.ApplicationEntity)
-            .HasForeignKey<AboutYouEntity>(c => c.ApplicationId)
-            .HasPrincipalKey<ApplicationEntity>(c => c.Id);
     }
 }

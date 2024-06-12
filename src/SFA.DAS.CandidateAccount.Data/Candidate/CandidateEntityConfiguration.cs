@@ -32,5 +32,11 @@ public class CandidateEntityConfiguration : IEntityTypeConfiguration<CandidateEn
             .WithOne(c => c.Candidate)
             .HasForeignKey<AddressEntity>(c => c.CandidateId)
             .HasPrincipalKey<CandidateEntity>(c => c.Id);
+
+        builder
+            .HasOne(c => c.AboutYou)
+            .WithOne(c => c.CandidateEntity)
+            .HasForeignKey<AboutYouEntity>(c => c.CandidateId)
+            .HasPrincipalKey<CandidateEntity>(c => c.Id);
     }
 }

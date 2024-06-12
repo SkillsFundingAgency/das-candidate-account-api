@@ -33,6 +33,7 @@ public class WhenHandlingCreateCandidateCommand
             .Excluding(c=>c.Applications)
             .Excluding(c => c.Status)
             .Excluding(c => c.Address)
+            .Excluding(c => c.AboutYou)
         );
 
         actual.Candidate.Address.Should().BeEquivalentTo(entity.Address, options=>options.Excluding(c=> c.Candidate));
@@ -61,6 +62,7 @@ public class WhenHandlingCreateCandidateCommand
             .Excluding(c => c.Applications)
             .Excluding(c => c.Status)
             .Excluding(c => c.Address)
+            .Excluding(c => c.AboutYou)
         );
 
         actual.Candidate.Address.Should().BeEquivalentTo(entity.Address, options => options.Excluding(c => c.Candidate));

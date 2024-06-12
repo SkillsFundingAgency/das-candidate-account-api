@@ -29,11 +29,12 @@ namespace SFA.DAS.CandidateAccount.Domain.Application
         public string? WhatIsYourInterest { get; set; }
         public bool? ApplyUnderDisabilityConfidentScheme { get; set; }
         public Guid? PreviousAnswersSourceId { get; set; }
+        public string? Strengths { get; set; }
+        public string? Support { get; set; }
+
         public virtual ICollection<WorkHistoryEntity> WorkHistoryEntities { get; set; } = null!;
         public virtual ICollection<TrainingCourseEntity> TrainingCourseEntities { get; set; } = null!;
         public virtual ICollection<QualificationEntity> QualificationEntities { get; set; } = null!;
         public virtual ICollection<AdditionalQuestionEntity>? AdditionalQuestionEntities { get; set; } = null!;
-        public virtual AboutYouEntity? AboutYouEntity { get; set; } = null;
-        
     }
 }

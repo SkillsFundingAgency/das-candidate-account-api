@@ -64,7 +64,6 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
                 .Include(c=>c.AdditionalQuestionEntities)
                 .Include(c=>c.CandidateEntity)
                     .ThenInclude(c=>c.Address)
-                .Include(c=>c.AboutYouEntity)
                 .IgnoreAutoIncludes()
                 .SingleOrDefaultAsync(c=>c.Id == applicationId);
         return applicationEntity;
@@ -108,7 +107,6 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
             .Include(x => x.TrainingCourseEntities)
             .Include(x => x.QualificationEntities)
             .Include(x => x.WorkHistoryEntities)
-            .Include(x => x.AboutYouEntity)
             .AsNoTracking()
             .SingleAsync(x => x.Id == applicationId);
 
@@ -125,7 +123,6 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
         original.TrainingCourseEntities.ToList().ForEach(x => x.Id = Guid.NewGuid());
         original.QualificationEntities.ToList().ForEach(x => x.Id = Guid.NewGuid());
         original.WorkHistoryEntities.ToList().ForEach(x => x.Id = Guid.NewGuid());
-        if (original.AboutYouEntity != null) { original.AboutYouEntity.Id = Guid.NewGuid(); }
         original.JobsStatus = (short)SectionStatus.PreviousAnswer;
         original.InterestsStatus = (short)SectionStatus.PreviousAnswer;
         original.QualificationsStatus = (short)SectionStatus.PreviousAnswer;

@@ -35,6 +35,7 @@ public record CandidateEntity
     public short Status { get; set; }
     
     public virtual AddressEntity? Address { get; set; }
-    
+    public virtual AboutYouEntity? AboutYou { get; set; } = null;
+
     public virtual ICollection<ApplicationEntity>? Applications { get; set; } = null!;
 }

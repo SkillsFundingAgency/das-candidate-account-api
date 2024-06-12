@@ -32,7 +32,6 @@ public class GetApplicationApiResponse
     public DateTime CreatedDate { get; set; }
     public DateTime? WithdrawnDate { get; set; }
     public List<AdditionalQuestion>? AdditionalQuestions { get; set; } = [];
-    public AboutYouItem AboutYou { get; set; }
     public List<Qualification> Qualifications { get; set; }
     public List<WorkHistoryItem> WorkHistory { get; set; }
     public List<TrainingCourseItem> TrainingCourses { get; set; }
@@ -41,7 +40,9 @@ public class GetApplicationApiResponse
 
     public DateTime? ResponseDate { get; set; }
     public Guid? PreviousAnswersSourceId { get; set; }
-    
+    public string? Strengths { get; set; }
+    public string? Support { get; set; }
+
     public static implicit operator GetApplicationApiResponse(Domain.Application.Application application)
     {
         
@@ -76,15 +77,14 @@ public class GetApplicationApiResponse
             WithdrawnDate = application.WithdrawnDate,
             ResponseDate = application.ResponseDate,
             ResponseNotes = application.ResponseNotes,
-            PreviousAnswersSourceId = application.PreviousAnswersSourceId
+            PreviousAnswersSourceId = application.PreviousAnswersSourceId,
+            Strengths = application.Strengths,
+            Support = application.Support
         };
     }
 
-
-
     public static implicit operator GetApplicationApiResponse(ApplicationDetail applicationDetail)
     {
-        
         return new GetApplicationApiResponse
         {
             Status = applicationDetail.Status,
@@ -114,14 +114,15 @@ public class GetApplicationApiResponse
             Qualifications = applicationDetail.Qualifications,
             AdditionalQuestions = applicationDetail.AdditionalQuestions,
             WorkHistory = applicationDetail.WorkHistory.Select(c=>(WorkHistoryItem)c).ToList(),
-            AboutYou = applicationDetail.AboutYou,
             Candidate = applicationDetail.Candidate,
             SubmittedDate = applicationDetail.SubmittedDate,
             WithdrawnDate = applicationDetail.WithdrawnDate,
             CreatedDate = applicationDetail.CreatedDate,
             ResponseDate = applicationDetail.ResponseDate,
             ResponseNotes = applicationDetail.ResponseNotes,
-            PreviousAnswersSourceId = applicationDetail.PreviousAnswersSourceId
+            PreviousAnswersSourceId = applicationDetail.PreviousAnswersSourceId,
+            Support = applicationDetail.Support,
+            Strengths = applicationDetail.Strengths,
         };
     }
 }
