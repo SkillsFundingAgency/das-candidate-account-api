@@ -1,7 +1,5 @@
-using System.Collections.Specialized;
 using Microsoft.EntityFrameworkCore;
 using SFA.DAS.CandidateAccount.Domain.Application;
-using Exception = System.Exception;
 
 namespace SFA.DAS.CandidateAccount.Data.Application;
 
@@ -46,6 +44,7 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
         application.AdditionalQuestion2Status = applicationEntity.AdditionalQuestion2Status != 0 ? applicationEntity.AdditionalQuestion2Status : application.AdditionalQuestion2Status;
         application.InterviewAdjustmentsStatus = applicationEntity.InterviewAdjustmentsStatus != 0 ? applicationEntity.InterviewAdjustmentsStatus : application.InterviewAdjustmentsStatus;
         application.DisabilityConfidenceStatus = applicationEntity.DisabilityConfidenceStatus != 0 ? applicationEntity.DisabilityConfidenceStatus : application.DisabilityConfidenceStatus;
+        application.MigrationDate = applicationEntity.MigrationDate;
         
         await dataContext.SaveChangesAsync();
         
