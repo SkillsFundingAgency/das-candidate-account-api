@@ -29,6 +29,7 @@ namespace SFA.DAS.CandidateAccount.Domain.Application
         public string? WhatIsYourInterest { get; set; }
         public bool? ApplyUnderDisabilityConfidentScheme { get; set; }
         public Guid? PreviousAnswersSourceId { get; set; }
+        public DateTime? MigrationDate { get; set; }
         public virtual ICollection<WorkHistoryEntity> WorkHistoryEntities { get; set; } = null!;
         public virtual ICollection<TrainingCourseEntity> TrainingCourseEntities { get; set; } = null!;
         public virtual ICollection<QualificationEntity> QualificationEntities { get; set; } = null!;

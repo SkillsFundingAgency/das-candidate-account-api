@@ -133,7 +133,8 @@ public class ApplicationDetail : Application
             CreatedDate = source.CreatedDate,
             ResponseNotes = source.ResponseNotes,
             ResponseDate = source.ResponseDate,
-            PreviousAnswersSourceId = source.PreviousAnswersSourceId
+            PreviousAnswersSourceId = source.PreviousAnswersSourceId,
+            MigrationDate = source.MigrationDate
         };
     }
 }
@@ -149,6 +150,7 @@ public class Application : ApplicationBase
     public required string VacancyReference { get; set; }
     public List<AdditionalQuestion>? AdditionalQuestions { get; set; } = [];
     public Guid? PreviousAnswersSourceId { get; set; }
+    public DateTime? MigrationDate { get; set; }
 
 
     public static implicit operator Application(ApplicationEntity source)
@@ -216,7 +218,8 @@ public class Application : ApplicationBase
             AdditionalQuestions = source.AdditionalQuestionEntities?.Select(c=>(AdditionalQuestion)c).ToList()!,
             ResponseNotes = source.ResponseNotes,
             ResponseDate = source.ResponseDate,
-            PreviousAnswersSourceId = source.PreviousAnswersSourceId
+            PreviousAnswersSourceId = source.PreviousAnswersSourceId,
+            MigrationDate = source.MigrationDate
         };
     }
 }

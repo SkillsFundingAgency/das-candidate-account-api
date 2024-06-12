@@ -34,6 +34,7 @@ public class ApplicationEntityConfiguration : IEntityTypeConfiguration<Applicati
         builder.Property(x => x.InterviewAdjustmentsStatus).HasColumnName("InterviewAdjustmentsStatus").HasColumnType("tinyint").IsRequired().HasDefaultValue(0);
         builder.Property(x => x.DisabilityConfidenceStatus).HasColumnName("DisabilityConfidenceStatus").HasColumnType("tinyint").IsRequired().HasDefaultValue(0);
         builder.Property(x => x.PreviousAnswersSourceId).HasColumnName("PreviousAnswersSourceId").HasColumnType("uniqueidentifier");
+        builder.Property(x => x.MigrationDate).HasColumnName("MigrationDate").HasColumnType("datetime").IsRequired(false);
 
         builder.HasIndex(c =>  new { c.VacancyReference, c.CandidateId});
         builder.HasIndex(c =>  new { c.CandidateId});
