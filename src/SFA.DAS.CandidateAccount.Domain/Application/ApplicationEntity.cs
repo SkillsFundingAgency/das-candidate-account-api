@@ -31,7 +31,7 @@ namespace SFA.DAS.CandidateAccount.Domain.Application
         public Guid? PreviousAnswersSourceId { get; set; }
         public string? Strengths { get; set; }
         public string? Support { get; set; }
-
+        public DateTime? MigrationDate { get; set; }
         public virtual ICollection<WorkHistoryEntity> WorkHistoryEntities { get; set; } = null!;
         public virtual ICollection<TrainingCourseEntity> TrainingCourseEntities { get; set; } = null!;
         public virtual ICollection<QualificationEntity> QualificationEntities { get; set; } = null!;

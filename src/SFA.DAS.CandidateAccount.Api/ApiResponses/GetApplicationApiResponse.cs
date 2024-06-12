@@ -42,6 +42,7 @@ public class GetApplicationApiResponse
     public Guid? PreviousAnswersSourceId { get; set; }
     public string? Strengths { get; set; }
     public string? Support { get; set; }
+    public DateTime? MigrationDate { get; set; }
 
     public static implicit operator GetApplicationApiResponse(Domain.Application.Application application)
     {
@@ -79,7 +80,8 @@ public class GetApplicationApiResponse
             ResponseNotes = application.ResponseNotes,
             PreviousAnswersSourceId = application.PreviousAnswersSourceId,
             Strengths = application.Strengths,
-            Support = application.Support
+            Support = application.Support,
+            MigrationDate = application.MigrationDate
         };
     }
 
@@ -122,7 +124,7 @@ public class GetApplicationApiResponse
             ResponseNotes = applicationDetail.ResponseNotes,
             PreviousAnswersSourceId = applicationDetail.PreviousAnswersSourceId,
             Support = applicationDetail.Support,
-            Strengths = applicationDetail.Strengths,
+            MigrationDate = application.MigrationDate
         };
     }
 }

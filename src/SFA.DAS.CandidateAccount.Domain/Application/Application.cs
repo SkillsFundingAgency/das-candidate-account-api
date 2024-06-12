@@ -137,6 +137,7 @@ public class ApplicationDetail : Application
             PreviousAnswersSourceId = source.PreviousAnswersSourceId,
             Strengths = source.Strengths,
             Support = source.Support,
+            MigrationDate = source.MigrationDate
         };
     }
 }
@@ -154,7 +155,7 @@ public class Application : ApplicationBase
     public Guid? PreviousAnswersSourceId { get; set; }
     public string? Strengths { get; set; }
     public string? Support { get; set; }
-
+public DateTime? MigrationDate { get; set; }
 
 
     public static implicit operator Application(ApplicationEntity source)
@@ -224,7 +225,8 @@ public class Application : ApplicationBase
             ResponseDate = source.ResponseDate,
             PreviousAnswersSourceId = source.PreviousAnswersSourceId,
             Strengths = source.Strengths,
-            Support = source.Support
+            Support = source.Support,
+            MigrationDate = source.MigrationDate
         };
     }
 }
