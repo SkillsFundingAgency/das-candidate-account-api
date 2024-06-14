@@ -35,7 +35,6 @@ namespace SFA.DAS.CandidateAccount.Data.AboutYou
                 return new Tuple<Domain.Candidate.AboutYou, bool>(newEntity, true);
             }
 
-            aboutYouItem.Id = aboutYouEntity.Id;
             aboutYouItem.Sex = aboutYouEntity.Sex;
             aboutYouItem.EthnicGroup = aboutYouEntity.EthnicGroup; 
             aboutYouItem.EthnicSubGroup = aboutYouEntity.EthnicSubGroup; 
