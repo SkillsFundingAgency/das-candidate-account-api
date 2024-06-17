@@ -2,6 +2,7 @@
 {
     public class LegacyApplication
     {
+        public required Guid Id { get; set; }
         public required Guid CandidateId { get; set; }
         public required string VacancyReference { get; set; }
 
