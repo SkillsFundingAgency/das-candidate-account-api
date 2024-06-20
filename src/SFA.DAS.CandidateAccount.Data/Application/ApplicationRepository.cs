@@ -114,6 +114,7 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
         original.CreatedDate = DateTime.UtcNow;
         original.UpdatedDate = null;
         original.SubmittedDate = null;
+        original.MigrationDate = null;
         original.ResponseDate = null;
         original.ResponseNotes = null;
         original.VacancyReference = vacancyReference;
