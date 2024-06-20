@@ -11,7 +11,7 @@ public class WhenHandlingPutNotificationPreferencesCommand
 {
     [Test, RecursiveMoqAutoData]
     public async Task Then_The_Request_Is_Handled_And_Upsert_Is_Done(
-        PutCandidatePreferencesCommand comand,
+        PutCandidatePreferencesCommand command,
         List<Tuple<bool, CandidatePreferencesEntity>> upsertResponse,
         [Frozen] Mock<ICandidatePreferencesRepository> repository,
         PutCandidatePreferencesCommandHandler handler)
@@ -19,8 +19,8 @@ public class WhenHandlingPutNotificationPreferencesCommand
         repository.Setup(x =>
             x.Upsert(It.IsAny<List<CandidatePreference>>())).ReturnsAsync(upsertResponse);
 
-        var actual = await handler.Handle(comand, CancellationToken.None);
+        var actual = await handler.Handle(command, CancellationToken.None);
 
-        actual.CandidatePreferences.Count.Should().Be(comand.CandidatePreferences.Count);
+        actual.CandidatePreferences.Count.Should().Be(command.CandidatePreferences.Count);
     }
 }
