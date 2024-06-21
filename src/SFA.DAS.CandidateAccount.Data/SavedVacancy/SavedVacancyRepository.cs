@@ -1,11 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SFA.DAS.CandidateAccount.Domain.Candidate;
 
 namespace SFA.DAS.CandidateAccount.Data.SavedVacancy
 {
     public interface ISavedVacancyRepository
     {
         Task<List<Domain.Candidate.SavedVacancy>> GetByCandidateId(Guid candidateId);
-        Task<Domain.Candidate.SavedVacancy> Upsert(Domain.Candidate.SavedVacancy savedVacancy, Guid candidateId);
+        Task<Domain.Candidate.SavedVacancy?> Get(Guid candidateId, string vacancyReference);
+        Task<Tuple<Domain.Candidate.SavedVacancy, bool>> Upsert(Domain.Candidate.SavedVacancy savedVacancy);
         Task<Domain.Candidate.SavedVacancy> Delete(Domain.Candidate.SavedVacancy savedVacancy, Guid candidateId);
     }
 
@@ -21,14 +23,40 @@ namespace SFA.DAS.CandidateAccount.Data.SavedVacancy
             return savedVacancyItems.Select(x => (Domain.Candidate.SavedVacancy)x).ToList();
         }
 
+        public async Task<Domain.Candidate.SavedVacancy?> Get(Guid candidateId, string vacancyReference)
+        {
+            var result = await dataContext.SavedVacancyEntities
+                .AsNoTracking()
+                .SingleOrDefaultAsync(x => x.CandidateId == candidateId && x.VacancyReference == vacancyReference);
+
+            return result;
+        }
+
         public Task<Domain.Candidate.SavedVacancy> Delete(Domain.Candidate.SavedVacancy savedVacancy, Guid candidateId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Domain.Candidate.SavedVacancy> Upsert(Domain.Candidate.SavedVacancy savedVacancy, Guid candidateId)
+        public async Task<Tuple<Domain.Candidate.SavedVacancy, bool>> Upsert(Domain.Candidate.SavedVacancy savedVacancy)
         {
-            throw new NotImplementedException();
+            var existing = await Get(savedVacancy.CandidateId, savedVacancy.VacancyReference);
+
+            if (existing == null)
+            {
+                var newEntity = new SavedVacancyEntity
+                {
+                    Id = Guid.NewGuid(),
+                    CandidateId = savedVacancy.CandidateId,
+                    VacancyReference = savedVacancy.VacancyReference,
+                    CreatedOn = savedVacancy.CreatedOn
+                };
+
+                dataContext.SavedVacancyEntities.Add(newEntity);
+                await dataContext.SaveChangesAsync();
+                return new Tuple<Domain.Candidate.SavedVacancy, bool>(newEntity, true);
+            }
+
+            return new Tuple<Domain.Candidate.SavedVacancy, bool>(existing, false);
         }
     }
 }
