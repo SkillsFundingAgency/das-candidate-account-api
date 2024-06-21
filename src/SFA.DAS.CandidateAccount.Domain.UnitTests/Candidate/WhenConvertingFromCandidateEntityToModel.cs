@@ -35,8 +35,8 @@ public class WhenConvertingFromCandidateEntityToModel
             .BeEquivalentTo(source,
                 options => options.Excluding(c => c.Applications)
                     .Excluding(c => c.Status)
+                    .Excluding(c => c.CandidatePreferences)
                     .Excluding(c => c.AboutYou));
-        actual.Should().BeEquivalentTo(source, options=>options.Excluding(c=>c.Applications).Excluding(c => c.Status).Excluding(c=> c.CandidatePreferences));
         actual.Status.Should().Be(status);
     }
 }

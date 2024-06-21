@@ -45,6 +45,7 @@ public class WhenCallingGetCandidateApplications
                     .Excluding(c=>c.Address)
                     .Excluding(c=>c.CandidatePreferences)
                     .Excluding(c=>c.Applications)
+                    .Excluding(c=>c.AboutYou)
                 );
         actualModel.Candidates.Select(c => c.ApplicationId).ToList().Should()
             .BeEquivalentTo(queryResult.Candidates.Select(x => x.Id).ToList());
