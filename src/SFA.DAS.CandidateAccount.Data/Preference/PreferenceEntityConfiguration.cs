@@ -14,5 +14,6 @@ public class PreferenceEntityConfiguration : IEntityTypeConfiguration<Preference
         builder.Property(x => x.PreferenceId).HasColumnName("PreferenceId").HasColumnType("uniqueidentifier").IsRequired();
         builder.Property(x => x.PreferenceMeaning).HasColumnName("PreferenceMeaning").HasColumnType("varchar").HasMaxLength(500).IsRequired();
         builder.Property(x => x.PreferenceHint).HasColumnName("PreferenceHint").HasColumnType("varchar").HasMaxLength(500).IsRequired();
+        builder.Property(x => x.PreferenceType).HasColumnName("PreferenceType").HasColumnType("varchar").HasMaxLength(50).IsRequired(false);
     }
 }
