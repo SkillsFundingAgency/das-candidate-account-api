@@ -19,7 +19,6 @@ public class WhenMappingGetApplicationApiResponseFromMeditorResponse
         var actual = (GetApplicationApiResponse)application;
 
         actual.Should().BeEquivalentTo(application, options => options
-            .Excluding(c=>c.AboutYou)
             .Excluding(c=>c.TrainingCourses)
         );
     }

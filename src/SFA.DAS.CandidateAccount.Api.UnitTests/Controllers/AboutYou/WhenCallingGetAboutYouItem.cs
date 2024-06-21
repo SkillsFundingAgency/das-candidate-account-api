@@ -15,44 +15,39 @@ public class WhenCallingGetAboutYouItem
 {
     [Test, MoqAutoData]
     public async Task Then_The_Command_Is_Sent_To_Mediator_And_Ok_Returned(
-        Guid applicationId,
         Guid candidateId,
         GetAboutYouItemQueryResult response,
         [Frozen] Mock<IMediator> mediator,
         [Greedy] AboutYouController controller)
     {
         mediator.Setup(x => x.Send(It.Is<GetAboutYouItemQuery>(
-                c =>
-                    c.ApplicationId.Equals(applicationId) &&
-                    c.CandidateId.Equals(candidateId)
+                c => c.CandidateId.Equals(candidateId)
             ), It.IsAny<CancellationToken>()))
             .ReturnsAsync(response);
 
-        var actual = await controller.Get(candidateId, applicationId) as OkObjectResult;
+        var actual = await controller.Get(candidateId) as OkObjectResult;
 
         using (new AssertionScope())
         {
             actual.Should().NotBeNull();
             actual?.StatusCode.Should().Be((int)HttpStatusCode.OK);
-            actual?.Value.Should().BeEquivalentTo((GetAboutYouItemApiResponse)response.AboutYou);
+            actual?.Value.Should().BeEquivalentTo((GetAboutYouItemApiResponse)response);
         }
     }
     
     [Test, MoqAutoData]
     public async Task Then_The_Command_Is_Sent_To_Mediator_And_NotFound_Returned_When_Result_Is_Null(
-        Guid applicationId,
         Guid candidateId,
         [Frozen] Mock<IMediator> mediator,
         [Greedy] AboutYouController controller)
     {
         mediator.Setup(x => x.Send(It.Is<GetAboutYouItemQuery>(
                 c =>
-                    c.ApplicationId.Equals(applicationId) &&
                     c.CandidateId.Equals(candidateId)
             ), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new GetAboutYouItemQueryResult());
 
-        var actual = await controller.Get(candidateId, applicationId) as NotFoundResult;
+        var actual = await controller.Get(candidateId) as NotFoundResult;
 
         using (new AssertionScope())
         {
@@ -63,7 +58,6 @@ public class WhenCallingGetAboutYouItem
 
     [Test, MoqAutoData]
     public async Task Then_If_Exception_Returned_From_Mediator_Then_InternalServerError_Is_Returned(
-        Guid applicationId,
         Guid candidateId,
         [Frozen] Mock<IMediator> mediator,
         [Greedy] AboutYouController controller)
@@ -71,7 +65,7 @@ public class WhenCallingGetAboutYouItem
         mediator.Setup(x => x.Send(It.IsAny<GetAboutYouItemQuery>(), It.IsAny<CancellationToken>()))
             .ThrowsAsync(new Exception());
 
-        var actual = await controller.Get(candidateId, applicationId) as StatusCodeResult;
+        var actual = await controller.Get(candidateId) as StatusCodeResult;
 
         using (new AssertionScope())
         {
