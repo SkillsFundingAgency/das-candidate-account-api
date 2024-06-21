@@ -11,6 +11,7 @@ using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplicationQua
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetQualification;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetQualifications;
 using SFA.DAS.CandidateAccount.Application.ReferenceData.Queries;
+using SFA.DAS.CandidateAccount.Application.ReferenceData.Queries.GetAvailableQualifications;
 using SFA.DAS.CandidateAccount.Data.AdditionalQuestion;
 using SFA.DAS.CandidateAccount.Data.Address;
 using SFA.DAS.CandidateAccount.Data.Application;

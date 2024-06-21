@@ -44,22 +44,22 @@ END
 
 IF NOT EXISTS(SELECT 1 FROM Preference where PreferenceMeaning = 'Your application gets a response')
 BEGIN
-insert into Preference (PreferenceId, PreferenceMeaning, PreferenceHint)
-Values (NEWID(), 'Your application gets a response', 'Be notified when an application is successful or unsuccessful')
+insert into Preference (PreferenceId, PreferenceMeaning, PreferenceHint, PreferenceType)
+Values (NEWID(), 'Your application gets a response', 'Be notified when an application is successful or unsuccessful','application')
 END
 ELSE
 BEGIN
-    UPDATE Preference set PreferenceHint = 'Be notified when an application is successful or unsuccessful' where PreferenceMeaning = 'Your application gets a response'
+    UPDATE Preference set PreferenceHint = 'Be notified when an application is successful or unsuccessful', PreferenceType='application' where PreferenceMeaning = 'Your application gets a response'
 END
 
 --add default notification preferences
 
 IF NOT EXISTS(SELECT 1 FROM Preference where PreferenceMeaning = 'A vacancy is closing soon')
 BEGIN
-insert into Preference (PreferenceId, PreferenceMeaning, PreferenceHint)
-Values (NEWID(), 'A vacancy is closing soon', 'Get a reminder 7 days before the closing date for an apprenticeship. We''ll notify you for your saved vacancies and apprenticeships you''ve began an application for.')
+insert into Preference (PreferenceId, PreferenceMeaning, PreferenceHint, PreferenceType)
+Values (NEWID(), 'A vacancy is closing soon', 'Get a reminder 7 days before the closing date for an apprenticeship. We''ll notify you for your saved vacancies and apprenticeships you''ve began an application for.','closing')
 END
 ELSE
 BEGIN
-    UPDATE Preference set PreferenceHint = 'Get a reminder 7 days before the closing date for an apprenticeship. We''ll notify you for your saved vacancies and apprenticeships you''ve began an application for.' where PreferenceMeaning = 'A vacancy is closing soon'
+    UPDATE Preference set PreferenceHint = 'Get a reminder 7 days before the closing date for an apprenticeship. We''ll notify you for your saved vacancies and apprenticeships you''ve began an application for.', PreferenceType='closing' where PreferenceMeaning = 'A vacancy is closing soon'
 END

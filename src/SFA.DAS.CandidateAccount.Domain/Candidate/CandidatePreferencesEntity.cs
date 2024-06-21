@@ -9,6 +9,7 @@
         public DateTime CreatedOn { get; set; }
         public DateTime? UpdatedOn { get; set; }
         public string ContactMethod { get; set; }
+        public virtual CandidateEntity Candidate { get; set; }
 
         public static implicit operator CandidatePreferencesEntity(CandidatePreference source)
         {

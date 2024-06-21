@@ -5,27 +5,26 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using SFA.DAS.CandidateAccount.Api.Controllers;
-using SFA.DAS.CandidateAccount.Application.ReferenceData.Queries;
-using SFA.DAS.CandidateAccount.Application.ReferenceData.Queries.GetAvailableQualifications;
+using SFA.DAS.CandidateAccount.Application.ReferenceData.Queries.GetAvailablePreferences;
 using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.ReferenceData;
 
-public class WhenCallingGetQualifications
+public class WhenCallingGetPreferences
 {
     [Test, MoqAutoData]
     public async Task Then_The_Query_Is_Handled_And_Data_Returned(
-        GetAvailableQualificationsQueryResult result,
+        GetAvailablePreferencesQueryResult result,
         [Frozen] Mock<IMediator> mediator,
         [Greedy] ReferenceDataController controller)
     {
-        mediator.Setup(x => x.Send(It.IsAny<GetAvailableQualificationsQuery>(), CancellationToken.None))
+        mediator.Setup(x => x.Send(It.IsAny<GetAvailablePreferencesQuery>(), CancellationToken.None))
             .ReturnsAsync(result);
 
-        var actual = await controller.GetQualifications() as OkObjectResult;
+        var actual = await controller.GetPreferences() as OkObjectResult;
         
         actual!.StatusCode.Should().Be((int) HttpStatusCode.OK);
-        actual.Value.Should().BeEquivalentTo(new {QualificationReferences= result.QualificationReferences});
+        actual.Value.Should().BeEquivalentTo(new {Preferences= result.Preferences});
     }
 
     [Test, MoqAutoData]
@@ -33,10 +32,10 @@ public class WhenCallingGetQualifications
         [Frozen] Mock<IMediator> mediator,
         [Greedy]ReferenceDataController controller)
     {
-        mediator.Setup(x => x.Send(It.IsAny<GetAvailableQualificationsQuery>(), CancellationToken.None))
+        mediator.Setup(x => x.Send(It.IsAny<GetAvailablePreferencesQuery>(), CancellationToken.None))
             .ThrowsAsync(new Exception());
 
-        var actual = await controller.GetQualifications() as StatusCodeResult;
+        var actual = await controller.GetPreferences() as StatusCodeResult;
 
         actual.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
     }

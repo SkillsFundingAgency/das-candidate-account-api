@@ -44,6 +44,7 @@ public class AddLegacyApplicationCommandHandler(IApplicationRepository applicati
 
         return new ApplicationEntity
         {
+            Id = legacyApplication.Id,
             CandidateId = legacyApplication.CandidateId,
             VacancyReference = legacyApplication.VacancyReference,
             Status = (short)legacyApplication.Status,

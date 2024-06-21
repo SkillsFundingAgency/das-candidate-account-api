@@ -24,7 +24,8 @@ public class Candidate
             UpdatedOn = source.UpdatedOn,
             TermsOfUseAcceptedOn = source.TermsOfUseAcceptedOn,
             Status = (CandidateStatus) source.Status,
-            Address = source.Address
+            Address = source.Address,
+            MigratedEmail = source.MigratedEmail
         };
     }
 
@@ -42,6 +43,7 @@ public class Candidate
     public DateTime? UpdatedOn { get; set; }
     public DateTime? TermsOfUseAcceptedOn { get; set; }
     public CandidateStatus? Status { get; set; }
+    public string? MigratedEmail { get; set; }
 
     public string? Email { get; set; }
 
