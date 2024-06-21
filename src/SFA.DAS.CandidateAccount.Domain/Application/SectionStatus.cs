@@ -17,6 +17,7 @@ public enum ApplicationStatus
     Withdrawn = 2,
     Successful = 3,
     UnSuccessful = 4,
+    Expired = 5
 }
 
 public enum CandidateStatus

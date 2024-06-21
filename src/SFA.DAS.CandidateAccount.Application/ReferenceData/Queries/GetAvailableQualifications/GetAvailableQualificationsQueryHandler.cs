@@ -2,7 +2,7 @@ using MediatR;
 using SFA.DAS.CandidateAccount.Data.ReferenceData;
 using SFA.DAS.CandidateAccount.Domain.Application;
 
-namespace SFA.DAS.CandidateAccount.Application.ReferenceData.Queries;
+namespace SFA.DAS.CandidateAccount.Application.ReferenceData.Queries.GetAvailableQualifications;
 
 public class GetAvailableQualificationsQueryHandler(IQualificationReferenceRepository repository) : IRequestHandler<GetAvailableQualificationsQuery, GetAvailableQualificationsQueryResult>
 {
