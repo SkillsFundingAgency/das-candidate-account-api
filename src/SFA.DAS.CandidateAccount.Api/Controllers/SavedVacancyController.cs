@@ -21,7 +21,12 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers
         [HttpPut]
         public async Task<IActionResult> Put(Guid candidateId, SavedVacancyRequest request)
         {
-            var result = await mediator.Send(new AddSavedVacancyCommand() { CandidateId = candidateId, VacancyReference = request.VacancyReference});
+            var result = await mediator.Send(new AddSavedVacancyCommand()
+            {
+                CandidateId = candidateId,
+                VacancyReference = request.VacancyReference,
+                CreatedOn = request.CreatedOn
+            });
             return Ok(result.SavedVacancy);
         }
     }
