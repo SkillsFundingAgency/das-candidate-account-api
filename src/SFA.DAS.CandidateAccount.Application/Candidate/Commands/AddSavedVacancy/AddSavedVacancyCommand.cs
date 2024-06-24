@@ -8,6 +8,7 @@ namespace SFA.DAS.CandidateAccount.Application.Candidate.Commands.AddSavedVacanc
     {
         public Guid CandidateId { get; set; }
         public string VacancyReference { get; set; }
+        public DateTime CreatedOn { get; set; }
     }
 
     public class AddSavedVacancyCommandResult
@@ -24,7 +25,7 @@ namespace SFA.DAS.CandidateAccount.Application.Candidate.Commands.AddSavedVacanc
             {
                 CandidateId = request.CandidateId,
                 VacancyReference = request.VacancyReference,
-                CreatedOn = DateTime.UtcNow
+                CreatedOn = request.CreatedOn
             };
 
             var result = await savedVacancyRepository.Upsert(savedVacancy);
