@@ -54,7 +54,7 @@ stages:
     parameters:
       SolutionBaseName: $(SolutionBaseName)
       DatabaseProjectPath: src/$(SolutionBaseName).Database/$(SolutionBaseName).Database.csproj
-  
+
 - stage: Deploy_AT
   dependsOn: Build
   displayName: Deploy to AT
@@ -118,7 +118,7 @@ stages:
 #   variables:
 #   - group: PROD Management Resources
 #   - group: PROD Shared Resources
-#   - group: __PRODSpecificReleaseVariables__ #PLACEHOLDER
+#   - group: PROD das-candidate-account-api
 #   jobs:
 #   - template: pipeline-templates/job/deploy.yml
 #     parameters:
