@@ -107,7 +107,7 @@
         "resourceGroupName": "[concat(variables('resourceNamePrefix'), 'api-rg')]",
         "databaseName": "[concat(variables('resourceNamePrefix'), '-db')]",
         "apiAppServiceName": "[concat(variables('resourceNamePrefix'), 'api-as')]",
-        "appServicePlanName": "[concat(variables('resourceNamePrefix'), '-asp')]",
+        "appServicePlanName": "[concat(variables('resourceNamePrefix'), 'api-asp')]",
         "configNames": "SFA.DAS.CandidateAccount.Api"
     },
     "resources": [
