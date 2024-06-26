@@ -8,7 +8,7 @@ namespace SFA.DAS.CandidateAccount.Data.SavedVacancy
         Task<List<Domain.Candidate.SavedVacancy>> GetByCandidateId(Guid candidateId);
         Task<Domain.Candidate.SavedVacancy?> Get(Guid candidateId, string vacancyReference);
         Task<Tuple<Domain.Candidate.SavedVacancy, bool>> Upsert(Domain.Candidate.SavedVacancy savedVacancy);
-        Task<Domain.Candidate.SavedVacancy> Delete(Domain.Candidate.SavedVacancy savedVacancy, Guid candidateId);
+        Task Delete(Domain.Candidate.SavedVacancy savedVacancy);
     }
 
     public class SavedVacancyRepository(ICandidateAccountDataContext dataContext) : ISavedVacancyRepository
@@ -32,9 +32,10 @@ namespace SFA.DAS.CandidateAccount.Data.SavedVacancy
             return result;
         }
 
-        public Task<Domain.Candidate.SavedVacancy> Delete(Domain.Candidate.SavedVacancy savedVacancy, Guid candidateId)
+        public async Task Delete(Domain.Candidate.SavedVacancy savedVacancy)
         {
-            throw new NotImplementedException();
+             dataContext.SavedVacancyEntities.Remove(savedVacancy!);
+             await dataContext.SaveChangesAsync();
         }
 
         public async Task<Tuple<Domain.Candidate.SavedVacancy, bool>> Upsert(Domain.Candidate.SavedVacancy savedVacancy)
