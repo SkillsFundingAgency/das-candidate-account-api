@@ -27,18 +27,6 @@ namespace SFA.DAS.CandidateAccount.Data.CandidatePreferences
 
             foreach (var item in preferences)
             {
-                var textCandidatePreference = new CandidatePreferencesEntity
-                {
-                    Id = Guid.NewGuid(),
-                    CandidateId = candidateId,
-                    PreferenceId = item.PreferenceId,
-                    ContactMethod = "Text",
-                    Status = null,
-                    CreatedOn = DateTime.UtcNow,
-                    UpdatedOn = null
-                };
-                dataContext.CandidatePreferencesEntities.Add(textCandidatePreference);
-
                 var emailCandidatePreference = new CandidatePreferencesEntity
                 {
                     Id = Guid.NewGuid(),

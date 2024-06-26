@@ -42,16 +42,6 @@ insert into QualificationReference (Id, Name)
 Values (NEWID(), 'Other')
 END
 
-IF NOT EXISTS(SELECT 1 FROM Preference where PreferenceMeaning = 'Your application gets a response')
-BEGIN
-insert into Preference (PreferenceId, PreferenceMeaning, PreferenceHint, PreferenceType)
-Values (NEWID(), 'Your application gets a response', 'Be notified when an application is successful or unsuccessful','application')
-END
-ELSE
-BEGIN
-    UPDATE Preference set PreferenceHint = 'Be notified when an application is successful or unsuccessful', PreferenceType='application' where PreferenceMeaning = 'Your application gets a response'
-END
-
 --add default notification preferences
 
 IF NOT EXISTS(SELECT 1 FROM Preference where PreferenceMeaning = 'A vacancy is closing soon')
