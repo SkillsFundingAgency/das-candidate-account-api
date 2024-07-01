@@ -35,14 +35,8 @@
         "resourceGroupLocation": {
             "type": "string"
         },
-        "sharedBackEndAppServicePlanName": {
-            "type": "string"
-        },
         "backEndAccessRestrictions": {
             "type": "array"
-        },
-        "sharedBackEndSubnetResourceId": {
-            "type": "string"
         },
         "sharedKeyVaultName": {
             "type": "string"
@@ -86,7 +80,7 @@
         },
         "nonASETier": {
             "type": "string",
-            "defaultValue": "PremiumV2"
+            "defaultValue": "Standard"
         },
         "sharedEnvVirtualNetworkName": {
             "type": "string"
@@ -270,13 +264,13 @@
                         "value": "[variables('apiAppServiceName')]"
                     },
                     "appServicePlanName": {
-                        "value": "[parameters('sharedBackEndAppServicePlanName')]"
+                        "value": "[variables('appServicePlanName')]"
                     },
                     "appServicePlanResourceGroup": {
                         "value": "[parameters('sharedEnvResourceGroup')]"
                     },
                     "subnetResourceId": {
-                        "value": "[parameters('sharedBackEndSubnetResourceId')]"
+                        "value": "[reference(concat(parameters('subnetObject').name, '-', parameters('utcValue'))).outputs.subnetResourceId.value]"
                     },
                     "appServiceAppSettings": {
                         "value": {
