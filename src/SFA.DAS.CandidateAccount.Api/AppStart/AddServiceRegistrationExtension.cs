@@ -10,6 +10,7 @@ using SFA.DAS.CandidateAccount.Data.TrainingCourse;
 using SFA.DAS.CandidateAccount.Data.WorkExperience;
 using SFA.DAS.CandidateAccount.Data.CandidatePreferences;
 using SFA.DAS.CandidateAccount.Data.Preference;
+using SFA.DAS.CandidateAccount.Data.SavedVacancy;
 
 namespace SFA.DAS.CandidateAccount.Api.AppStart;
 
@@ -28,6 +29,7 @@ public static class AddServiceRegistrationExtension
         services.AddScoped<IAddressRepository, AddressRepository>();
         services.AddScoped<ICandidatePreferencesRepository, CandidatePreferencesRepository>();
         services.AddScoped<IPreferencesRepository, PreferencesRepository>();
+        services.AddScoped<ISavedVacancyRepository, SavedVacancyRepository>();
         services.AddMediatR(configuration => configuration.RegisterServicesFromAssembly(typeof(UpsertApplicationCommand).Assembly));
     }
 }

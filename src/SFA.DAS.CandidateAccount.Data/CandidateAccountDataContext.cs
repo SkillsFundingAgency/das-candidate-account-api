@@ -17,6 +17,7 @@ using SFA.DAS.CandidateAccount.Domain.Configuration;
 using SFA.DAS.CandidateAccount.Data.Address;
 using SFA.DAS.CandidateAccount.Data.CandidatePreferences;
 using SFA.DAS.CandidateAccount.Data.Preference;
+using SFA.DAS.CandidateAccount.Data.SavedVacancy;
 
 namespace SFA.DAS.CandidateAccount.Data;
 
@@ -33,6 +34,7 @@ public interface ICandidateAccountDataContext
     DbSet<QualificationEntity> QualificationEntities { get; set; }
     DbSet<CandidatePreferencesEntity> CandidatePreferencesEntities { get; set; }
     DbSet<PreferenceEntity> PreferenceEntities { get; set; }
+    DbSet<SavedVacancyEntity> SavedVacancyEntities { get; set; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
 }
 public class CandidateAccountDataContext : DbContext, ICandidateAccountDataContext
@@ -51,6 +53,7 @@ public class CandidateAccountDataContext : DbContext, ICandidateAccountDataConte
     public DbSet<QualificationEntity> QualificationEntities { get; set; }
     public DbSet<CandidatePreferencesEntity> CandidatePreferencesEntities { get; set; }
     public DbSet<PreferenceEntity> PreferenceEntities { get; set; }
+    public DbSet<SavedVacancyEntity> SavedVacancyEntities { get; set; }
 
     private readonly CandidateAccountConfiguration? _configuration;
     public CandidateAccountDataContext()
@@ -105,6 +108,7 @@ public class CandidateAccountDataContext : DbContext, ICandidateAccountDataConte
         modelBuilder.ApplyConfiguration(new AddressEntityConfiguration());
         modelBuilder.ApplyConfiguration(new CandidatePreferencesEntityConfiguration());
         modelBuilder.ApplyConfiguration(new PreferenceEntityConfiguration());
+        modelBuilder.ApplyConfiguration(new SavedVacancyEntityConfiguration());
 
         base.OnModelCreating(modelBuilder);
     }
