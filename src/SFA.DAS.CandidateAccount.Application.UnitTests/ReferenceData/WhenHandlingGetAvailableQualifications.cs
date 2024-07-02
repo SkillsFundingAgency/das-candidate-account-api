@@ -2,6 +2,7 @@ using AutoFixture.NUnit3;
 using FluentAssertions;
 using Moq;
 using SFA.DAS.CandidateAccount.Application.ReferenceData.Queries;
+using SFA.DAS.CandidateAccount.Application.ReferenceData.Queries.GetAvailableQualifications;
 using SFA.DAS.CandidateAccount.Data.ReferenceData;
 using SFA.DAS.CandidateAccount.Domain.Application;
 using SFA.DAS.Testing.AutoFixture;

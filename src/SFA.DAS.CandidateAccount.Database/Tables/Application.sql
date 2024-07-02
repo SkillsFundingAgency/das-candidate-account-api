@@ -23,6 +23,8 @@ CREATE TABLE dbo.[Application] (
     [WhatIsYourInterest]                    nvarchar(max)       NULL,
     [ApplyUnderDisabilityConfidentScheme]   bit                 NULL,
     [PreviousAnswersSourceId]               uniqueidentifier    NULL,
+    [Strengths]   			                nvarchar(max)	    NULL,
+    [Support]  		    	                nvarchar(max)       NULL,
     [MigrationDate]                         datetime            NULL,
     CONSTRAINT [PK_Application] PRIMARY KEY (Id),
     INDEX [IX_Application_CandidateIdVacancyReference] NONCLUSTERED(CandidateId, VacancyReference),

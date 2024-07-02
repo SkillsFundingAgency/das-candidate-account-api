@@ -11,12 +11,11 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers;
 
 [ApiVersion("1.0")]
 [ApiController]
-[Route("api/candidates/{candidateId}/applications/{applicationId}/about-you")]
+[Route("api/candidates/{candidateId}/about-you")]
 public class AboutYouController(IMediator mediator, ILogger<AboutYouController> logger) : Controller
 {
     [HttpPut]
-    [Route("{id}")]
-    public async Task<IActionResult> PutAboutYouItem([FromRoute] Guid candidateId, [FromRoute] Guid applicationId, [FromRoute] Guid id, PutAboutYouItemRequest request)
+    public async Task<IActionResult> PutAboutYouItem([FromRoute] Guid candidateId, PutAboutYouItemRequest request)
     {
         try
         {
@@ -24,10 +23,7 @@ public class AboutYouController(IMediator mediator, ILogger<AboutYouController> 
             {
                 AboutYou = new AboutYou
                 {
-                    Id = id,
-                    ApplicationId = applicationId,
-                    Strengths = request.SkillsAndStrengths,
-                    Support = request.Support,
+                    CandidateId = candidateId,
                     Sex = request.Sex,
                     EthnicGroup = request.EthnicGroup,
                     EthnicSubGroup = request.EthnicSubGroup,
@@ -51,20 +47,19 @@ public class AboutYouController(IMediator mediator, ILogger<AboutYouController> 
     }
 
     [HttpGet]
-    public async Task<IActionResult> Get([FromRoute] Guid candidateId, [FromRoute] Guid applicationId)
+    public async Task<IActionResult> Get([FromRoute] Guid candidateId)
     {
         try
         {
             var result = await mediator.Send(new GetAboutYouItemQuery
             {
                 CandidateId = candidateId,
-                ApplicationId = applicationId
             });
             if (result.AboutYou == null)
             {
                 return NotFound();
             }
-            return Ok((GetAboutYouItemApiResponse)result.AboutYou);
+            return Ok((GetAboutYouItemApiResponse)result);
         }
         catch (Exception e)
         {

@@ -25,6 +25,9 @@ public abstract class ApplicationBase
     public bool? ApplyUnderDisabilityConfidentScheme { get; set; }
     public DateTime? ResponseDate { get; set; }
     public string? ResponseNotes { get; set; }
+    public string? Strengths { get; set; }
+    public string? Support { get; set; }
+
 
     protected static T ParseValue<T>(short status) where T : struct, Enum
     {
@@ -58,7 +61,6 @@ public abstract class ApplicationBase
 
 public class ApplicationDetail : Application
 {
-    public AboutYou AboutYou { get; set; }
     public List<Qualification> Qualifications { get; set; }
     public List<WorkHistory> WorkHistory { get; set; }
     public List<TrainingCourse> TrainingCourses { get; set; }
@@ -123,7 +125,6 @@ public class ApplicationDetail : Application
             WhatIsYourInterest = source.WhatIsYourInterest,
             ApplyUnderDisabilityConfidentScheme = source.ApplyUnderDisabilityConfidentScheme,
             AdditionalQuestions = source.AdditionalQuestionEntities?.Select(c=>(AdditionalQuestion)c).ToList(),
-            AboutYou = source.AboutYouEntity,
             Candidate = source.CandidateEntity,
             Qualifications = source.QualificationEntities.Select(c=>(Qualification)c).ToList(),
             WorkHistory = source.WorkHistoryEntities.Select(c=>(WorkHistory)c).ToList(),
@@ -134,6 +135,8 @@ public class ApplicationDetail : Application
             ResponseNotes = source.ResponseNotes,
             ResponseDate = source.ResponseDate,
             PreviousAnswersSourceId = source.PreviousAnswersSourceId,
+            Strengths = source.Strengths,
+            Support = source.Support,
             MigrationDate = source.MigrationDate
         };
     }
@@ -150,7 +153,9 @@ public class Application : ApplicationBase
     public required string VacancyReference { get; set; }
     public List<AdditionalQuestion>? AdditionalQuestions { get; set; } = [];
     public Guid? PreviousAnswersSourceId { get; set; }
-    public DateTime? MigrationDate { get; set; }
+    public string? Strengths { get; set; }
+    public string? Support { get; set; }
+public DateTime? MigrationDate { get; set; }
 
 
     public static implicit operator Application(ApplicationEntity source)
@@ -219,6 +224,8 @@ public class Application : ApplicationBase
             ResponseNotes = source.ResponseNotes,
             ResponseDate = source.ResponseDate,
             PreviousAnswersSourceId = source.PreviousAnswersSourceId,
+            Strengths = source.Strengths,
+            Support = source.Support,
             MigrationDate = source.MigrationDate
         };
     }

@@ -17,6 +17,8 @@ public class WhenConvertingFromCandidateEntityToModel
             .Excluding(c=> c.Applications)
             .Excluding(c => c.Status)
             .Excluding(c=> c.Address)
+            .Excluding(c => c.AboutYou)
+            .Excluding(c=> c.CandidatePreferences)
         );
         actual.Status.Should().Be(status);
     }
@@ -29,7 +31,12 @@ public class WhenConvertingFromCandidateEntityToModel
         
         var actual = (Domain.Candidate.Candidate)source;
 
-        actual.Should().BeEquivalentTo(source, options=>options.Excluding(c=>c.Applications).Excluding(c => c.Status));
+        actual.Should()
+            .BeEquivalentTo(source,
+                options => options.Excluding(c => c.Applications)
+                    .Excluding(c => c.Status)
+                    .Excluding(c => c.CandidatePreferences)
+                    .Excluding(c => c.AboutYou));
         actual.Status.Should().Be(status);
     }
 }

@@ -15,7 +15,7 @@ public class WhenHandlingGetAboutYouItemQuery
     [Frozen] Mock<IAboutYouRespository> aboutYouRepository,
     GetAboutYouItemQueryHandler handler)
     {
-        aboutYouRepository.Setup(x => x.Get(request.ApplicationId, request.CandidateId)).ReturnsAsync(entity);
+        aboutYouRepository.Setup(x => x.Get(request.CandidateId)).ReturnsAsync(entity);
 
         var actual = await handler.Handle(request, CancellationToken.None);
 
@@ -30,7 +30,7 @@ public class WhenHandlingGetAboutYouItemQuery
         [Frozen] Mock<IAboutYouRespository> aboutYouRepository,
         GetAboutYouItemQueryHandler handler)
     {
-        aboutYouRepository.Setup(x => x.Get(request.ApplicationId, request.CandidateId)).ReturnsAsync((Domain.Candidate.AboutYou)null);
+        aboutYouRepository.Setup(x => x.Get(request.CandidateId)).ReturnsAsync((Domain.Candidate.AboutYou)null);
 
         var actual = await handler.Handle(request, CancellationToken.None);
 

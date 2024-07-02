@@ -44,6 +44,7 @@ public class AddLegacyApplicationCommandHandler(IApplicationRepository applicati
 
         return new ApplicationEntity
         {
+            Id = legacyApplication.Id,
             CandidateId = legacyApplication.CandidateId,
             VacancyReference = legacyApplication.VacancyReference,
             Status = (short)legacyApplication.Status,
@@ -57,11 +58,8 @@ public class AddLegacyApplicationCommandHandler(IApplicationRepository applicati
             ResponseNotes = legacyApplication.Status == ApplicationStatus.UnSuccessful ?
                 legacyApplication.UnsuccessfulReason : string.Empty,
             MigrationDate = DateTime.UtcNow,
-            AboutYouEntity = new AboutYouEntity
-            {
-                Strengths = legacyApplication.SkillsAndStrengths,
-                Support = legacyApplication.Support,
-            },
+            Strengths = legacyApplication.SkillsAndStrengths,
+            Support = legacyApplication.Support,
             AdditionalQuestionEntities = additionalQuestions,
             SkillsAndStrengthStatus = (short)SectionStatus.Incomplete,
             InterviewAdjustmentsStatus = (short)SectionStatus.Incomplete,

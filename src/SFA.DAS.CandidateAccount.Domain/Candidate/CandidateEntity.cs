@@ -18,7 +18,8 @@ public record CandidateEntity
             TermsOfUseAcceptedOn = source.TermsOfUseAcceptedOn,
             MiddleNames = source.MiddleNames,
             PhoneNumber = source.PhoneNumber,
-            UpdatedOn = source.UpdatedOn
+            UpdatedOn = source.UpdatedOn,
+            MigratedEmail = source.MigratedEmail
         };
     }
     public Guid Id { get; set; }
@@ -33,8 +34,13 @@ public record CandidateEntity
     public DateTime? TermsOfUseAcceptedOn { get; set; }
     public required string GovUkIdentifier { get; set; }
     public short Status { get; set; }
-    
+    public string? MigratedEmail { get; set; }
+
     public virtual AddressEntity? Address { get; set; }
     
+    public virtual ICollection<CandidatePreferencesEntity> CandidatePreferences { get; set; }
+    
+    public virtual AboutYouEntity? AboutYou { get; set; } = null;
+
     public virtual ICollection<ApplicationEntity>? Applications { get; set; } = null!;
 }

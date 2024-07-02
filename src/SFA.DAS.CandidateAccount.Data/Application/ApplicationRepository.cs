@@ -12,6 +12,7 @@ public interface IApplicationRepository
     Task<IEnumerable<ApplicationEntity>> GetByCandidateId(Guid candidateId, short? statusId);
     Task<ApplicationEntity?> GetByVacancyReference(Guid candidateId, string vacancyReference);
     Task<ApplicationEntity> Clone(Guid applicationId, string vacancyReference, bool requiresDisabilityConfidence, SectionStatus? additionalQuestion1Status, SectionStatus? additionalQuestion2Status);
+    Task<IEnumerable<ApplicationEntity>> GetApplicationsByVacancyReference(string vacancyReference, short? statusId = null, Guid? preferenceId = null, bool canEmailOnly = false);
 }
 
 public class ApplicationRepository(ICandidateAccountDataContext dataContext) : IApplicationRepository
@@ -63,7 +64,6 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
                 .Include(c=>c.AdditionalQuestionEntities)
                 .Include(c=>c.CandidateEntity)
                     .ThenInclude(c=>c.Address)
-                .Include(c=>c.AboutYouEntity)
                 .IgnoreAutoIncludes()
                 .SingleOrDefaultAsync(c=>c.Id == applicationId);
         return applicationEntity;
@@ -107,7 +107,6 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
             .Include(x => x.TrainingCourseEntities)
             .Include(x => x.QualificationEntities)
             .Include(x => x.WorkHistoryEntities)
-            .Include(x => x.AboutYouEntity)
             .AsNoTracking()
             .SingleAsync(x => x.Id == applicationId);
 
@@ -116,6 +115,7 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
         original.CreatedDate = DateTime.UtcNow;
         original.UpdatedDate = null;
         original.SubmittedDate = null;
+        original.MigrationDate = null;
         original.ResponseDate = null;
         original.ResponseNotes = null;
         original.VacancyReference = vacancyReference;
@@ -124,7 +124,6 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
         original.TrainingCourseEntities.ToList().ForEach(x => x.Id = Guid.NewGuid());
         original.QualificationEntities.ToList().ForEach(x => x.Id = Guid.NewGuid());
         original.WorkHistoryEntities.ToList().ForEach(x => x.Id = Guid.NewGuid());
-        if (original.AboutYouEntity != null) { original.AboutYouEntity.Id = Guid.NewGuid(); }
         original.JobsStatus = (short)SectionStatus.PreviousAnswer;
         original.InterestsStatus = (short)SectionStatus.PreviousAnswer;
         original.QualificationsStatus = (short)SectionStatus.PreviousAnswer;
@@ -157,5 +156,17 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
         await dataContext.SaveChangesAsync();
 
         return original;
+    }
+
+
+    public async Task<IEnumerable<ApplicationEntity>> GetApplicationsByVacancyReference(string vacancyReference, short? statusId = null, Guid? preferenceId = null, bool canEmailOnly = false)
+    {
+        return await dataContext.ApplicationEntities
+            .Include(c => c.CandidateEntity)
+                .ThenInclude(c => c.CandidatePreferences)
+            .Include(c=>c.CandidateEntity)
+                .ThenInclude(c=>c.Address)
+            .Where(c => c.VacancyReference == vacancyReference && (statusId== null || c.Status == statusId) && c.CandidateEntity.CandidatePreferences.Count(x=>(preferenceId == null || x.PreferenceId == preferenceId) 
+                && (!canEmailOnly || (x.ContactMethod == "email" && x.Status!.Value))) >= 1).ToListAsync();
     }
 }

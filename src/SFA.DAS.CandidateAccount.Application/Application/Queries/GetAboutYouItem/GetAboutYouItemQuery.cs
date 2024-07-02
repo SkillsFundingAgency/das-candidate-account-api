@@ -4,5 +4,4 @@ namespace SFA.DAS.CandidateAccount.Application.Application.Queries.GetAboutYouIt
 public class GetAboutYouItemQuery : IRequest<GetAboutYouItemQueryResult>
 {
     public Guid CandidateId { get; set; }
-    public Guid ApplicationId { get; set; }
 }

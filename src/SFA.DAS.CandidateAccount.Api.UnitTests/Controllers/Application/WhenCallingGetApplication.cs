@@ -67,7 +67,6 @@ public class WhenCallingGetApplication
         actual.Value.Should().BeEquivalentTo((Domain.Application.ApplicationDetail)response.Application, options => 
             options
                 .Excluding(prop => prop!.AdditionalQuestions)
-                .Excluding(prop => prop!.AboutYou)
                 .Excluding(prop => prop!.TrainingCourses)
             );
     }

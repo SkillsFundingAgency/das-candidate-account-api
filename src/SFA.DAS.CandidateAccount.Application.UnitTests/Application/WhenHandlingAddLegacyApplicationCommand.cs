@@ -67,9 +67,8 @@ namespace SFA.DAS.CandidateAccount.Application.UnitTests.Application
             using var scope = new AssertionScope();
             _capturedApplicationEntity.Status.Should().Be((short)command.LegacyApplication.Status);
             _capturedApplicationEntity.MigrationDate.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(1));
-            _capturedApplicationEntity.AboutYouEntity.Should().NotBeNull();
-            _capturedApplicationEntity.AboutYouEntity.Strengths.Should().Be(command.LegacyApplication.SkillsAndStrengths);
-            _capturedApplicationEntity.AboutYouEntity.Support.Should().Be(command.LegacyApplication.Support);
+            _capturedApplicationEntity.Strengths.Should().Be(command.LegacyApplication.SkillsAndStrengths);
+            _capturedApplicationEntity.Support.Should().Be(command.LegacyApplication.Support);
         }
 
         [Test, MoqAutoData]
