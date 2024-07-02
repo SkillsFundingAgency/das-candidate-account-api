@@ -60,6 +60,8 @@ public class WhenUpsertingCandidate
         actual.Item1.Email.Should().Be(existingCandidate.Email);
         actual.Item1.GovUkIdentifier.Should().Be(candidate.GovUkIdentifier);
         actual.Item1.DateOfBirth.Should().Be(candidate.DateOfBirth);
+        actual.Item1.PhoneNumber.Should().Be(existingCandidate.PhoneNumber);
+        actual.Item1.MigratedEmail.Should().Be(existingCandidate.MigratedEmail);
         actual.Item1.UpdatedOn.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(5));
     }
 
