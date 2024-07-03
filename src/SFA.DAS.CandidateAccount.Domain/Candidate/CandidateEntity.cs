@@ -19,7 +19,8 @@ public record CandidateEntity
             MiddleNames = source.MiddleNames,
             PhoneNumber = source.PhoneNumber,
             UpdatedOn = source.UpdatedOn,
-            MigratedEmail = source.MigratedEmail
+            MigratedEmail = source.MigratedEmail,
+            MigratedCandidateId = source.MigratedCandidateId
         };
     }
     public Guid Id { get; set; }
