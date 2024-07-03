@@ -30,6 +30,8 @@ public class WhenUpsertingCandidate
         context.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
         actual.Item1.FirstName.Should().Be(existingCandidate.FirstName);
         actual.Item1.LastName.Should().Be(existingCandidate.LastName);
+        actual.Item1.MigratedCandidateId.Should().Be(existingCandidate.MigratedCandidateId);
+        actual.Item1.MigratedEmail.Should().Be(existingCandidate.MigratedEmail);
         actual.Item1.GovUkIdentifier.Should().Be(candidate.GovUkIdentifier);
         actual.Item1.DateOfBirth.Should().Be(candidate.DateOfBirth);
         actual.Item1.UpdatedOn.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(5));
@@ -62,6 +64,7 @@ public class WhenUpsertingCandidate
         actual.Item1.DateOfBirth.Should().Be(candidate.DateOfBirth);
         actual.Item1.PhoneNumber.Should().Be(existingCandidate.PhoneNumber);
         actual.Item1.MigratedEmail.Should().Be(existingCandidate.MigratedEmail);
+        actual.Item1.MigratedCandidateId.Should().Be(existingCandidate.MigratedCandidateId);
         actual.Item1.UpdatedOn.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(5));
     }
 

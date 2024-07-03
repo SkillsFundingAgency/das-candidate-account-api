@@ -80,6 +80,7 @@ public class CandidateRepository(ICandidateAccountDataContext dataContext) : ICa
         existingCandidate.PhoneNumber = candidate.PhoneNumber ?? existingCandidate.PhoneNumber;
         existingCandidate.Status = candidate.Status.HasValue ? (short)candidate.Status : existingCandidate.Status;
         existingCandidate.MigratedEmail = candidate.MigratedEmail ?? existingCandidate.MigratedEmail;
+        existingCandidate.MigratedCandidateId = candidate.MigratedCandidateId ?? existingCandidate.MigratedCandidateId;
         dataContext.CandidateEntities.Update(existingCandidate);
         await dataContext.SaveChangesAsync();
     
