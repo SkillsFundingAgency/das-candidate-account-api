@@ -43,4 +43,5 @@ public record CandidateEntity
     public virtual AboutYouEntity? AboutYou { get; set; } = null;
 
     public virtual ICollection<ApplicationEntity>? Applications { get; set; } = null!;
+    public Guid? MigratedCandidateId { get; set; }
 }
