@@ -72,6 +72,7 @@ public class CandidateRepository(ICandidateAccountDataContext dataContext) : ICa
             .CandidateEntities
             .FirstOrDefaultAsync(c => c.Id == candidate.Id);
 
+        //TODO look at why we are doing this - and not doing all the fields
         if (existingCandidate == null)
         {
             var newCandidate = (CandidateEntity)candidate;

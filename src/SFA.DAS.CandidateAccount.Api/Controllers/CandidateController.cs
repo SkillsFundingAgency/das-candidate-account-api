@@ -28,7 +28,8 @@ public class CandidateController(IMediator mediator, ILogger<ApplicationControll
                 LastName = request.LastName,
                 GovUkIdentifier = id,
                 DateOfBirth = request.DateOfBirth,
-                MigratedEmail = request.MigratedEmail
+                MigratedEmail = request.MigratedEmail,
+                MigratedCandidateId = request.MigratedCandidateId
             });
 
             return Created($"{result.Candidate.Id}",result.Candidate);
@@ -105,7 +106,8 @@ public class CandidateController(IMediator mediator, ILogger<ApplicationControll
                     PhoneNumber = postCandidateRequest.PhoneNumber,
                     TermsOfUseAcceptedOn = postCandidateRequest.TermsOfUseAcceptedOn,
                     Status = postCandidateRequest.Status,
-                    MigratedEmail = postCandidateRequest.MigratedEmail
+                    MigratedEmail = postCandidateRequest.MigratedEmail,
+                    MigratedCandidateId = postCandidateRequest.MigratedCandidateId
                 }
             });
 

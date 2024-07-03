@@ -29,6 +29,8 @@ public class WhenCallingPostCandidate
                 && c.FirstName.Equals(postCandidateRequest.FirstName)
                 && c.LastName.Equals(postCandidateRequest.LastName)
                 && c.DateOfBirth.Equals(postCandidateRequest.DateOfBirth)
+                && c.MigratedCandidateId.Equals(postCandidateRequest.MigratedCandidateId)
+                && c.MigratedEmail.Equals(postCandidateRequest.MigratedEmail)
             ), CancellationToken.None))
             .ReturnsAsync(createCandidateCommandResponse);
         
