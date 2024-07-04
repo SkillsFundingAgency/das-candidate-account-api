@@ -11,4 +11,5 @@ public class CreateCandidateCommand : IRequest<CreateCandidateCommandResponse>
     public DateTime? DateOfBirth { get; set; }
     public string? MigratedEmail { get; set; }
     public Guid? MigratedCandidateId { get; set; }
+    public string? PhoneNumber { get; set; }
 }

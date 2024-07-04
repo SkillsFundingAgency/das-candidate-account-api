@@ -7,8 +7,8 @@
         public required string VacancyReference { get; set; }
 
         public ApplicationStatus Status { get; set; }
-        public string SkillsAndStrengths { get; set; }
-        public string Support { get; set; }
+        public string? SkillsAndStrengths { get; set; }
+        public string? Support { get; set; }
         public DateTime? DateApplied { get; set; }
         public DateTime? SuccessfulDateTime { get; set; }
         public DateTime? UnsuccessfulDateTime { get; set; }

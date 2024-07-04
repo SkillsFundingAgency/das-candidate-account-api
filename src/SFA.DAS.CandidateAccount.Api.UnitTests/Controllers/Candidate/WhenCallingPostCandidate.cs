@@ -31,6 +31,7 @@ public class WhenCallingPostCandidate
                 && c.DateOfBirth.Equals(postCandidateRequest.DateOfBirth)
                 && c.MigratedCandidateId.Equals(postCandidateRequest.MigratedCandidateId)
                 && c.MigratedEmail.Equals(postCandidateRequest.MigratedEmail)
+                && c.PhoneNumber.Equals(postCandidateRequest.PhoneNumber)
             ), CancellationToken.None))
             .ReturnsAsync(createCandidateCommandResponse);
         

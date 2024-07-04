@@ -28,6 +28,7 @@ public class CandidateController(IMediator mediator, ILogger<ApplicationControll
                 LastName = request.LastName,
                 GovUkIdentifier = id,
                 DateOfBirth = request.DateOfBirth,
+                PhoneNumber = request.PhoneNumber,
                 MigratedEmail = request.MigratedEmail,
                 MigratedCandidateId = request.MigratedCandidateId
             });

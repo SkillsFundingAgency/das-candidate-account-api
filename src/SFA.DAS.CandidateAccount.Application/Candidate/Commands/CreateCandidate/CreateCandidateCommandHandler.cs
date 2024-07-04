@@ -20,7 +20,8 @@ public class CreateCandidateCommandHandler(ICandidateRepository candidateReposit
             CreatedOn = DateTime.UtcNow,
             DateOfBirth = command.DateOfBirth,
             MigratedEmail = command.MigratedEmail,
-            MigratedCandidateId = command.MigratedCandidateId
+            MigratedCandidateId = command.MigratedCandidateId,
+            PhoneNumber = command.PhoneNumber
         });
 
         if (result.Item2)
