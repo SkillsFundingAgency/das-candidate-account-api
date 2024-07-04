@@ -20,7 +20,8 @@ public record CandidateEntity
             PhoneNumber = source.PhoneNumber,
             UpdatedOn = source.UpdatedOn,
             MigratedEmail = source.MigratedEmail,
-            MigratedCandidateId = source.MigratedCandidateId
+            MigratedCandidateId = source.MigratedCandidateId,
+            Status = (short)source.Status
         };
     }
     public Guid Id { get; set; }
