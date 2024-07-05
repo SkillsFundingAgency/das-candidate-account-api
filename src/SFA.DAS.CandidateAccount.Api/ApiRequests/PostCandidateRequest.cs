@@ -22,4 +22,5 @@ public abstract class CandidateRequest
     public string? LastName { get; set; }
     public CandidateStatus? Status { get; set; }
     public string? MigratedEmail { get; set; }
+    public Guid? MigratedCandidateId { get; set; }
 }

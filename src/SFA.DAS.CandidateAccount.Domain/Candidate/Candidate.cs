@@ -25,7 +25,8 @@ public class Candidate
             TermsOfUseAcceptedOn = source.TermsOfUseAcceptedOn,
             Status = (CandidateStatus) source.Status,
             Address = source.Address,
-            MigratedEmail = source.MigratedEmail
+            MigratedEmail = source.MigratedEmail,
+            MigratedCandidateId = source.MigratedCandidateId
         };
     }
 
@@ -48,4 +49,5 @@ public class Candidate
     public string? Email { get; set; }
 
     public Guid Id { get; set; }
+    public Guid? MigratedCandidateId { get; set; }
 }

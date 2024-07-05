@@ -20,6 +20,7 @@ public record CandidateEntity
             PhoneNumber = source.PhoneNumber,
             UpdatedOn = source.UpdatedOn,
             MigratedEmail = source.MigratedEmail,
+            MigratedCandidateId = source.MigratedCandidateId,
             Status = (short)source.Status
         };
     }
@@ -44,4 +45,5 @@ public record CandidateEntity
     public virtual AboutYouEntity? AboutYou { get; set; } = null;
 
     public virtual ICollection<ApplicationEntity>? Applications { get; set; } = null!;
+    public Guid? MigratedCandidateId { get; set; }
 }

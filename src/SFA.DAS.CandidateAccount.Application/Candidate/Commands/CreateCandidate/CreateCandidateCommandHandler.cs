@@ -19,7 +19,9 @@ public class CreateCandidateCommandHandler(ICandidateRepository candidateReposit
             GovUkIdentifier = command.GovUkIdentifier,
             CreatedOn = DateTime.UtcNow,
             DateOfBirth = command.DateOfBirth,
-            MigratedEmail = command.MigratedEmail
+            MigratedEmail = command.MigratedEmail,
+            MigratedCandidateId = command.MigratedCandidateId,
+            PhoneNumber = command.PhoneNumber
         });
 
         if (result.Item2)
