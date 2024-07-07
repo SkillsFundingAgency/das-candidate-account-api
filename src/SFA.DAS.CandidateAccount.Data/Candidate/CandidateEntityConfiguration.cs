@@ -24,6 +24,7 @@ public class CandidateEntityConfiguration : IEntityTypeConfiguration<CandidateEn
         builder.Property(x => x.GovUkIdentifier).HasColumnName("GovUkIdentifier").HasColumnType("varchar").HasMaxLength(150).IsRequired();
         builder.Property(x => x.Status).HasColumnName("Status").HasColumnType("tinyint").IsRequired().HasDefaultValue(0);
         builder.Property(x => x.MigratedEmail).HasColumnName("MigratedEmail").HasColumnType("varchar").HasMaxLength(255).IsRequired(false);
+        builder.Property(x => x.MigratedCandidateId).HasColumnName("MigratedCandidateId").HasColumnType("uniqueidentifier").IsRequired(false);
 
         builder.HasIndex(x => x.GovUkIdentifier).IsUnique();
         builder.HasIndex(x => x.Email).IsUnique();
@@ -39,5 +40,11 @@ public class CandidateEntityConfiguration : IEntityTypeConfiguration<CandidateEn
             .WithOne(c => c.CandidateEntity)
             .HasForeignKey<AboutYouEntity>(c => c.CandidateId)
             .HasPrincipalKey<CandidateEntity>(c => c.Id);
+
+        builder
+            .HasMany(c => c.CandidatePreferences)
+            .WithOne(c => c.Candidate)
+            .HasForeignKey(c => c.CandidateId)
+            .HasPrincipalKey(c => c.Id);
     }
 }

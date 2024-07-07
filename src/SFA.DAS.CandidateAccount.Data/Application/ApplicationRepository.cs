@@ -12,6 +12,7 @@ public interface IApplicationRepository
     Task<IEnumerable<ApplicationEntity>> GetByCandidateId(Guid candidateId, short? statusId);
     Task<ApplicationEntity?> GetByVacancyReference(Guid candidateId, string vacancyReference);
     Task<ApplicationEntity> Clone(Guid applicationId, string vacancyReference, bool requiresDisabilityConfidence, SectionStatus? additionalQuestion1Status, SectionStatus? additionalQuestion2Status);
+    Task<IEnumerable<ApplicationEntity>> GetApplicationsByVacancyReference(string vacancyReference, short? statusId = null, Guid? preferenceId = null, bool canEmailOnly = false);
 }
 
 public class ApplicationRepository(ICandidateAccountDataContext dataContext) : IApplicationRepository
@@ -118,6 +119,7 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
         original.CreatedDate = DateTime.UtcNow;
         original.UpdatedDate = null;
         original.SubmittedDate = null;
+        original.MigrationDate = null;
         original.ResponseDate = null;
         original.ResponseNotes = null;
         original.VacancyReference = vacancyReference;
@@ -158,5 +160,17 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
         await dataContext.SaveChangesAsync();
 
         return original;
+    }
+
+
+    public async Task<IEnumerable<ApplicationEntity>> GetApplicationsByVacancyReference(string vacancyReference, short? statusId = null, Guid? preferenceId = null, bool canEmailOnly = false)
+    {
+        return await dataContext.ApplicationEntities
+            .Include(c => c.CandidateEntity)
+                .ThenInclude(c => c.CandidatePreferences)
+            .Include(c=>c.CandidateEntity)
+                .ThenInclude(c=>c.Address)
+            .Where(c => c.VacancyReference == vacancyReference && (statusId== null || c.Status == statusId) && c.CandidateEntity.CandidatePreferences.Count(x=>(preferenceId == null || x.PreferenceId == preferenceId) 
+                && (!canEmailOnly || (x.ContactMethod == "email" && x.Status!.Value))) >= 1).ToListAsync();
     }
 }

@@ -24,6 +24,10 @@ public class WhenHandlingCreateCandidateCommand
                 && c.FirstName.Equals(command.FirstName)
                 && c.LastName.Equals(command.LastName)
                 && c.GovUkIdentifier.Equals(command.GovUkIdentifier)
+                && c.PhoneNumber.Equals(command.PhoneNumber)
+                && c.MigratedEmail.Equals(command.MigratedEmail)
+                && c.MigratedCandidateId.Equals(command.MigratedCandidateId)
+                && c.DateOfBirth.Equals(command.DateOfBirth)
                 )))
             .ReturnsAsync(new Tuple<CandidateEntity, bool>(entity, true));
         
@@ -34,6 +38,7 @@ public class WhenHandlingCreateCandidateCommand
             .Excluding(c => c.Status)
             .Excluding(c => c.Address)
             .Excluding(c => c.AboutYou)
+            .Excluding(c => c.CandidatePreferences)
         );
 
         actual.Candidate.Address.Should().BeEquivalentTo(entity.Address, options=>options.Excluding(c=> c.Candidate));
@@ -62,6 +67,7 @@ public class WhenHandlingCreateCandidateCommand
             .Excluding(c => c.Applications)
             .Excluding(c => c.Status)
             .Excluding(c => c.Address)
+            .Excluding(c => c.CandidatePreferences)
             .Excluding(c => c.AboutYou)
         );
 

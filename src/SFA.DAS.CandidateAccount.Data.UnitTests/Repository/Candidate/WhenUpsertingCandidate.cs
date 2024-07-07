@@ -30,6 +30,8 @@ public class WhenUpsertingCandidate
         context.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
         actual.Item1.FirstName.Should().Be(existingCandidate.FirstName);
         actual.Item1.LastName.Should().Be(existingCandidate.LastName);
+        actual.Item1.MigratedCandidateId.Should().Be(existingCandidate.MigratedCandidateId);
+        actual.Item1.MigratedEmail.Should().Be(existingCandidate.MigratedEmail);
         actual.Item1.GovUkIdentifier.Should().Be(candidate.GovUkIdentifier);
         actual.Item1.DateOfBirth.Should().Be(candidate.DateOfBirth);
         actual.Item1.UpdatedOn.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(5));
@@ -60,6 +62,9 @@ public class WhenUpsertingCandidate
         actual.Item1.Email.Should().Be(existingCandidate.Email);
         actual.Item1.GovUkIdentifier.Should().Be(candidate.GovUkIdentifier);
         actual.Item1.DateOfBirth.Should().Be(candidate.DateOfBirth);
+        actual.Item1.PhoneNumber.Should().Be(existingCandidate.PhoneNumber);
+        actual.Item1.MigratedEmail.Should().Be(existingCandidate.MigratedEmail);
+        actual.Item1.MigratedCandidateId.Should().Be(existingCandidate.MigratedCandidateId);
         actual.Item1.UpdatedOn.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(5));
     }
 
@@ -87,7 +92,7 @@ public class WhenUpsertingCandidate
         Assert.IsNotNull(actual);
         actual.Item2.Should().BeTrue();
         actual.Item1.Should().BeEquivalentTo(noCandidateExists, options => options.Excluding(c=>c.CreatedOn).Excluding(c=>c.UpdatedOn).Excluding(c => c.Status));
-        actual.Item1.Status.Should().Be((short)candidate.Status);
+        actual.Item1.Status.Should().Be((short)CandidateStatus.Incomplete);
         actual.Item1.CreatedOn.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(5));
     }
 }

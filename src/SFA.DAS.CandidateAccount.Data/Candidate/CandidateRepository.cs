@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SFA.DAS.CandidateAccount.Domain.Application;
 using SFA.DAS.CandidateAccount.Domain.Candidate;
 
 namespace SFA.DAS.CandidateAccount.Data.Candidate;
@@ -10,6 +9,7 @@ public interface ICandidateRepository
     Task<CandidateEntity?> GetById(Guid id);
     Task<CandidateEntity?> GetByGovIdentifier(string id);
     Task<Tuple<CandidateEntity,bool>> UpsertCandidate(Domain.Candidate.Candidate candidate);
+    Task<CandidateEntity?> GetByMigratedCandidateId(Guid? id);
 }
 public class CandidateRepository(ICandidateAccountDataContext dataContext) : ICandidateRepository
 {
@@ -44,6 +44,19 @@ public class CandidateRepository(ICandidateAccountDataContext dataContext) : ICa
         return result;
     }
 
+    public async Task<CandidateEntity?> GetByMigratedCandidateId(Guid? id)
+    {
+        if (!id.HasValue)
+        {
+            return null;
+        }
+        var result = await dataContext
+            .CandidateEntities
+            .FirstOrDefaultAsync(c => c.MigratedCandidateId == id);
+
+        return result;
+    }
+    
     public async Task<CandidateEntity?> GetByGovIdentifier(string id)
     {
         var result = await dataContext
@@ -59,6 +72,7 @@ public class CandidateRepository(ICandidateAccountDataContext dataContext) : ICa
             .CandidateEntities
             .FirstOrDefaultAsync(c => c.Id == candidate.Id);
 
+        //TODO look at why we are doing this - and not doing all the fields
         if (existingCandidate == null)
         {
             var newCandidate = (CandidateEntity)candidate;
@@ -79,6 +93,8 @@ public class CandidateRepository(ICandidateAccountDataContext dataContext) : ICa
         existingCandidate.DateOfBirth = candidate.DateOfBirth ?? existingCandidate.DateOfBirth;
         existingCandidate.PhoneNumber = candidate.PhoneNumber ?? existingCandidate.PhoneNumber;
         existingCandidate.Status = candidate.Status.HasValue ? (short)candidate.Status : existingCandidate.Status;
+        existingCandidate.MigratedEmail = candidate.MigratedEmail ?? existingCandidate.MigratedEmail;
+        existingCandidate.MigratedCandidateId = candidate.MigratedCandidateId ?? existingCandidate.MigratedCandidateId;
         dataContext.CandidateEntities.Update(existingCandidate);
         await dataContext.SaveChangesAsync();
     
