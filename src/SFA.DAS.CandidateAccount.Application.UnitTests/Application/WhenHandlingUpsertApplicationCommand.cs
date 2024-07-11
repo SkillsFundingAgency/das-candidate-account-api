@@ -120,6 +120,33 @@ public class WhenHandlingUpsertApplicationCommand
     }
 
     [Test, RecursiveMoqAutoData]
+    public async Task Then_The_Request_Is_Handled_Application_Is_Not_Cloned_From_A_Previous_Application_If_Withdrawn(
+        UpsertApplicationCommand command,
+        ApplicationEntity previousApplication,
+        [Frozen] Mock<IApplicationRepository> applicationRepository,
+        UpsertApplicationCommandHandler handler)
+    {
+        previousApplication.Status = (short)ApplicationStatus.Withdrawn;
+        var previousApplications = new List<ApplicationEntity> { previousApplication };
+
+        applicationRepository.Setup(x => x.Exists(command.CandidateId, command.VacancyReference))
+            .ReturnsAsync(false);
+
+        applicationRepository.Setup(x => x.GetByCandidateId(command.CandidateId, null))
+            .ReturnsAsync(previousApplications);
+
+        await handler.Handle(command, CancellationToken.None);
+
+        applicationRepository.Verify(x =>
+                x.Clone(It.IsAny<Guid>(),
+                    It.IsAny<string>(),
+                    It.IsAny<bool>(),
+                    It.IsAny<SectionStatus?>(),
+                    It.IsAny<SectionStatus?>()),
+            Times.Never());
+    }
+
+    [Test, RecursiveMoqAutoData]
     public async Task Then_The_Request_Is_Handled_Saved_Vacancy_Is_Deleted(
         UpsertApplicationCommand command,
         SavedVacancy savedVacancy,

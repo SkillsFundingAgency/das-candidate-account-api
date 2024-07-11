@@ -17,7 +17,7 @@ public class UpsertApplicationCommandHandler(
         if(! await applicationRepository.Exists(command.CandidateId, command.VacancyReference))
         {
             var previousApplications = await applicationRepository.GetByCandidateId(command.CandidateId, null);
-            var previousApplication = previousApplications.Where(x => x.Status != (short)ApplicationStatus.Draft).MaxBy(x => x.CreatedDate);
+            var previousApplication = previousApplications.Where(x => x.Status != (short)ApplicationStatus.Draft && x.Status != (short)ApplicationStatus.Withdrawn).MaxBy(x => x.CreatedDate);
 
             if (previousApplication != null)
             {
