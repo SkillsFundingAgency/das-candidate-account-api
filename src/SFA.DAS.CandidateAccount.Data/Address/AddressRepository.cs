@@ -29,7 +29,7 @@ public class AddressRepository(ICandidateAccountDataContext dataContext) : IAddr
         {
             existingAddress.AddressLine1 = addressEntity.AddressLine1;
             existingAddress.AddressLine2 = addressEntity.AddressLine2;
-            existingAddress.Town = addressEntity.Town;
+            existingAddress.Town = addressEntity.Town ?? string.Empty;
             existingAddress.Postcode = addressEntity.Postcode;
             existingAddress.County = addressEntity.County;
             existingAddress.Latitude = addressEntity.Latitude;
