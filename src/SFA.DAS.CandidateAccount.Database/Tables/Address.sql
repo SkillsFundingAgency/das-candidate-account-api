@@ -3,7 +3,7 @@ CREATE TABLE dbo.[Address] (
     [Uprn]                  nvarchar(12)        NULL,
     [AddressLine1]			nvarchar(150)	    NOT NULL,
     [AddressLine2]			nvarchar(150)	    NULL,
-    [Town]      			nvarchar(150)	    NOT NULL,
+    [Town]      			nvarchar(150)	    NOT NULL default(''),
     [County]    			nvarchar(150)	    NULL,
     [Postcode]              nvarchar(50)        NOT NULL,   
     [Latitude]				nvarchar(150)	    NOT NULL,
