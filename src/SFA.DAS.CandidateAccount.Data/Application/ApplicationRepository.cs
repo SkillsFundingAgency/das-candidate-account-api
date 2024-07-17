@@ -88,7 +88,7 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
 
     public async Task<IEnumerable<ApplicationEntity>> GetByCandidateId(Guid candidateId, short? statusId)
     {
-        return await dataContext.ApplicationEntities
+        return await dataContext.ApplicationEntities.Include(c => c.AdditionalQuestionEntities)
             .Where(x => x.CandidateId == candidateId && (statusId == null || x.Status == statusId.Value))
             .ToListAsync();
     }
