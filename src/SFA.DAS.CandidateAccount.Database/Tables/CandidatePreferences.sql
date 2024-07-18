@@ -7,5 +7,6 @@ CREATE TABLE dbo.[CandidatePreferences] (
     [UpdatedOn]			    datetime		        NULL,
     [ContactMethod]         nvarchar(50)            NOT NULL
 
-    CONSTRAINT [PK_CandidatePreferences] PRIMARY KEY (Id)
+    CONSTRAINT [PK_CandidatePreferences] PRIMARY KEY (Id),
+    INDEX [IX_CandidatePreferences_CandidateId] NONCLUSTERED(CandidateId)
     )
