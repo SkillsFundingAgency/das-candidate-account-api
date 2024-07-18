@@ -5,5 +5,6 @@ CREATE TABLE dbo.[MonitoringInformation] (
     [Ethnicity]				nvarchar(150)	    NOT NULL,
     [CandidateId]			uniqueidentifier	NOT NULL
     CONSTRAINT [PK_MonitoringInformation] PRIMARY KEY (Id),
-    CONSTRAINT [FK_MonitoringInformation_Candidate] FOREIGN KEY (CandidateId) REFERENCES [Candidate](Id)
+    CONSTRAINT [FK_MonitoringInformation_Candidate] FOREIGN KEY (CandidateId) REFERENCES [Candidate](Id),
+    INDEX [IX_MonitoringInformation_CandidateId] NONCLUSTERED(CandidateId)
     )

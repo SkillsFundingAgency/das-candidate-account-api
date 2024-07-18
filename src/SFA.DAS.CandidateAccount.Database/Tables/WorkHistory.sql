@@ -8,5 +8,6 @@ CREATE TABLE dbo.[WorkHistory] (
     [ApplicationId]         uniqueidentifier     NOT NULL,
     [Description]  			nvarchar(max)   NOT NULL
     CONSTRAINT [PK_WorkHistory] PRIMARY KEY (Id),
-    CONSTRAINT [FK_WorkHistory_Application] FOREIGN KEY (ApplicationId) REFERENCES [Application](Id)
+    CONSTRAINT [FK_WorkHistory_Application] FOREIGN KEY (ApplicationId) REFERENCES [Application](Id),
+    INDEX [IX_WorkHistory_ApplicationId] NONCLUSTERED(ApplicationId)
     )
