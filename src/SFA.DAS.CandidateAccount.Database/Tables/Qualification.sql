@@ -6,7 +6,7 @@ CREATE TABLE dbo.[Qualification] (
     [IsPredicted]               bit                 NOT NULL,
     [ApplicationId]             uniqueidentifier    NOT NULL,
     [QualificationReferenceId]  uniqueidentifier    NOT NULL,
-    [AdditionalInformation]     nvarchar(50)        NULL
+    [AdditionalInformation]     nvarchar(max)        NULL
     CONSTRAINT [PK_Qualification] PRIMARY KEY (Id),
     CONSTRAINT [FK_Qualification_QualificationReference] FOREIGN KEY (QualificationReferenceId) REFERENCES [QualificationReference](Id),
     CONSTRAINT [FK_Qualification_Application] FOREIGN KEY (ApplicationId) REFERENCES [Application](Id)
