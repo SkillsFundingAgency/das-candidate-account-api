@@ -23,5 +23,6 @@ public enum ApplicationStatus
 public enum CandidateStatus
 {
     Incomplete = 0,
-    Completed = 1
+    Completed = 1,
+    InProgress = 2,
 }
