@@ -1,13 +1,15 @@
 using MediatR;
 using SFA.DAS.CandidateAccount.Data.AdditionalQuestion;
 using SFA.DAS.CandidateAccount.Data.Application;
+using SFA.DAS.CandidateAccount.Data.SavedVacancy;
 using SFA.DAS.CandidateAccount.Domain.Application;
 
 namespace SFA.DAS.CandidateAccount.Application.Application.Commands.UpsertApplication;
 
 public class UpsertApplicationCommandHandler(
     IApplicationRepository applicationRepository,
-    IAdditionalQuestionRepository additionalQuestionRepository)
+    IAdditionalQuestionRepository additionalQuestionRepository,
+    ISavedVacancyRepository savedVacancyRepository)
     : IRequestHandler<UpsertApplicationCommand, UpsertApplicationCommandResponse>
 {
     public async Task<UpsertApplicationCommandResponse> Handle(UpsertApplicationCommand command, CancellationToken cancellationToken)
@@ -15,7 +17,7 @@ public class UpsertApplicationCommandHandler(
         if(! await applicationRepository.Exists(command.CandidateId, command.VacancyReference))
         {
             var previousApplications = await applicationRepository.GetByCandidateId(command.CandidateId, null);
-            var previousApplication = previousApplications.Where(x => x.Status != (short)ApplicationStatus.Draft).MaxBy(x => x.CreatedDate);
+            var previousApplication = previousApplications.Where(x => x.Status != (short)ApplicationStatus.Draft && x.Status != (short)ApplicationStatus.Withdrawn).MaxBy(x => x.CreatedDate);
 
             if (previousApplication != null)
             {
@@ -23,6 +25,7 @@ public class UpsertApplicationCommandHandler(
                 var result = await applicationRepository.Clone(previousApplication.Id, command.VacancyReference, requiresDisabilityConfidence, command.IsAdditionalQuestion1Complete, command.IsAdditionalQuestion2Complete);
 
                 await UpsertAdditionalQuestions(command, cancellationToken, result);
+                await RemoveSavedVacancy(command.CandidateId, command.VacancyReference);
 
                 return new UpsertApplicationCommandResponse
                 {
@@ -48,6 +51,10 @@ public class UpsertApplicationCommandHandler(
         });
 
         await UpsertAdditionalQuestions(command, cancellationToken, application.Item1);
+        if (application.Item2)
+        {
+            await RemoveSavedVacancy(command.CandidateId, command.VacancyReference);
+        }
 
         return new UpsertApplicationCommandResponse
         {
@@ -76,6 +83,16 @@ public class UpsertApplicationCommandHandler(
                 QuestionText = additionalQuestion,
                 Answer = string.Empty,
             }, command.CandidateId);
+        }
+    }
+
+    private async Task RemoveSavedVacancy(Guid candidateId, string vacancyReference)
+    {
+        var savedVacancy = await savedVacancyRepository.Get(candidateId, vacancyReference);
+
+        if (savedVacancy != null)
+        {
+            await savedVacancyRepository.Delete(savedVacancy);
         }
     }
 }

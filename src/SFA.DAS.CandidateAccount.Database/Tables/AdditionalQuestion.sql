@@ -4,5 +4,6 @@ CREATE TABLE dbo.[AdditionalQuestion] (
     [Answer] 			    nvarchar(max)       NULL,
     [ApplicationId]         uniqueidentifier    NOT NULL
     CONSTRAINT [PK_AdditionalQuestion] PRIMARY KEY (Id),
-    CONSTRAINT [FK_AdditionalQuestion_Application] FOREIGN KEY (ApplicationId) REFERENCES [dbo].[Application](Id)
+    CONSTRAINT [FK_AdditionalQuestion_Application] FOREIGN KEY (ApplicationId) REFERENCES [dbo].[Application](Id),
+    INDEX [IX_AdditionalQuestion_ApplicationId] NONCLUSTERED(ApplicationId)
     )

@@ -21,7 +21,8 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
     {
         var application = await dataContext.ApplicationEntities.SingleOrDefaultAsync(c =>
             c.VacancyReference == applicationEntity.VacancyReference &&
-            c.CandidateId == applicationEntity.CandidateId);
+            c.CandidateId == applicationEntity.CandidateId
+            && c.Status != (int)ApplicationStatus.Withdrawn);
 
         if (application == null)
         {
@@ -79,7 +80,7 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
     public async Task<bool> Exists(Guid candidateId, string vacancyReference)
     {
         var existing = await dataContext.ApplicationEntities
-            .Where(x => x.CandidateId == candidateId && x.VacancyReference == vacancyReference)
+            .Where(x => x.CandidateId == candidateId && x.VacancyReference == vacancyReference && x.Status != (short)ApplicationStatus.Withdrawn)
             .FirstOrDefaultAsync();
 
         return existing != null;
@@ -87,18 +88,21 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
 
     public async Task<IEnumerable<ApplicationEntity>> GetByCandidateId(Guid candidateId, short? statusId)
     {
-        return await dataContext.ApplicationEntities
+        return await dataContext.ApplicationEntities.Include(c => c.AdditionalQuestionEntities)
             .Where(x => x.CandidateId == candidateId && (statusId == null || x.Status == statusId.Value))
             .ToListAsync();
     }
 
     public async Task<ApplicationEntity?> GetByVacancyReference(Guid candidateId, string vacancyReference)
     {
-        var application = await dataContext.ApplicationEntities.SingleOrDefaultAsync(c =>
+        var applications = await dataContext.ApplicationEntities.Where(c =>
             c.VacancyReference == vacancyReference &&
-            c.CandidateId == candidateId);
+            c.CandidateId == candidateId)
+            .OrderByDescending(x => x.CreatedDate)
+            .ToListAsync();
 
-        return application ?? null;
+        var result = applications.FirstOrDefault(x => x.Status != (short)ApplicationStatus.Withdrawn);
+        return result ?? applications.FirstOrDefault();
     }
 	
 	public async Task<ApplicationEntity> Clone(Guid applicationId, string vacancyReference, bool requiresDisabilityConfidence, SectionStatus? additionalQuestion1Status, SectionStatus? additionalQuestion2Status)
