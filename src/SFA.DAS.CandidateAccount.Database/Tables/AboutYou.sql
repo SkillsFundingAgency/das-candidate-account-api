@@ -7,5 +7,6 @@ CREATE TABLE dbo.[AboutYou] (
     [OtherEthnicSubGroupAnswer]  	nvarchar(max)       NULL,
     [CandidateId]                   uniqueidentifier    NOT NULL
     CONSTRAINT [PK_AboutYou] PRIMARY KEY (Id),
-    CONSTRAINT [FK_AboutYou_Candidate] FOREIGN KEY (CandidateId) REFERENCES [dbo].[Candidate](Id)
+    CONSTRAINT [FK_AboutYou_Candidate] FOREIGN KEY (CandidateId) REFERENCES [dbo].[Candidate](Id),
+    INDEX [IX_AboutYou_CandidateId] NONCLUSTERED(CandidateId)
 	)

@@ -9,5 +9,7 @@ CREATE TABLE dbo.[Qualification] (
     [AdditionalInformation]     nvarchar(50)        NULL
     CONSTRAINT [PK_Qualification] PRIMARY KEY (Id),
     CONSTRAINT [FK_Qualification_QualificationReference] FOREIGN KEY (QualificationReferenceId) REFERENCES [QualificationReference](Id),
-    CONSTRAINT [FK_Qualification_Application] FOREIGN KEY (ApplicationId) REFERENCES [Application](Id)
+    CONSTRAINT [FK_Qualification_Application] FOREIGN KEY (ApplicationId) REFERENCES [Application](Id),
+    INDEX [IX_Qualification_ApplicationId] NONCLUSTERED(ApplicationId),
+    INDEX [IX_Qualification_ApplicationQualificationRefId] NONCLUSTERED(ApplicationId, QualificationReferenceId)
     )

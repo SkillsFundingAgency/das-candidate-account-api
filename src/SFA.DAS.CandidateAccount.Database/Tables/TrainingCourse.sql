@@ -6,5 +6,6 @@ CREATE TABLE dbo.[TrainingCourse] (
     [ApplicationId] uniqueidentifier   NOT NULL,
     [Title]  		    	nvarchar(500)   NOT NULL
     CONSTRAINT [PK_Course] PRIMARY KEY (Id),
-    CONSTRAINT [FK_TrainingCourseApplication] FOREIGN KEY (ApplicationId) REFERENCES [Application](Id)
+    CONSTRAINT [FK_TrainingCourseApplication] FOREIGN KEY (ApplicationId) REFERENCES [Application](Id),
+    INDEX [IX_TrainingCourse_ApplicationId] NONCLUSTERED(ApplicationId)
     )

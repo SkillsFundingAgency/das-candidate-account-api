@@ -5,5 +5,6 @@ CREATE TABLE dbo.[Education] (
     [ToYear]    			smallint    	    NOT NULL,
     [ApplicationId]         uniqueidentifier    NOT NULL,
     CONSTRAINT [PK_Education] PRIMARY KEY (Id),
-    CONSTRAINT [FK_Education_Application] FOREIGN KEY (ApplicationId) REFERENCES [Application](Id)
+    CONSTRAINT [FK_Education_Application] FOREIGN KEY (ApplicationId) REFERENCES [Application](Id),
+    INDEX [IX_Education_ApplicationId] NONCLUSTERED(ApplicationId)
     )

@@ -6,7 +6,7 @@
         public string? Uprn { get; set; }
         public string AddressLine1 { get; set; } = null!;
         public string? AddressLine2 { get; set; }
-        public string Town { get; set; } = null!;
+        public string? Town { get; set; }
         public string? County { get; set; }
         public string Postcode { get; set; } = null!;
         public double Latitude { get; set; }

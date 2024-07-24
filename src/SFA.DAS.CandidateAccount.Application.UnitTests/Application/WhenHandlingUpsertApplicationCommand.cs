@@ -4,7 +4,9 @@ using Moq;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.UpsertApplication;
 using SFA.DAS.CandidateAccount.Data.AdditionalQuestion;
 using SFA.DAS.CandidateAccount.Data.Application;
+using SFA.DAS.CandidateAccount.Data.SavedVacancy;
 using SFA.DAS.CandidateAccount.Domain.Application;
+using SFA.DAS.CandidateAccount.Domain.Candidate;
 using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.CandidateAccount.Application.UnitTests.Application;
@@ -115,5 +117,49 @@ public class WhenHandlingUpsertApplicationCommand
 
         actual.Application.Id.Should().Be(cloneResult.Id);
         actual.IsCreated.Should().BeTrue();
+    }
+
+    [Test, RecursiveMoqAutoData]
+    public async Task Then_The_Request_Is_Handled_Application_Is_Not_Cloned_From_A_Previous_Application_If_Withdrawn(
+        UpsertApplicationCommand command,
+        ApplicationEntity previousApplication,
+        [Frozen] Mock<IApplicationRepository> applicationRepository,
+        UpsertApplicationCommandHandler handler)
+    {
+        previousApplication.Status = (short)ApplicationStatus.Withdrawn;
+        var previousApplications = new List<ApplicationEntity> { previousApplication };
+
+        applicationRepository.Setup(x => x.Exists(command.CandidateId, command.VacancyReference))
+            .ReturnsAsync(false);
+
+        applicationRepository.Setup(x => x.GetByCandidateId(command.CandidateId, null))
+            .ReturnsAsync(previousApplications);
+
+        await handler.Handle(command, CancellationToken.None);
+
+        applicationRepository.Verify(x =>
+                x.Clone(It.IsAny<Guid>(),
+                    It.IsAny<string>(),
+                    It.IsAny<bool>(),
+                    It.IsAny<SectionStatus?>(),
+                    It.IsAny<SectionStatus?>()),
+            Times.Never());
+    }
+
+    [Test, RecursiveMoqAutoData]
+    public async Task Then_The_Request_Is_Handled_Saved_Vacancy_Is_Deleted(
+        UpsertApplicationCommand command,
+        SavedVacancy savedVacancy,
+        [Frozen] Mock<IApplicationRepository> applicationRepository,
+        [Frozen] Mock<ISavedVacancyRepository> savedVacancyRepository,
+        UpsertApplicationCommandHandler handler)
+    {
+        savedVacancyRepository.Setup(x=> x.Get(command.CandidateId, command.VacancyReference))
+            .ReturnsAsync(savedVacancy);
+
+        await handler.Handle(command, CancellationToken.None);
+
+        savedVacancyRepository.Verify(x => x.Delete(It.Is<SavedVacancy>(v => v == savedVacancy)), Times.Once);
+
     }
 }

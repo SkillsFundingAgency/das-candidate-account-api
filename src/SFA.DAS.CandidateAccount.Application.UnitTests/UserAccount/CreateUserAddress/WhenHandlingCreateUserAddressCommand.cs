@@ -22,4 +22,20 @@ public class WhenHandlingCreateUserAddressCommand
 
         actual.Id.Should().Be(addressEntity.Id);
     }
+
+    [Test, RecursiveMoqAutoData]
+    public async Task Then_Town_IsNull_Request_Is_Handled_And_Entity_Created(
+        CreateUserAddressCommand command,
+        AddressEntity addressEntity,
+        [Frozen] Mock<IAddressRepository> addressRepository,
+        [Greedy] CreateUserAddressCommandHandler handler)
+    {
+        addressEntity.Town = null;
+
+        addressRepository.Setup(x => x.Upsert(It.Is<AddressEntity>(x => x.CandidateId == command.CandidateId))).ReturnsAsync(addressEntity);
+
+        var actual = await handler.Handle(command, CancellationToken.None);
+
+        actual.Id.Should().Be(addressEntity.Id);
+    }
 }
