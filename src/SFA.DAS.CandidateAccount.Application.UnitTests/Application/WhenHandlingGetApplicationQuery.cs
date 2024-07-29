@@ -70,14 +70,16 @@ public class WhenHandlingGetApplicationQuery
     }
     
     [Test, RecursiveMoqAutoData]
-    public async Task Then_If_The_Application_Does_Not_Belong_To_The_Candidate_Then_Error_Returned(
+    public async Task Then_If_The_Application_Does_Not_Belong_To_The_Candidate_Then_Null_Returned(
         GetApplicationQuery query,
         ApplicationEntity entity,
         [Frozen] Mock<IApplicationRepository> repository,
         GetApplicationQueryHandler handler)
     {
         repository.Setup(x => x.GetById(query.ApplicationId, query.IncludeDetail)).ReturnsAsync(entity);
-        
-        Assert.ThrowsAsync<ValidationException>(()=> handler.Handle(query, CancellationToken.None));
+
+        var result = await handler.Handle(query, CancellationToken.None);
+
+        result.Should().BeNull();
     }
 }
