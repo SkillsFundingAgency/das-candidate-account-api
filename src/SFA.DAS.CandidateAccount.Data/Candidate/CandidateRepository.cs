@@ -10,6 +10,7 @@ public interface ICandidateRepository
     Task<CandidateEntity?> GetByGovIdentifier(string id);
     Task<Tuple<CandidateEntity,bool>> UpsertCandidate(Domain.Candidate.Candidate candidate);
     Task<CandidateEntity?> GetByMigratedCandidateId(Guid? id);
+    Task<CandidateEntity?> GetByMigratedCandidateEmail(string email);
 }
 public class CandidateRepository(ICandidateAccountDataContext dataContext) : ICandidateRepository
 {
@@ -56,7 +57,20 @@ public class CandidateRepository(ICandidateAccountDataContext dataContext) : ICa
 
         return result;
     }
-    
+
+    public async Task<CandidateEntity?> GetByMigratedCandidateEmail(string email)
+    {
+        if (string.IsNullOrWhiteSpace(email))
+        {
+            return null;
+        }
+        var result = await dataContext
+            .CandidateEntities
+            .FirstOrDefaultAsync(c => c.MigratedEmail == email);
+
+        return result;
+    }
+
     public async Task<CandidateEntity?> GetByGovIdentifier(string id)
     {
         var result = await dataContext
