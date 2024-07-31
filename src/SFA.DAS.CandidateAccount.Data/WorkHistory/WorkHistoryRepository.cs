@@ -12,6 +12,8 @@ namespace SFA.DAS.CandidateAccount.Data.WorkExperience
     }
     public class WorkHistoryRepository(ICandidateAccountDataContext dataContext) : IWorkHistoryRepository
     {
+        public static readonly int MaximumItems = 100;
+
         public async Task<List<WorkHistoryEntity>> GetAll(Guid applicationId, Guid candidateId, WorkHistoryType? workHistoryType, CancellationToken cancellationToken)
         {
             var query = from wrk in dataContext.WorkExperienceEntities
@@ -56,6 +58,16 @@ namespace SFA.DAS.CandidateAccount.Data.WorkExperience
 
             if (workHistory == null)
             {
+                var itemCount = await dataContext.WorkExperienceEntities
+                    .Where(fil => fil.ApplicationId == workHistoryEntity.ApplicationId)
+                    .Where(fil => fil.WorkHistoryType == (byte)workHistoryEntity.WorkHistoryType)
+                    .CountAsync();
+
+                if (itemCount >= MaximumItems)
+                {
+                    throw new InvalidOperationException($"Cannot insert a new work history item for application {workHistoryEntity.ApplicationId}; maximum reached.");
+                }
+
                 await dataContext.WorkExperienceEntities.AddAsync((WorkHistoryEntity)workHistoryEntity);
                 await dataContext.SaveChangesAsync();
                 return new Tuple<WorkHistoryEntity, bool>(workHistoryEntity, true);
