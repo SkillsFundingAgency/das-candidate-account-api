@@ -14,6 +14,8 @@ public interface IQualificationRepository
 }
 public class QualificationRepository(ICandidateAccountDataContext dataContext) : IQualificationRepository
 {
+    public static readonly int MaximumItems = 150;
+
     public async Task<IEnumerable<QualificationEntity>> GetCandidateApplicationQualifications(Guid candidateId, Guid applicationId)
     {
         return await dataContext.QualificationEntities
@@ -89,6 +91,16 @@ public class QualificationRepository(ICandidateAccountDataContext dataContext) :
 
         if (existingQualification == null)
         {
+            var itemCount = await dataContext.QualificationEntities
+                .Where(fil => fil.ApplicationId == applicationId)
+                .Where(fil => fil.QualificationReferenceId == qualificationEntity.QualificationReference.Id)
+                .CountAsync();
+
+            if (itemCount >= MaximumItems)
+            {
+                throw new InvalidOperationException($"Cannot insert a new qualification for application {applicationId}; maximum reached.");
+            }
+
             var newQualification = (QualificationEntity)qualificationEntity;
             newQualification.ApplicationId = applicationId;
             await dataContext.QualificationEntities.AddAsync(newQualification);
