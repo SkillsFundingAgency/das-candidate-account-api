@@ -104,13 +104,14 @@ public class ApplicationController(IMediator mediator, ILogger<ApplicationContro
                 IncludeDetail = includeDetail
             });
 
-            if (result.Application == null)
+            if (result == null || result.Application == null)
             {
                 return NotFound();
             }
 
-            var getApplicationApiResponse =includeDetail ? (GetApplicationApiResponse)((ApplicationDetail)result.Application) 
-                :  (Domain.Application.Application)result.Application;
+            var getApplicationApiResponse = includeDetail
+                ? (GetApplicationApiResponse)((ApplicationDetail)result.Application)
+                : (Domain.Application.Application)result.Application;
             return Ok(getApplicationApiResponse);
         }
         catch (ValidationException e)
