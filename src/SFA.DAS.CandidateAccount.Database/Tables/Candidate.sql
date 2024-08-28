@@ -17,5 +17,6 @@ CREATE TABLE dbo.[Candidate] (
     CONSTRAINT [UK_Candidate] UNIQUE (GovUkIdentifier, Email),
     INDEX [IX_Candidate_Email] NONCLUSTERED(Email),
     INDEX [IX_Candidate_MigratedCandidateId] NONCLUSTERED(MigratedCandidateId),
-    INDEX [IX_Candidate_GovUkIdentifier] NONCLUSTERED(GovUkIdentifier)
+    INDEX [IX_Candidate_GovUkIdentifier] NONCLUSTERED(GovUkIdentifier),
+    INDEX [IX_Candidate_MigratedEmail] NONCLUSTERED(MigratedEmail)
 )
