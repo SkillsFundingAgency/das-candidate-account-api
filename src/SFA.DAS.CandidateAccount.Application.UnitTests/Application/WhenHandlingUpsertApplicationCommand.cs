@@ -119,14 +119,18 @@ public class WhenHandlingUpsertApplicationCommand
         actual.IsCreated.Should().BeTrue();
     }
 
-    [Test, RecursiveMoqAutoData]
-    public async Task Then_The_Request_Is_Handled_Application_Is_Not_Cloned_From_A_Previous_Application_If_Withdrawn(
+    [Test]
+    [RecursiveMoqInlineAutoData(ApplicationStatus.Withdrawn)]
+    [RecursiveMoqInlineAutoData(ApplicationStatus.Draft)]
+    [RecursiveMoqInlineAutoData(ApplicationStatus.Expired)]
+    public async Task Then_The_Request_Is_Handled_Application_Is_Not_Cloned_From_A_Previous_Application_If_Withdrawn_Or_Expired_Or_WithDrawn(
+        ApplicationStatus status,
         UpsertApplicationCommand command,
         ApplicationEntity previousApplication,
         [Frozen] Mock<IApplicationRepository> applicationRepository,
         UpsertApplicationCommandHandler handler)
     {
-        previousApplication.Status = (short)ApplicationStatus.Withdrawn;
+        previousApplication.Status = (short)status;
         var previousApplications = new List<ApplicationEntity> { previousApplication };
 
         applicationRepository.Setup(x => x.Exists(command.CandidateId, command.VacancyReference))
