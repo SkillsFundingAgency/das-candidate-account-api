@@ -23,7 +23,7 @@ This Candidate Account Api solution is part of the FindAnApprenticeship project.
 
 ### Local running
 
-The APIM FindApprenticeship Jobs api uses the standard Apprenticeship Service configuration. All configuration can be found in the [das-employer-config repository](https://github.com/SkillsFundingAgency/das-employer-config/blob/master/das-apim-endpoints/SFA.DAS.FindApprenticeshipJobs.OuterApi.json).
+The Candidate Account api uses the standard Apprenticeship Service configuration. All configuration can be found in the [das-employer-config repository](https://github.com/SkillsFundingAgency/das-employer-config/blob/master/das-candidate-account-api/SFA.DAS.CandidateAccount.Api.json).
 
 * appsettings.json file
 ```json
