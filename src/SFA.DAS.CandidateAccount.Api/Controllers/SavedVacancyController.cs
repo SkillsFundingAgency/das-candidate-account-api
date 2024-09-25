@@ -5,7 +5,7 @@ using SFA.DAS.CandidateAccount.Application.Candidate.Commands.AddSavedVacancy;
 using SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetSavedVacancies;
 using SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetSavedVacancy;
 using System.Net;
-using SFA.DAS.CandidateAccount.Application.Candidate.Commands.RemoveSavedVacancy;
+using SFA.DAS.CandidateAccount.Application.Candidate.Commands.DeleteSavedVacancy;
 
 namespace SFA.DAS.CandidateAccount.Api.Controllers
 {
@@ -52,11 +52,11 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers
         }
 
         [HttpDelete("{vacancyReference}")]
-        public async Task<IActionResult> RemoveSavedVacancy(Guid candidateId, string vacancyReference)
+        public async Task<IActionResult> DeleteSavedVacancy(Guid candidateId, string vacancyReference)
         {
             try
             {
-                await mediator.Send(new RemoveSavedVacancyCommand(candidateId, vacancyReference));
+                await mediator.Send(new DeleteSavedVacancyCommand(candidateId, vacancyReference));
 
                 return NoContent();
             }

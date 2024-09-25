@@ -2,7 +2,7 @@
 using FluentAssertions;
 using MediatR;
 using Moq;
-using SFA.DAS.CandidateAccount.Application.Candidate.Commands.RemoveSavedVacancy;
+using SFA.DAS.CandidateAccount.Application.Candidate.Commands.DeleteSavedVacancy;
 using SFA.DAS.CandidateAccount.Data.SavedVacancy;
 using SFA.DAS.CandidateAccount.Domain.Candidate;
 using SFA.DAS.Testing.AutoFixture;
@@ -10,14 +10,14 @@ using SFA.DAS.Testing.AutoFixture;
 namespace SFA.DAS.CandidateAccount.Application.UnitTests.SavedVacancies
 {
     [TestFixture]
-    public class WhenHandlingRemoveSavedVacancyCommand
+    public class WhenHandlingDeleteSavedVacancyCommand
     {
         [Test, RecursiveMoqAutoData]
         public async Task Then_The_Command_Is_Handled_And_Entity_Deleted(
-            RemoveSavedVacancyCommand command,
+            DeleteSavedVacancyCommand command,
             SavedVacancy repositoryResult,
             [Frozen] Mock<ISavedVacancyRepository> repository,
-            RemoveSavedVacancyCommandHandler handler)
+            DeleteSavedVacancyCommandHandler handler)
         {
             repository.Setup(x =>
                     x.Get(command.CandidateId, command.VacancyReference))
@@ -32,10 +32,10 @@ namespace SFA.DAS.CandidateAccount.Application.UnitTests.SavedVacancies
 
         [Test, RecursiveMoqAutoData]
         public async Task Then_The_Command_Is_Handled_And_Entity_Not_Deleted(
-            RemoveSavedVacancyCommand command,
+            DeleteSavedVacancyCommand command,
             SavedVacancy repositoryResult,
             [Frozen] Mock<ISavedVacancyRepository> repository,
-            RemoveSavedVacancyCommandHandler handler)
+            DeleteSavedVacancyCommandHandler handler)
         {
             repository.Setup(x =>
                     x.Get(command.CandidateId, command.VacancyReference))

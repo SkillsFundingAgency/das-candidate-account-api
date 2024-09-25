@@ -4,15 +4,15 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using SFA.DAS.CandidateAccount.Api.Controllers;
-using SFA.DAS.CandidateAccount.Application.Candidate.Commands.RemoveSavedVacancy;
 using SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetSavedVacancy;
 using SFA.DAS.Testing.AutoFixture;
 using System.Net;
+using SFA.DAS.CandidateAccount.Application.Candidate.Commands.DeleteSavedVacancy;
 
 namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.SavedVacancies
 {
     [TestFixture]
-    public class WhenCallingRemoveSavedVacancy
+    public class WhenCallingDeleteSavedVacancy
     {
         [Test, MoqAutoData]
         public async Task Then_The_Response_Is_Returned_As_Expected(
@@ -21,11 +21,11 @@ namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.SavedVacancies
             [Frozen] Mock<IMediator> mediator,
             [Greedy] SavedVacancyController controller)
         {
-            var result = await controller.RemoveSavedVacancy(candidateId, vacancyReference) as NoContentResult;
+            var result = await controller.DeleteSavedVacancy(candidateId, vacancyReference) as NoContentResult;
 
             result.Should().BeOfType<NoContentResult>();
 
-            mediator.Verify(x => x.Send(It.Is<RemoveSavedVacancyCommand>(c =>
+            mediator.Verify(x => x.Send(It.Is<DeleteSavedVacancyCommand>(c =>
                 c.CandidateId.Equals(candidateId) &&
                 c.VacancyReference.Equals(vacancyReference)
             ), CancellationToken.None));

@@ -1,11 +1,11 @@
 ﻿using MediatR;
 using SFA.DAS.CandidateAccount.Data.SavedVacancy;
 
-namespace SFA.DAS.CandidateAccount.Application.Candidate.Commands.RemoveSavedVacancy
+namespace SFA.DAS.CandidateAccount.Application.Candidate.Commands.DeleteSavedVacancy
 {
-    public record RemoveSavedVacancyCommandHandler(ISavedVacancyRepository Repository) : IRequestHandler<RemoveSavedVacancyCommand, Unit>
+    public record DeleteSavedVacancyCommandHandler(ISavedVacancyRepository Repository) : IRequestHandler<DeleteSavedVacancyCommand, Unit>
     {
-        public async Task<Unit> Handle(RemoveSavedVacancyCommand command, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(DeleteSavedVacancyCommand command, CancellationToken cancellationToken)
         {
             var result = await Repository.Get(command.CandidateId, command.VacancyReference);
 
