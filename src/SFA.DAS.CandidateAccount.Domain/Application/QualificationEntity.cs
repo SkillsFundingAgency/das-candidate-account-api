@@ -12,7 +12,8 @@
                 ToYear = source.ToYear,
                 AdditionalInformation = source.AdditionalInformation,
                 IsPredicted = source.IsPredicted ?? false,
-                QualificationReferenceId = source.QualificationReference.Id
+                QualificationReferenceId = source.QualificationReference.Id,
+                CreatedDate = source.CreatedDate
             };
         }
         public Guid Id { get; set; }
@@ -25,5 +26,6 @@
         public Guid ApplicationId { get; set; }
         public virtual ApplicationEntity ApplicationEntity { get; set; }
         public virtual QualificationReferenceEntity QualificationReferenceEntity { get; set; }
+        public DateTime? CreatedDate { get; set; }
     }
 }
