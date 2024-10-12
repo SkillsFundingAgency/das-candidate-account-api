@@ -75,4 +75,32 @@ public class WhenHandlingCreateCandidateCommand
 
         candidatePreferenceRepository.Verify(x =>x.Create(entity.Id), Times.Never);
     }
+
+    [Test, RecursiveMoqAutoData]
+    public async Task Then_The_Email_Already_Exist_Is_Handled_And_Entity_AlreadyExist_Returned(
+        CreateCandidateCommand command,
+        CandidateEntity entity,
+        [Frozen] Mock<ICandidateRepository> candidateRepository,
+        [Frozen] Mock<ICandidatePreferencesRepository> candidatePreferenceRepository,
+        CreateCandidateCommandHandler handler)
+    {
+        candidateRepository.Setup(x => x.Insert(It.Is<CandidateEntity>(c =>
+                c.Email.Equals(command.Email)
+            )))
+            .ReturnsAsync(new Tuple<CandidateEntity, bool>(entity, false));
+
+        var actual = await handler.Handle(command, CancellationToken.None);
+
+        actual.Candidate.Should().BeEquivalentTo(entity, options => options
+            .Excluding(c => c.Applications)
+            .Excluding(c => c.Status)
+            .Excluding(c => c.Address)
+            .Excluding(c => c.CandidatePreferences)
+            .Excluding(c => c.AboutYou)
+        );
+
+        actual.Candidate.Address.Should().BeEquivalentTo(entity.Address, options => options.Excluding(c => c.Candidate));
+
+        candidatePreferenceRepository.Verify(x => x.Create(entity.Id), Times.Never);
+    }
 }

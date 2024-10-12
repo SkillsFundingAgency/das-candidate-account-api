@@ -20,7 +20,8 @@ public class CandidateRepository(ICandidateAccountDataContext dataContext) : ICa
     {
         var existingCandidate = await dataContext
             .CandidateEntities
-            .FirstOrDefaultAsync(c => c.GovUkIdentifier == candidate.GovUkIdentifier);
+            .FirstOrDefaultAsync(c => 
+                c.GovUkIdentifier == candidate.GovUkIdentifier);
 
         if (existingCandidate != null) return new Tuple<CandidateEntity, bool>(existingCandidate, false);
 
