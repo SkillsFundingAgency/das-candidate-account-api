@@ -9,6 +9,8 @@ public class Qualification
     public int? ToYear { get; set; }
     public bool? IsPredicted { get; set; }
     public QualificationReference QualificationReference { get; set; }
+    public DateTime? CreatedDate { get; set; }
+
     public static implicit operator Qualification?(QualificationEntity? source)
     {
         if (source == null)
@@ -23,7 +25,8 @@ public class Qualification
             Grade = source.Grade,
             ToYear = source.ToYear,
             AdditionalInformation = source.AdditionalInformation,
-            QualificationReference = source.QualificationReferenceEntity
+            QualificationReference = source.QualificationReferenceEntity,
+            CreatedDate = source.CreatedDate
         };
     }
 }
