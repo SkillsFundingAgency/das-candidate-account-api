@@ -14,7 +14,7 @@ namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.Candidate
     public class WhenDeletingCandidate
     {
         [Test, MoqAutoData]
-        public async Task Then_If_MediatorCall_Returns_Candidate_Then_Ok_Result_Returned(
+        public async Task Then_If_MediatorCall_Returns_Candidate_Then_NoContent_Result_Returned(
            Guid id,
            DeleteCandidateCommandResult deleteCandidateCommandResult,
            [Frozen] Mock<IMediator> mediator,
@@ -30,9 +30,8 @@ namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.Candidate
             var actual = await controller.DeleteCandidate(id);
 
             //Assert
-            var result = actual as OkObjectResult;
-            var actualResult = result.Value as Domain.Candidate.Candidate;
-            actualResult.Should().BeEquivalentTo(deleteCandidateCommandResult.Candidate);
+            var result = actual as NoContentResult;
+            result.StatusCode.Should().Be((int)HttpStatusCode.NoContent);
         }
 
         [Test, MoqAutoData]

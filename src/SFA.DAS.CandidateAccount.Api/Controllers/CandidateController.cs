@@ -163,7 +163,7 @@ public class CandidateController(IMediator mediator, ILogger<ApplicationControll
                 return NotFound();
             }
 
-            return Ok(result.Candidate);
+            return NoContent();
         }
         catch (Exception e)
         {
