@@ -101,6 +101,7 @@ public class WhenHandlingUpsertApplicationCommand
         [Frozen] Mock<IApplicationRepository> applicationRepository,
         UpsertApplicationCommandHandler handler)
     {
+        previousApplication.MigrationDate = null;
         var previousApplications = new List<ApplicationEntity>{ previousApplication };
 
         applicationRepository.Setup(x => x.Exists(command.CandidateId, command.VacancyReference))
@@ -131,6 +132,34 @@ public class WhenHandlingUpsertApplicationCommand
         UpsertApplicationCommandHandler handler)
     {
         previousApplication.Status = (short)status;
+        var previousApplications = new List<ApplicationEntity> { previousApplication };
+
+        applicationRepository.Setup(x => x.Exists(command.CandidateId, command.VacancyReference))
+            .ReturnsAsync(false);
+
+        applicationRepository.Setup(x => x.GetByCandidateId(command.CandidateId, null))
+            .ReturnsAsync(previousApplications);
+
+        await handler.Handle(command, CancellationToken.None);
+
+        applicationRepository.Verify(x =>
+                x.Clone(It.IsAny<Guid>(),
+                    It.IsAny<string>(),
+                    It.IsAny<bool>(),
+                    It.IsAny<SectionStatus?>(),
+                    It.IsAny<SectionStatus?>()),
+            Times.Never());
+    }
+    
+    [Test, RecursiveMoqAutoData]
+    public async Task Then_The_Request_Is_Handled_Application_Is_Not_Cloned_From_A_Previous_Application_If_Migrated(
+        UpsertApplicationCommand command,
+        ApplicationEntity previousApplication,
+        [Frozen] Mock<IApplicationRepository> applicationRepository,
+        UpsertApplicationCommandHandler handler)
+    {
+        previousApplication.Status = (short)ApplicationStatus.Submitted;
+        previousApplication.MigrationDate = DateTime.Today;
         var previousApplications = new List<ApplicationEntity> { previousApplication };
 
         applicationRepository.Setup(x => x.Exists(command.CandidateId, command.VacancyReference))
