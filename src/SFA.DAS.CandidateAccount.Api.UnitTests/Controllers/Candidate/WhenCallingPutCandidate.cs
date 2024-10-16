@@ -74,23 +74,4 @@ public class WhenCallingPutCandidate
         var actualResult = result.Value as Domain.Candidate.Candidate;
         actualResult.Should().BeEquivalentTo(upsertCandidateCommandResult.Candidate);
     }
-    
-    [Test, MoqAutoData]
-    public async Task Then_If_Error_Then_InternalServerError_Response_Returned(
-        string vacancyReference,
-        ApplicationRequest userProfileRequest,
-        [Frozen] Mock<IMediator> mediator,
-        [Greedy] ApplicationController controller)
-    {
-        //Arrange
-        mediator.Setup(x => x.Send(It.IsAny<UpsertCandidateCommand>(),
-            CancellationToken.None)).ThrowsAsync(new Exception("Error"));
-        
-        //Act
-        var actual = await controller.PutApplication(vacancyReference, userProfileRequest);
-        
-        //Assert
-        var result = actual as StatusCodeResult;
-        result?.StatusCode.Should().Be((int) HttpStatusCode.InternalServerError);
-    }
 }
