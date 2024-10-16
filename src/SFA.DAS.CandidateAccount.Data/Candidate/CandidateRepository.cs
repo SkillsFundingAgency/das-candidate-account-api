@@ -71,7 +71,9 @@ public class CandidateRepository(ICandidateAccountDataContext dataContext) : ICa
         }
         var result = await dataContext
             .CandidateEntities
-            .FirstOrDefaultAsync(c => c.MigratedEmail == email);
+            .FirstOrDefaultAsync(c => 
+                c.MigratedEmail == email &&
+                c.Status != (short)CandidateStatus.Deleted);
 
         return result;
     }
@@ -86,6 +88,7 @@ public class CandidateRepository(ICandidateAccountDataContext dataContext) : ICa
 
         candidate.Status = (short)CandidateStatus.Deleted;
         candidate.GovUkIdentifier = null;
+        candidate.UpdatedOn = DateTime.UtcNow;
         dataContext.CandidateEntities.Update(candidate);
         await dataContext.SaveChangesAsync();
 
