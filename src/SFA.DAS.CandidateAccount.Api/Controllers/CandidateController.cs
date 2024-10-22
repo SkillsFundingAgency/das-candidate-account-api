@@ -156,12 +156,7 @@ public class CandidateController(IMediator mediator, ILogger<ApplicationControll
     {
         try
         {
-            var result = await mediator.Send(new DeleteCandidateCommand(candidateId));
-
-            if (result.Candidate is null)
-            {
-                return NotFound();
-            }
+            await mediator.Send(new DeleteCandidateCommand(candidateId));
 
             return NoContent();
         }

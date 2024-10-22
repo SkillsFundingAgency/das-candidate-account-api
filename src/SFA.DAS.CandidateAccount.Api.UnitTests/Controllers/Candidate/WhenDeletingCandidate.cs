@@ -52,8 +52,8 @@ namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.Candidate
             var actual = await controller.DeleteCandidate(id);
 
             //Assert
-            var result = actual as NotFoundResult;
-            result!.StatusCode.Should().Be((int) HttpStatusCode.NotFound);
+            var result = actual as NoContentResult;
+            result.StatusCode.Should().Be((int)HttpStatusCode.NoContent);
         }
 
         [Test, MoqAutoData]
