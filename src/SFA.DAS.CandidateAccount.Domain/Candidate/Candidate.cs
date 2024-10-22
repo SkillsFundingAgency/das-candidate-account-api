@@ -32,7 +32,7 @@ public class Candidate
 
     public Address? Address { get; set; }
 
-    public string GovUkIdentifier { get; set; } = null!;
+    public string? GovUkIdentifier { get; set; }
 
     public string? LastName { get; set; }
 
