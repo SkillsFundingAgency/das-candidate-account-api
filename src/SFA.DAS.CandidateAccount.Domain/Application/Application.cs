@@ -126,7 +126,7 @@ public class ApplicationDetail : Application
             ApplyUnderDisabilityConfidentScheme = source.ApplyUnderDisabilityConfidentScheme,
             AdditionalQuestions = source.AdditionalQuestionEntities?.Select(c=>(AdditionalQuestion)c).ToList(),
             Candidate = source.CandidateEntity,
-            Qualifications = source.QualificationEntities.Select(c=>(Qualification)c).ToList(),
+            Qualifications = source.QualificationEntities.OrderBy(c=>c.CreatedDate).Select(c=>(Qualification)c).ToList(),
             WorkHistory = source.WorkHistoryEntities.Select(c=>(WorkHistory)c).ToList(),
             TrainingCourses = source.TrainingCourseEntities.Select(c=>(TrainingCourse)c).ToList(),
             SubmittedDate = source.SubmittedDate,
@@ -155,8 +155,7 @@ public class Application : ApplicationBase
     public Guid? PreviousAnswersSourceId { get; set; }
     public string? Strengths { get; set; }
     public string? Support { get; set; }
-public DateTime? MigrationDate { get; set; }
-
+    public DateTime? MigrationDate { get; set; }
 
     public static implicit operator Application(ApplicationEntity source)
     {

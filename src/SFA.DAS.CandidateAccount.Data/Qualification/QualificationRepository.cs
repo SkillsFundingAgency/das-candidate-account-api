@@ -22,6 +22,7 @@ public class QualificationRepository(ICandidateAccountDataContext dataContext) :
             .Where(c => c.ApplicationId == applicationId)
             .Where(c=> c.ApplicationEntity.CandidateId == candidateId)
             .Include(c=>c.QualificationReferenceEntity)
+            .OrderBy(c => c.CreatedDate)
             .ToListAsync();
     }
     
@@ -32,6 +33,7 @@ public class QualificationRepository(ICandidateAccountDataContext dataContext) :
             .Where(c=> c.ApplicationEntity.CandidateId == candidateId)
             .Where(c=>c.QualificationReferenceId == qualificationReferenceId)
             .Include(c=>c.QualificationReferenceEntity)
+            .OrderBy(c => c.CreatedDate)
             .ToListAsync();
     }
 
