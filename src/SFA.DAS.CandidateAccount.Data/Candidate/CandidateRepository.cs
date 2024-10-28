@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SFA.DAS.CandidateAccount.Domain.Application;
 using SFA.DAS.CandidateAccount.Domain.Candidate;
 
 namespace SFA.DAS.CandidateAccount.Data.Candidate;
@@ -11,6 +12,7 @@ public interface ICandidateRepository
     Task<Tuple<CandidateEntity,bool>> UpsertCandidate(Domain.Candidate.Candidate candidate);
     Task<CandidateEntity?> GetByMigratedCandidateId(Guid? id);
     Task<CandidateEntity?> GetByMigratedCandidateEmail(string email);
+    Task<Tuple<CandidateEntity?, bool>> DeleteCandidate(Guid id);
 }
 public class CandidateRepository(ICandidateAccountDataContext dataContext) : ICandidateRepository
 {
@@ -32,7 +34,9 @@ public class CandidateRepository(ICandidateAccountDataContext dataContext) : ICa
     {
         var result = await dataContext
             .CandidateEntities
-            .FirstOrDefaultAsync(c => c.Email == email);
+            .FirstOrDefaultAsync(c => 
+                c.Email == email && 
+                c.Status != (short)CandidateStatus.Deleted);
 
         return result;
     }
@@ -67,9 +71,28 @@ public class CandidateRepository(ICandidateAccountDataContext dataContext) : ICa
         }
         var result = await dataContext
             .CandidateEntities
-            .FirstOrDefaultAsync(c => c.MigratedEmail == email);
+            .FirstOrDefaultAsync(c => 
+                c.MigratedEmail == email &&
+                c.Status != (short)CandidateStatus.Deleted);
 
         return result;
+    }
+
+    public async Task<Tuple<CandidateEntity?, bool>> DeleteCandidate(Guid id)
+    {
+        var candidate = await dataContext
+            .CandidateEntities
+            .FirstOrDefaultAsync(c => c.Id == id);
+
+        if (candidate is null) return new Tuple<CandidateEntity?, bool>(null, false);
+
+        candidate.Status = (short)CandidateStatus.Deleted;
+        candidate.GovUkIdentifier = null;
+        candidate.UpdatedOn = DateTime.UtcNow;
+        dataContext.CandidateEntities.Update(candidate);
+        await dataContext.SaveChangesAsync();
+
+        return new Tuple<CandidateEntity?, bool>(candidate, true);
     }
 
     public async Task<CandidateEntity?> GetByGovIdentifier(string id)

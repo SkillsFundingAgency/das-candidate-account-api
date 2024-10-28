@@ -34,7 +34,7 @@ public record CandidateEntity
     public DateTime CreatedOn { get; set; }
     public DateTime? UpdatedOn { get; set; }
     public DateTime? TermsOfUseAcceptedOn { get; set; }
-    public required string GovUkIdentifier { get; set; }
+    public string? GovUkIdentifier { get; set; }
     public short Status { get; set; }
     public string? MigratedEmail { get; set; }
 
