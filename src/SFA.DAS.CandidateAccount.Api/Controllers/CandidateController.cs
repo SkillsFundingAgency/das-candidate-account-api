@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.CandidateAccount.Api.ApiRequests;
 using SFA.DAS.CandidateAccount.Application.Candidate.Commands.CreateCandidate;
+using SFA.DAS.CandidateAccount.Application.Candidate.Commands.DeleteCandidate;
 using SFA.DAS.CandidateAccount.Application.Candidate.Commands.UpsertCandidate;
 using SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetCandidate;
 using SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetCandidateByMigratedEmail;
@@ -146,6 +147,23 @@ public class CandidateController(IMediator mediator, ILogger<ApplicationControll
         {
             logger.LogError(e, "Upsert Candidate : An error occurred");
             return new StatusCodeResult((int) HttpStatusCode.InternalServerError);
+        }
+    }
+
+    [HttpDelete]
+    [Route("{candidateId}")]
+    public async Task<IActionResult> DeleteCandidate([FromRoute] Guid candidateId)
+    {
+        try
+        {
+            await mediator.Send(new DeleteCandidateCommand(candidateId));
+
+            return NoContent();
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e, "Delete Candidate : An error occurred");
+            return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
         }
     }
 }
