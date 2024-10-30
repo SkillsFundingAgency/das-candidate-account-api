@@ -72,7 +72,7 @@ public class CandidateAccountDataContext : DbContext, ICandidateAccountDataConte
 
         var connection = new SqlConnection
         {
-            ConnectionString = _configuration!.ConnectionString
+            ConnectionString = _configuration!.SqlConnectionString
         };
 
         optionsBuilder.UseSqlServer(connection, options =>
