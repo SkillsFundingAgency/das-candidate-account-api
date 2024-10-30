@@ -20,7 +20,8 @@ public class UpsertApplicationCommandHandler(
             var previousApplication = previousApplications.Where(x => 
                 x.Status != (short)ApplicationStatus.Draft && 
                 x.Status != (short)ApplicationStatus.Withdrawn &&
-                x.Status != (short)ApplicationStatus.Expired)
+                x.Status != (short)ApplicationStatus.Expired) 
+                .Where(x=>x.MigrationDate == null)
                 .MaxBy(x => x.CreatedDate);
 
             if (previousApplication != null)
