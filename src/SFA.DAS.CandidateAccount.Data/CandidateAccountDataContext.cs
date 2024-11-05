@@ -39,9 +39,6 @@ public interface ICandidateAccountDataContext
 }
 public class CandidateAccountDataContext : DbContext, ICandidateAccountDataContext
 {
-    private const string AzureResource = "https://database.windows.net/";
-    private readonly ChainedTokenCredential _azureServiceTokenProvider;
-    private readonly EnvironmentConfiguration _environmentConfiguration;
     public DbSet<CandidateEntity> CandidateEntities { get; set; }
     public DbSet<ApplicationEntity> ApplicationEntities { get; set; }
     public DbSet<WorkHistoryEntity> WorkExperienceEntities { get; set; }
@@ -64,27 +61,18 @@ public class CandidateAccountDataContext : DbContext, ICandidateAccountDataConte
     {
 
     }
-    public CandidateAccountDataContext(IOptions<CandidateAccountConfiguration> config, DbContextOptions options, ChainedTokenCredential azureServiceTokenProvider, EnvironmentConfiguration environmentConfiguration) : base(options)
+    public CandidateAccountDataContext(IOptions<CandidateAccountConfiguration> config, DbContextOptions options) : base(options)
     {
-        _azureServiceTokenProvider = azureServiceTokenProvider;
-        _environmentConfiguration = environmentConfiguration;
+        
         _configuration = config.Value;
     }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseLazyLoadingProxies();
 
-        if (_configuration == null
-            || _environmentConfiguration.EnvironmentName.Equals("DEV", StringComparison.CurrentCultureIgnoreCase)
-            || _environmentConfiguration.EnvironmentName.Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase))
-        {
-            return;
-        }
-
         var connection = new SqlConnection
         {
             ConnectionString = _configuration!.SqlConnectionString,
-            AccessToken = _azureServiceTokenProvider.GetTokenAsync(new TokenRequestContext(scopes: new string[] { AzureResource })).Result.Token,
         };
 
         optionsBuilder.UseSqlServer(connection, options =>
@@ -93,7 +81,6 @@ public class CandidateAccountDataContext : DbContext, ICandidateAccountDataConte
                 TimeSpan.FromSeconds(20),
                 null
             ));
-
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
