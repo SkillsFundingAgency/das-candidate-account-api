@@ -83,7 +83,7 @@ public class CandidateAccountDataContext : DbContext, ICandidateAccountDataConte
 
         var connection = new SqlConnection
         {
-            ConnectionString = _configuration.ConnectionString,
+            ConnectionString = _configuration!.SqlConnectionString,
             AccessToken = _azureServiceTokenProvider.GetTokenAsync(new TokenRequestContext(scopes: new string[] { AzureResource })).Result.Token,
         };
 
