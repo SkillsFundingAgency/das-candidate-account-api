@@ -158,7 +158,8 @@ public class CandidateController(IMediator mediator, ILogger<ApplicationControll
                     TermsOfUseAcceptedOn = postCandidateRequest.TermsOfUseAcceptedOn,
                     Status = postCandidateRequest.Status,
                     MigratedEmail = postCandidateRequest.MigratedEmail,
-                    MigratedCandidateId = postCandidateRequest.MigratedCandidateId
+                    MigratedCandidateId = postCandidateRequest.MigratedCandidateId,
+                    GovUkIdentifier = postCandidateRequest.GovUkIdentifier
                 }
             });
 
