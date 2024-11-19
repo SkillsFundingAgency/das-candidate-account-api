@@ -32,6 +32,9 @@ public class WhenCallingPutCandidate
                 && c.Candidate.PhoneNumber.Equals(postCandidateRequest.PhoneNumber)
                 && c.Candidate.DateOfBirth.Equals(postCandidateRequest.DateOfBirth)
                 && c.Candidate.TermsOfUseAcceptedOn.Equals(postCandidateRequest.TermsOfUseAcceptedOn)
+                && c.Candidate.GovUkIdentifier.Equals(postCandidateRequest.GovUkIdentifier)
+                && c.Candidate.MigratedEmail.Equals(postCandidateRequest.MigratedEmail)
+                && c.Candidate.MigratedCandidateId.Equals(postCandidateRequest.MigratedCandidateId)
             ), CancellationToken.None))
             .ReturnsAsync(upsertCandidateCommandResult);
         
@@ -63,6 +66,9 @@ public class WhenCallingPutCandidate
                 && c.Candidate.PhoneNumber.Equals(postCandidateRequest.PhoneNumber)
                 && c.Candidate.DateOfBirth.Equals(postCandidateRequest.DateOfBirth)
                 && c.Candidate.TermsOfUseAcceptedOn.Equals(postCandidateRequest.TermsOfUseAcceptedOn)
+                && c.Candidate.GovUkIdentifier.Equals(postCandidateRequest.GovUkIdentifier)
+                && c.Candidate.MigratedEmail.Equals(postCandidateRequest.MigratedEmail)
+                && c.Candidate.MigratedCandidateId.Equals(postCandidateRequest.MigratedCandidateId)
                 ), CancellationToken.None))
             .ReturnsAsync(upsertCandidateCommandResult);
         

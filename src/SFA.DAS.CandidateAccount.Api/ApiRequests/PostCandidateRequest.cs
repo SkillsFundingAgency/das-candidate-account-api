@@ -23,4 +23,5 @@ public abstract class CandidateRequest
     public CandidateStatus? Status { get; set; }
     public string? MigratedEmail { get; set; }
     public Guid? MigratedCandidateId { get; set; }
+    public string? GovUkIdentifier { get; set; }
 }

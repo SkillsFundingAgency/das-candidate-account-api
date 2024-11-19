@@ -110,15 +110,11 @@ public class CandidateRepository(ICandidateAccountDataContext dataContext) : ICa
             .CandidateEntities
             .FirstOrDefaultAsync(c => c.Id == candidate.Id);
 
-        //TODO look at why we are doing this - and not doing all the fields
         if (existingCandidate == null)
         {
             var newCandidate = (CandidateEntity)candidate;
             newCandidate.CreatedOn = DateTime.UtcNow;
             newCandidate.UpdatedOn = null;
-            newCandidate.FirstName = candidate.FirstName;
-            newCandidate.LastName = candidate.LastName;
-            newCandidate.DateOfBirth = candidate.DateOfBirth;
             await dataContext.CandidateEntities.AddAsync(newCandidate);
             await dataContext.SaveChangesAsync();
             return new Tuple<CandidateEntity, bool>(newCandidate, true);
@@ -133,6 +129,7 @@ public class CandidateRepository(ICandidateAccountDataContext dataContext) : ICa
         existingCandidate.Status = candidate.Status.HasValue ? (short)candidate.Status : existingCandidate.Status;
         existingCandidate.MigratedEmail = candidate.MigratedEmail ?? existingCandidate.MigratedEmail;
         existingCandidate.MigratedCandidateId = candidate.MigratedCandidateId ?? existingCandidate.MigratedCandidateId;
+        existingCandidate.GovUkIdentifier = candidate.GovUkIdentifier ?? existingCandidate.GovUkIdentifier;
         dataContext.CandidateEntities.Update(existingCandidate);
         await dataContext.SaveChangesAsync();
     
