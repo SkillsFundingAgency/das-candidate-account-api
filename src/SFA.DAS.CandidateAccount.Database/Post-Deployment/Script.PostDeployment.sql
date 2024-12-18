@@ -53,3 +53,8 @@ ELSE
 BEGIN
     UPDATE Preference set PreferenceHint = 'Get a reminder 7 days before the closing date for an apprenticeship. We''ll notify you for your saved vacancies and apprenticeships you''ve began an application for.', PreferenceType='closing' where PreferenceMeaning = 'A vacancy is closing soon'
 END
+
+IF EXISTS(SELECT 1 FROM Preference where PreferenceMeaning = 'Your application gets a response')
+BEGIN
+    DELETE FROM Preference where PreferenceMeaning = 'Your application gets a response'
+END
