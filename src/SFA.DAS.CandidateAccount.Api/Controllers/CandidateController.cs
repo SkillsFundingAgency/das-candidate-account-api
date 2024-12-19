@@ -181,7 +181,7 @@ public class CandidateController(IMediator mediator, ILogger<ApplicationControll
         }
         catch (Exception e)
         {
-            logger.LogError(e, "Delete Candidate : An error occurred");
+            logger.LogError(e, "Get Candidates By Activity : An error occurred");
             return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
         }
     }
