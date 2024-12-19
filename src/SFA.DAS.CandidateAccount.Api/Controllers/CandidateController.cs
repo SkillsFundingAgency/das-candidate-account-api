@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Net;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -8,6 +9,7 @@ using SFA.DAS.CandidateAccount.Application.Candidate.Commands.UpsertCandidate;
 using SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetCandidate;
 using SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetCandidateByMigratedEmail;
 using SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetCandidateByMigratedId;
+using SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetCandidatesByActivity;
 using SFA.DAS.CandidateAccount.Domain.Candidate;
 
 namespace SFA.DAS.CandidateAccount.Api.Controllers;
@@ -159,6 +161,23 @@ public class CandidateController(IMediator mediator, ILogger<ApplicationControll
             await mediator.Send(new DeleteCandidateCommand(candidateId));
 
             return NoContent();
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e, "Delete Candidate : An error occurred");
+            return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+        }
+    }
+
+    [HttpGet]
+    [Route("GetCandidatesByActivity")]
+    public async Task<IActionResult> GetCandidatesByActivity([FromQuery, Required] DateTime cutOffDateTime)
+    {
+        try
+        {
+            var result = await mediator.Send(new GetCandidatesByActivityQuery(cutOffDateTime));
+
+            return Ok(result);
         }
         catch (Exception e)
         {

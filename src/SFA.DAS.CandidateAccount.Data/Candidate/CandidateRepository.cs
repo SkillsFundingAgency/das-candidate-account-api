@@ -13,6 +13,7 @@ public interface ICandidateRepository
     Task<CandidateEntity?> GetByMigratedCandidateId(Guid? id);
     Task<CandidateEntity?> GetByMigratedCandidateEmail(string email);
     Task<Tuple<CandidateEntity?, bool>> DeleteCandidate(Guid id);
+    Task<List<CandidateEntity>> GetCandidatesByActivity(DateTime cutOffDateTime);
 }
 public class CandidateRepository(ICandidateAccountDataContext dataContext) : ICandidateRepository
 {
@@ -23,7 +24,14 @@ public class CandidateRepository(ICandidateAccountDataContext dataContext) : ICa
             .FirstOrDefaultAsync(c => 
                 c.GovUkIdentifier == candidate.GovUkIdentifier);
 
-        if (existingCandidate != null) return new Tuple<CandidateEntity, bool>(existingCandidate, false);
+        if (existingCandidate != null)
+        {
+            existingCandidate.UpdatedOn = DateTime.UtcNow;
+            dataContext.CandidateEntities.Update(candidate);
+            await dataContext.SaveChangesAsync();
+
+            return new Tuple<CandidateEntity, bool>(existingCandidate, false);
+        }
 
         await dataContext.CandidateEntities.AddAsync(candidate);
         await dataContext.SaveChangesAsync();
@@ -93,6 +101,19 @@ public class CandidateRepository(ICandidateAccountDataContext dataContext) : ICa
         await dataContext.SaveChangesAsync();
 
         return new Tuple<CandidateEntity?, bool>(candidate, true);
+    }
+
+    public async Task<List<CandidateEntity>> GetCandidatesByActivity(DateTime cutOffDateTime)
+    {
+        var candidates = await dataContext
+            .CandidateEntities
+            .AsNoTracking()
+            .Where(fil => 
+                fil.UpdatedOn < cutOffDateTime && 
+                fil.Status == (short)CandidateStatus.Completed)
+            .ToListAsync();
+
+        return candidates;
     }
 
     public async Task<CandidateEntity?> GetByGovIdentifier(string id)

@@ -49,6 +49,7 @@ public class WhenInsertingCandidate
         //Assert
         actual.Item1.Should().Be(candidate);
         context.Verify(x => x.CandidateEntities.AddAsync(candidate, CancellationToken.None), Times.Never);
-        context.Verify(x => x.SaveChangesAsync(CancellationToken.None), Times.Never);
+        context.Verify(x => x.CandidateEntities.Update(candidate), Times.Once);
+        context.Verify(x => x.SaveChangesAsync(CancellationToken.None), Times.Once);
     }
 }
