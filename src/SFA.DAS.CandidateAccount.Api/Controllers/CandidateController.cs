@@ -171,11 +171,11 @@ public class CandidateController(IMediator mediator, ILogger<ApplicationControll
 
     [HttpGet]
     [Route("GetCandidatesByActivity")]
-    public async Task<IActionResult> GetCandidatesByActivity([FromQuery, Required] DateTime cutOffDateTime)
+    public async Task<IActionResult> GetCandidatesByActivity([FromQuery, Required] DateTime cutOffDateTime, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 1000)
     {
         try
         {
-            var result = await mediator.Send(new GetCandidatesByActivityQuery(cutOffDateTime));
+            var result = await mediator.Send(new GetCandidatesByActivityQuery(cutOffDateTime, pageNumber, pageSize));
 
             return Ok(result);
         }

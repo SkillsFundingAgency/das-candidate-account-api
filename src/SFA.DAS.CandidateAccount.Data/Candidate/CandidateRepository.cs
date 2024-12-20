@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SFA.DAS.CandidateAccount.Domain.Application;
 using SFA.DAS.CandidateAccount.Domain.Candidate;
+using SFA.DAS.CandidateAccount.Domain.Models;
 
 namespace SFA.DAS.CandidateAccount.Data.Candidate;
 public interface ICandidateRepository
@@ -13,7 +14,8 @@ public interface ICandidateRepository
     Task<CandidateEntity?> GetByMigratedCandidateId(Guid? id);
     Task<CandidateEntity?> GetByMigratedCandidateEmail(string email);
     Task<Tuple<CandidateEntity?, bool>> DeleteCandidate(Guid id);
-    Task<List<CandidateEntity>> GetCandidatesByActivity(DateTime cutOffDateTime);
+    Task<PaginatedList<CandidateEntity>> GetCandidatesByActivity(DateTime cutOffDateTime, int pageNumber, int pageSize,
+        CancellationToken token);
 }
 public class CandidateRepository(ICandidateAccountDataContext dataContext) : ICandidateRepository
 {
@@ -103,17 +105,27 @@ public class CandidateRepository(ICandidateAccountDataContext dataContext) : ICa
         return new Tuple<CandidateEntity?, bool>(candidate, true);
     }
 
-    public async Task<List<CandidateEntity>> GetCandidatesByActivity(DateTime cutOffDateTime)
+    public async Task<PaginatedList<CandidateEntity>> GetCandidatesByActivity(DateTime cutOffDateTime,
+        int pageNumber,
+        int pageSize,
+        CancellationToken token)
     {
-        var candidates = await dataContext
+        // Query
+        var query = dataContext
             .CandidateEntities
             .AsNoTracking()
             .Where(fil => 
                 fil.UpdatedOn < cutOffDateTime && 
                 fil.Status == (short)CandidateStatus.Completed)
-            .ToListAsync();
+            .OrderByDescending(fil => fil.UpdatedOn);
 
-        return candidates;
+        // Count
+        var count = await query.CountAsync(token);
+
+        // Pagination
+        query = (IOrderedQueryable<CandidateEntity>)query.Skip((pageNumber - 1) * pageSize).Take(pageSize);
+
+        return await PaginatedList<CandidateEntity>.CreateAsync(query, count, pageNumber, pageSize);
     }
 
     public async Task<CandidateEntity?> GetByGovIdentifier(string id)

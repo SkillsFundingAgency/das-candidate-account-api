@@ -5,6 +5,7 @@ using SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetCandidatesByActi
 using SFA.DAS.CandidateAccount.Data.Candidate;
 using SFA.DAS.CandidateAccount.Domain.Application;
 using SFA.DAS.CandidateAccount.Domain.Candidate;
+using SFA.DAS.CandidateAccount.Domain.Models;
 using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.CandidateAccount.Application.UnitTests.Candidate
@@ -16,35 +17,22 @@ namespace SFA.DAS.CandidateAccount.Application.UnitTests.Candidate
         public async Task Then_The_Candidates_Found_By_Activity_And_Returned(
             DateTime cutOffDateTime,
             GetCandidatesByActivityQuery query,
-            List<CandidateEntity> entities,
+            PaginatedList<CandidateEntity> entities,
             [Frozen] Mock<ICandidateRepository> repository,
             GetCandidatesByActivityQueryHandler handler)
         {
-            query = new GetCandidatesByActivityQuery(CutOffDateTime: cutOffDateTime);
-            foreach (var candidateEntity in entities)
+            query = new GetCandidatesByActivityQuery(CutOffDateTime: cutOffDateTime, query.PageNumber, query.PageSize);
+            foreach (var candidateEntity in entities.Items)
             {
                 candidateEntity.Status = (short)CandidateStatus.Completed;
                 candidateEntity.UpdatedOn = cutOffDateTime.AddMinutes(-1);
             }
-            repository.Setup(x => x.GetCandidatesByActivity(It.IsAny<DateTime>())).ReturnsAsync(entities);
+            repository.Setup(x => x.GetCandidatesByActivity(query.CutOffDateTime, query.PageNumber, query.PageSize, CancellationToken.None)).ReturnsAsync(entities);
 
             var actual = await handler.Handle(query, CancellationToken.None);
 
-            actual.Candidates.Count.Should().Be(entities.Count);
-            actual.Candidates.Should().BeEquivalentTo(entities.Select(x => (Domain.Candidate.Candidate)x!));
-        }
-
-        [Test, RecursiveMoqAutoData]
-        public async Task Then_The_Candidates_NotFound_By_Activity_And_Empty_Returned(
-            GetCandidatesByActivityQuery query,
-            [Frozen] Mock<ICandidateRepository> repository,
-            GetCandidatesByActivityQueryHandler handler)
-        {
-            repository.Setup(x => x.GetCandidatesByActivity(It.IsAny<DateTime>())).ReturnsAsync(new List<CandidateEntity>{ Capacity = 0});
-
-            var actual = await handler.Handle(query, CancellationToken.None);
-
-            actual.Candidates.Count.Should().Be(0);
+            actual.Candidates.Count.Should().Be(entities.Items.Count);
+            actual.Candidates.Should().BeEquivalentTo(entities.Items.Select(x => (Domain.Candidate.Candidate)x!));
         }
     }
 }

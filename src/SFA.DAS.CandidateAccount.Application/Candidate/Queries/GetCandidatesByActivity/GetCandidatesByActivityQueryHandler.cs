@@ -9,14 +9,11 @@ namespace SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetCandidatesBy
         public async Task<GetCandidatesByActivityQueryResult> Handle(GetCandidatesByActivityQuery request,
             CancellationToken cancellationToken)
         {
-            var candidates = await repository.GetCandidatesByActivity(request.CutOffDateTime);
-
-            return new GetCandidatesByActivityQueryResult
-            {
-                Candidates = candidates is {Count: > 0} 
-                    ? candidates.Select(x => (Domain.Candidate.Candidate)x).ToList() 
-                    : []
-            };
+            return await repository.GetCandidatesByActivity(
+                request.CutOffDateTime,
+                request.PageNumber,
+                request.PageSize,
+                cancellationToken);
         }
     }
 }

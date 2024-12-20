@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoFixture.NUnit3;
+﻿using AutoFixture.NUnit3;
 using FluentAssertions;
 using Moq;
 using SFA.DAS.CandidateAccount.Data.Candidate;
 using SFA.DAS.CandidateAccount.Data.UnitTests.DatabaseMock;
 using SFA.DAS.CandidateAccount.Domain.Application;
 using SFA.DAS.CandidateAccount.Domain.Candidate;
+using SFA.DAS.CandidateAccount.Domain.Models;
 using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.CandidateAccount.Data.UnitTests.Repository.Candidate
@@ -19,25 +15,27 @@ namespace SFA.DAS.CandidateAccount.Data.UnitTests.Repository.Candidate
     {
         [Test, RecursiveMoqAutoData]
         public async Task And_Then_Candidates_Are_Returned(
+            int pageNumber,
+            int pageSize,
             DateTime cutOffDateTime,
-            List<CandidateEntity> candidates,
+            PaginatedList<CandidateEntity> candidates,
             [Frozen] Mock<ICandidateAccountDataContext> context,
             CandidateRepository repository)
         {
             //Arrange
-            foreach (var candidateEntity in candidates)
+            foreach (var candidateEntity in candidates.Items)
             {
                 candidateEntity.Status = (short) CandidateStatus.Completed;
                 candidateEntity.UpdatedOn = cutOffDateTime.AddMinutes(-1);
             }
 
-            context.Setup(x => x.CandidateEntities).ReturnsDbSet( candidates);
+            context.Setup(x => x.CandidateEntities).ReturnsDbSet(candidates.Items);
 
             //Act
-            var result = await repository.GetCandidatesByActivity(cutOffDateTime);
+            var result = await repository.GetCandidatesByActivity(cutOffDateTime, 1, 1000, default);
 
             //Assert
-            result.Should().BeEquivalentTo(candidates);
+            result.Items.Should().BeEquivalentTo(candidates.Items);
         }
 
         [Test]
@@ -61,10 +59,10 @@ namespace SFA.DAS.CandidateAccount.Data.UnitTests.Repository.Candidate
             context.Setup(x => x.CandidateEntities).ReturnsDbSet(candidates);
 
             //Act
-            var result = await repository.GetCandidatesByActivity(cutOffDateTime);
+            var result = await repository.GetCandidatesByActivity(cutOffDateTime, 1, 1000, default);
 
             //Assert
-            result.Should().BeEmpty();
+            result.Items.Should().BeEmpty();
         }
 
         [Test, RecursiveMoqInlineAutoData]
@@ -84,10 +82,10 @@ namespace SFA.DAS.CandidateAccount.Data.UnitTests.Repository.Candidate
             context.Setup(x => x.CandidateEntities).ReturnsDbSet(candidates);
 
             //Act
-            var result = await repository.GetCandidatesByActivity(cutOffDateTime);
+            var result = await repository.GetCandidatesByActivity(cutOffDateTime, 1, 1000, default);
 
             //Assert
-            result.Should().BeEmpty();
+            result.Items.Should().BeEmpty();
         }
     }
 }
