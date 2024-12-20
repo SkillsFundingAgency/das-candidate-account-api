@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SFA.DAS.CandidateAccount.Domain.Application;
 using SFA.DAS.CandidateAccount.Domain.Candidate;
+using SFA.DAS.CandidateAccount.Domain.Models;
 
 namespace SFA.DAS.CandidateAccount.Data.Candidate;
 public interface ICandidateRepository
@@ -13,6 +14,8 @@ public interface ICandidateRepository
     Task<CandidateEntity?> GetByMigratedCandidateId(Guid? id);
     Task<CandidateEntity?> GetByMigratedCandidateEmail(string email);
     Task<Tuple<CandidateEntity?, bool>> DeleteCandidate(Guid id);
+    Task<PaginatedList<CandidateEntity>> GetCandidatesByActivity(DateTime cutOffDateTime, int pageNumber, int pageSize,
+        CancellationToken token);
 }
 public class CandidateRepository(ICandidateAccountDataContext dataContext) : ICandidateRepository
 {
@@ -23,7 +26,14 @@ public class CandidateRepository(ICandidateAccountDataContext dataContext) : ICa
             .FirstOrDefaultAsync(c => 
                 c.GovUkIdentifier == candidate.GovUkIdentifier);
 
-        if (existingCandidate != null) return new Tuple<CandidateEntity, bool>(existingCandidate, false);
+        if (existingCandidate != null)
+        {
+            existingCandidate.UpdatedOn = DateTime.UtcNow;
+            dataContext.CandidateEntities.Update(candidate);
+            await dataContext.SaveChangesAsync();
+
+            return new Tuple<CandidateEntity, bool>(existingCandidate, false);
+        }
 
         await dataContext.CandidateEntities.AddAsync(candidate);
         await dataContext.SaveChangesAsync();
@@ -93,6 +103,29 @@ public class CandidateRepository(ICandidateAccountDataContext dataContext) : ICa
         await dataContext.SaveChangesAsync();
 
         return new Tuple<CandidateEntity?, bool>(candidate, true);
+    }
+
+    public async Task<PaginatedList<CandidateEntity>> GetCandidatesByActivity(DateTime cutOffDateTime,
+        int pageNumber,
+        int pageSize,
+        CancellationToken token)
+    {
+        // Query
+        var query = dataContext
+            .CandidateEntities
+            .AsNoTracking()
+            .Where(fil => 
+                fil.UpdatedOn < cutOffDateTime && 
+                fil.Status == (short)CandidateStatus.Completed)
+            .OrderByDescending(fil => fil.UpdatedOn);
+
+        // Count
+        var count = await query.CountAsync(token);
+
+        // Pagination
+        query = (IOrderedQueryable<CandidateEntity>)query.Skip((pageNumber - 1) * pageSize).Take(pageSize);
+
+        return await PaginatedList<CandidateEntity>.CreateAsync(query, count, pageNumber, pageSize);
     }
 
     public async Task<CandidateEntity?> GetByGovIdentifier(string id)
