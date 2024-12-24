@@ -1,7 +1,7 @@
 ﻿using AutoFixture.NUnit3;
 using FluentAssertions;
 using Moq;
-using SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetCandidatesByActivity;
+using SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetInactiveCandidates;
 using SFA.DAS.CandidateAccount.Data.Candidate;
 using SFA.DAS.CandidateAccount.Domain.Application;
 using SFA.DAS.CandidateAccount.Domain.Candidate;
@@ -16,12 +16,12 @@ namespace SFA.DAS.CandidateAccount.Application.UnitTests.Candidate
         [Test, RecursiveMoqAutoData]
         public async Task Then_The_Candidates_Found_By_Activity_And_Returned(
             DateTime cutOffDateTime,
-            GetCandidatesByActivityQuery query,
+            GetInactiveCandidatesQuery query,
             PaginatedList<CandidateEntity> entities,
             [Frozen] Mock<ICandidateRepository> repository,
-            GetCandidatesByActivityQueryHandler handler)
+            GetInactiveCandidatesQueryHandler handler)
         {
-            query = new GetCandidatesByActivityQuery(CutOffDateTime: cutOffDateTime, query.PageNumber, query.PageSize);
+            query = new GetInactiveCandidatesQuery(CutOffDateTime: cutOffDateTime, query.PageNumber, query.PageSize);
             foreach (var candidateEntity in entities.Items)
             {
                 candidateEntity.Status = (short)CandidateStatus.Completed;

@@ -4,9 +4,9 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using SFA.DAS.CandidateAccount.Api.Controllers;
-using SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetCandidatesByActivity;
 using SFA.DAS.Testing.AutoFixture;
 using System.Net;
+using SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetInactiveCandidates;
 
 namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.Candidate
 {
@@ -16,23 +16,23 @@ namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.Candidate
         [Test, MoqAutoData]
         public async Task Then_If_MediatorCall_Returns_Candidates_Then_Ok_Result_Returned(
             DateTime cutOffDateTime,
-            GetCandidatesByActivityQueryResult getCandidatesByActivityQueryResult,
+            GetInactiveCandidatesQueryResult getCandidatesByActivityQueryResult,
             [Frozen] Mock<IMediator> mediator,
             [Greedy] CandidateController controller)
         {
             //Arrange
-            mediator.Setup(x => x.Send(It.Is<GetCandidatesByActivityQuery>(c =>
+            mediator.Setup(x => x.Send(It.Is<GetInactiveCandidatesQuery>(c =>
                     c.CutOffDateTime == cutOffDateTime
                 ), CancellationToken.None))
                 .ReturnsAsync(getCandidatesByActivityQueryResult);
 
             //Act
-            var actual = await controller.GetCandidatesByActivity(cutOffDateTime);
+            var actual = await controller.GetInactiveCandidates(cutOffDateTime);
 
             //Assert
             var result = actual as OkObjectResult;
-            var actualResult = result.Value as GetCandidatesByActivityQueryResult;
-            actualResult.Candidates.Should().BeEquivalentTo(getCandidatesByActivityQueryResult.Candidates);
+            var actualResult = result!.Value as GetInactiveCandidatesQueryResult;
+            actualResult!.Candidates.Should().BeEquivalentTo(getCandidatesByActivityQueryResult.Candidates);
         }
 
         [Test, MoqAutoData]
@@ -42,11 +42,11 @@ namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.Candidate
             [Greedy] CandidateController controller)
         {
             //Arrange
-            mediator.Setup(x => x.Send(It.IsAny<GetCandidatesByActivityQuery>(),
+            mediator.Setup(x => x.Send(It.IsAny<GetInactiveCandidatesQuery>(),
                 CancellationToken.None)).ThrowsAsync(new Exception("Error"));
 
             //Act
-            var actual = await controller.GetCandidatesByActivity(cutOffDateTime);
+            var actual = await controller.GetInactiveCandidates(cutOffDateTime);
 
             //Assert
             var result = actual as StatusCodeResult;

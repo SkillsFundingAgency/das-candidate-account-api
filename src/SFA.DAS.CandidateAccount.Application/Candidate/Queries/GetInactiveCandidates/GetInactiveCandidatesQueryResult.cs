@@ -1,8 +1,8 @@
 ﻿using SFA.DAS.CandidateAccount.Domain.Models;
 
-namespace SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetCandidatesByActivity
+namespace SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetInactiveCandidates
 {
-    public record GetCandidatesByActivityQueryResult
+    public record GetInactiveCandidatesQueryResult
     {
         public List<Domain.Candidate.Candidate> Candidates { get; private init; } = [];
         public int TotalCount { get; set; }
@@ -10,9 +10,9 @@ namespace SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetCandidatesBy
         public int PageSize { get; set; }
         public int TotalPages { get; set; }
 
-        public static implicit operator GetCandidatesByActivityQueryResult(PaginatedList<Domain.Candidate.CandidateEntity> source)
+        public static implicit operator GetInactiveCandidatesQueryResult(PaginatedList<Domain.Candidate.CandidateEntity> source)
         {
-            return new GetCandidatesByActivityQueryResult
+            return new GetInactiveCandidatesQueryResult
             {
                 TotalCount = source.TotalCount,
                 PageIndex = source.PageIndex,
