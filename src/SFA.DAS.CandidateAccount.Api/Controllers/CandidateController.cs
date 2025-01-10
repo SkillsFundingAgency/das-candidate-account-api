@@ -6,8 +6,6 @@ using SFA.DAS.CandidateAccount.Application.Candidate.Commands.CreateCandidate;
 using SFA.DAS.CandidateAccount.Application.Candidate.Commands.DeleteCandidate;
 using SFA.DAS.CandidateAccount.Application.Candidate.Commands.UpsertCandidate;
 using SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetCandidate;
-using SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetCandidateByMigratedEmail;
-using SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetCandidateByMigratedId;
 using SFA.DAS.CandidateAccount.Domain.Candidate;
 
 namespace SFA.DAS.CandidateAccount.Api.Controllers;
@@ -67,52 +65,6 @@ public class CandidateController(IMediator mediator, ILogger<ApplicationControll
         }
     }
     
-    [HttpGet]
-    [Route("migrated/{id}")]
-    public async Task<IActionResult> GetCandidateByMigratedId(Guid id)
-    {
-        try
-        {
-            var result = await mediator.Send(new GetCandidateByMigratedIdQuery()
-            {
-                MigratedCandidateId = id
-            });
-            if (result.Candidate == null)
-            {
-                return NotFound();
-            }
-            return Ok(result.Candidate);
-        }
-        catch (Exception e)
-        {
-            logger.LogError(e, "Get candidate by migrated id : An error occurred");
-            return new StatusCodeResult((int) HttpStatusCode.InternalServerError);
-        }
-    }
-
-    [HttpGet]
-    [Route("migrated/email/{email}")]
-    public async Task<IActionResult> GetCandidateByMigratedEmail(string email)
-    {
-        try
-        {
-            var result = await mediator.Send(new GetCandidateByMigratedEmailQuery
-            {
-                Email = email
-            });
-            if (result.Candidate == null)
-            {
-                return NotFound();
-            }
-            return Ok(result.Candidate);
-        }
-        catch (Exception e)
-        {
-            logger.LogError(e, "Get candidate by migrated email : An error occurred");
-            return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
-        }
-    }
-
     [HttpPut]
     [Route("{candidateId}")]
     public async Task<IActionResult> PutCandidate([FromRoute] Guid candidateId, PutCandidateRequest postCandidateRequest)
