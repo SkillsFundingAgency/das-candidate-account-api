@@ -11,8 +11,6 @@ public interface ICandidateRepository
     Task<CandidateEntity?> GetById(Guid id);
     Task<CandidateEntity?> GetByGovIdentifier(string id);
     Task<Tuple<CandidateEntity,bool>> UpsertCandidate(Domain.Candidate.Candidate candidate);
-    Task<CandidateEntity?> GetByMigratedCandidateId(Guid? id);
-    Task<CandidateEntity?> GetByMigratedCandidateEmail(string email);
     Task<Tuple<CandidateEntity?, bool>> DeleteCandidate(Guid id);
     Task<PaginatedList<CandidateEntity>> GetCandidatesByActivity(DateTime cutOffDateTime, int pageNumber, int pageSize,
         CancellationToken token);
@@ -56,34 +54,6 @@ public class CandidateRepository(ICandidateAccountDataContext dataContext) : ICa
         var result = await dataContext
             .CandidateEntities
             .FirstOrDefaultAsync(c => c.Id == id);
-
-        return result;
-    }
-
-    public async Task<CandidateEntity?> GetByMigratedCandidateId(Guid? id)
-    {
-        if (!id.HasValue)
-        {
-            return null;
-        }
-        var result = await dataContext
-            .CandidateEntities
-            .FirstOrDefaultAsync(c => c.MigratedCandidateId == id);
-
-        return result;
-    }
-
-    public async Task<CandidateEntity?> GetByMigratedCandidateEmail(string email)
-    {
-        if (string.IsNullOrWhiteSpace(email))
-        {
-            return null;
-        }
-        var result = await dataContext
-            .CandidateEntities
-            .FirstOrDefaultAsync(c => 
-                c.MigratedEmail == email &&
-                c.Status != (short)CandidateStatus.Deleted);
 
         return result;
     }
