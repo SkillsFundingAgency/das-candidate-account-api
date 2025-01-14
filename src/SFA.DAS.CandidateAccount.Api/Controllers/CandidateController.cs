@@ -7,6 +7,7 @@ using SFA.DAS.CandidateAccount.Application.Candidate.Commands.CreateCandidate;
 using SFA.DAS.CandidateAccount.Application.Candidate.Commands.DeleteCandidate;
 using SFA.DAS.CandidateAccount.Application.Candidate.Commands.UpsertCandidate;
 using SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetCandidate;
+using SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetCandidateByEmail;
 using SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetCandidateByMigratedEmail;
 using SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetCandidateByMigratedId;
 using SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetInactiveCandidates;
@@ -114,6 +115,30 @@ public class CandidateController(IMediator mediator, ILogger<ApplicationControll
             return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
         }
     }
+    
+    
+    [HttpGet]
+    [Route("email/{email}")]
+    public async Task<IActionResult> GetCandidateByEmail(string email)
+    {
+        try
+        {
+            var result = await mediator.Send(new GetCandidateByEmailQuery
+            {
+                Email = email
+            });
+            if (result.Candidate == null)
+            {
+                return NotFound();
+            }
+            return Ok(result.Candidate);
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e, "Get candidate by email : An error occurred");
+            return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+        }
+    }
 
     [HttpPut]
     [Route("{candidateId}")]
@@ -135,7 +160,8 @@ public class CandidateController(IMediator mediator, ILogger<ApplicationControll
                     TermsOfUseAcceptedOn = postCandidateRequest.TermsOfUseAcceptedOn,
                     Status = postCandidateRequest.Status,
                     MigratedEmail = postCandidateRequest.MigratedEmail,
-                    MigratedCandidateId = postCandidateRequest.MigratedCandidateId
+                    MigratedCandidateId = postCandidateRequest.MigratedCandidateId,
+                    GovUkIdentifier = postCandidateRequest.GovUkIdentifier
                 }
             });
 
