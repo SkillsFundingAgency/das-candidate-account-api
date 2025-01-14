@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Net;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -8,6 +9,7 @@ using SFA.DAS.CandidateAccount.Application.Candidate.Commands.UpsertCandidate;
 using SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetCandidate;
 using SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetCandidateByMigratedEmail;
 using SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetCandidateByMigratedId;
+using SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetInactiveCandidates;
 using SFA.DAS.CandidateAccount.Domain.Candidate;
 
 namespace SFA.DAS.CandidateAccount.Api.Controllers;
@@ -32,7 +34,7 @@ public class CandidateController(IMediator mediator, ILogger<ApplicationControll
                 DateOfBirth = request.DateOfBirth,
                 PhoneNumber = request.PhoneNumber,
                 MigratedEmail = request.MigratedEmail,
-                MigratedCandidateId = request.MigratedCandidateId
+                MigratedCandidateId = request.MigratedCandidateId,
             });
 
             return Created($"{result.Candidate.Id}",result.Candidate);
@@ -163,6 +165,23 @@ public class CandidateController(IMediator mediator, ILogger<ApplicationControll
         catch (Exception e)
         {
             logger.LogError(e, "Delete Candidate : An error occurred");
+            return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+        }
+    }
+
+    [HttpGet]
+    [Route("GetInactiveCandidates")]
+    public async Task<IActionResult> GetInactiveCandidates([FromQuery, Required] DateTime cutOffDateTime, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 1000)
+    {
+        try
+        {
+            var result = await mediator.Send(new GetInactiveCandidatesQuery(cutOffDateTime, pageNumber, pageSize));
+
+            return Ok(result);
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e, "Get Candidates By Activity : An error occurred");
             return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
         }
     }
