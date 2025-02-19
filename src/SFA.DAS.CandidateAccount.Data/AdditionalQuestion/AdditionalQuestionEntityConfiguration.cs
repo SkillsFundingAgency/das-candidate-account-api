@@ -14,7 +14,7 @@ public class AdditionalQuestionEntityConfiguration : IEntityTypeConfiguration<Ad
         builder.Property(x => x.Id).HasColumnName("Id").HasColumnType("uniqueidentifier").IsRequired();
         builder.Property(x => x.Answer).HasColumnName("Answer").HasColumnType("varchar(max)").IsRequired();
         builder.Property(x => x.QuestionText).HasColumnName("QuestionText").HasColumnType("varchar").HasMaxLength(500).IsRequired();
-        builder.Property(x => x.QuestionOrder).HasColumnName("Order").HasColumnType("int").IsRequired(false);
+        builder.Property(x => x.QuestionOrder).HasColumnName("QuestionOrder").HasColumnType("tinyint").IsRequired(false);
         builder.Property(x => x.ApplicationId).HasColumnName("ApplicationId").HasColumnType("uniqueidentifier").IsRequired();
     }
 }
