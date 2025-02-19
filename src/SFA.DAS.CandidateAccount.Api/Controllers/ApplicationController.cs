@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-using System.Net;
 using MediatR;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +10,8 @@ using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplication;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplicationByVacancyReference;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplications;
 using SFA.DAS.CandidateAccount.Domain.Application;
-using SFA.DAS.CandidateAccount.Domain.Candidate;
+using System.ComponentModel.DataAnnotations;
+using System.Net;
 
 namespace SFA.DAS.CandidateAccount.Api.Controllers;
 
@@ -40,7 +39,7 @@ public class ApplicationController(IMediator mediator, ILogger<ApplicationContro
                 IsWorkHistoryComplete = applicationRequest.IsWorkHistoryComplete,
                 IsAdditionalQuestion1Complete = applicationRequest.IsAdditionalQuestion1Complete,
                 IsAdditionalQuestion2Complete = applicationRequest.IsAdditionalQuestion2Complete,
-                AdditionalQuestions = applicationRequest.AdditionalQuestions.ToList()
+                AdditionalQuestions = applicationRequest.AdditionalQuestions
             });
 
             if (result.IsCreated)
@@ -110,7 +109,7 @@ public class ApplicationController(IMediator mediator, ILogger<ApplicationContro
             }
 
             var getApplicationApiResponse = includeDetail
-                ? (GetApplicationApiResponse)((ApplicationDetail)result.Application)
+                ? (GetApplicationApiResponse)(ApplicationDetail)result.Application
                 : (Domain.Application.Application)result.Application;
             return Ok(getApplicationApiResponse);
         }

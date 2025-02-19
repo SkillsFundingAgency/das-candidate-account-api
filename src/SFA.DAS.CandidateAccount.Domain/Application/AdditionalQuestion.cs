@@ -7,6 +7,7 @@ public class AdditionalQuestion
     public Guid ApplicationId { get; init; }
     public string? QuestionText { get; init; }
     public string? Answer { get; init; }
+    public short? QuestionOrder { get; init; }
 
     public static implicit operator AdditionalQuestion(AdditionalQuestionEntity source)
     {
@@ -16,6 +17,7 @@ public class AdditionalQuestion
             Answer = source.Answer,
             ApplicationId = source.ApplicationId,
             QuestionText = source.QuestionText,
+            QuestionOrder = source.QuestionOrder,
         };
     }
 }
