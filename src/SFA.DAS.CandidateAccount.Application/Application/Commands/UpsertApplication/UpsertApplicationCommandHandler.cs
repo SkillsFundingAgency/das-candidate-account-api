@@ -78,17 +78,19 @@ public class UpsertApplicationCommandHandler(
             return;
         }
 
-        foreach (var additionalQuestion in command.AdditionalQuestions)
-        {
-            await additionalQuestionRepository.UpsertAdditionalQuestion(new AdditionalQuestion
+        if (command.AdditionalQuestions != null)
+            foreach (var newAdditionalQuestion in command.AdditionalQuestions.Select(additionalQuestion => new AdditionalQuestion
+                     {
+                         Id = Guid.NewGuid(),
+                         ApplicationId = application.Id,
+                         CandidateId = command.CandidateId,
+                         QuestionText = additionalQuestion.Value,
+                         QuestionOrder = (short) additionalQuestion.Key,
+                         Answer = string.Empty,
+                     }))
             {
-                Id = Guid.NewGuid(),
-                ApplicationId = application.Id,
-                CandidateId = command.CandidateId,
-                QuestionText = additionalQuestion,
-                Answer = string.Empty,
-            }, command.CandidateId);
-        }
+                await additionalQuestionRepository.UpsertAdditionalQuestion(newAdditionalQuestion, command.CandidateId);
+            }
     }
 
     private async Task RemoveSavedVacancy(Guid candidateId, string vacancyReference)

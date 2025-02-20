@@ -22,6 +22,9 @@ public class WhenHandlingGetAdditionalQuestionQueryHandler
 
         var actual = await handler.Handle(request, CancellationToken.None);
 
-        actual.Should().BeEquivalentTo(entity, options =>  options.Excluding(c=>c.ApplicationEntity));
+        actual.Should().BeEquivalentTo(entity, options =>  options
+            .Excluding(c=>c.ApplicationEntity)
+            .Excluding(c => c.QuestionOrder)
+        );
     }
 }

@@ -1,5 +1,3 @@
-using SFA.DAS.CandidateAccount.Domain.Candidate;
-
 namespace SFA.DAS.CandidateAccount.Domain.Application;
 
 public abstract class ApplicationBase
@@ -124,7 +122,7 @@ public class ApplicationDetail : Application
             ]),
             WhatIsYourInterest = source.WhatIsYourInterest,
             ApplyUnderDisabilityConfidentScheme = source.ApplyUnderDisabilityConfidentScheme,
-            AdditionalQuestions = source.AdditionalQuestionEntities?.Select(c=>(AdditionalQuestion)c).ToList(),
+            AdditionalQuestions = source.AdditionalQuestionEntities?.Select(c=>(AdditionalQuestion)c).OrderBy(ord => ord.QuestionOrder).ToList(),
             Candidate = source.CandidateEntity,
             Qualifications = source.QualificationEntities.OrderBy(c=>c.CreatedDate).Select(c=>(Qualification)c).ToList(),
             WorkHistory = source.WorkHistoryEntities.Select(c=>(WorkHistory)c).ToList(),
@@ -219,7 +217,7 @@ public class Application : ApplicationBase
             ]),
             WhatIsYourInterest = source.WhatIsYourInterest,
             ApplyUnderDisabilityConfidentScheme = source.ApplyUnderDisabilityConfidentScheme,
-            AdditionalQuestions = source.AdditionalQuestionEntities?.Select(c=>(AdditionalQuestion)c).ToList()!,
+            AdditionalQuestions = source.AdditionalQuestionEntities?.Select(c=>(AdditionalQuestion)c).OrderBy(ord => ord.QuestionOrder).ToList()!,
             ResponseNotes = source.ResponseNotes,
             ResponseDate = source.ResponseDate,
             PreviousAnswersSourceId = source.PreviousAnswersSourceId,

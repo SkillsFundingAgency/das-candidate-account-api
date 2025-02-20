@@ -6,6 +6,7 @@
         public required string QuestionText { get; init; }
         public string? Answer { get; set; }
         public Guid ApplicationId { get; init; }
+        public short? QuestionOrder { get; init; }
         public virtual ApplicationEntity ApplicationEntity { get; set; }
 
         public static implicit operator AdditionalQuestionEntity(AdditionalQuestion source)
@@ -15,7 +16,8 @@
                 Answer = source.Answer,
                 QuestionText = source.QuestionText,
                 ApplicationId = source.ApplicationId,
-                Id = source.Id
+                Id = source.Id,
+                QuestionOrder = source.QuestionOrder
             };
         }
     }

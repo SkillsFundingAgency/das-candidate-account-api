@@ -36,7 +36,7 @@ public class WhenCallingPutApplication
                 && c.IsWorkHistoryComplete.Equals(applicationRequest.IsWorkHistoryComplete)
                 && c.IsAdditionalQuestion1Complete.Equals(applicationRequest.IsAdditionalQuestion1Complete)
                 && c.IsAdditionalQuestion2Complete.Equals(applicationRequest.IsAdditionalQuestion2Complete)
-                && c.AdditionalQuestions.SequenceEqual(applicationRequest.AdditionalQuestions.ToList())
+                && c.AdditionalQuestions.Equals(applicationRequest.AdditionalQuestions)
             ), CancellationToken.None))
             .ReturnsAsync(upsertApplicationCommandResult);
         
@@ -71,7 +71,7 @@ public class WhenCallingPutApplication
                 && c.IsWorkHistoryComplete.Equals(applicationRequest.IsWorkHistoryComplete)
                 && c.IsAdditionalQuestion1Complete.Equals(applicationRequest.IsAdditionalQuestion1Complete)
                 && c.IsAdditionalQuestion2Complete.Equals(applicationRequest.IsAdditionalQuestion2Complete)
-                && c.AdditionalQuestions.SequenceEqual(applicationRequest.AdditionalQuestions.ToList())
+                && c.AdditionalQuestions.Equals(applicationRequest.AdditionalQuestions)
                 ), CancellationToken.None))
             .ReturnsAsync(upsertApplicationCommandResult);
         

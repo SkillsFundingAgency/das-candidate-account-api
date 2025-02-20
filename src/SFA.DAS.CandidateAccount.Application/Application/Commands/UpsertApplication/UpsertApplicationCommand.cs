@@ -16,5 +16,5 @@ public record UpsertApplicationCommand : IRequest<UpsertApplicationCommandRespon
     public SectionStatus? IsAdditionalQuestion1Complete { get; init; }
     public SectionStatus? IsAdditionalQuestion2Complete { get; init; }
     public string? DisabilityStatus { get; init; }
-    public List<string?> AdditionalQuestions { get; init; } = [];
+    public List<KeyValuePair<int, string>>? AdditionalQuestions { get; init; } = [];
 }
