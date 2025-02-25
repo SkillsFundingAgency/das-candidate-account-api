@@ -362,7 +362,7 @@
         {
             "condition": "[equals(parameters('enableFailedRequestAlert'), true())]",
             "apiVersion": "2021-04-01",
-            "name": "[concat('application-insights-', variables('apiAppServiceName'), '-alert-', parameters('utcValue'))]",
+            "name": "[concat('app-insights-', variables('apiAppServiceName'), '-alert-', parameters('utcValue'))]",
             "type": "Microsoft.Resources/deployments",
             "resourceGroup": "[variables('resourceGroupName')]",
             "properties": {
