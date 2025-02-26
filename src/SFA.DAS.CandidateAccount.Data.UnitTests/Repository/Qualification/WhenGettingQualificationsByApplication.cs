@@ -45,16 +45,18 @@ public class WhenGettingQualificationsByApplication
         qualification1.ApplicationEntity.Id = applicationId;
         qualification1.ApplicationEntity.CandidateId = candidateId;
         qualification1.CreatedDate = DateTime.UtcNow.AddDays(-2);
+        qualification1.QualificationOrder = 1;
         qualification2.ApplicationId = applicationId;
         qualification2.ApplicationEntity.Id = applicationId;
         qualification2.ApplicationEntity.CandidateId = candidateId;
         qualification2.CreatedDate = DateTime.UtcNow.AddDays(-1);
+        qualification2.QualificationOrder = 2;
         qualifications.Add(qualification1);
         qualifications.Add(qualification2);
         dataContext.Setup(x => x.QualificationEntities).ReturnsDbSet(qualifications);
 
         var actual = await repository.GetCandidateApplicationQualifications(candidateId, applicationId);
 
-        actual.ToList().Should().BeEquivalentTo(new List<QualificationEntity> { qualification1, qualification2 }).And.BeInAscendingOrder(c=>c.CreatedDate);
+        actual.ToList().Should().BeEquivalentTo(new List<QualificationEntity> { qualification1, qualification2 }).And.BeInAscendingOrder(c=>c.QualificationOrder);
     }
 }
