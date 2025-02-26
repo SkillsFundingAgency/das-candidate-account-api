@@ -1,5 +1,4 @@
 using MediatR;
-using SFA.DAS.CandidateAccount.Application.Application.Commands.UpsertTrainingCourse;
 using SFA.DAS.CandidateAccount.Data.Application;
 using SFA.DAS.CandidateAccount.Data.Qualification;
 using SFA.DAS.CandidateAccount.Data.ReferenceData;
