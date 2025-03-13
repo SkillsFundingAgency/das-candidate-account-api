@@ -140,6 +140,7 @@ public class QualificationController(IMediator mediator, ILogger<QualificationCo
                     Grade = request.Grade,
                     Subject = request.Subject,
                     IsPredicted = request.IsPredicted,
+                    QualificationOrder = request.QualificationOrder,
                     AdditionalInformation = request.AdditionalInformation
                 }
             });
@@ -154,7 +155,7 @@ public class QualificationController(IMediator mediator, ILogger<QualificationCo
         }
         catch (Exception e)
         {
-            logger.LogError(e, "Error deleting qualification");
+            logger.LogError(e, "Error upsert qualification");
             return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
         }
     }
