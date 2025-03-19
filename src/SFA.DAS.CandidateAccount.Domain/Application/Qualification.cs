@@ -8,6 +8,7 @@ public class Qualification
     public string? AdditionalInformation { get; set; }
     public int? ToYear { get; set; }
     public bool? IsPredicted { get; set; }
+    public short? QualificationOrder { get; set; }
     public QualificationReference QualificationReference { get; set; }
     public DateTime? CreatedDate { get; set; }
 
@@ -24,6 +25,7 @@ public class Qualification
             IsPredicted = source.IsPredicted,
             Grade = source.Grade,
             ToYear = source.ToYear,
+            QualificationOrder = source.QualificationOrder,
             AdditionalInformation = source.AdditionalInformation,
             QualificationReference = source.QualificationReferenceEntity,
             CreatedDate = source.CreatedDate

@@ -19,6 +19,7 @@ public class QualificationEntityConfiguration : IEntityTypeConfiguration<Qualifi
         builder.Property(x => x.ToYear).HasColumnName("ToYear").HasColumnType("smallint").IsRequired(false);
         builder.Property(x => x.IsPredicted).HasColumnName("IsPredicted").HasColumnType("bit").IsRequired();
         builder.Property(x => x.ApplicationId).HasColumnName("ApplicationId").HasColumnType("uniqueidentifier").IsRequired();
+        builder.Property(x => x.QualificationOrder).HasColumnName("QualificationOrder").HasColumnType("tinyint").IsRequired(false);
         builder.Property(x => x.CreatedDate).HasColumnName("CreatedDate").HasColumnType("datetime").IsRequired(false).HasDefaultValue();
         
         builder
