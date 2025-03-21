@@ -14,7 +14,7 @@ public interface IQualificationRepository
 }
 public class QualificationRepository(ICandidateAccountDataContext dataContext) : IQualificationRepository
 {
-    public static readonly int MaximumItems = 150;
+    private const int MaximumItems = 150;
 
     public async Task<IEnumerable<QualificationEntity>> GetCandidateApplicationQualifications(Guid candidateId, Guid applicationId)
     {
@@ -22,7 +22,8 @@ public class QualificationRepository(ICandidateAccountDataContext dataContext) :
             .Where(c => c.ApplicationId == applicationId)
             .Where(c=> c.ApplicationEntity.CandidateId == candidateId)
             .Include(c=>c.QualificationReferenceEntity)
-            .OrderBy(c => c.CreatedDate)
+            .OrderBy(c => c.QualificationOrder)
+            .ThenBy(c => c.CreatedDate)
             .ToListAsync();
     }
     
@@ -33,7 +34,8 @@ public class QualificationRepository(ICandidateAccountDataContext dataContext) :
             .Where(c=> c.ApplicationEntity.CandidateId == candidateId)
             .Where(c=>c.QualificationReferenceId == qualificationReferenceId)
             .Include(c=>c.QualificationReferenceEntity)
-            .OrderBy(c => c.CreatedDate)
+            .OrderBy(c => c.QualificationOrder)
+            .ThenBy(c => c.CreatedDate)
             .ToListAsync();
     }
 
@@ -115,6 +117,7 @@ public class QualificationRepository(ICandidateAccountDataContext dataContext) :
         existingQualification.Subject = qualificationEntity.Subject ?? existingQualification.Subject;
         existingQualification.AdditionalInformation = qualificationEntity.AdditionalInformation ?? existingQualification.AdditionalInformation;
         existingQualification.ToYear = qualificationEntity.ToYear ?? existingQualification.ToYear;
+        existingQualification.QualificationOrder = qualificationEntity.QualificationOrder ?? existingQualification.QualificationOrder;
         dataContext.QualificationEntities.Update(existingQualification);
         await dataContext.SaveChangesAsync();
     

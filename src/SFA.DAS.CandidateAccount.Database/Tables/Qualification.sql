@@ -5,6 +5,7 @@ CREATE TABLE dbo.[Qualification] (
     [ToYear]    			    smallint    	    NULL,
     [IsPredicted]               bit                 NOT NULL,
     [ApplicationId]             uniqueidentifier    NOT NULL,
+    [QualificationOrder]        tinyint             NULL,
     [QualificationReferenceId]  uniqueidentifier    NOT NULL,
     [AdditionalInformation]     nvarchar(max)       NULL,
     [CreatedDate]               DateTime            NULL default(GETDATE()),
