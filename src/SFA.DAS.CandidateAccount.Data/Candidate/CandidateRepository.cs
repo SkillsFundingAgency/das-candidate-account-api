@@ -53,6 +53,7 @@ public class CandidateRepository(ICandidateAccountDataContext dataContext) : ICa
     {
         var result = await dataContext
             .CandidateEntities
+                .Include(c=>c.Address)
             .FirstOrDefaultAsync(c => c.Id == id);
 
         return result;
@@ -102,6 +103,7 @@ public class CandidateRepository(ICandidateAccountDataContext dataContext) : ICa
     {
         var result = await dataContext
             .CandidateEntities
+                .Include(c => c.Address)
             .FirstOrDefaultAsync(c => c.GovUkIdentifier == id);
 
         return result;
