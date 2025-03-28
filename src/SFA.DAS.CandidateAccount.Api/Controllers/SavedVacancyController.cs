@@ -46,17 +46,18 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers
             {
                 CandidateId = candidateId,
                 VacancyReference = request.VacancyReference,
+                VacancyId = request.VacancyId,
                 CreatedOn = request.CreatedOn
             });
             return Ok(result.SavedVacancy);
         }
 
         [HttpDelete("{vacancyReference}")]
-        public async Task<IActionResult> DeleteSavedVacancy(Guid candidateId, string vacancyReference)
+        public async Task<IActionResult> DeleteSavedVacancy(Guid candidateId, string vacancyReference, string vacancyId)
         {
             try
             {
-                await mediator.Send(new DeleteSavedVacancyCommand(candidateId, vacancyReference));
+                await mediator.Send(new DeleteSavedVacancyCommand(candidateId, vacancyReference, vacancyId));
 
                 return NoContent();
             }

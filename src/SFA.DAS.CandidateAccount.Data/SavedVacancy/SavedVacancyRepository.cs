@@ -7,6 +7,7 @@ namespace SFA.DAS.CandidateAccount.Data.SavedVacancy
     {
         Task<List<Domain.Candidate.SavedVacancy>> GetByCandidateId(Guid candidateId);
         Task<Domain.Candidate.SavedVacancy?> Get(Guid candidateId, string vacancyReference);
+        Task<Domain.Candidate.SavedVacancy?> GetByVacancyId(Guid candidateId, string vacancyId);
         Task<Tuple<Domain.Candidate.SavedVacancy, bool>> Upsert(Domain.Candidate.SavedVacancy savedVacancy);
         Task Delete(Domain.Candidate.SavedVacancy savedVacancy);
     }
@@ -32,6 +33,15 @@ namespace SFA.DAS.CandidateAccount.Data.SavedVacancy
             return result;
         }
 
+        public async Task<Domain.Candidate.SavedVacancy?> GetByVacancyId(Guid candidateId, string vacancyId)
+        {
+            var result = await dataContext.SavedVacancyEntities
+                .AsNoTracking()
+                .SingleOrDefaultAsync(x => x.CandidateId == candidateId && x.VacancyId == vacancyId);
+
+            return result;
+        }
+
         public async Task Delete(Domain.Candidate.SavedVacancy savedVacancy)
         {
              dataContext.SavedVacancyEntities.Remove(savedVacancy!);
@@ -40,7 +50,7 @@ namespace SFA.DAS.CandidateAccount.Data.SavedVacancy
 
         public async Task<Tuple<Domain.Candidate.SavedVacancy, bool>> Upsert(Domain.Candidate.SavedVacancy savedVacancy)
         {
-            var existing = await Get(savedVacancy.CandidateId, savedVacancy.VacancyReference);
+            var existing = await GetByVacancyId(savedVacancy.CandidateId, savedVacancy.VacancyId);
 
             if (existing == null)
             {
@@ -49,6 +59,7 @@ namespace SFA.DAS.CandidateAccount.Data.SavedVacancy
                     Id = Guid.NewGuid(),
                     CandidateId = savedVacancy.CandidateId,
                     VacancyReference = savedVacancy.VacancyReference,
+                    VacancyId = savedVacancy.VacancyId,
                     CreatedOn = savedVacancy.CreatedOn
                 };
 

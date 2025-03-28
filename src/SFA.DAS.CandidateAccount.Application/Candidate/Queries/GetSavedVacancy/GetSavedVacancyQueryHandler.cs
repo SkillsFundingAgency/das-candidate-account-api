@@ -16,6 +16,7 @@ namespace SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetSavedVacancy
                 Id = result.Id,
                 CandidateId = result.CandidateId,
                 VacancyReference = result.VacancyReference,
+                VacancyId = result.VacancyId,
                 CreatedOn = result.CreatedOn
             };
         }

@@ -7,7 +7,7 @@ namespace SFA.DAS.CandidateAccount.Application.Candidate.Commands.DeleteSavedVac
     {
         public async Task<Unit> Handle(DeleteSavedVacancyCommand command, CancellationToken cancellationToken)
         {
-            var result = await Repository.Get(command.CandidateId, command.VacancyReference);
+            var result = await Repository.GetByVacancyId(command.CandidateId, command.VacancyId);
 
             if (result != null)
             {
