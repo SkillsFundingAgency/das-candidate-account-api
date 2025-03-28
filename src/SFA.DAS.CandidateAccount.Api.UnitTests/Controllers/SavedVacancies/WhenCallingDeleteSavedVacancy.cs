@@ -18,10 +18,11 @@ namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.SavedVacancies
         public async Task Then_The_Response_Is_Returned_As_Expected(
             Guid candidateId,
             string vacancyReference,
+            string vacancyId,
             [Frozen] Mock<IMediator> mediator,
             [Greedy] SavedVacancyController controller)
         {
-            var result = await controller.DeleteSavedVacancy(candidateId, vacancyReference) as NoContentResult;
+            var result = await controller.DeleteSavedVacancy(candidateId, vacancyReference, vacancyId) as NoContentResult;
 
             result.Should().BeOfType<NoContentResult>();
 
