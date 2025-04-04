@@ -2,7 +2,7 @@
     [Id]					uniqueidentifier	NOT NULL,
     [CandidateId]			uniqueidentifier	NOT NULL,
     [VacancyReference]      nvarchar(150)       NOT NULL,
-    [VacancyId]             nvarchar(150)       NOT NULL,
+    [VacancyId]             nvarchar(150)       NULL,
     [CreatedOn]             datetime            NOT NULL DEFAULT GETDATE(),
     CONSTRAINT [PK_SavedVacancy] PRIMARY KEY (Id),
     INDEX [IX_SavedVacancy_CandidateIdVacancyReference] NONCLUSTERED(CandidateId, VacancyReference),

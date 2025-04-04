@@ -16,18 +16,18 @@ namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.SavedVacancies
         [Test, MoqAutoData]
         public async Task Then_The_Response_Is_Returned_As_Expected(
             Guid candidateId,
-            string vacancyReference,
+            string vacancyId,
             GetSavedVacancyQueryResult queryResult,
             [Frozen] Mock<IMediator> mediator,
             [Greedy] SavedVacancyController controller)
         {
-            queryResult.VacancyReference = vacancyReference;
+            queryResult.VacancyId = vacancyId;
             queryResult.CandidateId = candidateId;
 
-            mediator.Setup(x => x.Send(It.Is<GetSavedVacancyQuery>(c => c.CandidateId == candidateId && c.VacancyReference == vacancyReference), It.IsAny<CancellationToken>()))
+            mediator.Setup(x => x.Send(It.Is<GetSavedVacancyQuery>(c => c.CandidateId == candidateId && c.VacancyId == vacancyId), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(queryResult);
 
-            var result = await controller.GetByVacancyReference(candidateId, vacancyReference) as OkObjectResult;
+            var result = await controller.GetByVacancyReference(candidateId, vacancyId) as OkObjectResult;
 
             result.Value.Should().BeEquivalentTo((GetSavedVacancyQueryResult)queryResult);
         }
@@ -35,15 +35,15 @@ namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.SavedVacancies
         [Test, MoqAutoData]
         public async Task Then_The_Response_Is_Null_Returned_As_NotFound(
             Guid candidateId,
-            string vacancyReference,
+            string vacancyId,
             [Frozen] Mock<IMediator> mediator,
             [Greedy] SavedVacancyController controller)
         {
 
-            mediator.Setup(x => x.Send(It.Is<GetSavedVacancyQuery>(c => c.CandidateId == candidateId && c.VacancyReference == vacancyReference), It.IsAny<CancellationToken>()))
+            mediator.Setup(x => x.Send(It.Is<GetSavedVacancyQuery>(c => c.CandidateId == candidateId && c.VacancyId == vacancyId), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetSavedVacancyQueryResult());
 
-            var result = await controller.GetByVacancyReference(candidateId, vacancyReference) as StatusCodeResult;
+            var result = await controller.GetByVacancyReference(candidateId, vacancyId) as StatusCodeResult;
 
             result.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
         }
@@ -51,15 +51,15 @@ namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.SavedVacancies
         [Test, MoqAutoData]
         public async Task Then_The_Response_Is_Exception_Returned_As_InternalServerException(
             Guid candidateId,
-            string vacancyReference,
+            string vacancyId,
             [Frozen] Mock<IMediator> mediator,
             [Greedy] SavedVacancyController controller)
         {
 
-            mediator.Setup(x => x.Send(It.Is<GetSavedVacancyQuery>(c => c.CandidateId == candidateId && c.VacancyReference == vacancyReference), It.IsAny<CancellationToken>()))
+            mediator.Setup(x => x.Send(It.Is<GetSavedVacancyQuery>(c => c.CandidateId == candidateId && c.VacancyId == vacancyId), It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new Exception());
 
-            var result = await controller.GetByVacancyReference(candidateId, vacancyReference) as StatusCodeResult;
+            var result = await controller.GetByVacancyReference(candidateId, vacancyId) as StatusCodeResult;
 
             result.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
         }
