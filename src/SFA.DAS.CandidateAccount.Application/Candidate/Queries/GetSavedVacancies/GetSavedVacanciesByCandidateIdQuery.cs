@@ -17,6 +17,7 @@ namespace SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetSavedVacanci
             public Guid Id { get; set; }
             public Guid CandidateId { get; set; }
             public string VacancyReference { get; set; }
+            public string VacancyId { get; set; }
             public DateTime CreatedOn { get; set; }
         }
 
@@ -34,6 +35,7 @@ namespace SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetSavedVacanci
                     Id = x.Id,
                     CandidateId = x.CandidateId,
                     VacancyReference = x.VacancyReference,
+                    VacancyId = x.VacancyId,
                     CreatedOn = x.CreatedOn
                 }).ToList()
             };

@@ -5,6 +5,7 @@
         public Guid Id { get; set; }
         public Guid CandidateId { get; set; }
         public string VacancyReference { get; set; }
+        public string VacancyId { get; set; }
         public DateTime CreatedOn { get; set; }
 
         public static implicit operator SavedVacancy?(SavedVacancyEntity? source)
@@ -16,6 +17,7 @@
                 Id = source.Id,
                 CandidateId = source.CandidateId,
                 VacancyReference = source.VacancyReference,
+                VacancyId = source.VacancyId,
                 CreatedOn = source.CreatedOn,
             };
         }

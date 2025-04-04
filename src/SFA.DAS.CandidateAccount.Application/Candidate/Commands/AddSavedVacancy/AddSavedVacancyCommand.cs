@@ -8,6 +8,8 @@ namespace SFA.DAS.CandidateAccount.Application.Candidate.Commands.AddSavedVacanc
     {
         public Guid CandidateId { get; set; }
         public string VacancyReference { get; set; }
+        public string VacancyId { get; set; }
+
         public DateTime CreatedOn { get; set; }
     }
 
@@ -25,6 +27,7 @@ namespace SFA.DAS.CandidateAccount.Application.Candidate.Commands.AddSavedVacanc
             {
                 CandidateId = request.CandidateId,
                 VacancyReference = request.VacancyReference,
+                VacancyId = request.VacancyId,
                 CreatedOn = request.CreatedOn
             };
 
