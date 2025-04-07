@@ -12,7 +12,7 @@ namespace SFA.DAS.CandidateAccount.Data.EmploymentLocation
             builder.HasKey(x => x.Id);
 
             builder.Property(x => x.Id).HasColumnName("Id").HasColumnType("uniqueidentifier").IsRequired();
-            builder.Property(x => x.Addresses).HasColumnName("Addresses").HasColumnType("varchar(500)");
+            builder.Property(x => x.Addresses).HasColumnName("Addresses").HasColumnType("varchar(max)");
             builder.Property(x => x.EmployerLocationOption).HasColumnName("EmployerLocationOption").HasColumnType("tinyint").IsRequired();
             builder.Property(x => x.EmploymentLocationInformation).HasColumnName("EmploymentLocationInformation").HasColumnType("varchar(max)");
             builder.Property(x => x.ApplicationId).HasColumnName("ApplicationId").HasColumnType("uniqueidentifier").IsRequired();
