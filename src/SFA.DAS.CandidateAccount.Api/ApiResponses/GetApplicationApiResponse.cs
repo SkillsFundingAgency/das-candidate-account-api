@@ -15,12 +15,14 @@ public class GetApplicationApiResponse
     public SectionStatus InterviewAdjustmentsStatus { get; set; }
     public SectionStatus AdditionalQuestion2Status { get; set; }
     public SectionStatus AdditionalQuestion1Status { get; set; }
+    public SectionStatus EmploymentLocationStatus { get; set; }
     public SectionStatus InterestsStatus { get; set; }
     public SectionStatus EducationHistorySectionStatus { get; set; }
     public SectionStatus WorkHistorySectionStatus { get; set; }
     public SectionStatus ApplicationQuestionsSectionStatus { get; set; }
     public SectionStatus InterviewAdjustmentsSectionStatus { get; set; }
     public SectionStatus DisabilityConfidenceSectionStatus { get; set; }
+    public SectionStatus EmploymentLocationSectionStatus { get; set; }
     public SectionStatus ApplicationAllSectionStatus { get; set; }
     public string? WhatIsYourInterest { get; set; }
     public bool? ApplyUnderDisabilityConfidentScheme { get; set; }
@@ -32,6 +34,7 @@ public class GetApplicationApiResponse
     public DateTime CreatedDate { get; set; }
     public DateTime? WithdrawnDate { get; set; }
     public List<AdditionalQuestion>? AdditionalQuestions { get; set; } = [];
+    public List<EmploymentLocation>? EmploymentLocations { get; set; } = [];
     public List<Qualification> Qualifications { get; set; }
     public List<WorkHistoryItem> WorkHistory { get; set; }
     public List<TrainingCourseItem> TrainingCourses { get; set; }
@@ -59,10 +62,12 @@ public class GetApplicationApiResponse
             InterviewAdjustmentsStatus = application.InterviewAdjustmentsStatus,
             AdditionalQuestion1Status = application.AdditionalQuestion1Status,
             AdditionalQuestion2Status = application.AdditionalQuestion2Status,
+            EmploymentLocationStatus = application.EmploymentLocationStatus,
             InterestsStatus = application.InterestsStatus,
             EducationHistorySectionStatus = application.EducationHistorySectionStatus,
             WorkHistorySectionStatus = application.WorkHistorySectionStatus,
             ApplicationQuestionsSectionStatus = application.ApplicationQuestionsSectionStatus,
+            EmploymentLocationSectionStatus = application.EmploymentLocationSectionStatus,
             InterviewAdjustmentsSectionStatus = application.InterviewAdjustmentsSectionStatus,
             DisabilityConfidenceSectionStatus = application.DisabilityConfidenceSectionStatus,
             ApplicationAllSectionStatus = application.ApplicationAllSectionStatus,
@@ -73,8 +78,9 @@ public class GetApplicationApiResponse
             DisabilityStatus = application.DisabilityStatus,
             VacancyReference = application.VacancyReference,
             AdditionalQuestions = application.AdditionalQuestions,
-            SubmittedDate = application.SubmittedDate,
+            EmploymentLocations = application.EmploymentLocations,
             CreatedDate = application.CreatedDate,
+            SubmittedDate = application.SubmittedDate,
             WithdrawnDate = application.WithdrawnDate,
             ResponseDate = application.ResponseDate,
             ResponseNotes = application.ResponseNotes,
@@ -99,6 +105,7 @@ public class GetApplicationApiResponse
             InterviewAdjustmentsStatus = applicationDetail.InterviewAdjustmentsStatus,
             AdditionalQuestion1Status = applicationDetail.AdditionalQuestion1Status,
             AdditionalQuestion2Status = applicationDetail.AdditionalQuestion2Status,
+            EmploymentLocationStatus = applicationDetail.EmploymentLocationStatus,
             InterestsStatus = applicationDetail.InterestsStatus,
             EducationHistorySectionStatus = applicationDetail.EducationHistorySectionStatus,
             WorkHistorySectionStatus = applicationDetail.WorkHistorySectionStatus,
@@ -106,6 +113,7 @@ public class GetApplicationApiResponse
             InterviewAdjustmentsSectionStatus = applicationDetail.InterviewAdjustmentsSectionStatus,
             DisabilityConfidenceSectionStatus = applicationDetail.DisabilityConfidenceSectionStatus,
             ApplicationAllSectionStatus = applicationDetail.ApplicationAllSectionStatus,
+            EmploymentLocationSectionStatus = applicationDetail.EmploymentLocationSectionStatus,
             WhatIsYourInterest = applicationDetail.WhatIsYourInterest,
             ApplyUnderDisabilityConfidentScheme = applicationDetail.ApplyUnderDisabilityConfidentScheme,
             Id = applicationDetail.Id,
@@ -115,6 +123,7 @@ public class GetApplicationApiResponse
             TrainingCourses = applicationDetail.TrainingCourses.Select(c=>(TrainingCourseItem)c).ToList(),
             Qualifications = applicationDetail.Qualifications,
             AdditionalQuestions = applicationDetail.AdditionalQuestions,
+            EmploymentLocations = applicationDetail.EmploymentLocations,
             WorkHistory = applicationDetail.WorkHistory.Select(c=>(WorkHistoryItem)c).ToList(),
             Candidate = applicationDetail.Candidate,
             SubmittedDate = applicationDetail.SubmittedDate,
@@ -125,7 +134,7 @@ public class GetApplicationApiResponse
             PreviousAnswersSourceId = applicationDetail.PreviousAnswersSourceId,
             Strengths = applicationDetail.Strengths,
             Support = applicationDetail.Support,
-            MigrationDate = applicationDetail.MigrationDate
+            MigrationDate = applicationDetail.MigrationDate,
         };
     }
 }

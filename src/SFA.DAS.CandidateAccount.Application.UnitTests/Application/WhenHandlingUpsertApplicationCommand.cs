@@ -1,9 +1,11 @@
 using AutoFixture.NUnit3;
 using FluentAssertions;
 using Moq;
+using Newtonsoft.Json;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.UpsertApplication;
 using SFA.DAS.CandidateAccount.Data.AdditionalQuestion;
 using SFA.DAS.CandidateAccount.Data.Application;
+using SFA.DAS.CandidateAccount.Data.EmploymentLocation;
 using SFA.DAS.CandidateAccount.Data.SavedVacancy;
 using SFA.DAS.CandidateAccount.Domain.Application;
 using SFA.DAS.CandidateAccount.Domain.Candidate;
@@ -18,10 +20,19 @@ public class WhenHandlingUpsertApplicationCommand
         UpsertApplicationCommand command,
         ApplicationEntity applicationEntity,
         AdditionalQuestionEntity additionalQuestionEntity,
+        EmploymentLocationEntity employmentLocationEntity,
         [Frozen] Mock<IApplicationRepository> applicationRepository,
         [Frozen] Mock<IAdditionalQuestionRepository> additionalQuestionRepository,
+        [Frozen] Mock<IEmploymentLocationRepository> employmentLocationRepository,
         UpsertApplicationCommandHandler handler)
     {
+        applicationEntity.EmploymentLocationEntities = applicationEntity.EmploymentLocationEntities!
+            .Select(entityEmploymentLocationEntity => new EmploymentLocationEntity
+            {
+                Addresses = Domain.Application.Address.ToJson(command.EmploymentLocation.Addresses.ToList()),
+                EmploymentLocationInformation = entityEmploymentLocationEntity.EmploymentLocationInformation,
+                EmployerLocationOption = entityEmploymentLocationEntity.EmployerLocationOption,
+            }).ToList();
         applicationRepository.Setup(x =>
             x.Upsert(It.Is<ApplicationEntity>(c => 
                 c.VacancyReference.Equals(command.VacancyReference)
@@ -41,11 +52,20 @@ public class WhenHandlingUpsertApplicationCommand
             x.UpsertAdditionalQuestion(It.Is<Domain.Application.AdditionalQuestion>(c => 
                 c.Id.Equals(Guid.NewGuid())
                 && c.ApplicationId.Equals(applicationEntity.Id)
-                && c.CandidateId.Equals(command.CandidateId)
                 && c.QuestionText.Equals(command.AdditionalQuestions.FirstOrDefault())
                 && c.Answer.Equals(string.Empty)
                 ), command.CandidateId))
             .ReturnsAsync(new Tuple<AdditionalQuestionEntity, bool>(additionalQuestionEntity, true));
+
+        employmentLocationRepository.Setup(x =>
+                x.UpsertEmploymentLocation(It.Is<EmploymentLocation>(c =>
+                    c.Id.Equals(Guid.NewGuid())
+                    && c.ApplicationId.Equals(applicationEntity.Id)
+                    && c.Addresses.Equals(command.EmploymentLocation.Addresses)
+                    && c.EmployerLocationOption.Equals(command.EmploymentLocation.EmployerLocationOption)
+                    && c.EmploymentLocationInformation.Equals(command.EmploymentLocation.EmploymentLocationInformation)
+                ), command.CandidateId, CancellationToken.None))
+            .ReturnsAsync(new Tuple<EmploymentLocationEntity, bool>(employmentLocationEntity, true));
 
         var actual = await handler.Handle(command, CancellationToken.None);
 
@@ -55,13 +75,23 @@ public class WhenHandlingUpsertApplicationCommand
 
     [Test, RecursiveMoqAutoData]
     public async Task Then_If_The_Candidate_And_Application_Exist_It_Is_Updated(
+        List<Domain.Application.Address> addresses,
         UpsertApplicationCommand command,
         ApplicationEntity applicationEntity,
         AdditionalQuestionEntity additionalQuestionEntity,
+        EmploymentLocationEntity employmentLocationEntity,
         [Frozen] Mock<IApplicationRepository> applicationRepository,
         [Frozen] Mock<IAdditionalQuestionRepository> additionalQuestionRepository,
+        [Frozen] Mock<IEmploymentLocationRepository> employmentLocationRepository,
         UpsertApplicationCommandHandler handler)
     {
+        applicationEntity.EmploymentLocationEntities = applicationEntity.EmploymentLocationEntities!
+            .Select(entityEmploymentLocationEntity => new EmploymentLocationEntity
+            {
+                Addresses = Domain.Application.Address.ToJson(addresses.ToList()),
+                EmploymentLocationInformation = entityEmploymentLocationEntity.EmploymentLocationInformation,
+                EmployerLocationOption = entityEmploymentLocationEntity.EmployerLocationOption,
+            }).ToList();
         applicationRepository.Setup(x =>
             x.Upsert(It.Is<ApplicationEntity>(c => 
                 c.VacancyReference.Equals(command.VacancyReference)
@@ -81,11 +111,20 @@ public class WhenHandlingUpsertApplicationCommand
                 x.UpsertAdditionalQuestion(It.Is<Domain.Application.AdditionalQuestion>(c =>
                     c.Id.Equals(Guid.NewGuid())
                     && c.ApplicationId.Equals(applicationEntity.Id)
-                    && c.CandidateId.Equals(command.CandidateId)
                     && c.QuestionText.Equals(command.AdditionalQuestions.FirstOrDefault())
                     && c.Answer.Equals(string.Empty)
                 ), command.CandidateId))
             .ReturnsAsync(new Tuple<AdditionalQuestionEntity, bool>(additionalQuestionEntity, true));
+
+        employmentLocationRepository.Setup(x =>
+                x.UpsertEmploymentLocation(It.Is<EmploymentLocation>(c =>
+                    c.Id.Equals(Guid.NewGuid())
+                    && c.ApplicationId.Equals(applicationEntity.Id)
+                    && c.Addresses.Equals(command.EmploymentLocation.Addresses)
+                    && c.EmployerLocationOption.Equals(command.EmploymentLocation.EmployerLocationOption)
+                    && c.EmploymentLocationInformation.Equals(command.EmploymentLocation.EmploymentLocationInformation)
+                ), command.CandidateId, CancellationToken.None))
+            .ReturnsAsync(new Tuple<EmploymentLocationEntity, bool>(employmentLocationEntity, true));
 
         var actual = await handler.Handle(command, CancellationToken.None);
 
@@ -101,6 +140,20 @@ public class WhenHandlingUpsertApplicationCommand
         [Frozen] Mock<IApplicationRepository> applicationRepository,
         UpsertApplicationCommandHandler handler)
     {
+        previousApplication.EmploymentLocationEntities = previousApplication.EmploymentLocationEntities!
+            .Select(entityEmploymentLocationEntity => new EmploymentLocationEntity
+            {
+                Addresses = Domain.Application.Address.ToJson([]),
+                EmploymentLocationInformation = entityEmploymentLocationEntity.EmploymentLocationInformation,
+                EmployerLocationOption = entityEmploymentLocationEntity.EmployerLocationOption,
+            }).ToList();
+        cloneResult.EmploymentLocationEntities = cloneResult.EmploymentLocationEntities!
+            .Select(entityEmploymentLocationEntity => new EmploymentLocationEntity
+            {
+                Addresses = Domain.Application.Address.ToJson([]),
+                EmploymentLocationInformation = entityEmploymentLocationEntity.EmploymentLocationInformation,
+                EmployerLocationOption = entityEmploymentLocationEntity.EmployerLocationOption,
+            }).ToList();
         previousApplication.MigrationDate = null;
         var previousApplications = new List<ApplicationEntity>{ previousApplication };
 
@@ -131,6 +184,13 @@ public class WhenHandlingUpsertApplicationCommand
         [Frozen] Mock<IApplicationRepository> applicationRepository,
         UpsertApplicationCommandHandler handler)
     {
+        previousApplication.EmploymentLocationEntities = previousApplication.EmploymentLocationEntities!
+            .Select(entityEmploymentLocationEntity => new EmploymentLocationEntity
+            {
+                Addresses = Domain.Application.Address.ToJson([]),
+                EmploymentLocationInformation = entityEmploymentLocationEntity.EmploymentLocationInformation,
+                EmployerLocationOption = entityEmploymentLocationEntity.EmployerLocationOption,
+            }).ToList();
         previousApplication.Status = (short)status;
         var previousApplications = new List<ApplicationEntity> { previousApplication };
 
@@ -139,6 +199,9 @@ public class WhenHandlingUpsertApplicationCommand
 
         applicationRepository.Setup(x => x.GetByCandidateId(command.CandidateId, null))
             .ReturnsAsync(previousApplications);
+
+        applicationRepository.Setup(x => x.Upsert(It.IsAny<ApplicationEntity>()))
+            .ReturnsAsync(new Tuple<ApplicationEntity, bool>(previousApplication, false));
 
         await handler.Handle(command, CancellationToken.None);
 
@@ -153,11 +216,19 @@ public class WhenHandlingUpsertApplicationCommand
     
     [Test, RecursiveMoqAutoData]
     public async Task Then_The_Request_Is_Handled_Application_Is_Not_Cloned_From_A_Previous_Application_If_Migrated(
+        List<Domain.Application.Address> addresses,
         UpsertApplicationCommand command,
         ApplicationEntity previousApplication,
         [Frozen] Mock<IApplicationRepository> applicationRepository,
         UpsertApplicationCommandHandler handler)
     {
+        previousApplication.EmploymentLocationEntities = previousApplication.EmploymentLocationEntities!
+            .Select(entityEmploymentLocationEntity => new EmploymentLocationEntity
+            {
+                Addresses = Domain.Application.Address.ToJson(addresses),
+                EmploymentLocationInformation = entityEmploymentLocationEntity.EmploymentLocationInformation,
+                EmployerLocationOption = entityEmploymentLocationEntity.EmployerLocationOption,
+            }).ToList();
         previousApplication.Status = (short)ApplicationStatus.Submitted;
         previousApplication.MigrationDate = DateTime.Today;
         var previousApplications = new List<ApplicationEntity> { previousApplication };
@@ -167,6 +238,9 @@ public class WhenHandlingUpsertApplicationCommand
 
         applicationRepository.Setup(x => x.GetByCandidateId(command.CandidateId, null))
             .ReturnsAsync(previousApplications);
+
+        applicationRepository.Setup(x => x.Upsert(It.IsAny<ApplicationEntity>()))
+            .ReturnsAsync(new Tuple<ApplicationEntity, bool>(previousApplication, false));
 
         await handler.Handle(command, CancellationToken.None);
 
@@ -183,10 +257,56 @@ public class WhenHandlingUpsertApplicationCommand
     public async Task Then_The_Request_Is_Handled_Saved_Vacancy_Is_Deleted(
         UpsertApplicationCommand command,
         SavedVacancy savedVacancy,
+        ApplicationEntity applicationEntity,
+        AdditionalQuestionEntity additionalQuestionEntity,
+        EmploymentLocationEntity employmentLocationEntity,
         [Frozen] Mock<IApplicationRepository> applicationRepository,
+        [Frozen] Mock<IAdditionalQuestionRepository> additionalQuestionRepository,
+        [Frozen] Mock<IEmploymentLocationRepository> employmentLocationRepository,
         [Frozen] Mock<ISavedVacancyRepository> savedVacancyRepository,
         UpsertApplicationCommandHandler handler)
     {
+        applicationEntity.EmploymentLocationEntities = applicationEntity.EmploymentLocationEntities!
+            .Select(entityEmploymentLocationEntity => new EmploymentLocationEntity
+            {
+                Addresses = Domain.Application.Address.ToJson(command.EmploymentLocation.Addresses.ToList()),
+                EmploymentLocationInformation = entityEmploymentLocationEntity.EmploymentLocationInformation,
+                EmployerLocationOption = entityEmploymentLocationEntity.EmployerLocationOption,
+            }).ToList();
+        applicationRepository.Setup(x =>
+            x.Upsert(It.Is<ApplicationEntity>(c =>
+                c.VacancyReference.Equals(command.VacancyReference)
+                && c.CandidateId.Equals(command.CandidateId)
+                && c.DisabilityStatus.Equals(command.DisabilityStatus)
+                && c.Status.Equals((short)command.Status)
+                && c.JobsStatus.Equals((short)command.IsApplicationQuestionsComplete)
+                && c.DisabilityConfidenceStatus.Equals((short)command.IsDisabilityConfidenceComplete)
+                && c.QualificationsStatus.Equals((short)command.IsEducationHistoryComplete)
+                && c.TrainingCoursesStatus.Equals((short)command.IsWorkHistoryComplete)
+                && c.WorkExperienceStatus.Equals((short)command.IsInterviewAdjustmentsComplete)
+                && c.AdditionalQuestion1Status.Equals((short)command.IsAdditionalQuestion1Complete)
+                && c.AdditionalQuestion2Status.Equals((short)command.IsAdditionalQuestion2Complete)
+            ))).ReturnsAsync(new Tuple<ApplicationEntity, bool>(applicationEntity, true));
+
+        additionalQuestionRepository.Setup(x =>
+                x.UpsertAdditionalQuestion(It.Is<Domain.Application.AdditionalQuestion>(c =>
+                    c.Id.Equals(Guid.NewGuid())
+                    && c.ApplicationId.Equals(applicationEntity.Id)
+                    && c.QuestionText.Equals(command.AdditionalQuestions.FirstOrDefault())
+                    && c.Answer.Equals(string.Empty)
+                ), command.CandidateId))
+            .ReturnsAsync(new Tuple<AdditionalQuestionEntity, bool>(additionalQuestionEntity, true));
+
+        employmentLocationRepository.Setup(x =>
+                x.UpsertEmploymentLocation(It.Is<EmploymentLocation>(c =>
+                    c.Id.Equals(Guid.NewGuid())
+                    && c.ApplicationId.Equals(applicationEntity.Id)
+                    && c.Addresses.Equals(command.EmploymentLocation.Addresses)
+                    && c.EmployerLocationOption.Equals(command.EmploymentLocation.EmployerLocationOption)
+                    && c.EmploymentLocationInformation.Equals(command.EmploymentLocation.EmploymentLocationInformation)
+                ), command.CandidateId, CancellationToken.None))
+            .ReturnsAsync(new Tuple<EmploymentLocationEntity, bool>(employmentLocationEntity, true));
+
         savedVacancyRepository.Setup(x=> x.Get(command.CandidateId, command.VacancyReference))
             .ReturnsAsync(savedVacancy);
 

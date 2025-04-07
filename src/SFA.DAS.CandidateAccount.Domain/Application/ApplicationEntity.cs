@@ -26,6 +26,7 @@ namespace SFA.DAS.CandidateAccount.Domain.Application
         public short AdditionalQuestion1Status { get; set; }
         public short AdditionalQuestion2Status { get; set; }
         public short InterviewAdjustmentsStatus { get; set; }
+        public short EmploymentLocationStatus { get; set; }
         public string? WhatIsYourInterest { get; set; }
         public bool? ApplyUnderDisabilityConfidentScheme { get; set; }
         public Guid? PreviousAnswersSourceId { get; set; }
@@ -36,5 +37,6 @@ namespace SFA.DAS.CandidateAccount.Domain.Application
         public virtual ICollection<TrainingCourseEntity> TrainingCourseEntities { get; set; } = null!;
         public virtual ICollection<QualificationEntity> QualificationEntities { get; set; } = null!;
         public virtual ICollection<AdditionalQuestionEntity>? AdditionalQuestionEntities { get; set; } = null!;
+        public virtual ICollection<EmploymentLocationEntity>? EmploymentLocationEntities { get; set; } = null!;
     }
 }

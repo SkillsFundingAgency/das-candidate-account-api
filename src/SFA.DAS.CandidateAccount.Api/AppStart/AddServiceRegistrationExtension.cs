@@ -9,6 +9,7 @@ using SFA.DAS.CandidateAccount.Data.ReferenceData;
 using SFA.DAS.CandidateAccount.Data.TrainingCourse;
 using SFA.DAS.CandidateAccount.Data.WorkExperience;
 using SFA.DAS.CandidateAccount.Data.CandidatePreferences;
+using SFA.DAS.CandidateAccount.Data.EmploymentLocation;
 using SFA.DAS.CandidateAccount.Data.Preference;
 using SFA.DAS.CandidateAccount.Data.SavedVacancy;
 
@@ -30,6 +31,7 @@ public static class AddServiceRegistrationExtension
         services.AddScoped<ICandidatePreferencesRepository, CandidatePreferencesRepository>();
         services.AddScoped<IPreferencesRepository, PreferencesRepository>();
         services.AddScoped<ISavedVacancyRepository, SavedVacancyRepository>();
+        services.AddScoped<IEmploymentLocationRepository, EmploymentLocationRepository>();
         services.AddMediatR(configuration => configuration.RegisterServicesFromAssembly(typeof(UpsertApplicationCommand).Assembly));
     }
 }

@@ -1,4 +1,5 @@
 using FluentAssertions;
+using Newtonsoft.Json;
 using SFA.DAS.CandidateAccount.Domain.Application;
 using SFA.DAS.Testing.AutoFixture;
 
@@ -9,6 +10,13 @@ public class WhenConvertingFromApplicationEntityToModel
     [Test, RecursiveMoqAutoData]
     public void Then_The_Fields_Are_Mapped(ApplicationEntity source)
     {
+        source.EmploymentLocationEntities = source.EmploymentLocationEntities!
+            .Select(entityEmploymentLocationEntity => new EmploymentLocationEntity
+            {
+                Addresses = JsonConvert.SerializeObject(new List<Address>()),
+                EmploymentLocationInformation = entityEmploymentLocationEntity.EmploymentLocationInformation,
+                EmployerLocationOption = entityEmploymentLocationEntity.EmployerLocationOption,
+            }).ToList();
         source.JobsStatus = 4;
         source.QualificationsStatus = 2;
         source.WorkExperienceStatus = 1;
@@ -102,6 +110,9 @@ public class WhenConvertingFromApplicationEntityToModel
         source.AdditionalQuestion2Status = 4;
         source.AdditionalQuestion1Status = 4;
         source.InterestsStatus = 3;
+        source.EmploymentLocationStatus = 4;
+
+        source.EmploymentLocationEntities = new List<EmploymentLocationEntity>();
 
         var actual = (Domain.Application.Application)source;
 

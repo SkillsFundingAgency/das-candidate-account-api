@@ -13,11 +13,13 @@ public abstract class ApplicationBase
     public SectionStatus AdditionalQuestion2Status { get; set; }
     public SectionStatus AdditionalQuestion1Status { get; set; }
     public SectionStatus InterestsStatus { get; set; }
+    public SectionStatus EmploymentLocationStatus { get; set; }
     public SectionStatus EducationHistorySectionStatus { get; set; }
     public SectionStatus WorkHistorySectionStatus { get; set; }
     public SectionStatus ApplicationQuestionsSectionStatus { get; set; }
     public SectionStatus InterviewAdjustmentsSectionStatus { get; set; }
     public SectionStatus DisabilityConfidenceSectionStatus { get; set; }
+    public SectionStatus EmploymentLocationSectionStatus { get; set; }
     public SectionStatus ApplicationAllSectionStatus { get; set; }
     public string? WhatIsYourInterest { get; set; }
     public bool? ApplyUnderDisabilityConfidentScheme { get; set; }
@@ -82,6 +84,7 @@ public class ApplicationDetail : Application
             AdditionalQuestion2Status = ParseValue<SectionStatus>(source.AdditionalQuestion2Status),
             InterviewAdjustmentsStatus = ParseValue<SectionStatus>(source.InterviewAdjustmentsStatus),
             SkillsAndStrengthStatus = ParseValue<SectionStatus>(source.SkillsAndStrengthStatus),
+            EmploymentLocationStatus = ParseValue<SectionStatus>(source.EmploymentLocationStatus),
             EducationHistorySectionStatus = GetSectionStatus(
             [
                 ParseValue<SectionStatus>(source.QualificationsStatus),
@@ -107,6 +110,10 @@ public class ApplicationDetail : Application
             [
                 ParseValue<SectionStatus>(source.DisabilityConfidenceStatus)
             ]),
+            EmploymentLocationSectionStatus = GetSectionStatus(
+            [
+                ParseValue<SectionStatus>(source.EmploymentLocationStatus)
+            ]),
             ApplicationAllSectionStatus = GetSectionStatus(
             [
                 ParseValue<SectionStatus>(source.QualificationsStatus),
@@ -123,6 +130,7 @@ public class ApplicationDetail : Application
             WhatIsYourInterest = source.WhatIsYourInterest,
             ApplyUnderDisabilityConfidentScheme = source.ApplyUnderDisabilityConfidentScheme,
             AdditionalQuestions = source.AdditionalQuestionEntities?.Select(c=>(AdditionalQuestion)c).OrderBy(ord => ord.QuestionOrder).ToList(),
+            EmploymentLocations = source.EmploymentLocationEntities?.Select(c => (EmploymentLocation)c).ToList(),
             Candidate = source.CandidateEntity,
             Qualifications = source.QualificationEntities.OrderBy(c=>c.CreatedDate).Select(c=>(Qualification)c).ToList(),
             WorkHistory = source.WorkHistoryEntities.Select(c=>(WorkHistory)c).ToList(),
@@ -150,6 +158,7 @@ public class Application : ApplicationBase
     public string? DisabilityStatus { get; set; }
     public required string VacancyReference { get; set; }
     public List<AdditionalQuestion>? AdditionalQuestions { get; set; } = [];
+    public List<EmploymentLocation>? EmploymentLocations { get; set; } = [];
     public Guid? PreviousAnswersSourceId { get; set; }
     public string? Strengths { get; set; }
     public string? Support { get; set; }
@@ -202,6 +211,7 @@ public class Application : ApplicationBase
             [
                 ParseValue<SectionStatus>(source.DisabilityConfidenceStatus)
             ]),
+            EmploymentLocationSectionStatus = GetSectionStatus(ParseValue<SectionStatus>(source.EmploymentLocationStatus)),
             ApplicationAllSectionStatus = GetSectionStatus(
             [
                 ParseValue<SectionStatus>(source.QualificationsStatus),
@@ -218,6 +228,7 @@ public class Application : ApplicationBase
             WhatIsYourInterest = source.WhatIsYourInterest,
             ApplyUnderDisabilityConfidentScheme = source.ApplyUnderDisabilityConfidentScheme,
             AdditionalQuestions = source.AdditionalQuestionEntities?.Select(c=>(AdditionalQuestion)c).OrderBy(ord => ord.QuestionOrder).ToList()!,
+            EmploymentLocations = source.EmploymentLocationEntities?.Select(l => (EmploymentLocation)l).ToList(),
             ResponseNotes = source.ResponseNotes,
             ResponseDate = source.ResponseDate,
             PreviousAnswersSourceId = source.PreviousAnswersSourceId,

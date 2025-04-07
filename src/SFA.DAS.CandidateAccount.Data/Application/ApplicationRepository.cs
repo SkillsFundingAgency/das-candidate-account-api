@@ -45,6 +45,7 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
         application.AdditionalQuestion2Status = applicationEntity.AdditionalQuestion2Status != 0 ? applicationEntity.AdditionalQuestion2Status : application.AdditionalQuestion2Status;
         application.InterviewAdjustmentsStatus = applicationEntity.InterviewAdjustmentsStatus != 0 ? applicationEntity.InterviewAdjustmentsStatus : application.InterviewAdjustmentsStatus;
         application.DisabilityConfidenceStatus = applicationEntity.DisabilityConfidenceStatus != 0 ? applicationEntity.DisabilityConfidenceStatus : application.DisabilityConfidenceStatus;
+        application.EmploymentLocationStatus = applicationEntity.EmploymentLocationStatus != 0 ? applicationEntity.EmploymentLocationStatus : application.EmploymentLocationStatus;
         application.MigrationDate = applicationEntity.MigrationDate;
         
         await dataContext.SaveChangesAsync();
@@ -63,7 +64,8 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
                 .Include(c=>c.TrainingCourseEntities)
                 .Include(c=>c.WorkHistoryEntities)
                 .Include(c=>c.AdditionalQuestionEntities)
-                .Include(c=>c.CandidateEntity)
+                .Include(c => c.EmploymentLocationEntities)
+                .Include(c=> c.CandidateEntity)
                     .ThenInclude(c=>c.Address)
                 .IgnoreAutoIncludes()
                 .SingleOrDefaultAsync(c=>c.Id == applicationId);

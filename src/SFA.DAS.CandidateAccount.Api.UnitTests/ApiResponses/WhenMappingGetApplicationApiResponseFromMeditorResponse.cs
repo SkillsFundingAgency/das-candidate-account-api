@@ -4,7 +4,7 @@ using SFA.DAS.CandidateAccount.Api.ApiResponses;
 
 namespace SFA.DAS.CandidateAccount.Api.UnitTests.ApiResponses;
 
-public class WhenMappingGetApplicationApiResponseFromMeditorResponse
+public class WhenMappingGetApplicationApiResponseFromMediatorResponse
 {
     [Test, AutoData]
     public void Then_The_Fields_Are_Mapped(Domain.Application.Application application)
