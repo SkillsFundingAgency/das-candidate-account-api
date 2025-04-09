@@ -18,8 +18,8 @@ namespace SFA.DAS.CandidateAccount.Data.EmploymentLocation
             builder.Property(x => x.ApplicationId).HasColumnName("ApplicationId").HasColumnType("uniqueidentifier").IsRequired();
             
             builder.HasOne(x => x.ApplicationEntity)
-                .WithMany(x => x.EmploymentLocationEntities)
-                .HasForeignKey(x => x.ApplicationId)
+                .WithOne(x => x.EmploymentLocationEntity)
+                .HasForeignKey<EmploymentLocationEntity>(x => x.ApplicationId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

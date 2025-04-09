@@ -5,6 +5,6 @@ namespace SFA.DAS.CandidateAccount.Application.Application.Queries.GetEmployment
     public record GetEmploymentLocationsQuery : IRequest<GetEmploymentLocationsQueryResult>
     {
         public Guid ApplicationId { get; init; }
-        public Guid CandidateId { get; set; }
+        public Guid CandidateId { get; init; }
     }
 }

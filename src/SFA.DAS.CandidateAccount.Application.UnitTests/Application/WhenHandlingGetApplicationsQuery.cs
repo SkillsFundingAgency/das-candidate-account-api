@@ -24,13 +24,12 @@ public class WhenHandlingGetApplicationsQuery
 
         foreach (var applicationEntity in entities)
         {
-            applicationEntity.EmploymentLocationEntities = applicationEntity.EmploymentLocationEntities!
-                .Select(entityEmploymentLocationEntity => new EmploymentLocationEntity
-                {
-                    Addresses = Domain.Application.Address.ToJson(addresses.ToList()),
-                    EmploymentLocationInformation = entityEmploymentLocationEntity.EmploymentLocationInformation,
-                    EmployerLocationOption = entityEmploymentLocationEntity.EmployerLocationOption,
-                }).ToList();
+            applicationEntity.EmploymentLocationEntity = new EmploymentLocationEntity
+            {
+                Addresses = Domain.Application.Address.ToJson(addresses.ToList()),
+                EmploymentLocationInformation = applicationEntity.EmploymentLocationEntity.EmploymentLocationInformation,
+                EmployerLocationOption = applicationEntity.EmploymentLocationEntity.EmployerLocationOption,
+            };
         }
         query.CandidateId = candidateId;
         query.Status = status;

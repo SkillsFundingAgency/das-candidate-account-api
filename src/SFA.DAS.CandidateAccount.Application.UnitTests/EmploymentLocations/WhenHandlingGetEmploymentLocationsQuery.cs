@@ -15,22 +15,19 @@ namespace SFA.DAS.CandidateAccount.Application.UnitTests.EmploymentLocations
         public async Task Then_Request_Is_Handled_And_Entities_Returned(
             List<Domain.Application.Address> addresses,
             GetEmploymentLocationsQuery request,
-            List<EmploymentLocationEntity> entities,
+            EmploymentLocationEntity entity,
             [Frozen] Mock<IEmploymentLocationRepository> employmentLocationRepository,
             GetEmploymentLocationsQueryHandler handler)
         {
-            foreach (var entity in entities)
-            {
-                entity.Addresses = Domain.Application.Address.ToJson(addresses);
-            }
-            employmentLocationRepository.Setup(x => x.GetAll(request.ApplicationId, request.CandidateId, CancellationToken.None)).ReturnsAsync(entities);
+            entity.Addresses = Domain.Application.Address.ToJson(addresses);
+            employmentLocationRepository.Setup(x => x.Get(request.ApplicationId, request.CandidateId, CancellationToken.None)).ReturnsAsync(entity);
 
             var actual = await handler.Handle(request, CancellationToken.None);
 
-            actual.EmploymentLocations.Should().BeEquivalentTo(entities, 
-                options => options
-                    .Excluding(c => c.ApplicationEntity)
-                    .Excluding(c => c.Addresses));
+            actual.EmploymentLocation!.EmployerLocationOption.Should().Be(entity.EmployerLocationOption);
+            actual.EmploymentLocation.EmploymentLocationInformation.Should().Be(entity.EmploymentLocationInformation);
+            actual.EmploymentLocation.Id.Should().Be(entity.Id);
+            actual.EmploymentLocation.ApplicationId.Should().Be(entity.ApplicationId);
         }
     }
 }

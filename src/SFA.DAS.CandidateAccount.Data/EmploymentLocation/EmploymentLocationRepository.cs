@@ -5,13 +5,13 @@ namespace SFA.DAS.CandidateAccount.Data.EmploymentLocation
 {
     public interface IEmploymentLocationRepository
     {
-        Task<List<EmploymentLocationEntity>> GetAll(Guid applicationId, Guid candidateId, CancellationToken cancellationToken);
+        Task<EmploymentLocationEntity?> Get(Guid applicationId, Guid candidateId, CancellationToken cancellationToken);
         Task<Tuple<EmploymentLocationEntity, bool>> UpsertEmploymentLocation(EmploymentLocationEntity employmentLocation, Guid candidateId, CancellationToken token);
     }
 
     public class EmploymentLocationRepository(ICandidateAccountDataContext dataContext) : IEmploymentLocationRepository
     {
-        public async Task<List<EmploymentLocationEntity>> GetAll(Guid applicationId, Guid candidateId, CancellationToken cancellationToken)
+        public async Task<EmploymentLocationEntity?> Get(Guid applicationId, Guid candidateId, CancellationToken cancellationToken)
         {
             var query = from location in dataContext.EmploymentLocationEntities
                     .Where(fil => fil.ApplicationId == applicationId)
@@ -20,7 +20,7 @@ namespace SFA.DAS.CandidateAccount.Data.EmploymentLocation
                     on location.ApplicationId equals application.Id
                 select location;
 
-            return await query.ToListAsync(cancellationToken);
+            return await query.FirstOrDefaultAsync(cancellationToken);
         }
 
         public async Task<Tuple<EmploymentLocationEntity, bool>> UpsertEmploymentLocation(EmploymentLocationEntity employmentLocation, Guid candidateId, CancellationToken token)

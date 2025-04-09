@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-
-namespace SFA.DAS.CandidateAccount.Domain.Application
+﻿namespace SFA.DAS.CandidateAccount.Domain.Application
 {
     public class EmploymentLocationEntity
     {

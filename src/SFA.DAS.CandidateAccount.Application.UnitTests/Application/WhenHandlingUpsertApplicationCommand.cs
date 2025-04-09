@@ -26,14 +26,13 @@ public class WhenHandlingUpsertApplicationCommand
         [Frozen] Mock<IEmploymentLocationRepository> employmentLocationRepository,
         UpsertApplicationCommandHandler handler)
     {
-        applicationEntity.EmploymentLocationEntities = applicationEntity.EmploymentLocationEntities!
-            .Select(entityEmploymentLocationEntity => new EmploymentLocationEntity
-            {
-                Addresses = Domain.Application.Address.ToJson(command.EmploymentLocation.Addresses.ToList()),
-                EmploymentLocationInformation = entityEmploymentLocationEntity.EmploymentLocationInformation,
-                EmployerLocationOption = entityEmploymentLocationEntity.EmployerLocationOption,
-            }).ToList();
-        applicationRepository.Setup(x =>
+        applicationEntity.EmploymentLocationEntity = new EmploymentLocationEntity
+        {
+            Addresses = Domain.Application.Address.ToJson(command.EmploymentLocation.Addresses.ToList()),
+            EmploymentLocationInformation = applicationEntity.EmploymentLocationEntity.EmploymentLocationInformation,
+            EmployerLocationOption = applicationEntity.EmploymentLocationEntity.EmployerLocationOption,
+        };
+       applicationRepository.Setup(x =>
             x.Upsert(It.Is<ApplicationEntity>(c => 
                 c.VacancyReference.Equals(command.VacancyReference)
                 && c.CandidateId.Equals(command.CandidateId)
@@ -85,13 +84,13 @@ public class WhenHandlingUpsertApplicationCommand
         [Frozen] Mock<IEmploymentLocationRepository> employmentLocationRepository,
         UpsertApplicationCommandHandler handler)
     {
-        applicationEntity.EmploymentLocationEntities = applicationEntity.EmploymentLocationEntities!
-            .Select(entityEmploymentLocationEntity => new EmploymentLocationEntity
-            {
-                Addresses = Domain.Application.Address.ToJson(addresses.ToList()),
-                EmploymentLocationInformation = entityEmploymentLocationEntity.EmploymentLocationInformation,
-                EmployerLocationOption = entityEmploymentLocationEntity.EmployerLocationOption,
-            }).ToList();
+        applicationEntity.EmploymentLocationEntity = new EmploymentLocationEntity
+        {
+            Addresses = Domain.Application.Address.ToJson(addresses.ToList()),
+            EmploymentLocationInformation = applicationEntity.EmploymentLocationEntity.EmploymentLocationInformation,
+            EmployerLocationOption = applicationEntity.EmploymentLocationEntity.EmployerLocationOption,
+        };
+        
         applicationRepository.Setup(x =>
             x.Upsert(It.Is<ApplicationEntity>(c => 
                 c.VacancyReference.Equals(command.VacancyReference)
@@ -140,20 +139,18 @@ public class WhenHandlingUpsertApplicationCommand
         [Frozen] Mock<IApplicationRepository> applicationRepository,
         UpsertApplicationCommandHandler handler)
     {
-        previousApplication.EmploymentLocationEntities = previousApplication.EmploymentLocationEntities!
-            .Select(entityEmploymentLocationEntity => new EmploymentLocationEntity
-            {
+        previousApplication.EmploymentLocationEntity = new EmploymentLocationEntity
+        {
                 Addresses = Domain.Application.Address.ToJson([]),
-                EmploymentLocationInformation = entityEmploymentLocationEntity.EmploymentLocationInformation,
-                EmployerLocationOption = entityEmploymentLocationEntity.EmployerLocationOption,
-            }).ToList();
-        cloneResult.EmploymentLocationEntities = cloneResult.EmploymentLocationEntities!
-            .Select(entityEmploymentLocationEntity => new EmploymentLocationEntity
-            {
-                Addresses = Domain.Application.Address.ToJson([]),
-                EmploymentLocationInformation = entityEmploymentLocationEntity.EmploymentLocationInformation,
-                EmployerLocationOption = entityEmploymentLocationEntity.EmployerLocationOption,
-            }).ToList();
+                EmploymentLocationInformation = previousApplication.EmploymentLocationEntity.EmploymentLocationInformation,
+                EmployerLocationOption = previousApplication.EmploymentLocationEntity.EmployerLocationOption
+        };
+        cloneResult.EmploymentLocationEntity = new EmploymentLocationEntity
+        {
+            Addresses = Domain.Application.Address.ToJson([]),
+            EmploymentLocationInformation = previousApplication.EmploymentLocationEntity.EmploymentLocationInformation,
+            EmployerLocationOption = previousApplication.EmploymentLocationEntity.EmployerLocationOption,
+        };
         previousApplication.MigrationDate = null;
         var previousApplications = new List<ApplicationEntity>{ previousApplication };
 
@@ -184,13 +181,12 @@ public class WhenHandlingUpsertApplicationCommand
         [Frozen] Mock<IApplicationRepository> applicationRepository,
         UpsertApplicationCommandHandler handler)
     {
-        previousApplication.EmploymentLocationEntities = previousApplication.EmploymentLocationEntities!
-            .Select(entityEmploymentLocationEntity => new EmploymentLocationEntity
+        previousApplication.EmploymentLocationEntity = new EmploymentLocationEntity
             {
                 Addresses = Domain.Application.Address.ToJson([]),
-                EmploymentLocationInformation = entityEmploymentLocationEntity.EmploymentLocationInformation,
-                EmployerLocationOption = entityEmploymentLocationEntity.EmployerLocationOption,
-            }).ToList();
+                EmploymentLocationInformation = previousApplication.EmploymentLocationEntity.EmploymentLocationInformation,
+                EmployerLocationOption = previousApplication.EmploymentLocationEntity.EmployerLocationOption,
+            };
         previousApplication.Status = (short)status;
         var previousApplications = new List<ApplicationEntity> { previousApplication };
 
@@ -222,13 +218,12 @@ public class WhenHandlingUpsertApplicationCommand
         [Frozen] Mock<IApplicationRepository> applicationRepository,
         UpsertApplicationCommandHandler handler)
     {
-        previousApplication.EmploymentLocationEntities = previousApplication.EmploymentLocationEntities!
-            .Select(entityEmploymentLocationEntity => new EmploymentLocationEntity
+        previousApplication.EmploymentLocationEntity = new EmploymentLocationEntity
             {
                 Addresses = Domain.Application.Address.ToJson(addresses),
-                EmploymentLocationInformation = entityEmploymentLocationEntity.EmploymentLocationInformation,
-                EmployerLocationOption = entityEmploymentLocationEntity.EmployerLocationOption,
-            }).ToList();
+                EmploymentLocationInformation = previousApplication.EmploymentLocationEntity.EmploymentLocationInformation,
+                EmployerLocationOption = previousApplication.EmploymentLocationEntity.EmployerLocationOption,
+            };
         previousApplication.Status = (short)ApplicationStatus.Submitted;
         previousApplication.MigrationDate = DateTime.Today;
         var previousApplications = new List<ApplicationEntity> { previousApplication };
@@ -266,13 +261,12 @@ public class WhenHandlingUpsertApplicationCommand
         [Frozen] Mock<ISavedVacancyRepository> savedVacancyRepository,
         UpsertApplicationCommandHandler handler)
     {
-        applicationEntity.EmploymentLocationEntities = applicationEntity.EmploymentLocationEntities!
-            .Select(entityEmploymentLocationEntity => new EmploymentLocationEntity
+        applicationEntity.EmploymentLocationEntity = new EmploymentLocationEntity
             {
                 Addresses = Domain.Application.Address.ToJson(command.EmploymentLocation.Addresses.ToList()),
-                EmploymentLocationInformation = entityEmploymentLocationEntity.EmploymentLocationInformation,
-                EmployerLocationOption = entityEmploymentLocationEntity.EmployerLocationOption,
-            }).ToList();
+                EmploymentLocationInformation = applicationEntity.EmploymentLocationEntity.EmploymentLocationInformation,
+                EmployerLocationOption = applicationEntity.EmploymentLocationEntity.EmployerLocationOption,
+            };
         applicationRepository.Setup(x =>
             x.Upsert(It.Is<ApplicationEntity>(c =>
                 c.VacancyReference.Equals(command.VacancyReference)

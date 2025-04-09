@@ -64,7 +64,7 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
                 .Include(c=>c.TrainingCourseEntities)
                 .Include(c=>c.WorkHistoryEntities)
                 .Include(c=>c.AdditionalQuestionEntities)
-                .Include(c => c.EmploymentLocationEntities)
+                .Include(c => c.EmploymentLocationEntity)
                 .Include(c=> c.CandidateEntity)
                     .ThenInclude(c=>c.Address)
                 .IgnoreAutoIncludes()

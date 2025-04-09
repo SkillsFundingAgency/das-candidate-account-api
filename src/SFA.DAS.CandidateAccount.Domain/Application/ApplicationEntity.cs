@@ -37,6 +37,6 @@ namespace SFA.DAS.CandidateAccount.Domain.Application
         public virtual ICollection<TrainingCourseEntity> TrainingCourseEntities { get; set; } = null!;
         public virtual ICollection<QualificationEntity> QualificationEntities { get; set; } = null!;
         public virtual ICollection<AdditionalQuestionEntity>? AdditionalQuestionEntities { get; set; } = null!;
-        public virtual ICollection<EmploymentLocationEntity>? EmploymentLocationEntities { get; set; } = null!;
+        public virtual EmploymentLocationEntity? EmploymentLocationEntity { get; set; } = null!;
     }
 }

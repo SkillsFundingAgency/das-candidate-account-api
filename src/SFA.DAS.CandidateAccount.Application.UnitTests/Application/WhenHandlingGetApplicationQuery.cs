@@ -22,13 +22,12 @@ public class WhenHandlingGetApplicationQuery
         [Frozen] Mock<IApplicationRepository> repository,
         GetApplicationQueryHandler handler)
     {
-        entity.EmploymentLocationEntities = entity.EmploymentLocationEntities!
-            .Select(entityEmploymentLocationEntity => new EmploymentLocationEntity
-            {
-                Addresses = Domain.Application.Address.ToJson(addresses.ToList()),
-                EmploymentLocationInformation = entityEmploymentLocationEntity.EmploymentLocationInformation,
-                EmployerLocationOption = entityEmploymentLocationEntity.EmployerLocationOption,
-            }).ToList();
+        entity.EmploymentLocationEntity = new EmploymentLocationEntity
+        {
+            Addresses = Domain.Application.Address.ToJson(addresses.ToList()),
+            EmploymentLocationInformation = entity.EmploymentLocationEntity.EmploymentLocationInformation,
+            EmployerLocationOption = entity.EmploymentLocationEntity.EmployerLocationOption,
+        };
         query.CandidateId = entity.CandidateId;
         query.IncludeDetail = false;
         repository.Setup(x => x.GetById(query.ApplicationId, query.IncludeDetail)).ReturnsAsync(entity);
@@ -51,13 +50,12 @@ public class WhenHandlingGetApplicationQuery
         [Frozen] Mock<IApplicationRepository> repository,
         GetApplicationQueryHandler handler)
     {
-        entity.EmploymentLocationEntities = entity.EmploymentLocationEntities!
-            .Select(entityEmploymentLocationEntity => new EmploymentLocationEntity
-            {
-                Addresses = Domain.Application.Address.ToJson(addresses.ToList()),
-                EmploymentLocationInformation = entityEmploymentLocationEntity.EmploymentLocationInformation,
-                EmployerLocationOption = entityEmploymentLocationEntity.EmployerLocationOption,
-            }).ToList();
+        entity.EmploymentLocationEntity = new EmploymentLocationEntity
+        {
+            Addresses = Domain.Application.Address.ToJson(addresses.ToList()),
+            EmploymentLocationInformation = entity.EmploymentLocationEntity.EmploymentLocationInformation,
+            EmployerLocationOption = entity.EmploymentLocationEntity.EmployerLocationOption,
+        };
         query.CandidateId = entity.CandidateId;
         query.IncludeDetail = true;
         repository.Setup(x => x.GetById(query.ApplicationId, query.IncludeDetail)).ReturnsAsync(entity);

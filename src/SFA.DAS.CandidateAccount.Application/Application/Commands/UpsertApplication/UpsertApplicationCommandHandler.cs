@@ -32,7 +32,7 @@ public class UpsertApplicationCommandHandler(
                 var result = await applicationRepository.Clone(previousApplication.Id, command.VacancyReference, requiresDisabilityConfidence, command.IsAdditionalQuestion1Complete, command.IsAdditionalQuestion2Complete);
 
                 await UpsertAdditionalQuestions(command, cancellationToken, result);
-                await UpsertEmploymentLocations(command, cancellationToken, result);
+                await UpsertEmploymentLocations(command, result, cancellationToken);
                 await RemoveSavedVacancy(command.CandidateId, command.VacancyReference);
 
                 return new UpsertApplicationCommandResponse
@@ -60,7 +60,7 @@ public class UpsertApplicationCommandHandler(
         });
 
         await UpsertAdditionalQuestions(command, cancellationToken, application.Item1);
-        await UpsertEmploymentLocations(command, cancellationToken, application.Item1);
+        await UpsertEmploymentLocations(command, application.Item1, cancellationToken);
         if (application.Item2)
         {
             await RemoveSavedVacancy(command.CandidateId, command.VacancyReference);
@@ -98,12 +98,12 @@ public class UpsertApplicationCommandHandler(
             }
     }
 
-    private async Task UpsertEmploymentLocations(UpsertApplicationCommand command, CancellationToken cancellationToken, ApplicationEntity application)
+    private async Task UpsertEmploymentLocations(UpsertApplicationCommand command, ApplicationEntity application, CancellationToken cancellationToken)
     {
         var hasEmploymentLocations =
-            await employmentLocationRepository.GetAll(application.Id, command.CandidateId, cancellationToken);
+            await employmentLocationRepository.Get(application.Id, command.CandidateId, cancellationToken);
 
-        if (hasEmploymentLocations.Count > 0)
+        if (hasEmploymentLocations != null)
         {
             return;
         }

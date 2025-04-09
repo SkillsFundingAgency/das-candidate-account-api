@@ -130,7 +130,7 @@ public class ApplicationDetail : Application
             WhatIsYourInterest = source.WhatIsYourInterest,
             ApplyUnderDisabilityConfidentScheme = source.ApplyUnderDisabilityConfidentScheme,
             AdditionalQuestions = source.AdditionalQuestionEntities?.Select(c=>(AdditionalQuestion)c).OrderBy(ord => ord.QuestionOrder).ToList(),
-            EmploymentLocations = source.EmploymentLocationEntities?.Select(c => (EmploymentLocation)c).ToList(),
+            EmploymentLocation = source.EmploymentLocationEntity,
             Candidate = source.CandidateEntity,
             Qualifications = source.QualificationEntities.OrderBy(c=>c.CreatedDate).Select(c=>(Qualification)c).ToList(),
             WorkHistory = source.WorkHistoryEntities.Select(c=>(WorkHistory)c).ToList(),
@@ -158,7 +158,7 @@ public class Application : ApplicationBase
     public string? DisabilityStatus { get; set; }
     public required string VacancyReference { get; set; }
     public List<AdditionalQuestion>? AdditionalQuestions { get; set; } = [];
-    public List<EmploymentLocation>? EmploymentLocations { get; set; } = [];
+    public EmploymentLocation? EmploymentLocation { get; set; }
     public Guid? PreviousAnswersSourceId { get; set; }
     public string? Strengths { get; set; }
     public string? Support { get; set; }
@@ -228,7 +228,7 @@ public class Application : ApplicationBase
             WhatIsYourInterest = source.WhatIsYourInterest,
             ApplyUnderDisabilityConfidentScheme = source.ApplyUnderDisabilityConfidentScheme,
             AdditionalQuestions = source.AdditionalQuestionEntities?.Select(c=>(AdditionalQuestion)c).OrderBy(ord => ord.QuestionOrder).ToList()!,
-            EmploymentLocations = source.EmploymentLocationEntities?.Select(l => (EmploymentLocation)l).ToList(),
+            EmploymentLocation = source.EmploymentLocationEntity,
             ResponseNotes = source.ResponseNotes,
             ResponseDate = source.ResponseDate,
             PreviousAnswersSourceId = source.PreviousAnswersSourceId,

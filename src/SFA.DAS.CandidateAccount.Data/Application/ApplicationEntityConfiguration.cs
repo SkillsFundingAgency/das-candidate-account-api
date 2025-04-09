@@ -71,9 +71,9 @@ public class ApplicationEntityConfiguration : IEntityTypeConfiguration<Applicati
             .HasPrincipalKey(c => c.Id);
 
         builder
-            .HasMany(c => c.EmploymentLocationEntities)
+            .HasOne(c => c.EmploymentLocationEntity)
             .WithOne(c => c.ApplicationEntity)
-            .HasForeignKey(c => c.ApplicationId)
-            .HasPrincipalKey(c => c.Id);
+            .HasForeignKey<EmploymentLocationEntity>(c => c.ApplicationId)
+            .HasPrincipalKey<ApplicationEntity>(c => c.Id);
     }
 }

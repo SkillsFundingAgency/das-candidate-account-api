@@ -34,7 +34,7 @@ public class GetApplicationApiResponse
     public DateTime CreatedDate { get; set; }
     public DateTime? WithdrawnDate { get; set; }
     public List<AdditionalQuestion>? AdditionalQuestions { get; set; } = [];
-    public List<EmploymentLocation>? EmploymentLocations { get; set; } = [];
+    public EmploymentLocation? EmploymentLocation { get; set; } 
     public List<Qualification> Qualifications { get; set; }
     public List<WorkHistoryItem> WorkHistory { get; set; }
     public List<TrainingCourseItem> TrainingCourses { get; set; }
@@ -78,7 +78,7 @@ public class GetApplicationApiResponse
             DisabilityStatus = application.DisabilityStatus,
             VacancyReference = application.VacancyReference,
             AdditionalQuestions = application.AdditionalQuestions,
-            EmploymentLocations = application.EmploymentLocations,
+            EmploymentLocation = application.EmploymentLocation,
             CreatedDate = application.CreatedDate,
             SubmittedDate = application.SubmittedDate,
             WithdrawnDate = application.WithdrawnDate,
@@ -123,7 +123,7 @@ public class GetApplicationApiResponse
             TrainingCourses = applicationDetail.TrainingCourses.Select(c=>(TrainingCourseItem)c).ToList(),
             Qualifications = applicationDetail.Qualifications,
             AdditionalQuestions = applicationDetail.AdditionalQuestions,
-            EmploymentLocations = applicationDetail.EmploymentLocations,
+            EmploymentLocation = applicationDetail.EmploymentLocation,
             WorkHistory = applicationDetail.WorkHistory.Select(c=>(WorkHistoryItem)c).ToList(),
             Candidate = applicationDetail.Candidate,
             SubmittedDate = applicationDetail.SubmittedDate,

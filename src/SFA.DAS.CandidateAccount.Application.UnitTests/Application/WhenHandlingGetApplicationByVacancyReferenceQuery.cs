@@ -18,15 +18,13 @@ public class WhenHandlingGetApplicationByVacancyReferenceQuery
         ApplicationEntity entity,
         [Frozen] Mock<IApplicationRepository> repository,
         GetApplicationByVacancyReferenceQueryHandler handler)
-    {
-            
-        entity.EmploymentLocationEntities = entity.EmploymentLocationEntities!
-            .Select(entityEmploymentLocationEntity => new EmploymentLocationEntity
-            {
-                Addresses = JsonConvert.SerializeObject(addresses.ToList()),
-                EmploymentLocationInformation = entityEmploymentLocationEntity.EmploymentLocationInformation,
-                EmployerLocationOption = entityEmploymentLocationEntity.EmployerLocationOption,
-            }).ToList();
+    { 
+        entity.EmploymentLocationEntity = new EmploymentLocationEntity
+        {
+            Addresses = JsonConvert.SerializeObject(new List<Domain.Application.Address>()),
+            EmploymentLocationInformation = entity.EmploymentLocationEntity.EmploymentLocationInformation,
+            EmployerLocationOption = entity.EmploymentLocationEntity.EmployerLocationOption,
+        };
         query.CandidateId = entity.CandidateId;
         query.VacancyReference = entity.VacancyReference;
         

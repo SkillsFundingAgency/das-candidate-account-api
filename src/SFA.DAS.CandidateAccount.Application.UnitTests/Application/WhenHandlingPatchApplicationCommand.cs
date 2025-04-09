@@ -22,13 +22,12 @@ public class WhenHandlingPatchApplicationCommand
         PatchApplicationCommandHandler handler)
     {
         //Arrange
-        applicationEntity.EmploymentLocationEntities = applicationEntity.EmploymentLocationEntities!
-            .Select(entityEmploymentLocationEntity => new EmploymentLocationEntity
-            {
-                Addresses = Domain.Application.Address.ToJson(addresses.ToList()),
-                EmploymentLocationInformation = entityEmploymentLocationEntity.EmploymentLocationInformation,
-                EmployerLocationOption = entityEmploymentLocationEntity.EmployerLocationOption,
-            }).ToList();
+        applicationEntity.EmploymentLocationEntity = new EmploymentLocationEntity
+        {
+            Addresses = Domain.Application.Address.ToJson(addresses.ToList()),
+            EmploymentLocationInformation = applicationEntity.EmploymentLocationEntity.EmploymentLocationInformation,
+            EmployerLocationOption = applicationEntity.EmploymentLocationEntity.EmployerLocationOption,
+        };
         var update = applicationEntity;
         var patchCommand = new JsonPatchDocument<PatchApplication>();
         patchCommand.Replace(path => path.Status, patch.Status);
@@ -118,13 +117,12 @@ public class WhenHandlingPatchApplicationCommand
         patch.ApplyUnderDisabilityConfidentScheme = true;
 
         //Arrange
-        applicationEntity.EmploymentLocationEntities = applicationEntity.EmploymentLocationEntities!
-            .Select(entityEmploymentLocationEntity => new EmploymentLocationEntity
+        applicationEntity.EmploymentLocationEntity = new EmploymentLocationEntity
             {
                 Addresses = Domain.Application.Address.ToJson([]),
-                EmploymentLocationInformation = entityEmploymentLocationEntity.EmploymentLocationInformation,
-                EmployerLocationOption = entityEmploymentLocationEntity.EmployerLocationOption,
-            }).ToList();
+                EmploymentLocationInformation = applicationEntity.EmploymentLocationEntity.EmploymentLocationInformation,
+                EmployerLocationOption = applicationEntity.EmploymentLocationEntity.EmployerLocationOption,
+            };
         var update = applicationEntity;
         var patchCommand = new JsonPatchDocument<PatchApplication>();
         patchCommand.Replace(path => path.ApplyUnderDisabilityConfidentScheme, patch.ApplyUnderDisabilityConfidentScheme);
