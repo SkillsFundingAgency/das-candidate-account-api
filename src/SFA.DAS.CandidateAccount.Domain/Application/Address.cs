@@ -3,6 +3,7 @@
 namespace SFA.DAS.CandidateAccount.Domain.Application
 {
     public record Address(
+        Guid Id,
         string FullAddress,
         bool IsSelected,
         short AddressOrder)
