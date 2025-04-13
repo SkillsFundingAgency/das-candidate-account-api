@@ -65,8 +65,13 @@ public class ApplicationDetail : Application
     public List<WorkHistory> WorkHistory { get; set; }
     public List<TrainingCourse> TrainingCourses { get; set; }
     public Candidate.Candidate Candidate { get; set; }
+
     public static implicit operator ApplicationDetail(ApplicationEntity source)
     {
+        source.EmploymentLocationStatus = source.EmploymentLocationEntity is {EmployerLocationOption: (short)AvailableWhere.MultipleLocations}
+            ? source.EmploymentLocationStatus
+            : (short)SectionStatus.NotRequired;
+
         return new ApplicationDetail
         {
             Id = source.Id,
@@ -125,7 +130,8 @@ public class ApplicationDetail : Application
                 ParseValue<SectionStatus>(source.AdditionalQuestion1Status),
                 ParseValue<SectionStatus>(source.AdditionalQuestion2Status),
                 ParseValue<SectionStatus>(source.InterviewAdjustmentsStatus),
-                ParseValue<SectionStatus>(source.DisabilityConfidenceStatus)
+                ParseValue<SectionStatus>(source.DisabilityConfidenceStatus),
+                ParseValue<SectionStatus>(source.EmploymentLocationStatus)
             ]),
             WhatIsYourInterest = source.WhatIsYourInterest,
             ApplyUnderDisabilityConfidentScheme = source.ApplyUnderDisabilityConfidentScheme,
@@ -166,6 +172,10 @@ public class Application : ApplicationBase
 
     public static implicit operator Application(ApplicationEntity source)
     {
+        source.EmploymentLocationStatus = source.EmploymentLocationEntity is { EmployerLocationOption: (short)AvailableWhere.MultipleLocations }
+            ? source.EmploymentLocationStatus
+            : (short)SectionStatus.NotRequired;
+
         return new Application
         {
             Id = source.Id,
@@ -223,7 +233,8 @@ public class Application : ApplicationBase
                 ParseValue<SectionStatus>(source.AdditionalQuestion1Status),
                 ParseValue<SectionStatus>(source.AdditionalQuestion2Status),
                 ParseValue<SectionStatus>(source.InterviewAdjustmentsStatus),
-                ParseValue<SectionStatus>(source.DisabilityConfidenceStatus)
+                ParseValue<SectionStatus>(source.DisabilityConfidenceStatus),
+                ParseValue<SectionStatus>(source.EmploymentLocationStatus)
             ]),
             WhatIsYourInterest = source.WhatIsYourInterest,
             ApplyUnderDisabilityConfidentScheme = source.ApplyUnderDisabilityConfidentScheme,

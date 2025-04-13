@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.CandidateAccount.Ap
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.CandidateAccount.Domain.UnitTests", "SFA.DAS.CandidateAccount.Domain.UnitTests\SFA.DAS.CandidateAccount.Domain.UnitTests.csproj", "{01057B78-2C55-4FF6-8E54-7662059F8F1C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.CandidateAccount.Database", "SFA.DAS.CandidateAccount.Database\SFA.DAS.CandidateAccount.Database.csproj", "{46CA473D-AA6B-C68B-BFAD-CED1476C2948}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +61,10 @@ Global
 		{01057B78-2C55-4FF6-8E54-7662059F8F1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{01057B78-2C55-4FF6-8E54-7662059F8F1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{01057B78-2C55-4FF6-8E54-7662059F8F1C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46CA473D-AA6B-C68B-BFAD-CED1476C2948}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46CA473D-AA6B-C68B-BFAD-CED1476C2948}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46CA473D-AA6B-C68B-BFAD-CED1476C2948}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46CA473D-AA6B-C68B-BFAD-CED1476C2948}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

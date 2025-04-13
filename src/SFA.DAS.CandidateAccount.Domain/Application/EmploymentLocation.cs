@@ -8,8 +8,10 @@
         public string? EmploymentLocationInformation { get; set; }
         public Guid ApplicationId { get; set; }
 
-        public static implicit operator EmploymentLocation(EmploymentLocationEntity source)
+        public static implicit operator EmploymentLocation?(EmploymentLocationEntity? source)
         {
+            if (source is null) return null;
+
             return new EmploymentLocation
             {
                 Addresses = Address.ToList(source.Addresses),
