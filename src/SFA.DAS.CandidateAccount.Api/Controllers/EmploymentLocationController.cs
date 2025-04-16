@@ -11,7 +11,7 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers
     [ApiVersion("1.0")]
     [ApiController]
     [Route("api/candidates/{candidateId}/applications/{applicationId}/employment-locations")]
-    public class EmploymentLocationController(IMediator mediator, ILogger<EmploymentLocationController> logger) : Controller
+    public class EmploymentLocationController(IMediator mediator, ILogger<EmploymentLocationController> logger) : ControllerBase
     {
         [HttpGet]
         [Route("")]
