@@ -15,15 +15,7 @@ namespace SFA.DAS.CandidateAccount.Domain.Application
 
         public static List<Address>? ToList(string source)
         {
-            try
-            {
-                return JsonConvert.DeserializeObject<List<Address>>(source);
-            }
-            catch (JsonException ex)
-            {
-                // Log the exception or handle it as needed
-                return null;
-            }
+            return JsonConvert.DeserializeObject<List<Address>>(source);
         }
     }
 }

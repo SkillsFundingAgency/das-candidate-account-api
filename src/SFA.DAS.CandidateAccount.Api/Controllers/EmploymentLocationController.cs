@@ -61,7 +61,7 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers
             }
             catch (Exception e)
             {
-                logger.LogError(e, "Put AdditionalQuestion : An error occurred");
+                logger.LogError(e, "Put Employment Locations : An error occurred");
                 return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
             }
         }
