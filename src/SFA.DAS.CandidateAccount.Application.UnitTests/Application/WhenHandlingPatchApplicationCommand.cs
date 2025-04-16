@@ -3,6 +3,7 @@ using AutoFixture.NUnit3;
 using FluentAssertions;
 using Microsoft.AspNetCore.JsonPatch;
 using Moq;
+using Newtonsoft.Json;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.PatchApplication;
 using SFA.DAS.CandidateAccount.Data.Application;
 using SFA.DAS.CandidateAccount.Domain.Application;
@@ -14,12 +15,19 @@ public class WhenHandlingPatchApplicationCommand
 {
     [Test, RecursiveMoqAutoData]
     public async Task Then_The_Command_Is_Handled_And_Service_Called(
+        List<Domain.Application.Address> addresses,
         ApplicationEntity applicationEntity,
         PatchApplication patch,
         [Frozen] Mock<IApplicationRepository> service,
         PatchApplicationCommandHandler handler)
     {
         //Arrange
+        applicationEntity.EmploymentLocationEntity = new EmploymentLocationEntity
+        {
+            Addresses = Domain.Application.Address.ToJson(addresses.ToList()),
+            EmploymentLocationInformation = applicationEntity.EmploymentLocationEntity.EmploymentLocationInformation,
+            EmployerLocationOption = applicationEntity.EmploymentLocationEntity.EmployerLocationOption,
+        };
         var update = applicationEntity;
         var patchCommand = new JsonPatchDocument<PatchApplication>();
         patchCommand.Replace(path => path.Status, patch.Status);
@@ -109,6 +117,12 @@ public class WhenHandlingPatchApplicationCommand
         patch.ApplyUnderDisabilityConfidentScheme = true;
 
         //Arrange
+        applicationEntity.EmploymentLocationEntity = new EmploymentLocationEntity
+            {
+                Addresses = Domain.Application.Address.ToJson([]),
+                EmploymentLocationInformation = applicationEntity.EmploymentLocationEntity.EmploymentLocationInformation,
+                EmployerLocationOption = applicationEntity.EmploymentLocationEntity.EmployerLocationOption,
+            };
         var update = applicationEntity;
         var patchCommand = new JsonPatchDocument<PatchApplication>();
         patchCommand.Replace(path => path.ApplyUnderDisabilityConfidentScheme, patch.ApplyUnderDisabilityConfidentScheme);

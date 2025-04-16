@@ -13,11 +13,13 @@ public abstract class ApplicationBase
     public SectionStatus AdditionalQuestion2Status { get; set; }
     public SectionStatus AdditionalQuestion1Status { get; set; }
     public SectionStatus InterestsStatus { get; set; }
+    public SectionStatus EmploymentLocationStatus { get; set; }
     public SectionStatus EducationHistorySectionStatus { get; set; }
     public SectionStatus WorkHistorySectionStatus { get; set; }
     public SectionStatus ApplicationQuestionsSectionStatus { get; set; }
     public SectionStatus InterviewAdjustmentsSectionStatus { get; set; }
     public SectionStatus DisabilityConfidenceSectionStatus { get; set; }
+    public SectionStatus EmploymentLocationSectionStatus { get; set; }
     public SectionStatus ApplicationAllSectionStatus { get; set; }
     public string? WhatIsYourInterest { get; set; }
     public bool? ApplyUnderDisabilityConfidentScheme { get; set; }
@@ -63,8 +65,13 @@ public class ApplicationDetail : Application
     public List<WorkHistory> WorkHistory { get; set; }
     public List<TrainingCourse> TrainingCourses { get; set; }
     public Candidate.Candidate Candidate { get; set; }
+
     public static implicit operator ApplicationDetail(ApplicationEntity source)
     {
+        source.EmploymentLocationStatus = source.EmploymentLocationEntity is {EmployerLocationOption: (short)AvailableWhere.MultipleLocations}
+            ? source.EmploymentLocationStatus
+            : (short)SectionStatus.NotRequired;
+
         return new ApplicationDetail
         {
             Id = source.Id,
@@ -82,6 +89,7 @@ public class ApplicationDetail : Application
             AdditionalQuestion2Status = ParseValue<SectionStatus>(source.AdditionalQuestion2Status),
             InterviewAdjustmentsStatus = ParseValue<SectionStatus>(source.InterviewAdjustmentsStatus),
             SkillsAndStrengthStatus = ParseValue<SectionStatus>(source.SkillsAndStrengthStatus),
+            EmploymentLocationStatus = ParseValue<SectionStatus>(source.EmploymentLocationStatus),
             EducationHistorySectionStatus = GetSectionStatus(
             [
                 ParseValue<SectionStatus>(source.QualificationsStatus),
@@ -107,6 +115,10 @@ public class ApplicationDetail : Application
             [
                 ParseValue<SectionStatus>(source.DisabilityConfidenceStatus)
             ]),
+            EmploymentLocationSectionStatus = GetSectionStatus(
+            [
+                ParseValue<SectionStatus>(source.EmploymentLocationStatus)
+            ]),
             ApplicationAllSectionStatus = GetSectionStatus(
             [
                 ParseValue<SectionStatus>(source.QualificationsStatus),
@@ -118,11 +130,13 @@ public class ApplicationDetail : Application
                 ParseValue<SectionStatus>(source.AdditionalQuestion1Status),
                 ParseValue<SectionStatus>(source.AdditionalQuestion2Status),
                 ParseValue<SectionStatus>(source.InterviewAdjustmentsStatus),
-                ParseValue<SectionStatus>(source.DisabilityConfidenceStatus)
+                ParseValue<SectionStatus>(source.DisabilityConfidenceStatus),
+                ParseValue<SectionStatus>(source.EmploymentLocationStatus)
             ]),
             WhatIsYourInterest = source.WhatIsYourInterest,
             ApplyUnderDisabilityConfidentScheme = source.ApplyUnderDisabilityConfidentScheme,
             AdditionalQuestions = source.AdditionalQuestionEntities?.Select(c=>(AdditionalQuestion)c).OrderBy(ord => ord.QuestionOrder).ToList(),
+            EmploymentLocation = source.EmploymentLocationEntity,
             Candidate = source.CandidateEntity,
             Qualifications = source.QualificationEntities.OrderBy(c=>c.CreatedDate).Select(c=>(Qualification)c).ToList(),
             WorkHistory = source.WorkHistoryEntities.Select(c=>(WorkHistory)c).ToList(),
@@ -150,6 +164,7 @@ public class Application : ApplicationBase
     public string? DisabilityStatus { get; set; }
     public required string VacancyReference { get; set; }
     public List<AdditionalQuestion>? AdditionalQuestions { get; set; } = [];
+    public EmploymentLocation? EmploymentLocation { get; set; }
     public Guid? PreviousAnswersSourceId { get; set; }
     public string? Strengths { get; set; }
     public string? Support { get; set; }
@@ -157,6 +172,10 @@ public class Application : ApplicationBase
 
     public static implicit operator Application(ApplicationEntity source)
     {
+        source.EmploymentLocationStatus = source.EmploymentLocationEntity is { EmployerLocationOption: (short)AvailableWhere.MultipleLocations }
+            ? source.EmploymentLocationStatus
+            : (short)SectionStatus.NotRequired;
+
         return new Application
         {
             Id = source.Id,
@@ -202,6 +221,7 @@ public class Application : ApplicationBase
             [
                 ParseValue<SectionStatus>(source.DisabilityConfidenceStatus)
             ]),
+            EmploymentLocationSectionStatus = GetSectionStatus(ParseValue<SectionStatus>(source.EmploymentLocationStatus)),
             ApplicationAllSectionStatus = GetSectionStatus(
             [
                 ParseValue<SectionStatus>(source.QualificationsStatus),
@@ -213,11 +233,13 @@ public class Application : ApplicationBase
                 ParseValue<SectionStatus>(source.AdditionalQuestion1Status),
                 ParseValue<SectionStatus>(source.AdditionalQuestion2Status),
                 ParseValue<SectionStatus>(source.InterviewAdjustmentsStatus),
-                ParseValue<SectionStatus>(source.DisabilityConfidenceStatus)
+                ParseValue<SectionStatus>(source.DisabilityConfidenceStatus),
+                ParseValue<SectionStatus>(source.EmploymentLocationStatus)
             ]),
             WhatIsYourInterest = source.WhatIsYourInterest,
             ApplyUnderDisabilityConfidentScheme = source.ApplyUnderDisabilityConfidentScheme,
             AdditionalQuestions = source.AdditionalQuestionEntities?.Select(c=>(AdditionalQuestion)c).OrderBy(ord => ord.QuestionOrder).ToList()!,
+            EmploymentLocation = source.EmploymentLocationEntity,
             ResponseNotes = source.ResponseNotes,
             ResponseDate = source.ResponseDate,
             PreviousAnswersSourceId = source.PreviousAnswersSourceId,

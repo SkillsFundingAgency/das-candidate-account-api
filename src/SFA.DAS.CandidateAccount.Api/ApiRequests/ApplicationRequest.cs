@@ -17,5 +17,7 @@ public class ApplicationRequest
     public SectionStatus IsWorkHistoryComplete { get; set; }
     public SectionStatus IsAdditionalQuestion1Complete { get; set; }
     public SectionStatus IsAdditionalQuestion2Complete { get; set; }
+    public SectionStatus IsEmploymentLocationComplete { get; set; }
     public List<KeyValuePair<int, string>>? AdditionalQuestions { get; set; } = [];
+    public Location EmploymentLocation { get; set; } = null!;
 }
