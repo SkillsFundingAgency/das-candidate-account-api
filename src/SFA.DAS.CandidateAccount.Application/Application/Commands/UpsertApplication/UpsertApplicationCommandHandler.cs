@@ -32,7 +32,7 @@ public class UpsertApplicationCommandHandler(
                 var result = await applicationRepository.Clone(previousApplication.Id, command.VacancyReference, requiresDisabilityConfidence, command.IsAdditionalQuestion1Complete, command.IsAdditionalQuestion2Complete);
 
                 await UpsertAdditionalQuestions(command, cancellationToken, result);
-                await UpsertEmploymentLocations(command, result, cancellationToken);
+                if(command.EmploymentLocation != null) await UpsertEmploymentLocations(command, result, cancellationToken);
                 await RemoveSavedVacancy(command.CandidateId, command.VacancyReference);
 
                 return new UpsertApplicationCommandResponse
@@ -60,7 +60,11 @@ public class UpsertApplicationCommandHandler(
         });
 
         await UpsertAdditionalQuestions(command, cancellationToken, application.Item1);
-        await UpsertEmploymentLocations(command, application.Item1, cancellationToken);
+        if (command.EmploymentLocation != null)
+        {
+            await UpsertEmploymentLocations(command, application.Item1, cancellationToken);
+        }
+        
         if (application.Item2)
         {
             await RemoveSavedVacancy(command.CandidateId, command.VacancyReference);

@@ -6,7 +6,7 @@ namespace SFA.DAS.CandidateAccount.Data.EmploymentLocation
     public interface IEmploymentLocationRepository
     {
         Task<EmploymentLocationEntity?> Get(Guid applicationId, Guid candidateId, CancellationToken cancellationToken);
-        Task<Tuple<EmploymentLocationEntity, bool>> UpsertEmploymentLocation(EmploymentLocationEntity employmentLocation, Guid candidateId, CancellationToken token);
+        Task<Tuple<EmploymentLocationEntity, bool>> UpsertEmploymentLocation(EmploymentLocationEntity employmentLocation, Guid candidateId, CancellationToken token = default);
     }
 
     public class EmploymentLocationRepository(ICandidateAccountDataContext dataContext) : IEmploymentLocationRepository
@@ -23,15 +23,15 @@ namespace SFA.DAS.CandidateAccount.Data.EmploymentLocation
             return await query.FirstOrDefaultAsync(cancellationToken);
         }
 
-        public async Task<Tuple<EmploymentLocationEntity, bool>> UpsertEmploymentLocation(EmploymentLocationEntity employmentLocation, Guid candidateId, CancellationToken token)
+        public async Task<Tuple<EmploymentLocationEntity, bool>> UpsertEmploymentLocation(EmploymentLocationEntity employmentLocation, Guid candidateId, CancellationToken token = default)
         {
-            var query = from question in dataContext.EmploymentLocationEntities
+            var query = from location in dataContext.EmploymentLocationEntities.AsNoTracking()
                     .Where(fil => fil.ApplicationId == employmentLocation.ApplicationId)
                     .Where(fil => fil.Id == employmentLocation.Id)
-                join application in dataContext.ApplicationEntities
+                join application in dataContext.ApplicationEntities.AsNoTracking()
                         .Where(fil => fil.CandidateId == candidateId && fil.Id == employmentLocation.ApplicationId)
-                    on question.ApplicationId equals application.Id
-                select question;
+                    on location.ApplicationId equals application.Id
+                select location;
 
             var employmentLocationEntity = await query.SingleOrDefaultAsync(cancellationToken: token);
 

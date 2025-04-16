@@ -1,6 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using SFA.DAS.CandidateAccount.Api.ApiRequests;
+using SFA.DAS.CandidateAccount.Application.Application.Commands.UpsertEmploymentLocation;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetEmploymentLocations;
+using SFA.DAS.CandidateAccount.Domain.Application;
 using System.Net;
 
 namespace SFA.DAS.CandidateAccount.Api.Controllers
@@ -27,6 +30,38 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers
             catch (Exception e)
             {
                 logger.LogError(e, "Get Employment Locations : An error occurred");
+                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        [HttpPut]
+        [Route("{id}")]
+        public async Task<IActionResult> PutEmploymentLocation([FromRoute] Guid candidateId, [FromRoute] Guid applicationId, [FromRoute] Guid id, PutEmploymentLocationApiRequest request)
+        {
+            try
+            {
+                var result = await mediator.Send(new UpsertEmploymentLocationCommand
+                {
+                    EmploymentLocation = new EmploymentLocation
+                    {
+                        ApplicationId = applicationId,
+                        Id = id,
+                        EmployerLocationOption = request.EmployerLocationOption,
+                        EmploymentLocationInformation = request.EmploymentLocationInformation,
+                        Addresses = request.Addresses
+                    },
+                    CandidateId = candidateId
+                });
+
+                if (result.IsCreated)
+                {
+                    return Created($"{result.EmploymentLocation.Id}", result.EmploymentLocation);
+                }
+                return Ok(result.EmploymentLocation);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, "Put Employment Locations : An error occurred");
                 return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
             }
         }

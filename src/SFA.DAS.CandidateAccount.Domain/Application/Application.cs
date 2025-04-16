@@ -196,6 +196,7 @@ public class Application : ApplicationBase
             AdditionalQuestion2Status = ParseValue<SectionStatus>(source.AdditionalQuestion2Status),
             InterviewAdjustmentsStatus = ParseValue<SectionStatus>(source.InterviewAdjustmentsStatus),
             SkillsAndStrengthStatus = ParseValue<SectionStatus>(source.SkillsAndStrengthStatus),
+            EmploymentLocationStatus = ParseValue<SectionStatus>(source.EmploymentLocationStatus),
             EducationHistorySectionStatus = GetSectionStatus(
             [
                 ParseValue<SectionStatus>(source.QualificationsStatus),
@@ -221,7 +222,7 @@ public class Application : ApplicationBase
             [
                 ParseValue<SectionStatus>(source.DisabilityConfidenceStatus)
             ]),
-            EmploymentLocationSectionStatus = GetSectionStatus(ParseValue<SectionStatus>(source.EmploymentLocationStatus)),
+            EmploymentLocationSectionStatus = GetSectionStatus([ParseValue<SectionStatus>(source.EmploymentLocationStatus)]),
             ApplicationAllSectionStatus = GetSectionStatus(
             [
                 ParseValue<SectionStatus>(source.QualificationsStatus),
