@@ -6,6 +6,7 @@ using SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetSavedVacancies;
 using SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetSavedVacancy;
 using System.Net;
 using SFA.DAS.CandidateAccount.Application.Candidate.Commands.DeleteSavedVacancy;
+using Microsoft.IdentityModel.Tokens;
 
 namespace SFA.DAS.CandidateAccount.Api.Controllers
 {
@@ -21,14 +22,19 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("{vacancyId}")]
-        public async Task<IActionResult> GetByVacancyReference(Guid candidateId, string vacancyId)
+        [HttpGet("{vacancyReference}")]
+        public async Task<IActionResult> GetByVacancyReference(Guid candidateId, [FromRoute] string? vacancyReference, [FromQuery] string? vacancyId)
         {
             try
             {
-                var result = await mediator.Send(new GetSavedVacancyQuery(candidateId, vacancyId));
+                var result = await mediator.Send(new GetSavedVacancyQuery(candidateId, vacancyId, null));
 
-                if (result.Id == Guid.Empty) return NotFound();
+                if (result.Id == Guid.Empty) 
+                {
+                    result = await mediator.Send(new GetSavedVacancyQuery(candidateId, null, vacancyReference));
+
+                    if (result.Id == Guid.Empty) return NotFound();
+                }
 
                 return Ok(result);
             }
@@ -53,11 +59,11 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers
         }
 
         [HttpDelete("{vacancyId}")]
-        public async Task<IActionResult> DeleteSavedVacancy(Guid candidateId, string vacancyId)
-        {
+        public async Task<IActionResult> DeleteSavedVacancy(Guid candidateId, [FromRoute] string? vacancyId, [FromQuery] string? vacancyReference)
+        {           
             try
             {
-                await mediator.Send(new DeleteSavedVacancyCommand(candidateId, vacancyId));
+                await mediator.Send(new DeleteSavedVacancyCommand(candidateId, vacancyId, vacancyReference));
 
                 return NoContent();
             }

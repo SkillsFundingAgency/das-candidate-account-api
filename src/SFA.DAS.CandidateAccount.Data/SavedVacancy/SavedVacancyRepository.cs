@@ -6,7 +6,8 @@ namespace SFA.DAS.CandidateAccount.Data.SavedVacancy
     public interface ISavedVacancyRepository
     {
         Task<List<Domain.Candidate.SavedVacancy>> GetByCandidateId(Guid candidateId);
-        Task<Domain.Candidate.SavedVacancy?> Get(Guid candidateId, string vacancyId);
+        Task<Domain.Candidate.SavedVacancy?> Get(Guid candidateId, string? vacancyId, string? vacancyReference);
+        Task<int> CountByVacancyReference(Guid candidateId, string vacancyReference);
         Task<Tuple<Domain.Candidate.SavedVacancy, bool>> Upsert(Domain.Candidate.SavedVacancy savedVacancy);
         Task Delete(Domain.Candidate.SavedVacancy savedVacancy);
     }
@@ -23,13 +24,37 @@ namespace SFA.DAS.CandidateAccount.Data.SavedVacancy
             return savedVacancyItems.Select(x => (Domain.Candidate.SavedVacancy)x).ToList();
         }
 
-        public async Task<Domain.Candidate.SavedVacancy?> Get(Guid candidateId, string vacancyId)
+        public async Task<Domain.Candidate.SavedVacancy?> Get(Guid candidateId, string? vacancyId, string? vacancyReference)
         {
-            var result = await dataContext.SavedVacancyEntities
+            var query = dataContext.SavedVacancyEntities
                 .AsNoTracking()
-                .SingleOrDefaultAsync(x => x.CandidateId == candidateId && x.VacancyId == vacancyId);
+                .Where(x => x.CandidateId == candidateId);
+
+            SavedVacancyEntity? result = null;
+
+            if (!string.IsNullOrEmpty(vacancyId))
+            {
+                query = query.Where(x => x.VacancyId == vacancyId);
+                result = await query.SingleOrDefaultAsync();
+            }
+            else if (!string.IsNullOrEmpty(vacancyReference))
+            {
+                query = query.Where(x => x.VacancyReference == vacancyReference);
+                result = await query.FirstOrDefaultAsync();
+            }
 
             return result;
+        }
+
+        public async Task<int> CountByVacancyReference(Guid candidateId, string vacancyReference)
+        {
+            var query = dataContext.SavedVacancyEntities
+                .AsNoTracking()
+                .Where(x => x.CandidateId == candidateId && x.VacancyReference == vacancyReference);
+
+            var result = await query.ToListAsync();
+
+            return result.Count();
         }
 
         public async Task Delete(Domain.Candidate.SavedVacancy savedVacancy)
@@ -40,7 +65,7 @@ namespace SFA.DAS.CandidateAccount.Data.SavedVacancy
 
         public async Task<Tuple<Domain.Candidate.SavedVacancy, bool>> Upsert(Domain.Candidate.SavedVacancy savedVacancy)
         {
-            var existing = await Get(savedVacancy.CandidateId, savedVacancy.VacancyId);
+            var existing = await Get(savedVacancy.CandidateId, savedVacancy.VacancyId, null);
 
             if (existing == null)
             {

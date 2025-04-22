@@ -21,7 +21,7 @@ namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.SavedVacancies
             [Frozen] Mock<IMediator> mediator,
             [Greedy] SavedVacancyController controller)
         {
-            var result = await controller.DeleteSavedVacancy(candidateId, vacancyId) as NoContentResult;
+            var result = await controller.DeleteSavedVacancy(candidateId, vacancyId, null) as NoContentResult;
 
             result.Should().BeOfType<NoContentResult>();
 
@@ -42,7 +42,7 @@ namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.SavedVacancies
             mediator.Setup(x => x.Send(It.Is<GetSavedVacancyQuery>(c => c.CandidateId == candidateId && c.VacancyId == vacancyId), It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new Exception());
 
-            var actual = await controller.GetByVacancyReference(candidateId, vacancyId);
+            var actual = await controller.GetByVacancyReference(candidateId, vacancyId, null);
 
             actual.Should().BeOfType<StatusCodeResult>();
             var result = actual as StatusCodeResult;

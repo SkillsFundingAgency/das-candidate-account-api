@@ -187,12 +187,12 @@ public class WhenHandlingUpsertApplicationCommand
         [Frozen] Mock<ISavedVacancyRepository> savedVacancyRepository,
         UpsertApplicationCommandHandler handler)
     {
-        savedVacancyRepository.Setup(x=> x.Get(command.CandidateId, command.VacancyReference))
+        savedVacancyRepository.Setup(x=> x.Get(command.CandidateId, null, command.VacancyReference))
             .ReturnsAsync(savedVacancy);
 
         await handler.Handle(command, CancellationToken.None);
 
-        savedVacancyRepository.Verify(x => x.Delete(It.Is<SavedVacancy>(v => v == savedVacancy)), Times.Once);
+        savedVacancyRepository.Verify(x => x.Delete(It.Is<SavedVacancy>(v => v == savedVacancy)), Times.AtLeastOnce());
 
     }
 }

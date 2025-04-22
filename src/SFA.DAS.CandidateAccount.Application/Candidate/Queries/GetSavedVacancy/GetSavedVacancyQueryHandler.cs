@@ -7,7 +7,7 @@ namespace SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetSavedVacancy
     {
         public async Task<GetSavedVacancyQueryResult> Handle(GetSavedVacancyQuery request, CancellationToken cancellationToken)
         {
-            var result = await Repository.Get(request.CandidateId, request.VacancyId);
+            var result = await Repository.Get(request.CandidateId, request.VacancyId, request.VacancyReference);
 
             if (result is null) return new GetSavedVacancyQueryResult();
 

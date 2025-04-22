@@ -27,7 +27,7 @@ namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.SavedVacancies
             mediator.Setup(x => x.Send(It.Is<GetSavedVacancyQuery>(c => c.CandidateId == candidateId && c.VacancyId == vacancyId), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(queryResult);
 
-            var result = await controller.GetByVacancyReference(candidateId, vacancyId) as OkObjectResult;
+            var result = await controller.GetByVacancyReference(candidateId, vacancyId, null) as OkObjectResult;
 
             result.Value.Should().BeEquivalentTo((GetSavedVacancyQueryResult)queryResult);
         }
@@ -43,7 +43,7 @@ namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.SavedVacancies
             mediator.Setup(x => x.Send(It.Is<GetSavedVacancyQuery>(c => c.CandidateId == candidateId && c.VacancyId == vacancyId), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetSavedVacancyQueryResult());
 
-            var result = await controller.GetByVacancyReference(candidateId, vacancyId) as StatusCodeResult;
+            var result = await controller.GetByVacancyReference(candidateId, vacancyId, null) as StatusCodeResult;
 
             result.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
         }
@@ -59,7 +59,7 @@ namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.SavedVacancies
             mediator.Setup(x => x.Send(It.Is<GetSavedVacancyQuery>(c => c.CandidateId == candidateId && c.VacancyId == vacancyId), It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new Exception());
 
-            var result = await controller.GetByVacancyReference(candidateId, vacancyId) as StatusCodeResult;
+            var result = await controller.GetByVacancyReference(candidateId, vacancyId, null) as StatusCodeResult;
 
             result.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
         }
