@@ -29,7 +29,7 @@ namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.SavedVacancies
 
             var result = await controller.GetByVacancyReference(candidateId, vacancyId, null) as OkObjectResult;
 
-            result.Value.Should().BeEquivalentTo((GetSavedVacancyQueryResult)queryResult);
+            result!.Value.Should().BeEquivalentTo((GetSavedVacancyQueryResult)queryResult);
         }
 
         [Test, MoqAutoData]
@@ -45,7 +45,7 @@ namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.SavedVacancies
 
             var result = await controller.GetByVacancyReference(candidateId, vacancyId, null) as StatusCodeResult;
 
-            result.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
+            result!.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
         }
 
         [Test, MoqAutoData]
@@ -61,7 +61,7 @@ namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.SavedVacancies
 
             var result = await controller.GetByVacancyReference(candidateId, vacancyId, null) as StatusCodeResult;
 
-            result.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
+            result!.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
         }
     }
 }

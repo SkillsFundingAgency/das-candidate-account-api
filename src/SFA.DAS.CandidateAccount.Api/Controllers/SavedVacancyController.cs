@@ -23,7 +23,7 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers
         }
 
         [HttpGet("{vacancyReference}")]
-        public async Task<IActionResult> GetByVacancyReference(Guid candidateId, [FromRoute] string? vacancyReference, [FromQuery] string? vacancyId)
+        public async Task<IActionResult> GetByVacancyReference(Guid candidateId, [FromQuery] string? vacancyId, [FromRoute] string? vacancyReference)
         {
             try
             {

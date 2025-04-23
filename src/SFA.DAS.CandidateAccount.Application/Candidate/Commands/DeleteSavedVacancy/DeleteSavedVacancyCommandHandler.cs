@@ -13,6 +13,15 @@ namespace SFA.DAS.CandidateAccount.Application.Candidate.Commands.DeleteSavedVac
             {
                 await Repository.Delete(result);
             }
+            else
+            {
+                result = await Repository.Get(command.CandidateId, null, command.VacancyReference);
+
+                if (result != null)
+                {
+                    await Repository.Delete(result);
+                }
+            }
 
             return Unit.Value;
         }
