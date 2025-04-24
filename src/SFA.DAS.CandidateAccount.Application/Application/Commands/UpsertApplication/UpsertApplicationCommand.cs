@@ -15,6 +15,8 @@ public record UpsertApplicationCommand : IRequest<UpsertApplicationCommandRespon
     public SectionStatus? IsWorkHistoryComplete { get; init; }
     public SectionStatus? IsAdditionalQuestion1Complete { get; init; }
     public SectionStatus? IsAdditionalQuestion2Complete { get; init; }
+    public SectionStatus? IsEmploymentLocationComplete { get; init; }
     public string? DisabilityStatus { get; init; }
     public List<KeyValuePair<int, string>>? AdditionalQuestions { get; init; } = [];
+    public Location EmploymentLocation { get; init; } = null!;
 }

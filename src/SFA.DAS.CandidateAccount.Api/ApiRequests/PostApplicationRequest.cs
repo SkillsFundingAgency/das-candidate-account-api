@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using SFA.DAS.CandidateAccount.Domain.Application;
 
 namespace SFA.DAS.CandidateAccount.Api.ApiRequests;
