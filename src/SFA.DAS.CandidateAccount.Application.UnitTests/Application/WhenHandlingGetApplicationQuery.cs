@@ -2,10 +2,12 @@ using System.ComponentModel.DataAnnotations;
 using AutoFixture.NUnit3;
 using FluentAssertions;
 using Moq;
+using Newtonsoft.Json;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplication;
 using SFA.DAS.CandidateAccount.Data.AdditionalQuestion;
 using SFA.DAS.CandidateAccount.Data.Application;
 using SFA.DAS.CandidateAccount.Domain.Application;
+using SFA.DAS.CandidateAccount.Domain.Candidate;
 using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.CandidateAccount.Application.UnitTests.Application;
@@ -14,11 +16,18 @@ public class WhenHandlingGetApplicationQuery
 {
     [Test, RecursiveMoqAutoData]
     public async Task Then_The_Application_Is_Found_By_Id_And_Returned(
+        List<Domain.Application.Address> addresses,
         GetApplicationQuery query,
         ApplicationEntity entity,
         [Frozen] Mock<IApplicationRepository> repository,
         GetApplicationQueryHandler handler)
     {
+        entity.EmploymentLocationEntity = new EmploymentLocationEntity
+        {
+            Addresses = Domain.Application.Address.ToJson(addresses.ToList()),
+            EmploymentLocationInformation = entity.EmploymentLocationEntity.EmploymentLocationInformation,
+            EmployerLocationOption = entity.EmploymentLocationEntity.EmployerLocationOption,
+        };
         query.CandidateId = entity.CandidateId;
         query.IncludeDetail = false;
         repository.Setup(x => x.GetById(query.ApplicationId, query.IncludeDetail)).ReturnsAsync(entity);
@@ -35,11 +44,18 @@ public class WhenHandlingGetApplicationQuery
     }
     [Test, RecursiveMoqAutoData]
     public async Task Then_The_Application_Is_Found_By_Id_And_Returns_Detail_If_In_Query(
+        List<Domain.Application.Address> addresses,
         GetApplicationQuery query,
         ApplicationEntity entity,
         [Frozen] Mock<IApplicationRepository> repository,
         GetApplicationQueryHandler handler)
     {
+        entity.EmploymentLocationEntity = new EmploymentLocationEntity
+        {
+            Addresses = Domain.Application.Address.ToJson(addresses.ToList()),
+            EmploymentLocationInformation = entity.EmploymentLocationEntity.EmploymentLocationInformation,
+            EmployerLocationOption = entity.EmploymentLocationEntity.EmployerLocationOption,
+        };
         query.CandidateId = entity.CandidateId;
         query.IncludeDetail = true;
         repository.Setup(x => x.GetById(query.ApplicationId, query.IncludeDetail)).ReturnsAsync(entity);
