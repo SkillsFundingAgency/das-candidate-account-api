@@ -55,7 +55,7 @@ public class UpsertApplicationCommandHandler(
             TrainingCoursesStatus = (short)command.IsWorkHistoryComplete,
             AdditionalQuestion1Status = (short)command.IsAdditionalQuestion1Complete,
             AdditionalQuestion2Status = (short) command.IsAdditionalQuestion2Complete,
-            EmploymentLocationStatus = (short)command.IsEmploymentLocationComplete,
+            EmploymentLocationStatus = command.EmploymentLocation is not null ? (short)command.IsEmploymentLocationComplete : (short)SectionStatus.NotRequired,
             DisabilityStatus = command.DisabilityStatus
         });
 
