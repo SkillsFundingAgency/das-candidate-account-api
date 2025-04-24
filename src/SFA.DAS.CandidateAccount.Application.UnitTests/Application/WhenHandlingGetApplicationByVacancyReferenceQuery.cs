@@ -13,7 +13,6 @@ public class WhenHandlingGetApplicationByVacancyReferenceQuery
 {
     [Test, RecursiveMoqAutoData]
     public async Task Then_The_Application_Is_Found_By_Reference_And_Returned(
-        List<Domain.Application.Address> addresses,
         GetApplicationByVacancyReferenceQuery query,
         ApplicationEntity entity,
         [Frozen] Mock<IApplicationRepository> repository,
