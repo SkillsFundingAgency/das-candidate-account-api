@@ -14,7 +14,7 @@ namespace SFA.DAS.CandidateAccount.Data.SavedVacancy
             builder.Property(x => x.Id).HasColumnName("Id").HasColumnType("uniqueidentifier").IsRequired();
             builder.Property(x => x.VacancyReference).HasColumnName("VacancyReference").HasColumnType("varchar").IsRequired();
             builder.Property(x => x.CandidateId).HasColumnName("CandidateId").HasColumnType("uniqueidentifier").IsRequired();
-            builder.Property(x => x.VacancyId).HasColumnName("VacancyId").HasColumnType("nvarchar(150)").IsRequired();
+            builder.Property(x => x.VacancyId).HasColumnName("VacancyId").HasColumnType("nvarchar(150)").IsRequired(false);
             builder.Property(x => x.CreatedOn).HasColumnName("CreatedOn").HasColumnType("datetime").IsRequired();
 
             // Define indexes

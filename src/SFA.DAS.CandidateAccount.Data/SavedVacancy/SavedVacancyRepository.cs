@@ -5,23 +5,23 @@ namespace SFA.DAS.CandidateAccount.Data.SavedVacancy
 {
     public interface ISavedVacancyRepository
     {
-        Task<List<Domain.Candidate.SavedVacancy>> GetByCandidateId(Guid candidateId);
+        Task<List<Domain.Candidate.SavedVacancy?>> GetByCandidateId(Guid candidateId);
         Task<Domain.Candidate.SavedVacancy?> Get(Guid candidateId, string? vacancyId, string? vacancyReference);
-        Task<int> CountByVacancyReference(Guid candidateId, string vacancyReference);
+        Task<List<Domain.Candidate.SavedVacancy?>> GetAllByVacancyReference(Guid candidateId, string vacancyReference);
         Task<Tuple<Domain.Candidate.SavedVacancy, bool>> Upsert(Domain.Candidate.SavedVacancy savedVacancy);
         Task Delete(Domain.Candidate.SavedVacancy savedVacancy);
     }
 
     public class SavedVacancyRepository(ICandidateAccountDataContext dataContext) : ISavedVacancyRepository
     {
-        public async Task<List<Domain.Candidate.SavedVacancy>> GetByCandidateId(Guid candidateId)
+        public async Task<List<Domain.Candidate.SavedVacancy?>> GetByCandidateId(Guid candidateId)
         {
             var savedVacancyItems = await dataContext.SavedVacancyEntities
                 .AsNoTracking()
                 .Where(x => x.CandidateId == candidateId)
                 .ToListAsync();
 
-            return savedVacancyItems.Select(x => (Domain.Candidate.SavedVacancy)x).ToList();
+            return savedVacancyItems.Select(x => (Domain.Candidate.SavedVacancy?)x).ToList();
         }
 
         public async Task<Domain.Candidate.SavedVacancy?> Get(Guid candidateId, string? vacancyId, string? vacancyReference)
@@ -46,7 +46,7 @@ namespace SFA.DAS.CandidateAccount.Data.SavedVacancy
             return result;
         }
 
-        public async Task<int> CountByVacancyReference(Guid candidateId, string vacancyReference)
+        public async Task<List<Domain.Candidate.SavedVacancy?>> GetAllByVacancyReference(Guid candidateId, string vacancyReference)
         {
             var query = dataContext.SavedVacancyEntities
                 .AsNoTracking()
@@ -54,7 +54,7 @@ namespace SFA.DAS.CandidateAccount.Data.SavedVacancy
 
             var result = await query.ToListAsync();
 
-            return result.Count();
+            return result.Select(x => (Domain.Candidate.SavedVacancy?)x).ToList();
         }
 
         public async Task Delete(Domain.Candidate.SavedVacancy savedVacancy)

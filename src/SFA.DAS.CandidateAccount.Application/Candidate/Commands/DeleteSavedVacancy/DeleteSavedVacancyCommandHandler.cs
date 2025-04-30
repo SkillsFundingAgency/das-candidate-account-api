@@ -15,7 +15,8 @@ namespace SFA.DAS.CandidateAccount.Application.Candidate.Commands.DeleteSavedVac
             }
             else
             {
-                result = await Repository.Get(command.CandidateId, null, command.VacancyReference);
+                var vacancyReference = command.VacancyId;
+                result = await Repository.Get(command.CandidateId, null, vacancyReference);
 
                 if (result != null)
                 {

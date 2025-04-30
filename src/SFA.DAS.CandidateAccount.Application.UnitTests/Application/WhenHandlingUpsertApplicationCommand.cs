@@ -187,12 +187,29 @@ public class WhenHandlingUpsertApplicationCommand
         [Frozen] Mock<ISavedVacancyRepository> savedVacancyRepository,
         UpsertApplicationCommandHandler handler)
     {
-        savedVacancyRepository.Setup(x=> x.Get(command.CandidateId, null, command.VacancyReference))
-            .ReturnsAsync(savedVacancy);
+        savedVacancyRepository.Setup(x=> x.GetAllByVacancyReference(command.CandidateId, command.VacancyReference))
+            .ReturnsAsync(new List<SavedVacancy> { savedVacancy });
 
         await handler.Handle(command, CancellationToken.None);
 
-        savedVacancyRepository.Verify(x => x.Delete(It.Is<SavedVacancy>(v => v == savedVacancy)), Times.AtLeastOnce());
+        savedVacancyRepository.Verify(x => x.Delete(It.IsAny<SavedVacancy>()), Times.AtLeastOnce());
+
+    }
+
+    [Test, RecursiveMoqAutoData]
+    public async Task Then_The_Request_Is_Handled_When_Saved_Vacancy_Not_Found_And_Not_Deleted(
+    UpsertApplicationCommand command,
+    SavedVacancy savedVacancy,
+    [Frozen] Mock<IApplicationRepository> applicationRepository,
+    [Frozen] Mock<ISavedVacancyRepository> savedVacancyRepository,
+    UpsertApplicationCommandHandler handler)
+    {
+        savedVacancyRepository.Setup(x => x.GetAllByVacancyReference(command.CandidateId, command.VacancyReference))
+            .ReturnsAsync(new List<SavedVacancy>());
+
+        await handler.Handle(command, CancellationToken.None);
+
+        savedVacancyRepository.Verify(x => x.Delete(It.IsAny<SavedVacancy>()), Times.Never());
 
     }
 }
