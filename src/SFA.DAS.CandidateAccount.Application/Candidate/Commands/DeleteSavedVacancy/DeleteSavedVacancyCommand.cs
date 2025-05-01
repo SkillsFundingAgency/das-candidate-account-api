@@ -2,5 +2,5 @@
 
 namespace SFA.DAS.CandidateAccount.Application.Candidate.Commands.DeleteSavedVacancy
 {
-    public record DeleteSavedVacancyCommand(Guid CandidateId, string VacancyId) : IRequest<Unit>;
+    public record DeleteSavedVacancyCommand(Guid CandidateId, string VacancyId, bool DeleteAllByVacancyReference) : IRequest<Unit>;
 }

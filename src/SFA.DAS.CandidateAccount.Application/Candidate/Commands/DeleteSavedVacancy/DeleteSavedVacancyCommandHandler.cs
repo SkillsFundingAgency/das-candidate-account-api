@@ -7,6 +7,20 @@ namespace SFA.DAS.CandidateAccount.Application.Candidate.Commands.DeleteSavedVac
     {
         public async Task<Unit> Handle(DeleteSavedVacancyCommand command, CancellationToken cancellationToken)
         {
+            var vacancyReference = command.VacancyId?.Split('-')[0];
+
+            if (command.DeleteAllByVacancyReference)
+            {
+                var savedVacancies = await Repository.GetAllByVacancyReference(command.CandidateId, vacancyReference!);
+
+                foreach(var savedVacancy in savedVacancies)
+                {
+                    await Repository.Delete(savedVacancy!);
+                }
+
+                return Unit.Value;
+            }
+
             var result = await Repository.Get(command.CandidateId, command.VacancyId, null);
 
             if (result != null)
@@ -15,7 +29,6 @@ namespace SFA.DAS.CandidateAccount.Application.Candidate.Commands.DeleteSavedVac
             }
             else
             {
-                var vacancyReference = command.VacancyId;
                 result = await Repository.Get(command.CandidateId, null, vacancyReference);
 
                 if (result != null)

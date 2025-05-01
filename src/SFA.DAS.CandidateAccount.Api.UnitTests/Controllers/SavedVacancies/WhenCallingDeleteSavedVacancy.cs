@@ -21,7 +21,7 @@ namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.SavedVacancies
             [Frozen] Mock<IMediator> mediator,
             [Greedy] SavedVacancyController controller)
         {
-            var result = await controller.DeleteSavedVacancy(candidateId, vacancyId) as NoContentResult;
+            var result = await controller.DeleteSavedVacancy(candidateId, vacancyId, false) as NoContentResult;
 
             result.Should().BeOfType<NoContentResult>();
 
