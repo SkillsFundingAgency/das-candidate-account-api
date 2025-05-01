@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using SFA.DAS.CandidateAccount.Domain.Candidate;
 
 namespace SFA.DAS.CandidateAccount.Data.SavedVacancy
@@ -35,13 +36,13 @@ namespace SFA.DAS.CandidateAccount.Data.SavedVacancy
             if (!string.IsNullOrEmpty(vacancyId))
             {
                 query = query.Where(x => x.VacancyId == vacancyId);
-                result = await query.SingleOrDefaultAsync();
             }
             else if (!string.IsNullOrEmpty(vacancyReference))
             {
-                query = query.Where(x => x.VacancyReference == vacancyReference);
-                result = await query.FirstOrDefaultAsync();
+                query = query.Where(x => x.VacancyReference == vacancyReference && x.VacancyId == null);
             }
+
+            result = await query.SingleOrDefaultAsync();
 
             return result;
         }
