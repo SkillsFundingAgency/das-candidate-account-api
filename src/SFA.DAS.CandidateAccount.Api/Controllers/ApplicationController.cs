@@ -212,7 +212,7 @@ public class ApplicationController(IMediator mediator, ILogger<ApplicationContro
                 Statuses = statuses
             });
 
-            return Ok(result.Stats);
+            return Ok(result);
         }
         catch (Exception e)
         {

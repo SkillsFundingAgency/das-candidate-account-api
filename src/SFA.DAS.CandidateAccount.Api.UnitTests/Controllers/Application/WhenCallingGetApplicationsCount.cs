@@ -35,9 +35,9 @@ namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.Application
             result.Should().BeOfType<OkObjectResult>();
             var actionResult = result as OkObjectResult;
 
-            actionResult.Value.Should().BeOfType<List<GetApplicationsCountQueryResult.ApplicationStats>>();
-            var value = actionResult.Value as List<GetApplicationsCountQueryResult.ApplicationStats>;
-            value.Should().BeEquivalentTo(queryResult.Stats);
+            actionResult.Value.Should().BeOfType<GetApplicationsCountQueryResult>();
+            var value = actionResult.Value as GetApplicationsCountQueryResult;
+            value.Should().BeEquivalentTo(queryResult);
         }
 
         [Test, MoqAutoData]
