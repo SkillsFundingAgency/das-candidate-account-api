@@ -31,18 +31,16 @@ namespace SFA.DAS.CandidateAccount.Data.SavedVacancy
                 .AsNoTracking()
                 .Where(x => x.CandidateId == candidateId);
 
-            SavedVacancyEntity? result = null;
-
             if (!string.IsNullOrEmpty(vacancyId))
             {
                 query = query.Where(x => x.VacancyId == vacancyId);
             }
             else if (!string.IsNullOrEmpty(vacancyReference))
             {
-                query = query.Where(x => x.VacancyReference == vacancyReference && x.VacancyId == null);
+                query = query.Where(x => x.VacancyReference == vacancyReference && (x.VacancyId == null || x.VacancyId == vacancyReference));
             }
 
-            result = await query.SingleOrDefaultAsync();
+            var result = await query.SingleOrDefaultAsync();
 
             return result;
         }

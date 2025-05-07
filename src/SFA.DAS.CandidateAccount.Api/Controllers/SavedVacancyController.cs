@@ -27,14 +27,9 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers
         {
             try
             {
-                var result = await mediator.Send(new GetSavedVacancyQuery(candidateId, vacancyId, null));
+                var result = await mediator.Send(new GetSavedVacancyQuery(candidateId, vacancyId, vacancyReference));
 
-                if (result.Id == Guid.Empty) 
-                {
-                    result = await mediator.Send(new GetSavedVacancyQuery(candidateId, null, vacancyReference));
-
-                    if (result.Id == Guid.Empty) return NotFound();
-                }
+                if (result.Id == Guid.Empty) return NotFound();
 
                 return Ok(result);
             }
@@ -58,8 +53,8 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers
             return Ok(result.SavedVacancy);
         }
 
-        [HttpDelete("{vacancyId}/{deleteAllByReference}")]
-        public async Task<IActionResult> DeleteSavedVacancy(Guid candidateId, [FromRoute] string vacancyId, bool deleteAllByReference)
+        [HttpDelete("{vacancyId}")]
+        public async Task<IActionResult> DeleteSavedVacancy(Guid candidateId, [FromRoute] string vacancyId, [FromQuery] bool deleteAllByReference)
         {           
             try
             {

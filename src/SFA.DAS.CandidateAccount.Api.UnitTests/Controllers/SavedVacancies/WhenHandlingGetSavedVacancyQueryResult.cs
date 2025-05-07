@@ -11,7 +11,7 @@ using System.Net;
 namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.SavedVacancies
 {
     [TestFixture]
-    public class WhenCallingGetByVacancyReference
+    public class WhenHandlingGetSavedVacancyQueryResult
     {
         [Test, MoqAutoData]
         public async Task Then_The_Response_Is_Returned_As_Expected(

@@ -9,7 +9,7 @@ namespace SFA.DAS.CandidateAccount.Application.Candidate.Commands.DeleteSavedVac
         {
             var vacancyReference = command.VacancyId?.Split('-')[0];
 
-            if (command.DeleteAllByVacancyReference)
+            if (command.DeleteAllByReference)
             {
                 var savedVacancies = await Repository.GetAllByVacancyReference(command.CandidateId, vacancyReference!);
 
@@ -21,23 +21,16 @@ namespace SFA.DAS.CandidateAccount.Application.Candidate.Commands.DeleteSavedVac
                 return Unit.Value;
             }
 
-            var result = await Repository.Get(command.CandidateId, command.VacancyId, null);
+            var result = command.VacancyId.Contains('-') ?
+                await Repository.Get(command.CandidateId, command.VacancyId, null) :
+                await Repository.Get(command.CandidateId, null, vacancyReference);
 
             if (result != null)
             {
                 await Repository.Delete(result);
             }
-            else
-            {
-                result = await Repository.Get(command.CandidateId, null, vacancyReference);
 
-                if (result != null)
-                {
-                    await Repository.Delete(result);
-                }
-            }
-
-            return Unit.Value;
+                return Unit.Value;
         }
     }
 }
