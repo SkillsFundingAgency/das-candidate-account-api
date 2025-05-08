@@ -18,6 +18,7 @@ namespace SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplicatio
                 Stats = applications.GroupBy(app => app.Status).Select(app =>
                     new GetApplicationsCountQueryResult.ApplicationStats
                     {
+                        ApplicationIds = app.Select(a => a.Id).ToList(),
                         Status = (ApplicationStatus)app.Key,
                         Count = app.Count()
                     }).ToList()
