@@ -17,7 +17,7 @@ namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.Application
         [Test, MoqAutoData]
         public async Task Then_The_Application_Count_Is_Returned(
             Guid candidateId,
-            List<ApplicationStatus> statuses,
+            ApplicationStatus status,
             GetApplicationsCountQueryResult queryResult,
             [Frozen] Mock<IMediator> mediator,
             [Greedy] ApplicationController controller)
@@ -26,11 +26,11 @@ namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.Application
             mediator.Setup(x => x.Send(It.Is<GetApplicationsCountQuery>(
                     c =>
                         c.CandidateId.Equals(candidateId) &&
-                        c.Statuses.Equals(statuses)
+                        c.Status.Equals(status)
                 ), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(queryResult);
 
-            var result = await controller.GetApplicationsCount(candidateId, statuses);
+            var result = await controller.GetApplicationsCount(candidateId, status);
 
             result.Should().BeOfType<OkObjectResult>();
             var actionResult = result as OkObjectResult;
@@ -43,7 +43,7 @@ namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.Application
         [Test, MoqAutoData]
         public async Task Then_If_Exception_Returned_From_Mediator_Then_InternalServerError_Is_Returned(
             Guid candidateId,
-            List<ApplicationStatus> statuses,
+            ApplicationStatus status,
             GetApplicationsCountQueryResult queryResult,
             [Frozen] Mock<IMediator> mediator,
             [Greedy] ApplicationController controller)
@@ -52,12 +52,12 @@ namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.Application
             mediator.Setup(x => x.Send(It.Is<GetApplicationsCountQuery>(
                     c =>
                         c.CandidateId.Equals(candidateId) &&
-                        c.Statuses.Equals(statuses)
+                        c.Status.Equals(status)
                 ), It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new Exception());
 
             //Act
-            var actual = await controller.GetApplicationsCount(candidateId, statuses) as StatusCodeResult;
+            var actual = await controller.GetApplicationsCount(candidateId, status) as StatusCodeResult;
 
             //Assert
             Assert.That(actual, Is.Not.Null);

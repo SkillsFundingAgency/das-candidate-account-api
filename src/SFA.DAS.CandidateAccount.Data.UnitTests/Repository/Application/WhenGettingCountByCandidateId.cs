@@ -33,7 +33,7 @@ namespace SFA.DAS.CandidateAccount.Data.UnitTests.Repository.Application
             context.Setup(x => x.ApplicationEntities)
                 .ReturnsDbSet(allApplications);
 
-            var actual = await repository.GetCountByStatus(candidateId, [(short) status], CancellationToken.None);
+            var actual = await repository.GetCountByStatus(candidateId, (short) status, CancellationToken.None);
 
             actual.Should().BeEquivalentTo(applications);
         }

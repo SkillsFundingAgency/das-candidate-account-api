@@ -6,6 +6,6 @@ namespace SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplicatio
     public record GetApplicationsCountQuery : IRequest<GetApplicationsCountQueryResult>
     {
         public Guid CandidateId { get; set; }
-        public List<ApplicationStatus> Statuses { get; set; } = [];
+        public ApplicationStatus Status { get; set; }
     }
 }

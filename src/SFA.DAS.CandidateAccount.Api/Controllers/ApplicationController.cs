@@ -200,16 +200,16 @@ public class ApplicationController(IMediator mediator, ILogger<ApplicationContro
         }
     }
 
-    [HttpPost]
+    [HttpGet]
     [Route("Candidates/{candidateId}/[controller]s/count")]
-    public async Task<IActionResult> GetApplicationsCount([FromRoute] Guid candidateId, [FromBody, Required] List<ApplicationStatus> statuses)
+    public async Task<IActionResult> GetApplicationsCount([FromRoute] Guid candidateId, [FromQuery, Required] ApplicationStatus status)
     {
         try
         {
             var result = await mediator.Send(new GetApplicationsCountQuery
             {
                 CandidateId = candidateId,
-                Statuses = statuses
+                Status = status
             });
 
             return Ok(result);

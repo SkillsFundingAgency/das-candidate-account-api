@@ -21,17 +21,35 @@ namespace SFA.DAS.CandidateAccount.Application.UnitTests.Application
             [Greedy] GetApplicationsCountQueryHandler handler)
         {
             query.CandidateId = candidateId;
-            query.Statuses = [status];
+            query.Status = status;
             entities.ForEach(x => x.CandidateId = candidateId);
             entities.ForEach(x => x.Status = (short)status);
 
-            repository.Setup(x => x.GetCountByStatus(query.CandidateId, query.Statuses.Select(applicationStatus => (short)applicationStatus).ToList(), CancellationToken.None)).ReturnsAsync(entities);
+            repository.Setup(x => x.GetCountByStatus(query.CandidateId, (short)query.Status, CancellationToken.None)).ReturnsAsync(entities);
 
             var actual = await handler.Handle(query, CancellationToken.None);
 
             // Assert
-            var result = actual.Stats;
-            result.Count.Should().Be(entities.Count(x => x.Status == (short)status));
+            actual.Count.Should().Be(entities.Count(x => x.Status == (short)status));
+        }
+
+        [Test, RecursiveMoqAutoData]
+        public async Task Then_The_Applications_Are_Null_For_The_Candidate_Are_Returned(
+            Guid candidateId,
+            ApplicationStatus status,
+            GetApplicationsCountQuery query,
+            [Frozen] Mock<IApplicationRepository> repository,
+            [Greedy] GetApplicationsCountQueryHandler handler)
+        {
+            query.CandidateId = candidateId;
+            query.Status = status;
+
+            repository.Setup(x => x.GetCountByStatus(query.CandidateId, (short)query.Status, CancellationToken.None)).ReturnsAsync(new List<ApplicationEntity>{});
+
+            var actual = await handler.Handle(query, CancellationToken.None);
+
+            // Assert
+            actual.Count.Should().Be(0);
         }
     }
 }

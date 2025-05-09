@@ -13,7 +13,7 @@ public interface IApplicationRepository
     Task<ApplicationEntity?> GetByVacancyReference(Guid candidateId, string vacancyReference);
     Task<ApplicationEntity> Clone(Guid applicationId, string vacancyReference, bool requiresDisabilityConfidence, SectionStatus? additionalQuestion1Status, SectionStatus? additionalQuestion2Status);
     Task<IEnumerable<ApplicationEntity>> GetApplicationsByVacancyReference(string vacancyReference, short? statusId = null, Guid? preferenceId = null, bool canEmailOnly = false);
-    Task<IEnumerable<ApplicationEntity>> GetCountByStatus(Guid candidateId, List<short> statuses, CancellationToken cancellationToken = default);
+    Task<IEnumerable<ApplicationEntity>> GetCountByStatus(Guid candidateId, short status, CancellationToken cancellationToken = default);
 }
 
 public class ApplicationRepository(ICandidateAccountDataContext dataContext) : IApplicationRepository
@@ -175,10 +175,10 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
                 && (!canEmailOnly || (x.ContactMethod == "email" && x.Status!.Value))) >= 1).ToListAsync();
     }
 
-    public async Task<IEnumerable<ApplicationEntity>> GetCountByStatus(Guid candidateId, List<short> statuses, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<ApplicationEntity>> GetCountByStatus(Guid candidateId, short status, CancellationToken cancellationToken = default)
     {
         return await dataContext.ApplicationEntities
-            .Where(x => x.CandidateId == candidateId && statuses.Contains(x.Status))
+            .Where(x => x.CandidateId == candidateId && x.Status == status)
             .ToListAsync(cancellationToken);
     }
 }
