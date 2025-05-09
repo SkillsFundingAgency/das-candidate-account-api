@@ -95,11 +95,11 @@ public class UpsertApplicationCommandHandler(
 
     private async Task RemoveSavedVacancy(Guid candidateId, string vacancyReference)
     {
-        var savedVacancy = await savedVacancyRepository.Get(candidateId, vacancyReference);
+        var savedVacancies = await savedVacancyRepository.GetAllByVacancyReference(candidateId, vacancyReference);
 
-        if (savedVacancy != null)
+        foreach(var savedVacancy in savedVacancies)
         {
-            await savedVacancyRepository.Delete(savedVacancy);
+            await savedVacancyRepository.Delete(savedVacancy!);
         }
     }
 }

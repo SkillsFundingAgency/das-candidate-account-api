@@ -17,32 +17,32 @@ namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.SavedVacancies
         [Test, MoqAutoData]
         public async Task Then_The_Response_Is_Returned_As_Expected(
             Guid candidateId,
-            string vacancyReference,
+            string vacancyId,
             [Frozen] Mock<IMediator> mediator,
             [Greedy] SavedVacancyController controller)
         {
-            var result = await controller.DeleteSavedVacancy(candidateId, vacancyReference) as NoContentResult;
+            var result = await controller.DeleteSavedVacancy(candidateId, vacancyId, false) as NoContentResult;
 
             result.Should().BeOfType<NoContentResult>();
 
             mediator.Verify(x => x.Send(It.Is<DeleteSavedVacancyCommand>(c =>
                 c.CandidateId.Equals(candidateId) &&
-                c.VacancyReference.Equals(vacancyReference)
+                c.VacancyId.Equals(vacancyId)
             ), CancellationToken.None));
         }
 
         [Test, MoqAutoData]
         public async Task Then_The_Response_Is_Exception_Returned_As_InternalServerException(
             Guid candidateId,
-            string vacancyReference,
+            string vacancyId,
             [Frozen] Mock<IMediator> mediator,
             [Greedy] SavedVacancyController controller)
         {
 
-            mediator.Setup(x => x.Send(It.Is<GetSavedVacancyQuery>(c => c.CandidateId == candidateId && c.VacancyReference == vacancyReference), It.IsAny<CancellationToken>()))
+            mediator.Setup(x => x.Send(It.Is<GetSavedVacancyQuery>(c => c.CandidateId == candidateId && c.VacancyId == vacancyId), It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new Exception());
 
-            var actual = await controller.GetByVacancyReference(candidateId, vacancyReference);
+            var actual = await controller.GetByVacancyReference(candidateId, vacancyId, null);
 
             actual.Should().BeOfType<StatusCodeResult>();
             var result = actual as StatusCodeResult;

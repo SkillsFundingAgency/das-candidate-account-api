@@ -6,6 +6,7 @@ using SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetSavedVacancies;
 using SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetSavedVacancy;
 using System.Net;
 using SFA.DAS.CandidateAccount.Application.Candidate.Commands.DeleteSavedVacancy;
+using Microsoft.IdentityModel.Tokens;
 
 namespace SFA.DAS.CandidateAccount.Api.Controllers
 {
@@ -22,11 +23,11 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers
         }
 
         [HttpGet("{vacancyReference}")]
-        public async Task<IActionResult> GetByVacancyReference(Guid candidateId, string vacancyReference)
+        public async Task<IActionResult> GetByVacancyReference(Guid candidateId, [FromQuery] string? vacancyId, [FromRoute] string? vacancyReference)
         {
             try
             {
-                var result = await mediator.Send(new GetSavedVacancyQuery(candidateId, vacancyReference));
+                var result = await mediator.Send(new GetSavedVacancyQuery(candidateId, vacancyId, vacancyReference));
 
                 if (result.Id == Guid.Empty) return NotFound();
 
@@ -46,17 +47,18 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers
             {
                 CandidateId = candidateId,
                 VacancyReference = request.VacancyReference,
+                VacancyId = request.VacancyId,
                 CreatedOn = request.CreatedOn
             });
             return Ok(result.SavedVacancy);
         }
 
-        [HttpDelete("{vacancyReference}")]
-        public async Task<IActionResult> DeleteSavedVacancy(Guid candidateId, string vacancyReference)
-        {
+        [HttpDelete("{vacancyId}")]
+        public async Task<IActionResult> DeleteSavedVacancy(Guid candidateId, [FromRoute] string vacancyId, [FromQuery] bool deleteAllByReference)
+        {           
             try
             {
-                await mediator.Send(new DeleteSavedVacancyCommand(candidateId, vacancyReference));
+                await mediator.Send(new DeleteSavedVacancyCommand(candidateId, vacancyId, deleteAllByReference));
 
                 return NoContent();
             }
