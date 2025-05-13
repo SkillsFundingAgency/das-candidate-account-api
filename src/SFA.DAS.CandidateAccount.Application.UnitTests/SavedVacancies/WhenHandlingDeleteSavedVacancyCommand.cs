@@ -20,7 +20,7 @@ namespace SFA.DAS.CandidateAccount.Application.UnitTests.SavedVacancies
             DeleteSavedVacancyCommandHandler handler)
         {
             repository.Setup(x =>
-                    x.Get(command.CandidateId, command.VacancyReference))
+                    x.Get(command.CandidateId, command.VacancyId, null))
                 .ReturnsAsync(repositoryResult);
 
             var actual = await handler.Handle(command, CancellationToken.None);
@@ -38,7 +38,7 @@ namespace SFA.DAS.CandidateAccount.Application.UnitTests.SavedVacancies
             DeleteSavedVacancyCommandHandler handler)
         {
             repository.Setup(x =>
-                    x.Get(command.CandidateId, command.VacancyReference))
+                    x.Get(command.CandidateId, command.VacancyId, null))
                 .ReturnsAsync(() => null);
 
             var actual = await handler.Handle(command, CancellationToken.None);
