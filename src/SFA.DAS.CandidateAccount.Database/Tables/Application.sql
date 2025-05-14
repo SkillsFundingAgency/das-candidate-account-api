@@ -29,6 +29,7 @@ CREATE TABLE dbo.[Application] (
     CONSTRAINT [PK_Application] PRIMARY KEY (Id),
     INDEX [IX_Application_CandidateIdVacancyReference] NONCLUSTERED(CandidateId, VacancyReference),
     INDEX [IX_Application_CandidateId] NONCLUSTERED(CandidateId),
+    INDEX [IX_Application_VacancyReferenceStatus] NONCLUSTERED(VacancyReference, Status),
     INDEX [IX_Application_CandidateIdStatus] NONCLUSTERED (CandidateId, Status),
     CONSTRAINT [FK_Application_CandidateId] FOREIGN KEY (CandidateId) REFERENCES [Candidate](Id),
     CONSTRAINT [FK_Application_PreviousAnswersSourceId] FOREIGN KEY (PreviousAnswersSourceId) REFERENCES [Application](Id)
