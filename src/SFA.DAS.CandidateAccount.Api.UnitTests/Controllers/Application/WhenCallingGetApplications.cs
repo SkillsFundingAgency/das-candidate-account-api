@@ -38,7 +38,7 @@ public class WhenCallingGetApplications
     }
 
     [Test, MoqAutoData]
-    public async Task Then_If_Exception_Returned_From_Mediator_Then_InternalServerErrorr_Is_Returned(
+    public async Task Then_If_Exception_Returned_From_Mediator_Then_InternalServerError_Is_Returned(
         Guid candidateId,
         ApplicationStatus status,
         GetApplicationsQueryResult response,

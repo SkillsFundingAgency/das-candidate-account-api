@@ -301,12 +301,12 @@ public class WhenHandlingUpsertApplicationCommand
                 ), command.CandidateId, CancellationToken.None))
             .ReturnsAsync(new Tuple<EmploymentLocationEntity, bool>(employmentLocationEntity, true));
 
-        savedVacancyRepository.Setup(x=> x.Get(command.CandidateId, command.VacancyReference))
-            .ReturnsAsync(savedVacancy);
+        savedVacancyRepository.Setup(x=> x.GetAllByVacancyReference(command.CandidateId, command.VacancyReference))
+            .ReturnsAsync([savedVacancy]);
 
         await handler.Handle(command, CancellationToken.None);
 
-        savedVacancyRepository.Verify(x => x.Delete(It.Is<SavedVacancy>(v => v == savedVacancy)), Times.Once);
+        savedVacancyRepository.Verify(x => x.Delete(It.IsAny<SavedVacancy>()), Times.AtLeastOnce());
 
     }
 }

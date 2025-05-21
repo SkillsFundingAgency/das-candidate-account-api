@@ -12,6 +12,7 @@ using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplications;
 using SFA.DAS.CandidateAccount.Domain.Application;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
+using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplicationsCount;
 
 namespace SFA.DAS.CandidateAccount.Api.Controllers;
 
@@ -197,6 +198,27 @@ public class ApplicationController(IMediator mediator, ILogger<ApplicationContro
         catch (Exception e)
         {
             logger.LogError(e, "Post Application : An error occurred");
+            return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+        }
+    }
+
+    [HttpGet]
+    [Route("Candidates/{candidateId}/[controller]s/count")]
+    public async Task<IActionResult> GetApplicationsCount([FromRoute] Guid candidateId, [FromQuery, Required] ApplicationStatus status)
+    {
+        try
+        {
+            var result = await mediator.Send(new GetApplicationsCountQuery
+            {
+                CandidateId = candidateId,
+                Status = status
+            });
+
+            return Ok(result);
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e, "Unable to get applications count");
             return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
         }
     }
