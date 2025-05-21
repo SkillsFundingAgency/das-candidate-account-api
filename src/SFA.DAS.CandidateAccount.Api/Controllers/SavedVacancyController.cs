@@ -18,8 +18,16 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetByCandidateId(Guid candidateId)
         {
-            var result = await mediator.Send(new GetSavedVacanciesByCandidateIdQuery { CandidateId = candidateId });
-            return Ok(result);
+            try
+            {
+                var result = await mediator.Send(new GetSavedVacanciesByCandidateIdQuery { CandidateId = candidateId });
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, "GetByCandidateId : An error occurred");
+                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+            }
         }
 
         [HttpGet("{vacancyReference}")]

@@ -11,7 +11,7 @@ public interface IApplicationRepository
     Task<ApplicationEntity> Update(ApplicationEntity application);
     Task<IEnumerable<ApplicationEntity>> GetByCandidateId(Guid candidateId, short? statusId);
     Task<ApplicationEntity?> GetByVacancyReference(Guid candidateId, string vacancyReference);
-    Task<ApplicationEntity> Clone(Guid applicationId, string vacancyReference, bool requiresDisabilityConfidence, SectionStatus? additionalQuestion1Status, SectionStatus? additionalQuestion2Status);
+    Task<ApplicationEntity> Clone(Guid applicationId, string vacancyReference, bool requiresDisabilityConfidence, SectionStatus? additionalQuestion1Status, SectionStatus? additionalQuestion2Status, SectionStatus? employmentLocationStatus);
     Task<IEnumerable<ApplicationEntity>> GetApplicationsByVacancyReference(string vacancyReference, short? statusId = null, Guid? preferenceId = null, bool canEmailOnly = false);
     Task<IEnumerable<ApplicationEntity>> GetCountByStatus(Guid candidateId, short status, CancellationToken cancellationToken = default);
 }
@@ -108,7 +108,12 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
         return result ?? applications.FirstOrDefault();
     }
 	
-	public async Task<ApplicationEntity> Clone(Guid applicationId, string vacancyReference, bool requiresDisabilityConfidence, SectionStatus? additionalQuestion1Status, SectionStatus? additionalQuestion2Status)
+	public async Task<ApplicationEntity> Clone(Guid applicationId,
+        string vacancyReference,
+        bool requiresDisabilityConfidence,
+        SectionStatus? additionalQuestion1Status,
+        SectionStatus? additionalQuestion2Status,
+        SectionStatus? employmentLocationStatus)
     {
         var original = await dataContext.ApplicationEntities
             .Include(x => x.TrainingCourseEntities)
@@ -140,6 +145,7 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
         original.InterviewAdjustmentsStatus = (short)SectionStatus.PreviousAnswer;
         original.AdditionalQuestion1Status = (short)additionalQuestion1Status;
         original.AdditionalQuestion2Status = (short)additionalQuestion2Status;
+        original.EmploymentLocationStatus = (short) employmentLocationStatus;
 
 
         if (requiresDisabilityConfidence)
