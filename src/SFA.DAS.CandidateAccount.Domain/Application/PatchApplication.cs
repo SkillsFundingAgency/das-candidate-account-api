@@ -17,6 +17,7 @@ public class PatchApplication : ApplicationBase
             AdditionalQuestion2Status = ParseValue<SectionStatus>(application.AdditionalQuestion2Status),
             InterestsStatus = ParseValue<SectionStatus>(application.InterestsStatus),
             WorkExperienceStatus = ParseValue<SectionStatus>(application.WorkExperienceStatus),
+            EmploymentLocationStatus = ParseValue<SectionStatus>(application.EmploymentLocationStatus),
             WhatIsYourInterest = application.WhatIsYourInterest,
             ApplyUnderDisabilityConfidentScheme = application.ApplyUnderDisabilityConfidentScheme,
             ResponseNotes = application.ResponseNotes,

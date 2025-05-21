@@ -1,6 +1,7 @@
 using AutoFixture.NUnit3;
 using FluentAssertions;
 using Moq;
+using Newtonsoft.Json;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplicationByVacancyReference;
 using SFA.DAS.CandidateAccount.Data.Application;
 using SFA.DAS.CandidateAccount.Domain.Application;
@@ -16,7 +17,13 @@ public class WhenHandlingGetApplicationByVacancyReferenceQuery
         ApplicationEntity entity,
         [Frozen] Mock<IApplicationRepository> repository,
         GetApplicationByVacancyReferenceQueryHandler handler)
-    {
+    { 
+        entity.EmploymentLocationEntity = new EmploymentLocationEntity
+        {
+            Addresses = JsonConvert.SerializeObject(new List<Domain.Application.Address>()),
+            EmploymentLocationInformation = entity.EmploymentLocationEntity.EmploymentLocationInformation,
+            EmployerLocationOption = entity.EmploymentLocationEntity.EmployerLocationOption,
+        };
         query.CandidateId = entity.CandidateId;
         query.VacancyReference = entity.VacancyReference;
         

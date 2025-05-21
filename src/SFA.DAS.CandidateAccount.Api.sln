@@ -13,8 +13,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.CandidateAccount.Do
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.CandidateAccount.Data", "SFA.DAS.CandidateAccount.Data\SFA.DAS.CandidateAccount.Data.csproj", "{63E9B035-C007-49F7-BA36-7C124A018B31}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.CandidateAccount.Database", "SFA.DAS.CandidateAccount.Database\SFA.DAS.CandidateAccount.Database.csproj", "{DD59B291-8D0D-4E46-B828-687A74FE1765}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.CandidateAccount.Data.UnitTests", "SFA.DAS.CandidateAccount.Data.UnitTests\SFA.DAS.CandidateAccount.Data.UnitTests.csproj", "{0D42E9A3-7CBB-4117-8299-6EF8EEF43896}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.CandidateAccount.Application", "SFA.DAS.CandidateAccount.Application\SFA.DAS.CandidateAccount.Application.csproj", "{5F52FB86-531D-4360-8472-26573F8985A8}"
@@ -22,6 +20,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.CandidateAccount.Application.UnitTests", "SFA.DAS.CandidateAccount.Application.UnitTests\SFA.DAS.CandidateAccount.Application.UnitTests.csproj", "{BB47A5FB-4035-4780-9F78-6A7476196877}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.CandidateAccount.Domain.UnitTests", "SFA.DAS.CandidateAccount.Domain.UnitTests\SFA.DAS.CandidateAccount.Domain.UnitTests.csproj", "{01057B78-2C55-4FF6-8E54-7662059F8F1C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.CandidateAccount.Database", "SFA.DAS.CandidateAccount.Database\SFA.DAS.CandidateAccount.Database.csproj", "{46CA473D-AA6B-C68B-BFAD-CED1476C2948}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,10 +45,6 @@ Global
 		{63E9B035-C007-49F7-BA36-7C124A018B31}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63E9B035-C007-49F7-BA36-7C124A018B31}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{63E9B035-C007-49F7-BA36-7C124A018B31}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DD59B291-8D0D-4E46-B828-687A74FE1765}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DD59B291-8D0D-4E46-B828-687A74FE1765}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DD59B291-8D0D-4E46-B828-687A74FE1765}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DD59B291-8D0D-4E46-B828-687A74FE1765}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0D42E9A3-7CBB-4117-8299-6EF8EEF43896}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0D42E9A3-7CBB-4117-8299-6EF8EEF43896}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0D42E9A3-7CBB-4117-8299-6EF8EEF43896}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -65,6 +61,10 @@ Global
 		{01057B78-2C55-4FF6-8E54-7662059F8F1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{01057B78-2C55-4FF6-8E54-7662059F8F1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{01057B78-2C55-4FF6-8E54-7662059F8F1C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46CA473D-AA6B-C68B-BFAD-CED1476C2948}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46CA473D-AA6B-C68B-BFAD-CED1476C2948}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46CA473D-AA6B-C68B-BFAD-CED1476C2948}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46CA473D-AA6B-C68B-BFAD-CED1476C2948}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
