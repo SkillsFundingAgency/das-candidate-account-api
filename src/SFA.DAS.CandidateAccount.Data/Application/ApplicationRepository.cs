@@ -193,7 +193,9 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
 
     public async Task<IEnumerable<ApplicationEntity>> GetAllById(List<Guid> applicationIds, bool includeDetail = false, CancellationToken cancellationToken = default)
     {
-        var query = dataContext.ApplicationEntities.Where(c => applicationIds.Contains(c.Id));
+        var query = dataContext
+            .ApplicationEntities
+            .Where(c => applicationIds.Contains(c.Id));
 
         if (!includeDetail)
         {
