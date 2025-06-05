@@ -1,13 +1,14 @@
 ﻿using MediatR;
 using SFA.DAS.CandidateAccount.Data.SavedVacancy;
 using SFA.DAS.CandidateAccount.Domain.Candidate;
+using SFA.DAS.Common.Domain.Models;
 
 namespace SFA.DAS.CandidateAccount.Application.Candidate.Commands.AddSavedVacancy
 {
     public class AddSavedVacancyCommand : IRequest<AddSavedVacancyCommandResult>
     {
         public Guid CandidateId { get; set; }
-        public string VacancyReference { get; set; }
+        public VacancyReference VacancyReference { get; set; }
         public string VacancyId { get; set; }
 
         public DateTime CreatedOn { get; set; }
@@ -26,7 +27,7 @@ namespace SFA.DAS.CandidateAccount.Application.Candidate.Commands.AddSavedVacanc
             var savedVacancy = new SavedVacancy
             {
                 CandidateId = request.CandidateId,
-                VacancyReference = request.VacancyReference,
+                VacancyReference = request.VacancyReference.ToString(),
                 VacancyId = request.VacancyId,
                 CreatedOn = request.CreatedOn
             };
