@@ -1,11 +1,10 @@
-using System.Net;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.CandidateAccount.Api.ApiResponses;
-using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplicationByVacancyReference;
 using SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetCandidatesByApplicationVacancy;
 using SFA.DAS.CandidateAccount.Domain.Application;
-using SFA.DAS.CandidateAccount.Domain.Candidate;
+using SFA.DAS.Common.Domain.Models;
+using System.Net;
 
 namespace SFA.DAS.CandidateAccount.Api.Controllers;
 
@@ -16,7 +15,10 @@ public class VacanciesController(IMediator mediator, ILogger<VacanciesController
 {
     [HttpGet]
     [Route("{vacancyRef}/candidates")]
-    public async Task<IActionResult> GetCandidateApplications([FromRoute]string vacancyRef, [FromQuery]bool allowEmailContact, [FromQuery]Guid? preferenceId, [FromQuery]ApplicationStatus? applicationStatus)
+    public async Task<IActionResult> GetCandidateApplications([FromRoute] VacancyReference vacancyRef,
+        [FromQuery] bool allowEmailContact,
+        [FromQuery] Guid? preferenceId,
+        [FromQuery] ApplicationStatus? applicationStatus)
     {
         try
         {

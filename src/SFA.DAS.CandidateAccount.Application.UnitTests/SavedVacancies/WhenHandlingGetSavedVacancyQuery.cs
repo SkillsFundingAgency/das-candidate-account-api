@@ -19,7 +19,7 @@ namespace SFA.DAS.CandidateAccount.Application.UnitTests.SavedVacancies
             GetSavedVacancyQueryHandler handler)
         {
             repository.Setup(x =>
-                    x.Get(request.CandidateId, request.VacancyId, request.VacancyReference))
+                    x.Get(request.CandidateId, request.VacancyId, request.VacancyReference.ToString()))
                 .ReturnsAsync(repositoryResult);
 
             var actual = await handler.Handle(request, CancellationToken.None);
@@ -34,7 +34,7 @@ namespace SFA.DAS.CandidateAccount.Application.UnitTests.SavedVacancies
             GetSavedVacancyQueryHandler handler)
         {
             repository.Setup(x =>
-                    x.Get(request.CandidateId, request.VacancyId, request.VacancyReference))
+                    x.Get(request.CandidateId, request.VacancyId, request.VacancyReference.ToString()))
                 .ReturnsAsync(() => null);
 
             var actual = await handler.Handle(request, CancellationToken.None);

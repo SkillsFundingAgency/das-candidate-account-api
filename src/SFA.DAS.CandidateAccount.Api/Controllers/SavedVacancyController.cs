@@ -2,11 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.CandidateAccount.Api.ApiRequests;
 using SFA.DAS.CandidateAccount.Application.Candidate.Commands.AddSavedVacancy;
+using SFA.DAS.CandidateAccount.Application.Candidate.Commands.DeleteSavedVacancy;
 using SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetSavedVacancies;
 using SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetSavedVacancy;
 using System.Net;
-using SFA.DAS.CandidateAccount.Application.Candidate.Commands.DeleteSavedVacancy;
-using Microsoft.IdentityModel.Tokens;
+using SFA.DAS.Common.Domain.Models;
 
 namespace SFA.DAS.CandidateAccount.Api.Controllers
 {
@@ -23,7 +23,7 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers
         }
 
         [HttpGet("{vacancyReference}")]
-        public async Task<IActionResult> GetByVacancyReference(Guid candidateId, [FromQuery] string? vacancyId, [FromRoute] string? vacancyReference)
+        public async Task<IActionResult> GetByVacancyReference(Guid candidateId, [FromQuery] string? vacancyId, [FromRoute] VacancyReference? vacancyReference)
         {
             try
             {
@@ -46,7 +46,7 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers
             var result = await mediator.Send(new AddSavedVacancyCommand
             {
                 CandidateId = candidateId,
-                VacancyReference = request.VacancyReference,
+                VacancyReference = request.VacancyReference.ToString(),
                 VacancyId = request.VacancyId,
                 CreatedOn = request.CreatedOn
             });
