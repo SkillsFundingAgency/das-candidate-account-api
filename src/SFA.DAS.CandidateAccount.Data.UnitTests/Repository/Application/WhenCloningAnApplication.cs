@@ -21,7 +21,12 @@ namespace SFA.DAS.CandidateAccount.Data.UnitTests.Repository.Application
             context.Setup(x => x.ApplicationEntities)
                 .ReturnsDbSet(new List<ApplicationEntity>{originalApplication});
 
-            var actual = await repository.Clone(originalApplication.Id, originalApplication.VacancyReference, true, SectionStatus.NotRequired, SectionStatus.NotRequired);
+            var actual = await repository.Clone(originalApplication.Id,
+                originalApplication.VacancyReference,
+                true,
+                SectionStatus.NotRequired,
+                SectionStatus.NotRequired,
+                SectionStatus.NotStarted);
 
             context.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
 
@@ -39,6 +44,7 @@ namespace SFA.DAS.CandidateAccount.Data.UnitTests.Repository.Application
             actual.SkillsAndStrengthStatus.Should().Be((short)SectionStatus.PreviousAnswer);
             actual.TrainingCoursesStatus.Should().Be((short)SectionStatus.PreviousAnswer);
             actual.InterviewAdjustmentsStatus.Should().Be((short)SectionStatus.PreviousAnswer);
+            actual.EmploymentLocationStatus.Should().Be((short)SectionStatus.NotStarted);
 
             actual.PreviousAnswersSourceId.Should().Be(originalId);
         }
