@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SFA.DAS.CandidateAccount.Domain.Application;
-using SFA.DAS.CandidateAccount.Domain.Candidate;
 
 namespace SFA.DAS.CandidateAccount.Data.Application;
 
@@ -29,6 +28,7 @@ public class ApplicationEntityConfiguration : IEntityTypeConfiguration<Applicati
         builder.Property(x => x.WorkExperienceStatus).HasColumnName("WorkExperienceStatus").HasColumnType("tinyint").IsRequired().HasDefaultValue(0);
         builder.Property(x => x.SkillsAndStrengthStatus).HasColumnName("SkillsAndStrengthStatus").HasColumnType("tinyint").IsRequired().HasDefaultValue(0);
         builder.Property(x => x.InterestsStatus).HasColumnName("InterestsStatus").HasColumnType("tinyint").IsRequired().HasDefaultValue(0);
+        builder.Property(x => x.EmploymentLocationStatus).HasColumnName("EmploymentLocationStatus").HasColumnType("tinyint").IsRequired().HasDefaultValue(0);
         builder.Property(x => x.AdditionalQuestion1Status).HasColumnName("AdditionalQuestion1Status").HasColumnType("tinyint").IsRequired().HasDefaultValue(0);
         builder.Property(x => x.AdditionalQuestion2Status).HasColumnName("AdditionalQuestion2Status").HasColumnType("tinyint").IsRequired().HasDefaultValue(0);
         builder.Property(x => x.InterviewAdjustmentsStatus).HasColumnName("InterviewAdjustmentsStatus").HasColumnType("tinyint").IsRequired().HasDefaultValue(0);
@@ -69,5 +69,11 @@ public class ApplicationEntityConfiguration : IEntityTypeConfiguration<Applicati
             .WithOne(c => c.ApplicationEntity)
             .HasForeignKey(c => c.ApplicationId)
             .HasPrincipalKey(c => c.Id);
+
+        builder
+            .HasOne(c => c.EmploymentLocationEntity)
+            .WithOne(c => c.ApplicationEntity)
+            .HasForeignKey<EmploymentLocationEntity>(c => c.ApplicationId)
+            .HasPrincipalKey<ApplicationEntity>(c => c.Id);
     }
 }
