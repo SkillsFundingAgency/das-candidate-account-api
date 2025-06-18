@@ -27,7 +27,7 @@ public class UpsertApplicationCommandHandler(
             if (previousApplication != null)
             {
                 var requiresDisabilityConfidence = command.IsDisabilityConfidenceComplete == SectionStatus.NotStarted;
-                var result = await applicationRepository.Clone(previousApplication.Id, command.VacancyReference, requiresDisabilityConfidence, command.IsAdditionalQuestion1Complete, command.IsAdditionalQuestion2Complete);
+                var result = await applicationRepository.Clone(previousApplication.Id, command.VacancyReference, requiresDisabilityConfidence, command.IsAdditionalQuestion1Complete, command.IsAdditionalQuestion2Complete, command.ApprenticeshipType);
 
                 await UpsertAdditionalQuestions(command, cancellationToken, result);
                 await RemoveSavedVacancy(command.CandidateId, command.VacancyReference);

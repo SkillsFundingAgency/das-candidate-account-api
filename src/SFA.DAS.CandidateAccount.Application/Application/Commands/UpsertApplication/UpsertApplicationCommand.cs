@@ -1,4 +1,5 @@
 using MediatR;
+using SFA.DAS.CandidateAccount.Domain;
 using SFA.DAS.CandidateAccount.Domain.Application;
 
 namespace SFA.DAS.CandidateAccount.Application.Application.Commands.UpsertApplication;
@@ -8,6 +9,7 @@ public record UpsertApplicationCommand : IRequest<UpsertApplicationCommandRespon
     public required string VacancyReference { get; init; }
     public Guid CandidateId { get; init; }
     public ApplicationStatus Status { get; init; }
+    public ApprenticeshipTypes ApprenticeshipType { get; set; }
     public SectionStatus? IsDisabilityConfidenceComplete { get; init; }
     public SectionStatus? IsApplicationQuestionsComplete { get; init; }
     public SectionStatus? IsEducationHistoryComplete { get; init; }
