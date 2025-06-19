@@ -12,9 +12,9 @@ public interface IApplicationRepository
     Task<IEnumerable<ApplicationEntity>> GetByCandidateId(Guid candidateId, short? statusId);
     Task<ApplicationEntity?> GetByVacancyReference(Guid candidateId, string vacancyReference);
     Task<ApplicationEntity> Clone(Guid applicationId, string vacancyReference, bool requiresDisabilityConfidence, SectionStatus? additionalQuestion1Status, SectionStatus? additionalQuestion2Status, SectionStatus? employmentLocationStatus);
+    Task<IEnumerable<ApplicationEntity>> GetApplicationsByVacancyReference(string vacancyReference);
     Task<IEnumerable<ApplicationEntity>> GetApplicationsByVacancyReference(string vacancyReference, short? statusId = null, Guid? preferenceId = null, bool canEmailOnly = false);
     Task<IEnumerable<ApplicationEntity>> GetCountByStatus(Guid candidateId, short status, CancellationToken cancellationToken = default);
-    Task<IEnumerable<ApplicationEntity>> GetAllById(List<Guid> applicationIds, bool includeDetail = false, CancellationToken cancellationToken = default);
 }
 
 public class ApplicationRepository(ICandidateAccountDataContext dataContext) : IApplicationRepository
@@ -172,15 +172,22 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
         return original;
     }
 
+    public async Task<IEnumerable<ApplicationEntity>> GetApplicationsByVacancyReference(string vacancyReference)
+    {
+        return await dataContext.ApplicationEntities
+            .Include(c => c.CandidateEntity)
+            .Where(c => c.VacancyReference == vacancyReference)
+                .ToListAsync();
+    }
 
     public async Task<IEnumerable<ApplicationEntity>> GetApplicationsByVacancyReference(string vacancyReference, short? statusId = null, Guid? preferenceId = null, bool canEmailOnly = false)
     {
         return await dataContext.ApplicationEntities
             .Include(c => c.CandidateEntity)
                 .ThenInclude(c => c.CandidatePreferences)
-            .Include(c=>c.CandidateEntity)
-                .ThenInclude(c=>c.Address)
-            .Where(c => c.VacancyReference == vacancyReference && (statusId== null || c.Status == statusId) && c.CandidateEntity.CandidatePreferences.Count(x=>(preferenceId == null || x.PreferenceId == preferenceId) 
+            .Include(c => c.CandidateEntity)
+                .ThenInclude(c => c.Address)
+            .Where(c => c.VacancyReference == vacancyReference && (statusId == null || c.Status == statusId) && c.CandidateEntity.CandidatePreferences.Count(x => (preferenceId == null || x.PreferenceId == preferenceId)
                 && (!canEmailOnly || (x.ContactMethod == "email" && x.Status!.Value))) >= 1).ToListAsync();
     }
 
@@ -189,35 +196,5 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
         return await dataContext.ApplicationEntities
             .Where(x => x.CandidateId == candidateId && x.Status == status)
             .ToListAsync(cancellationToken);
-    }
-
-    public async Task<IEnumerable<ApplicationEntity>> GetAllById(List<Guid> applicationIds, bool includeDetail = false, CancellationToken cancellationToken = default)
-    {
-        var query = dataContext
-            .ApplicationEntities
-            .Where(c => applicationIds.Contains(c.Id));
-
-        if (!includeDetail)
-        {
-            query = query
-                .AsNoTracking()
-                .IgnoreAutoIncludes();
-        }
-        else
-        {
-            query = query
-                .AsNoTracking()
-                .Include(c => c.QualificationEntities)
-                    .ThenInclude(q => q.QualificationReferenceEntity)
-                .Include(c => c.TrainingCourseEntities)
-                .Include(c => c.WorkHistoryEntities)
-                .Include(c => c.AdditionalQuestionEntities)
-                .Include(c => c.EmploymentLocationEntity)
-                .Include(c => c.CandidateEntity)
-                    .ThenInclude(candidate => candidate.Address)
-                .IgnoreAutoIncludes();
-        }
-
-        return await query.ToListAsync(cancellationToken: cancellationToken);
     }
 }
