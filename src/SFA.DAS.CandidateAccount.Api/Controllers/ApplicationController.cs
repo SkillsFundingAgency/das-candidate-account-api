@@ -6,7 +6,6 @@ using SFA.DAS.CandidateAccount.Api.ApiResponses;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.AddLegacyApplication;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.PatchApplication;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.UpsertApplication;
-using SFA.DAS.CandidateAccount.Application.Application.Queries.GetAllApplicationsById;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplication;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplicationByVacancyReference;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplications;
@@ -220,22 +219,6 @@ public class ApplicationController(IMediator mediator, ILogger<ApplicationContro
         catch (Exception e)
         {
             logger.LogError(e, "Unable to get applications count");
-            return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
-        }
-    }
-
-    [HttpPost]
-    [Route("[controller]s/GetAll")]
-    public async Task<IActionResult> GetApplications([FromBody] GetAllApplicationsByIdApiRequest request)
-    {
-        try
-        {
-            var result = await mediator.Send(new GetAllApplicationsByIdQuery(request.ApplicationIds, request.IncludeDetails));
-            return Ok(result);
-        }
-        catch (Exception e)
-        {
-            logger.LogError(e, "Unable to get all applications");
             return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
         }
     }
