@@ -17,10 +17,10 @@ public class WhenHandlingGetCandidatesByApplicationVacancy
         [Frozen] Mock<IApplicationRepository> repository,
         GetCandidatesByApplicationVacancyQueryHandler handler)
     {
-        applicationEntities.ForEach(x => x.VacancyReference = query.VacancyReference.ToString());
+        applicationEntities.ForEach(x => x.VacancyReference = query.VacancyReference.ToShortString());
 
         repository.Setup(x =>
-            x.GetApplicationsByVacancyReference(query.VacancyReference.ToString(), query.StatusId, query.PreferenceId,
+            x.GetApplicationsByVacancyReference(query.VacancyReference.ToShortString(), query.StatusId, query.PreferenceId,
                 query.CanEmailOnly)).ReturnsAsync(applicationEntities);
 
         var actual = await handler.Handle(query, CancellationToken.None);
@@ -35,10 +35,10 @@ public class WhenHandlingGetCandidatesByApplicationVacancy
         [Frozen] Mock<IApplicationRepository> repository,
         GetCandidatesByApplicationVacancyQueryHandler handler)
     {
-        applicationEntities.ForEach(x => x.VacancyReference = query.VacancyReference.ToString());
+        applicationEntities.ForEach(x => x.VacancyReference = query.VacancyReference.ToShortString());
 
         repository.Setup(x =>
-            x.GetApplicationsByVacancyReference(query.VacancyReference.ToString(), query.StatusId, query.PreferenceId,
+            x.GetApplicationsByVacancyReference(query.VacancyReference.ToShortString(), query.StatusId, query.PreferenceId,
                 query.CanEmailOnly)).ReturnsAsync(new List<ApplicationEntity>());
 
         var actual = await handler.Handle(query, CancellationToken.None);

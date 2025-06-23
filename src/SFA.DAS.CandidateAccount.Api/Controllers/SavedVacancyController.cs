@@ -23,7 +23,7 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers
         }
 
         [HttpGet("{vacancyReference}")]
-        public async Task<IActionResult> GetByVacancyReference(Guid candidateId, [FromQuery] string? vacancyId, [FromRoute] VacancyReference? vacancyReference)
+        public async Task<IActionResult> GetByVacancyReference(Guid candidateId, [FromQuery] string? vacancyId, [FromRoute] string? vacancyReference)
         {
             try
             {
@@ -46,7 +46,7 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers
             var result = await mediator.Send(new AddSavedVacancyCommand
             {
                 CandidateId = candidateId,
-                VacancyReference = request.VacancyReference.ToString(),
+                VacancyReference = request.VacancyReference.HasValue ? request.VacancyReference.Value.ToShortString() : string.Empty,
                 VacancyId = request.VacancyId,
                 CreatedOn = request.CreatedOn
             });

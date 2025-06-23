@@ -24,7 +24,7 @@ public class WhenHandlingUpsertApplicationCommand
     {
         applicationRepository.Setup(x =>
             x.Upsert(It.Is<ApplicationEntity>(c => 
-                c.VacancyReference.Equals(command.VacancyReference.ToString())
+                c.VacancyReference.Equals(command.VacancyReference.ToShortString())
                 && c.CandidateId.Equals(command.CandidateId)
                 && c.DisabilityStatus.Equals(command.DisabilityStatus)
                 && c.Status.Equals((short)command.Status)
@@ -64,7 +64,7 @@ public class WhenHandlingUpsertApplicationCommand
     {
         applicationRepository.Setup(x =>
             x.Upsert(It.Is<ApplicationEntity>(c => 
-                c.VacancyReference.Equals(command.VacancyReference.ToString())
+                c.VacancyReference.Equals(command.VacancyReference.ToShortString())
                 && c.CandidateId.Equals(command.CandidateId)
                 && c.DisabilityStatus.Equals(command.DisabilityStatus)
                 && c.Status.Equals((short)command.Status)
@@ -104,14 +104,14 @@ public class WhenHandlingUpsertApplicationCommand
         previousApplication.MigrationDate = null;
         var previousApplications = new List<ApplicationEntity>{ previousApplication };
 
-        applicationRepository.Setup(x => x.Exists(command.CandidateId, command.VacancyReference.ToString()))
+        applicationRepository.Setup(x => x.Exists(command.CandidateId, command.VacancyReference.ToShortString()))
             .ReturnsAsync(false);
 
         applicationRepository.Setup(x => x.GetByCandidateId(command.CandidateId, null))
             .ReturnsAsync(previousApplications);
 
         applicationRepository.Setup(x =>
-            x.Clone(previousApplication.Id, command.VacancyReference.ToString(), command.IsDisabilityConfidenceComplete == SectionStatus.NotStarted, command.IsAdditionalQuestion1Complete, command.IsAdditionalQuestion2Complete))
+            x.Clone(previousApplication.Id, command.VacancyReference.ToShortString(), command.IsDisabilityConfidenceComplete == SectionStatus.NotStarted, command.IsAdditionalQuestion1Complete, command.IsAdditionalQuestion2Complete))
             .ReturnsAsync(cloneResult);
 
         var actual = await handler.Handle(command, CancellationToken.None);
@@ -134,7 +134,7 @@ public class WhenHandlingUpsertApplicationCommand
         previousApplication.Status = (short)status;
         var previousApplications = new List<ApplicationEntity> { previousApplication };
 
-        applicationRepository.Setup(x => x.Exists(command.CandidateId, command.VacancyReference.ToString()))
+        applicationRepository.Setup(x => x.Exists(command.CandidateId, command.VacancyReference.ToShortString()))
             .ReturnsAsync(false);
 
         applicationRepository.Setup(x => x.GetByCandidateId(command.CandidateId, null))
@@ -162,7 +162,7 @@ public class WhenHandlingUpsertApplicationCommand
         previousApplication.MigrationDate = DateTime.Today;
         var previousApplications = new List<ApplicationEntity> { previousApplication };
 
-        applicationRepository.Setup(x => x.Exists(command.CandidateId, command.VacancyReference.ToString()))
+        applicationRepository.Setup(x => x.Exists(command.CandidateId, command.VacancyReference.ToShortString()))
             .ReturnsAsync(false);
 
         applicationRepository.Setup(x => x.GetByCandidateId(command.CandidateId, null))
@@ -187,7 +187,7 @@ public class WhenHandlingUpsertApplicationCommand
         [Frozen] Mock<ISavedVacancyRepository> savedVacancyRepository,
         UpsertApplicationCommandHandler handler)
     {
-        savedVacancyRepository.Setup(x=> x.GetAllByVacancyReference(command.CandidateId, command.VacancyReference.ToString()))
+        savedVacancyRepository.Setup(x=> x.GetAllByVacancyReference(command.CandidateId, command.VacancyReference.ToShortString()))
             .ReturnsAsync(new List<SavedVacancy> { savedVacancy });
 
         await handler.Handle(command, CancellationToken.None);
@@ -204,7 +204,7 @@ public class WhenHandlingUpsertApplicationCommand
     [Frozen] Mock<ISavedVacancyRepository> savedVacancyRepository,
     UpsertApplicationCommandHandler handler)
     {
-        savedVacancyRepository.Setup(x => x.GetAllByVacancyReference(command.CandidateId, command.VacancyReference.ToString()))
+        savedVacancyRepository.Setup(x => x.GetAllByVacancyReference(command.CandidateId, command.VacancyReference.ToShortString()))
             .ReturnsAsync(new List<SavedVacancy>());
 
         await handler.Handle(command, CancellationToken.None);
