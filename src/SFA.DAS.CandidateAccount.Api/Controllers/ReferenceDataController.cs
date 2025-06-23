@@ -1,9 +1,8 @@
-using System.Net;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using SFA.DAS.CandidateAccount.Application.ReferenceData.Queries;
 using SFA.DAS.CandidateAccount.Application.ReferenceData.Queries.GetAvailablePreferences;
 using SFA.DAS.CandidateAccount.Application.ReferenceData.Queries.GetAvailableQualifications;
+using System.Net;
 
 namespace SFA.DAS.CandidateAccount.Api.Controllers;
 

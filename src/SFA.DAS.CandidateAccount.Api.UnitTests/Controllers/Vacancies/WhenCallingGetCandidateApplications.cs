@@ -8,6 +8,7 @@ using SFA.DAS.CandidateAccount.Api.ApiResponses;
 using SFA.DAS.CandidateAccount.Api.Controllers;
 using SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetCandidatesByApplicationVacancy;
 using SFA.DAS.CandidateAccount.Domain.Application;
+using SFA.DAS.Common.Domain.Models;
 using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.Vacancies;
@@ -16,7 +17,7 @@ public class WhenCallingGetCandidateApplications
 {
     [Test, RecursiveMoqAutoData]
     public async Task Then_The_Query_Is_Called_And_ApiResponse_Returned_With_Candidate_Data(
-        string vacancyRef,
+        VacancyReference vacancyRef,
         ApplicationStatus applicationStatus,
         bool allowEmailContact,
         Guid preferenceId,
@@ -55,7 +56,7 @@ public class WhenCallingGetCandidateApplications
 
     [Test, RecursiveMoqAutoData]
     public async Task Then_Returns_Empty_List_If_No_Results_Returned(
-        string vacancyRef,
+        VacancyReference vacancyRef,
         ApplicationStatus applicationStatus,
         bool allowEmailContact,
         Guid preferenceId,
@@ -81,7 +82,7 @@ public class WhenCallingGetCandidateApplications
 
     [Test, RecursiveMoqAutoData]
     public async Task Then_If_Error_Returns_InternalServerError_Response_Code(
-        string vacancyRef,
+        VacancyReference vacancyRef,
         ApplicationStatus applicationStatus,
         bool allowEmailContact,
         Guid preferenceId,
