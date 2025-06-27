@@ -138,12 +138,20 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
         original.InterestsStatus = (short)SectionStatus.PreviousAnswer;
         original.QualificationsStatus = (short)SectionStatus.PreviousAnswer;
         original.WorkExperienceStatus = (short)SectionStatus.PreviousAnswer;
-        original.SkillsAndStrengthStatus = (short)SectionStatus.PreviousAnswer;
         original.TrainingCoursesStatus = (short)SectionStatus.PreviousAnswer;
         original.InterviewAdjustmentsStatus = (short)SectionStatus.PreviousAnswer;
         original.AdditionalQuestion1Status = (short)additionalQuestion1Status;
         original.AdditionalQuestion2Status = (short)additionalQuestion2Status;
 
+        if (original.Strengths is { Length: > 0 })
+        {
+            original.SkillsAndStrengthStatus = (short)SectionStatus.PreviousAnswer;
+        }
+        else
+        {
+            // might be copying from a foundation
+            original.SkillsAndStrengthStatus = (short)SectionStatus.NotStarted;
+        }
 
         if (requiresDisabilityConfidence)
         {
