@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using SFA.DAS.CandidateAccount.Domain;
 using SFA.DAS.CandidateAccount.Domain.Application;
 
 namespace SFA.DAS.CandidateAccount.Data.Application;
@@ -11,7 +12,9 @@ public interface IApplicationRepository
     Task<ApplicationEntity> Update(ApplicationEntity application);
     Task<IEnumerable<ApplicationEntity>> GetByCandidateId(Guid candidateId, short? statusId);
     Task<ApplicationEntity?> GetByVacancyReference(Guid candidateId, string vacancyReference);
-    Task<ApplicationEntity> Clone(Guid applicationId, string vacancyReference, bool requiresDisabilityConfidence, SectionStatus? additionalQuestion1Status, SectionStatus? additionalQuestion2Status);
+    Task<ApplicationEntity> Clone(Guid applicationId, string vacancyReference, bool requiresDisabilityConfidence,
+        SectionStatus? additionalQuestion1Status, SectionStatus? additionalQuestion2Status,
+        ApprenticeshipTypes apprenticeshipType);
     Task<IEnumerable<ApplicationEntity>> GetApplicationsByVacancyReference(string vacancyReference, short? statusId = null, Guid? preferenceId = null, bool canEmailOnly = false);
     Task<IEnumerable<ApplicationEntity>> GetCountByStatus(Guid candidateId, short status, CancellationToken cancellationToken = default);
 }
@@ -106,7 +109,9 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
         return result ?? applications.FirstOrDefault();
     }
 	
-	public async Task<ApplicationEntity> Clone(Guid applicationId, string vacancyReference, bool requiresDisabilityConfidence, SectionStatus? additionalQuestion1Status, SectionStatus? additionalQuestion2Status)
+	public async Task<ApplicationEntity> Clone(Guid applicationId, string vacancyReference,
+        bool requiresDisabilityConfidence, SectionStatus? additionalQuestion1Status,
+        SectionStatus? additionalQuestion2Status, ApprenticeshipTypes apprenticeshipType)
     {
         var original = await dataContext.ApplicationEntities
             .Include(x => x.TrainingCourseEntities)
@@ -133,12 +138,20 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
         original.InterestsStatus = (short)SectionStatus.PreviousAnswer;
         original.QualificationsStatus = (short)SectionStatus.PreviousAnswer;
         original.WorkExperienceStatus = (short)SectionStatus.PreviousAnswer;
-        original.SkillsAndStrengthStatus = (short)SectionStatus.PreviousAnswer;
         original.TrainingCoursesStatus = (short)SectionStatus.PreviousAnswer;
         original.InterviewAdjustmentsStatus = (short)SectionStatus.PreviousAnswer;
         original.AdditionalQuestion1Status = (short)additionalQuestion1Status;
         original.AdditionalQuestion2Status = (short)additionalQuestion2Status;
 
+        if (original.Strengths is { Length: > 0 })
+        {
+            original.SkillsAndStrengthStatus = (short)SectionStatus.PreviousAnswer;
+        }
+        else
+        {
+            // might be copying from a foundation
+            original.SkillsAndStrengthStatus = (short)SectionStatus.NotStarted;
+        }
 
         if (requiresDisabilityConfidence)
         {
@@ -155,6 +168,12 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
         else
         {
             original.DisabilityConfidenceStatus = (short)SectionStatus.NotRequired;
+        }
+
+        if (apprenticeshipType == ApprenticeshipTypes.Foundation)
+        {
+            original.SkillsAndStrengthStatus = (short)SectionStatus.NotRequired;
+            original.Strengths = null;
         }
 
         dataContext.ApplicationEntities.Add(original);

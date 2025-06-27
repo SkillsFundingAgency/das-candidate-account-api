@@ -5,6 +5,7 @@ using SFA.DAS.CandidateAccount.Application.Application.Commands.UpsertApplicatio
 using SFA.DAS.CandidateAccount.Data.AdditionalQuestion;
 using SFA.DAS.CandidateAccount.Data.Application;
 using SFA.DAS.CandidateAccount.Data.SavedVacancy;
+using SFA.DAS.CandidateAccount.Domain;
 using SFA.DAS.CandidateAccount.Domain.Application;
 using SFA.DAS.CandidateAccount.Domain.Candidate;
 using SFA.DAS.Testing.AutoFixture;
@@ -111,7 +112,7 @@ public class WhenHandlingUpsertApplicationCommand
             .ReturnsAsync(previousApplications);
 
         applicationRepository.Setup(x =>
-            x.Clone(previousApplication.Id, command.VacancyReference, command.IsDisabilityConfidenceComplete == SectionStatus.NotStarted, command.IsAdditionalQuestion1Complete, command.IsAdditionalQuestion2Complete))
+            x.Clone(previousApplication.Id, command.VacancyReference, command.IsDisabilityConfidenceComplete == SectionStatus.NotStarted, command.IsAdditionalQuestion1Complete, command.IsAdditionalQuestion2Complete, command.ApprenticeshipType))
             .ReturnsAsync(cloneResult);
 
         var actual = await handler.Handle(command, CancellationToken.None);
@@ -147,7 +148,8 @@ public class WhenHandlingUpsertApplicationCommand
                     It.IsAny<string>(),
                     It.IsAny<bool>(),
                     It.IsAny<SectionStatus?>(),
-                    It.IsAny<SectionStatus?>()),
+                    It.IsAny<SectionStatus?>(),
+                    It.IsAny<ApprenticeshipTypes>()),
             Times.Never());
     }
     
@@ -175,7 +177,8 @@ public class WhenHandlingUpsertApplicationCommand
                     It.IsAny<string>(),
                     It.IsAny<bool>(),
                     It.IsAny<SectionStatus?>(),
-                    It.IsAny<SectionStatus?>()),
+                    It.IsAny<SectionStatus?>(),
+                    It.IsAny<ApprenticeshipTypes>()),
             Times.Never());
     }
 
