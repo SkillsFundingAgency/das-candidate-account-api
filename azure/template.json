@@ -428,7 +428,7 @@
                         "value": "[variables('apiAppServiceName')]"
                     },
                     "scopedResourceId": {
-                        "value": "[reference(concat(variables('apiAppServiceName'), '-application-insights-', parameters('utcValue'))).outputs.AppInsightsResourceId.value]"
+                        "value": "[reference(concat(variables('apiAppServiceName'), '-', parameters('utcValue'))).outputs.AppInsightsResourceId.value]"
                     }
                 }
             }
