@@ -41,7 +41,8 @@ public class ApplicationController(IMediator mediator, ILogger<ApplicationContro
                 IsWorkHistoryComplete = applicationRequest.IsWorkHistoryComplete,
                 IsAdditionalQuestion1Complete = applicationRequest.IsAdditionalQuestion1Complete,
                 IsAdditionalQuestion2Complete = applicationRequest.IsAdditionalQuestion2Complete,
-                AdditionalQuestions = applicationRequest.AdditionalQuestions
+                AdditionalQuestions = applicationRequest.AdditionalQuestions,
+                ApprenticeshipType = applicationRequest.ApprenticeshipType,
             });
 
             if (result.IsCreated)

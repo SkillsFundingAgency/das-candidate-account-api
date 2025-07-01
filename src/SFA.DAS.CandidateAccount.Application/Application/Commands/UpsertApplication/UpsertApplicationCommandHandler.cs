@@ -2,6 +2,7 @@ using MediatR;
 using SFA.DAS.CandidateAccount.Data.AdditionalQuestion;
 using SFA.DAS.CandidateAccount.Data.Application;
 using SFA.DAS.CandidateAccount.Data.SavedVacancy;
+using SFA.DAS.CandidateAccount.Domain;
 using SFA.DAS.CandidateAccount.Domain.Application;
 
 namespace SFA.DAS.CandidateAccount.Application.Application.Commands.UpsertApplication;
@@ -23,15 +24,15 @@ public class UpsertApplicationCommandHandler(
                 x.Status != (short)ApplicationStatus.Expired) 
                 .Where(x=>x.MigrationDate == null)
                 .MaxBy(x => x.CreatedDate);
-
+        
             if (previousApplication != null)
             {
                 var requiresDisabilityConfidence = command.IsDisabilityConfidenceComplete == SectionStatus.NotStarted;
-                var result = await applicationRepository.Clone(previousApplication.Id, command.VacancyReference.ToShortString(), requiresDisabilityConfidence, command.IsAdditionalQuestion1Complete, command.IsAdditionalQuestion2Complete);
-
+                var result = await applicationRepository.Clone(previousApplication.Id, command.VacancyReference.ToShortString(), requiresDisabilityConfidence, command.IsAdditionalQuestion1Complete, command.IsAdditionalQuestion2Complete, command.ApprenticeshipType);
+        
                 await UpsertAdditionalQuestions(command, cancellationToken, result);
                 await RemoveSavedVacancy(command.CandidateId, command.VacancyReference.ToShortString());
-
+        
                 return new UpsertApplicationCommandResponse
                 {
                     Application = result,
@@ -52,6 +53,7 @@ public class UpsertApplicationCommandHandler(
             TrainingCoursesStatus = (short)command.IsWorkHistoryComplete,
             AdditionalQuestion1Status = (short)command.IsAdditionalQuestion1Complete,
             AdditionalQuestion2Status = (short) command.IsAdditionalQuestion2Complete,
+            SkillsAndStrengthStatus = command.ApprenticeshipType is ApprenticeshipTypes.Foundation ? (short)SectionStatus.NotRequired : default,
             DisabilityStatus = command.DisabilityStatus
         });
 
