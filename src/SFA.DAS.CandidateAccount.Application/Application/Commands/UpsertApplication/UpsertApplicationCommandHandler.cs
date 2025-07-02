@@ -15,7 +15,7 @@ public class UpsertApplicationCommandHandler(
 {
     public async Task<UpsertApplicationCommandResponse> Handle(UpsertApplicationCommand command, CancellationToken cancellationToken)
     {
-        if(!await applicationRepository.Exists(command.CandidateId, command.VacancyReference))
+        if(! await applicationRepository.Exists(command.CandidateId, command.VacancyReference.ToShortString()))
         {
             var previousApplications = await applicationRepository.GetByCandidateId(command.CandidateId, null);
             var previousApplication = previousApplications.Where(x => 
@@ -28,10 +28,10 @@ public class UpsertApplicationCommandHandler(
             if (previousApplication != null)
             {
                 var requiresDisabilityConfidence = command.IsDisabilityConfidenceComplete == SectionStatus.NotStarted;
-                var result = await applicationRepository.Clone(previousApplication.Id, command.VacancyReference, requiresDisabilityConfidence, command.IsAdditionalQuestion1Complete, command.IsAdditionalQuestion2Complete, command.ApprenticeshipType);
+                var result = await applicationRepository.Clone(previousApplication.Id, command.VacancyReference.ToShortString(), requiresDisabilityConfidence, command.IsAdditionalQuestion1Complete, command.IsAdditionalQuestion2Complete, command.ApprenticeshipType);
         
                 await UpsertAdditionalQuestions(command, cancellationToken, result);
-                await RemoveSavedVacancy(command.CandidateId, command.VacancyReference);
+                await RemoveSavedVacancy(command.CandidateId, command.VacancyReference.ToShortString());
         
                 return new UpsertApplicationCommandResponse
                 {
@@ -43,7 +43,7 @@ public class UpsertApplicationCommandHandler(
 
         var application = await applicationRepository.Upsert(new ApplicationEntity
         {
-            VacancyReference = command.VacancyReference,
+            VacancyReference = command.VacancyReference.ToShortString(),
             CandidateId = command.CandidateId,
             Status = (short)command.Status,
             DisabilityConfidenceStatus = (short)command.IsDisabilityConfidenceComplete,
@@ -60,7 +60,7 @@ public class UpsertApplicationCommandHandler(
         await UpsertAdditionalQuestions(command, cancellationToken, application.Item1);
         if (application.Item2)
         {
-            await RemoveSavedVacancy(command.CandidateId, command.VacancyReference);
+            await RemoveSavedVacancy(command.CandidateId, command.VacancyReference.ToShortString());
         }
 
         return new UpsertApplicationCommandResponse
