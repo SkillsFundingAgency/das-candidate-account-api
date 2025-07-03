@@ -3,6 +3,7 @@ using SFA.DAS.CandidateAccount.Data.AdditionalQuestion;
 using SFA.DAS.CandidateAccount.Data.Application;
 using SFA.DAS.CandidateAccount.Data.EmploymentLocation;
 using SFA.DAS.CandidateAccount.Data.SavedVacancy;
+using SFA.DAS.CandidateAccount.Domain;
 using SFA.DAS.CandidateAccount.Domain.Application;
 
 namespace SFA.DAS.CandidateAccount.Application.Application.Commands.UpsertApplication;
@@ -16,7 +17,7 @@ public class UpsertApplicationCommandHandler(
 {
     public async Task<UpsertApplicationCommandResponse> Handle(UpsertApplicationCommand command, CancellationToken cancellationToken)
     {
-        if(! await applicationRepository.Exists(command.CandidateId, command.VacancyReference))
+        if(! await applicationRepository.Exists(command.CandidateId, command.VacancyReference.ToShortString()))
         {
             var previousApplications = await applicationRepository.GetByCandidateId(command.CandidateId, null);
             var previousApplication = previousApplications.Where(x => 
@@ -25,20 +26,22 @@ public class UpsertApplicationCommandHandler(
                 x.Status != (short)ApplicationStatus.Expired) 
                 .Where(x=>x.MigrationDate == null)
                 .MaxBy(x => x.CreatedDate);
-
+        
             if (previousApplication != null)
             {
                 var requiresDisabilityConfidence = command.IsDisabilityConfidenceComplete == SectionStatus.NotStarted;
+        
                 var result = await applicationRepository.Clone(previousApplication.Id,
-                    command.VacancyReference,
+                    command.VacancyReference.ToShortString(),
                     requiresDisabilityConfidence,
                     command.IsAdditionalQuestion1Complete,
                     command.IsAdditionalQuestion2Complete,
-                    command.IsEmploymentLocationComplete);
+                    command.IsEmploymentLocationComplete,
+                    command.ApprenticeshipType);
 
                 await UpsertAdditionalQuestions(command, cancellationToken, result);
                 if(command.EmploymentLocation != null) await UpsertEmploymentLocations(command, result, cancellationToken);
-                await RemoveSavedVacancy(command.CandidateId, command.VacancyReference);
+                await RemoveSavedVacancy(command.CandidateId, command.VacancyReference.ToShortString());
 
                 return new UpsertApplicationCommandResponse
                 {
@@ -50,7 +53,7 @@ public class UpsertApplicationCommandHandler(
 
         var application = await applicationRepository.Upsert(new ApplicationEntity
         {
-            VacancyReference = command.VacancyReference,
+            VacancyReference = command.VacancyReference.ToShortString(),
             CandidateId = command.CandidateId,
             Status = (short)command.Status,
             DisabilityConfidenceStatus = (short)command.IsDisabilityConfidenceComplete,
@@ -61,6 +64,7 @@ public class UpsertApplicationCommandHandler(
             AdditionalQuestion1Status = (short)command.IsAdditionalQuestion1Complete,
             AdditionalQuestion2Status = (short) command.IsAdditionalQuestion2Complete,
             EmploymentLocationStatus = command.EmploymentLocation is not null ? (short)command.IsEmploymentLocationComplete : (short)SectionStatus.NotRequired,
+            SkillsAndStrengthStatus = command.ApprenticeshipType is ApprenticeshipTypes.Foundation ? (short)SectionStatus.NotRequired : default,
             DisabilityStatus = command.DisabilityStatus
         });
 
@@ -72,7 +76,7 @@ public class UpsertApplicationCommandHandler(
         
         if (application.Item2)
         {
-            await RemoveSavedVacancy(command.CandidateId, command.VacancyReference);
+            await RemoveSavedVacancy(command.CandidateId, command.VacancyReference.ToShortString());
         }
 
         return new UpsertApplicationCommandResponse

@@ -7,7 +7,7 @@ public class GetCandidatesByApplicationVacancyQueryHandler (IApplicationReposito
 {
     public async Task<GetCandidatesByApplicationVacancyQueryResult> Handle(GetCandidatesByApplicationVacancyQuery request, CancellationToken cancellationToken)
     {
-        var applications = await applicationRepository.GetApplicationsByVacancyReference(request.VacancyReference,
+        var applications = await applicationRepository.GetApplicationsByVacancyReference(request.VacancyReference.ToShortString(),
             request.StatusId, request.PreferenceId, request.CanEmailOnly);
         
         return new GetCandidatesByApplicationVacancyQueryResult
