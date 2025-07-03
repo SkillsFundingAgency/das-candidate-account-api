@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-using System.Net;
 using AutoFixture.NUnit3;
 using FluentAssertions;
 using MediatR;
@@ -8,7 +6,10 @@ using Moq;
 using SFA.DAS.CandidateAccount.Api.ApiRequests;
 using SFA.DAS.CandidateAccount.Api.Controllers;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.UpsertApplication;
+using SFA.DAS.Common.Domain.Models;
 using SFA.DAS.Testing.AutoFixture;
+using System.ComponentModel.DataAnnotations;
+using System.Net;
 
 namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.Application;
 
@@ -16,7 +17,7 @@ public class WhenCallingPutApplication
 {
     [Test, MoqAutoData]
     public async Task Then_If_MediatorCall_Returns_Created_Then_Created_Result_Returned(
-        string vacancyReference,
+        VacancyReference vacancyReference,
         ApplicationRequest applicationRequest,
         UpsertApplicationCommandResponse upsertApplicationCommandResult,
         [Frozen] Mock<IMediator> mediator,
@@ -51,7 +52,7 @@ public class WhenCallingPutApplication
     
     [Test, MoqAutoData]
     public async Task Then_If_MediatorCall_Returns_NotCreated_Then_Ok_Result_Returned(
-        string vacancyReference,
+        VacancyReference vacancyReference,
         ApplicationRequest applicationRequest,
         UpsertApplicationCommandResponse upsertApplicationCommandResult,
         [Frozen] Mock<IMediator> mediator,
@@ -86,7 +87,7 @@ public class WhenCallingPutApplication
     
     [Test, MoqAutoData]
     public async Task Then_If_ValidationError_Then_BadRequest_Response_Returned(
-        string vacancyReference,
+        VacancyReference vacancyReference,
         ApplicationRequest userProfileRequest,
         [Frozen] Mock<IMediator> mediator,
         [Greedy] ApplicationController controller)
@@ -105,7 +106,7 @@ public class WhenCallingPutApplication
     
     [Test, MoqAutoData]
     public async Task Then_If_Error_Then_InternalServerError_Response_Returned(
-        string vacancyReference,
+        VacancyReference vacancyReference,
         ApplicationRequest userProfileRequest,
         [Frozen] Mock<IMediator> mediator,
         [Greedy] ApplicationController controller)

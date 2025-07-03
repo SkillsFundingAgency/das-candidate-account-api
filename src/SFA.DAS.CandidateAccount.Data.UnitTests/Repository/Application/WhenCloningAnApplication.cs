@@ -3,6 +3,7 @@ using FluentAssertions;
 using Moq;
 using SFA.DAS.CandidateAccount.Data.Application;
 using SFA.DAS.CandidateAccount.Data.UnitTests.DatabaseMock;
+using SFA.DAS.CandidateAccount.Domain;
 using SFA.DAS.CandidateAccount.Domain.Application;
 using SFA.DAS.Testing.AutoFixture;
 
@@ -26,7 +27,8 @@ namespace SFA.DAS.CandidateAccount.Data.UnitTests.Repository.Application
                 true,
                 SectionStatus.NotRequired,
                 SectionStatus.NotRequired,
-                SectionStatus.NotStarted);
+                SectionStatus.NotStarted,
+                ApprenticeshipTypes.Standard);
 
             context.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
 
@@ -47,6 +49,57 @@ namespace SFA.DAS.CandidateAccount.Data.UnitTests.Repository.Application
             actual.EmploymentLocationStatus.Should().Be((short)SectionStatus.NotStarted);
 
             actual.PreviousAnswersSourceId.Should().Be(originalId);
+        }
+        
+        [Test, RecursiveMoqAutoData]
+        public async Task Then_If_Applying_For_A_Foundation_Apprenticeship_Then_The_Skills_Are_Not_Cloned(
+            ApplicationEntity originalApplication,
+            [Frozen] Mock<ICandidateAccountDataContext> context,
+            ApplicationRepository repository)
+        {
+            // arrange
+            context.Setup(x => x.ApplicationEntities).ReturnsDbSet(new List<ApplicationEntity>{originalApplication});
+
+            // act
+            var actual = await repository.Clone(originalApplication.Id,
+                originalApplication.VacancyReference,
+                true,
+                SectionStatus.NotRequired,
+                SectionStatus.NotRequired,
+                SectionStatus.NotRequired,
+                ApprenticeshipTypes.Foundation);
+
+            // assert
+            context.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
+
+            actual.SkillsAndStrengthStatus.Should().Be((short)SectionStatus.NotRequired);
+            actual.Strengths.Should().BeNull();
+        }
+        
+        [Test, RecursiveMoqAutoData]
+        public async Task Then_If_Applying_For_An_Apprenticeship_Standard_And_Copying_Answers_From_A_Foundation_Apprenticeship_Application_Then_The_Skills_Status_Is_NotStarted(
+            ApplicationEntity originalApplication,
+            [Frozen] Mock<ICandidateAccountDataContext> context,
+            ApplicationRepository repository)
+        {
+            // arrange
+            originalApplication.Strengths = null;
+            context.Setup(x => x.ApplicationEntities).ReturnsDbSet(new List<ApplicationEntity>{originalApplication});
+
+            // act
+            var actual = await repository.Clone(originalApplication.Id,
+                originalApplication.VacancyReference,
+                true,
+                SectionStatus.NotRequired,
+                SectionStatus.NotRequired,
+                SectionStatus.NotStarted,
+                ApprenticeshipTypes.Standard);
+
+            // assert
+            context.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
+
+            actual.SkillsAndStrengthStatus.Should().Be((short)SectionStatus.NotStarted);
+            actual.Strengths.Should().BeNull();
         }
     }
 }

@@ -12,6 +12,7 @@ using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplicationByV
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplications;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplicationsCount;
 using SFA.DAS.CandidateAccount.Domain.Application;
+using SFA.DAS.Common.Domain.Models;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 
@@ -24,7 +25,7 @@ public class ApplicationController(IMediator mediator, ILogger<ApplicationContro
 {
     [HttpPut]
     [Route("[controller]s/{vacancyReference}")]
-    public async Task<IActionResult> PutApplication([FromRoute]string vacancyReference, ApplicationRequest applicationRequest)
+    public async Task<IActionResult> PutApplication([FromRoute] VacancyReference vacancyReference, ApplicationRequest applicationRequest)
     {
         try
         {
@@ -43,7 +44,8 @@ public class ApplicationController(IMediator mediator, ILogger<ApplicationContro
                 IsAdditionalQuestion2Complete = applicationRequest.IsAdditionalQuestion2Complete,
                 IsEmploymentLocationComplete = applicationRequest.IsEmploymentLocationComplete,
                 AdditionalQuestions = applicationRequest.AdditionalQuestions,
-                EmploymentLocation = applicationRequest.EmploymentLocation
+                EmploymentLocation = applicationRequest.EmploymentLocation,
+                ApprenticeshipType = applicationRequest.ApprenticeshipType,
             });
 
             if (result.IsCreated)
