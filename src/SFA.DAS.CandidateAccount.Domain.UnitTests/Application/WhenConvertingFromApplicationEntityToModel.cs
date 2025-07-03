@@ -1,4 +1,5 @@
 using FluentAssertions;
+using Newtonsoft.Json;
 using SFA.DAS.CandidateAccount.Domain.Application;
 using SFA.DAS.Testing.AutoFixture;
 
@@ -9,6 +10,12 @@ public class WhenConvertingFromApplicationEntityToModel
     [Test, RecursiveMoqAutoData]
     public void Then_The_Fields_Are_Mapped(ApplicationEntity source)
     {
+        source.EmploymentLocationEntity = new EmploymentLocationEntity
+        {
+            Addresses = JsonConvert.SerializeObject(new List<Address>()),
+            EmploymentLocationInformation = source.EmploymentLocationEntity.EmploymentLocationInformation,
+            EmployerLocationOption = source.EmploymentLocationEntity.EmployerLocationOption,
+        };
         source.JobsStatus = 4;
         source.QualificationsStatus = 2;
         source.WorkExperienceStatus = 1;
@@ -62,9 +69,12 @@ public class WhenConvertingFromApplicationEntityToModel
         {
             QualificationsStatus = (short)qualificationStatus,
             TrainingCoursesStatus = (short)trainingCourseStatus,
-            AdditionalQuestionEntities = new List<AdditionalQuestionEntity>()
+            AdditionalQuestionEntities = new List<AdditionalQuestionEntity>(),
+            EmploymentLocationEntity = new EmploymentLocationEntity
+            {
+                Addresses = JsonConvert.SerializeObject(new List<Address>()),
+            }
         };
-
         var actual = (Domain.Application.Application)source;
 
         actual.EducationHistorySectionStatus.Should().Be(expectedStatus);
@@ -81,8 +91,11 @@ public class WhenConvertingFromApplicationEntityToModel
             InterestsStatus = (short)interestsStatus,
             AdditionalQuestion1Status = (short)additionalQuestion1Status,
             AdditionalQuestion2Status = (short)additionalQuestion2Status,
+            EmploymentLocationEntity = new EmploymentLocationEntity()
+            {
+                Addresses = JsonConvert.SerializeObject(new List<Address>()),    
+            }
         };
-
         var actual = (Domain.Application.Application)source;
 
         actual.ApplicationQuestionsSectionStatus.Should().Be(expectedStatus);
@@ -102,6 +115,12 @@ public class WhenConvertingFromApplicationEntityToModel
         source.AdditionalQuestion2Status = 4;
         source.AdditionalQuestion1Status = 4;
         source.InterestsStatus = 3;
+        source.EmploymentLocationStatus = 4;
+
+        source.EmploymentLocationEntity = new EmploymentLocationEntity
+        {
+            Addresses = JsonConvert.SerializeObject(new List<Address>()),
+        };
 
         var actual = (Domain.Application.Application)source;
 
@@ -113,7 +132,11 @@ public class WhenConvertingFromApplicationEntityToModel
     {
         var source = new ApplicationEntity
         {
-            Status = (short)status
+            Status = (short)status,
+            EmploymentLocationEntity = new EmploymentLocationEntity
+            {
+                Addresses = JsonConvert.SerializeObject(new List<Address>()),
+            }
         };
 
         var actual = (Domain.Application.Application)source;

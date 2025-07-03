@@ -7,21 +7,26 @@ namespace SFA.DAS.CandidateAccount.Data.Application;
 public interface IApplicationRepository
 {
     Task<bool> Exists(Guid candidateId, string vacancyReference);
-    Task<Tuple<ApplicationEntity,bool>> Upsert(ApplicationEntity applicationEntity);
+    Task<Tuple<ApplicationEntity, bool>> Upsert(ApplicationEntity applicationEntity);
     Task<ApplicationEntity?> GetById(Guid applicationId, bool includeDetail = false);
     Task<ApplicationEntity> Update(ApplicationEntity application);
     Task<IEnumerable<ApplicationEntity>> GetByCandidateId(Guid candidateId, short? statusId);
     Task<ApplicationEntity?> GetByVacancyReference(Guid candidateId, string vacancyReference);
-    Task<ApplicationEntity> Clone(Guid applicationId, string vacancyReference, bool requiresDisabilityConfidence,
-        SectionStatus? additionalQuestion1Status, SectionStatus? additionalQuestion2Status,
+    Task<ApplicationEntity> Clone(Guid applicationId,
+        string vacancyReference,
+        bool requiresDisabilityConfidence,
+        SectionStatus? additionalQuestion1Status,
+        SectionStatus? additionalQuestion2Status,
+        SectionStatus? employmentLocationStatus,
         ApprenticeshipTypes apprenticeshipType);
     Task<IEnumerable<ApplicationEntity>> GetApplicationsByVacancyReference(string vacancyReference, short? statusId = null, Guid? preferenceId = null, bool canEmailOnly = false);
     Task<IEnumerable<ApplicationEntity>> GetCountByStatus(Guid candidateId, short status, CancellationToken cancellationToken = default);
+    Task<IEnumerable<ApplicationEntity>> GetAllById(List<Guid> applicationIds, bool includeDetail = false, CancellationToken cancellationToken = default);
 }
 
 public class ApplicationRepository(ICandidateAccountDataContext dataContext) : IApplicationRepository
 {
-    public async Task<Tuple<ApplicationEntity,bool>> Upsert(ApplicationEntity applicationEntity)
+    public async Task<Tuple<ApplicationEntity, bool>> Upsert(ApplicationEntity applicationEntity)
     {
         var application = await dataContext.ApplicationEntities.SingleOrDefaultAsync(c =>
             c.VacancyReference == applicationEntity.VacancyReference &&
@@ -32,9 +37,9 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
         {
             await dataContext.ApplicationEntities.AddAsync(applicationEntity);
             await dataContext.SaveChangesAsync();
-            return new Tuple<ApplicationEntity, bool>(applicationEntity, true);    
+            return new Tuple<ApplicationEntity, bool>(applicationEntity, true);
         }
-        
+
         application.UpdatedDate = DateTime.UtcNow;
         application.Status = applicationEntity.Status;
         application.SubmittedDate = applicationEntity.Status == 1 ? DateTime.UtcNow : null;
@@ -49,28 +54,30 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
         application.AdditionalQuestion2Status = applicationEntity.AdditionalQuestion2Status != 0 ? applicationEntity.AdditionalQuestion2Status : application.AdditionalQuestion2Status;
         application.InterviewAdjustmentsStatus = applicationEntity.InterviewAdjustmentsStatus != 0 ? applicationEntity.InterviewAdjustmentsStatus : application.InterviewAdjustmentsStatus;
         application.DisabilityConfidenceStatus = applicationEntity.DisabilityConfidenceStatus != 0 ? applicationEntity.DisabilityConfidenceStatus : application.DisabilityConfidenceStatus;
+        application.EmploymentLocationStatus = applicationEntity.EmploymentLocationStatus != 0 ? applicationEntity.EmploymentLocationStatus : application.EmploymentLocationStatus;
         application.MigrationDate = applicationEntity.MigrationDate;
-        
+
         await dataContext.SaveChangesAsync();
-        
+
         return new Tuple<ApplicationEntity, bool>(application, false);
     }
 
     public async Task<ApplicationEntity?> GetById(Guid applicationId, bool includeDetail)
     {
-        var applicationEntity = !includeDetail ? 
-            await dataContext.ApplicationEntities.Include(c=>c.AdditionalQuestionEntities).IgnoreAutoIncludes()
-                .SingleOrDefaultAsync(c=>c.Id == applicationId) :
+        var applicationEntity = !includeDetail ?
+            await dataContext.ApplicationEntities.Include(c => c.AdditionalQuestionEntities).IgnoreAutoIncludes()
+                .SingleOrDefaultAsync(c => c.Id == applicationId) :
             await dataContext.ApplicationEntities
-                .Include(c=>c.QualificationEntities)
-                    .ThenInclude(c=>c.QualificationReferenceEntity)
-                .Include(c=>c.TrainingCourseEntities)
-                .Include(c=>c.WorkHistoryEntities)
-                .Include(c=>c.AdditionalQuestionEntities)
-                .Include(c=>c.CandidateEntity)
-                    .ThenInclude(c=>c.Address)
+                .Include(c => c.QualificationEntities)
+                    .ThenInclude(c => c.QualificationReferenceEntity)
+                .Include(c => c.TrainingCourseEntities)
+                .Include(c => c.WorkHistoryEntities)
+                .Include(c => c.AdditionalQuestionEntities)
+                .Include(c => c.EmploymentLocationEntity)
+                .Include(c => c.CandidateEntity)
+                    .ThenInclude(c => c.Address)
                 .IgnoreAutoIncludes()
-                .SingleOrDefaultAsync(c=>c.Id == applicationId);
+                .SingleOrDefaultAsync(c => c.Id == applicationId);
         return applicationEntity;
     }
 
@@ -108,10 +115,14 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
         var result = applications.FirstOrDefault(x => x.Status != (short)ApplicationStatus.Withdrawn);
         return result ?? applications.FirstOrDefault();
     }
-	
-	public async Task<ApplicationEntity> Clone(Guid applicationId, string vacancyReference,
-        bool requiresDisabilityConfidence, SectionStatus? additionalQuestion1Status,
-        SectionStatus? additionalQuestion2Status, ApprenticeshipTypes apprenticeshipType)
+
+    public async Task<ApplicationEntity> Clone(Guid applicationId,
+        string vacancyReference,
+        bool requiresDisabilityConfidence,
+        SectionStatus? additionalQuestion1Status,
+        SectionStatus? additionalQuestion2Status,
+        SectionStatus? employmentLocationStatus,
+        ApprenticeshipTypes apprenticeshipType)
     {
         var original = await dataContext.ApplicationEntities
             .Include(x => x.TrainingCourseEntities)
@@ -142,6 +153,7 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
         original.InterviewAdjustmentsStatus = (short)SectionStatus.PreviousAnswer;
         original.AdditionalQuestion1Status = (short)additionalQuestion1Status;
         original.AdditionalQuestion2Status = (short)additionalQuestion2Status;
+        original.EmploymentLocationStatus = (short)employmentLocationStatus;
 
         if (original.Strengths is { Length: > 0 })
         {
@@ -155,7 +167,7 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
 
         if (requiresDisabilityConfidence)
         {
-            if(original.DisabilityConfidenceStatus == (short)SectionStatus.NotRequired)
+            if (original.DisabilityConfidenceStatus == (short)SectionStatus.NotRequired)
             {
                 original.DisabilityConfidenceStatus = (short)SectionStatus.NotStarted;
                 original.ApplyUnderDisabilityConfidentScheme = null;
@@ -188,9 +200,9 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
         return await dataContext.ApplicationEntities
             .Include(c => c.CandidateEntity)
                 .ThenInclude(c => c.CandidatePreferences)
-            .Include(c=>c.CandidateEntity)
-                .ThenInclude(c=>c.Address)
-            .Where(c => c.VacancyReference == vacancyReference && (statusId== null || c.Status == statusId) && c.CandidateEntity.CandidatePreferences.Count(x=>(preferenceId == null || x.PreferenceId == preferenceId) 
+            .Include(c => c.CandidateEntity)
+                .ThenInclude(c => c.Address)
+            .Where(c => c.VacancyReference == vacancyReference && (statusId == null || c.Status == statusId) && c.CandidateEntity.CandidatePreferences.Count(x => (preferenceId == null || x.PreferenceId == preferenceId)
                 && (!canEmailOnly || (x.ContactMethod == "email" && x.Status!.Value))) >= 1).ToListAsync();
     }
 
@@ -199,5 +211,35 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
         return await dataContext.ApplicationEntities
             .Where(x => x.CandidateId == candidateId && x.Status == status)
             .ToListAsync(cancellationToken);
+    }
+
+    public async Task<IEnumerable<ApplicationEntity>> GetAllById(List<Guid> applicationIds, bool includeDetail = false, CancellationToken cancellationToken = default)
+    {
+        var query = dataContext
+            .ApplicationEntities
+            .Where(c => applicationIds.Contains(c.Id));
+
+        if (!includeDetail)
+        {
+            query = query
+                .AsNoTracking()
+                .IgnoreAutoIncludes();
+        }
+        else
+        {
+            query = query
+                .AsNoTracking()
+                .Include(c => c.QualificationEntities)
+                    .ThenInclude(q => q.QualificationReferenceEntity)
+                .Include(c => c.TrainingCourseEntities)
+                .Include(c => c.WorkHistoryEntities)
+                .Include(c => c.AdditionalQuestionEntities)
+                .Include(c => c.EmploymentLocationEntity)
+                .Include(c => c.CandidateEntity)
+                    .ThenInclude(candidate => candidate.Address)
+                .IgnoreAutoIncludes();
+        }
+
+        return await query.ToListAsync(cancellationToken: cancellationToken);
     }
 }

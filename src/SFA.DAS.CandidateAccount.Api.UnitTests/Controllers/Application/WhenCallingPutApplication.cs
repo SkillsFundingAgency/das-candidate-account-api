@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-using System.Net;
 using AutoFixture.NUnit3;
 using FluentAssertions;
 using MediatR;
@@ -10,6 +8,8 @@ using SFA.DAS.CandidateAccount.Api.Controllers;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.UpsertApplication;
 using SFA.DAS.Common.Domain.Models;
 using SFA.DAS.Testing.AutoFixture;
+using System.ComponentModel.DataAnnotations;
+using System.Net;
 
 namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.Application;
 

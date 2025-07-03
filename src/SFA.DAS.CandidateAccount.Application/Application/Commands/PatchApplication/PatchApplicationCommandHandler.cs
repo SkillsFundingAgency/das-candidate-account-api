@@ -39,6 +39,7 @@ public class PatchApplicationCommandHandler (IApplicationRepository applicationR
         application.AdditionalQuestion2Status = (short)patchedDoc.AdditionalQuestion2Status;
         application.InterestsStatus = (short)patchedDoc.InterestsStatus;
         application.WorkExperienceStatus = (short)patchedDoc.WorkExperienceStatus;
+        application.EmploymentLocationStatus = (short)patchedDoc.EmploymentLocationStatus;
         application.WhatIsYourInterest = patchedDoc.WhatIsYourInterest;
         application.UpdatedDate = DateTime.UtcNow;
         application.ResponseNotes = patchedDoc.ResponseNotes;

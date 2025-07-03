@@ -6,7 +6,6 @@ using SFA.DAS.CandidateAccount.Application.Candidate.Commands.DeleteSavedVacancy
 using SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetSavedVacancies;
 using SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetSavedVacancy;
 using System.Net;
-using SFA.DAS.Common.Domain.Models;
 
 namespace SFA.DAS.CandidateAccount.Api.Controllers
 {
@@ -18,8 +17,16 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetByCandidateId(Guid candidateId)
         {
-            var result = await mediator.Send(new GetSavedVacanciesByCandidateIdQuery { CandidateId = candidateId });
-            return Ok(result);
+            try
+            {
+                var result = await mediator.Send(new GetSavedVacanciesByCandidateIdQuery { CandidateId = candidateId });
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, "GetByCandidateId : An error occurred");
+                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+            }
         }
 
         [HttpGet("{vacancyReference}")]
