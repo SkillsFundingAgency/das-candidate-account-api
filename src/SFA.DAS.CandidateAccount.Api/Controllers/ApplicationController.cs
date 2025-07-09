@@ -9,11 +9,11 @@ using SFA.DAS.CandidateAccount.Application.Application.Commands.UpsertApplicatio
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplication;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplicationByVacancyReference;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplications;
+using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplicationsCount;
 using SFA.DAS.CandidateAccount.Domain.Application;
+using SFA.DAS.Common.Domain.Models;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
-using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplicationsCount;
-using SFA.DAS.Common.Domain.Models;
 
 namespace SFA.DAS.CandidateAccount.Api.Controllers;
 
@@ -41,7 +41,9 @@ public class ApplicationController(IMediator mediator, ILogger<ApplicationContro
                 IsWorkHistoryComplete = applicationRequest.IsWorkHistoryComplete,
                 IsAdditionalQuestion1Complete = applicationRequest.IsAdditionalQuestion1Complete,
                 IsAdditionalQuestion2Complete = applicationRequest.IsAdditionalQuestion2Complete,
+                IsEmploymentLocationComplete = applicationRequest.IsEmploymentLocationComplete,
                 AdditionalQuestions = applicationRequest.AdditionalQuestions,
+                EmploymentLocation = applicationRequest.EmploymentLocation,
                 ApprenticeshipType = applicationRequest.ApprenticeshipType,
             });
 
