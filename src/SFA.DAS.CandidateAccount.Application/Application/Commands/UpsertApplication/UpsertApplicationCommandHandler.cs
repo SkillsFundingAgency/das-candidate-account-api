@@ -126,7 +126,7 @@ public class UpsertApplicationCommandHandler(
             Id = Guid.NewGuid(),
             ApplicationId = application.Id,
             Addresses = command.EmploymentLocation.Addresses,
-            EmployerLocationOption = command.EmploymentLocation.EmployerLocationOption,
+            EmployerLocationOption = (short)command.EmploymentLocation.EmployerLocationOption,
             EmploymentLocationInformation = command.EmploymentLocation.EmploymentLocationInformation
         }, command.CandidateId, cancellationToken);
     }
