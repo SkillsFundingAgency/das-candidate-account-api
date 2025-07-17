@@ -17,6 +17,7 @@ public interface IApplicationRepository
         ApprenticeshipTypes apprenticeshipType);
     Task<IEnumerable<ApplicationEntity>> GetApplicationsByVacancyReference(string vacancyReference, short? statusId = null, Guid? preferenceId = null, bool canEmailOnly = false);
     Task<IEnumerable<ApplicationEntity>> GetCountByStatus(Guid candidateId, short status, CancellationToken cancellationToken = default);
+    Task<bool> DeleteAsync(Guid applicationId, Guid candidateId, CancellationToken cancellationToken);
 }
 
 public class ApplicationRepository(ICandidateAccountDataContext dataContext) : IApplicationRepository
@@ -199,5 +200,23 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
         return await dataContext.ApplicationEntities
             .Where(x => x.CandidateId == candidateId && x.Status == status)
             .ToListAsync(cancellationToken);
+    }
+
+    public async Task<bool> DeleteAsync(Guid applicationId, Guid candidateId, CancellationToken cancellationToken)
+    {
+        var record = await dataContext
+            .ApplicationEntities
+            .SingleOrDefaultAsync(
+                x => x.Id == applicationId && x.CandidateId == candidateId,
+                cancellationToken);
+
+        if (record is null)
+        {
+            return false;
+        }
+
+        dataContext.ApplicationEntities.Remove(record);
+        await dataContext.SaveChangesAsync(cancellationToken);
+        return true;
     }
 }
