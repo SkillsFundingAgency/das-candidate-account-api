@@ -12,6 +12,7 @@ using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplications;
 using SFA.DAS.CandidateAccount.Domain.Application;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
+using SFA.DAS.CandidateAccount.Application.Application.Commands.DeleteApplication;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplicationsCount;
 using SFA.DAS.Common.Domain.Models;
 
@@ -221,5 +222,15 @@ public class ApplicationController(IMediator mediator, ILogger<ApplicationContro
             logger.LogError(e, "Unable to get applications count");
             return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
         }
+    }
+    
+    [HttpDelete]
+    [Route("Candidates/{candidateId:guid}/[controller]s/{applicationId:guid}")]
+    public async Task<IActionResult> DeleteApplication([FromRoute] Guid applicationId, [FromRoute] Guid candidateId, CancellationToken cancellation)
+    {
+        var result = await mediator.Send(new DeleteApplicationCommand(candidateId, applicationId), cancellation);
+        return result == DeleteApplicationCommandResult.None
+            ? NotFound()
+            : NoContent();
     }
 }
