@@ -28,3 +28,10 @@ public enum CandidateStatus
     Deleted = 3,
     Dormant = 4,
 }
+
+public enum AvailableWhere
+{
+    OneLocation,
+    MultipleLocations,
+    AcrossEngland,
+}
