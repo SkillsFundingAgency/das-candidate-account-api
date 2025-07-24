@@ -20,6 +20,7 @@ CREATE TABLE dbo.[Application] (
     [AdditionalQuestion2Status]             tinyint             NOT NULL default(0),
     [InterviewAdjustmentsStatus]            tinyint             NOT NULL default(0),
     [DisabilityConfidenceStatus]            tinyint             NOT NULL default(0),
+    [EmploymentLocationStatus]              tinyint             NOT NULL default(0),
     [WhatIsYourInterest]                    nvarchar(max)       NULL,
     [ApplyUnderDisabilityConfidentScheme]   bit                 NULL,
     [PreviousAnswersSourceId]               uniqueidentifier    NULL,

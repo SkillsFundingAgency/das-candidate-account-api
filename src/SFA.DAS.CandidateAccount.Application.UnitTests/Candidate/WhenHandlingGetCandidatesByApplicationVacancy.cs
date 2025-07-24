@@ -24,7 +24,7 @@ public class WhenHandlingGetCandidatesByApplicationVacancy
                 query.CanEmailOnly)).ReturnsAsync(applicationEntities);
 
         var actual = await handler.Handle(query, CancellationToken.None);
-        
+
         actual.Candidates.Should().BeEquivalentTo(applicationEntities);
     }
 
@@ -42,7 +42,7 @@ public class WhenHandlingGetCandidatesByApplicationVacancy
                 query.CanEmailOnly)).ReturnsAsync(new List<ApplicationEntity>());
 
         var actual = await handler.Handle(query, CancellationToken.None);
-        
+
         actual.Candidates.Should().BeEmpty();
     }
 }
