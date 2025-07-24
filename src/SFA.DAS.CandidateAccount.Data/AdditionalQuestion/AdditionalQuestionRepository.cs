@@ -8,6 +8,7 @@ public interface IAdditionalQuestionRepository
     Task<AdditionalQuestionEntity?> Get(Guid applicationId, Guid candidateId, Guid id, CancellationToken cancellationToken);
     Task<List<AdditionalQuestionEntity>> GetAll(Guid applicationId, Guid candidateId, CancellationToken cancellationToken);
     Task<Tuple<AdditionalQuestionEntity, bool>> UpsertAdditionalQuestion(Domain.Application.AdditionalQuestion additionalQuestion, Guid candidateId);
+    Task DeleteAllAsync(Guid applicationId, Guid candidateId, CancellationToken cancellationToken);
 }
 
 public class AdditionalQuestionRepository(ICandidateAccountDataContext dataContext) : IAdditionalQuestionRepository
@@ -61,5 +62,21 @@ public class AdditionalQuestionRepository(ICandidateAccountDataContext dataConte
 
         await dataContext.SaveChangesAsync();
         return new Tuple<AdditionalQuestionEntity, bool>(additionalQuestionEntity, false);
+    }
+
+    public async Task DeleteAllAsync(Guid applicationId, Guid candidateId, CancellationToken cancellationToken)
+    {
+        var records = await dataContext
+            .AdditionalQuestionEntities
+            .Where(x => x.ApplicationId == applicationId && x.ApplicationEntity.CandidateId == candidateId)
+            .ToListAsync(cancellationToken);
+
+        if (records is not { Count: > 0 })
+        {
+            return;
+        }
+
+        dataContext.AdditionalQuestionEntities.RemoveRange(records);
+        await dataContext.SaveChangesAsync(cancellationToken);
     }
 }
