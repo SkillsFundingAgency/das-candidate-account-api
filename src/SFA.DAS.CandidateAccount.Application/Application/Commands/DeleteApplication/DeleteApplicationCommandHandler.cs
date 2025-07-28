@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using SFA.DAS.CandidateAccount.Data.AdditionalQuestion;
 using SFA.DAS.CandidateAccount.Data.Application;
+using SFA.DAS.CandidateAccount.Data.EmploymentLocation;
 using SFA.DAS.CandidateAccount.Data.Qualification;
 using SFA.DAS.CandidateAccount.Data.TrainingCourse;
 using SFA.DAS.CandidateAccount.Data.WorkExperience;
@@ -12,7 +13,8 @@ public class DeleteApplicationCommandHandler(
     IApplicationRepository applicationRepository,
     IQualificationRepository qualificationRepository,
     ITrainingCourseRepository trainingCourseRepository,
-    IWorkHistoryRepository workHistoryRepository
+    IWorkHistoryRepository workHistoryRepository,
+    IEmploymentLocationRepository employmentLocationRepository
     ): IRequestHandler<DeleteApplicationCommand, DeleteApplicationCommandResult>
 {
     public async Task<DeleteApplicationCommandResult> Handle(DeleteApplicationCommand request, CancellationToken cancellationToken)
@@ -23,6 +25,7 @@ public class DeleteApplicationCommandHandler(
             return DeleteApplicationCommandResult.None;
         }
 
+        await employmentLocationRepository.DeleteAllAsync(request.ApplicationId, request.CandidateId, cancellationToken);
         await workHistoryRepository.DeleteAllAsync(request.ApplicationId, request.CandidateId, cancellationToken);
         await trainingCourseRepository.DeleteAllAsync(request.ApplicationId, request.CandidateId, cancellationToken);
         await qualificationRepository.DeleteAllAsync(request.ApplicationId, request.CandidateId, cancellationToken);
