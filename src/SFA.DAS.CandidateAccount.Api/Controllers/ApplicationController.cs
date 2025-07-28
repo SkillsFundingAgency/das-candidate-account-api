@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.CandidateAccount.Api.ApiRequests;
 using SFA.DAS.CandidateAccount.Api.ApiResponses;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.AddLegacyApplication;
+using SFA.DAS.CandidateAccount.Application.Application.Commands.DeleteApplication;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.PatchApplication;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.UpsertApplication;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplication;
@@ -223,5 +224,15 @@ public class ApplicationController(IMediator mediator, ILogger<ApplicationContro
             logger.LogError(e, "Unable to get applications count");
             return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
         }
+    }
+    
+    [HttpDelete]
+    [Route("Candidates/{candidateId:guid}/[controller]s/{applicationId:guid}")]
+    public async Task<IActionResult> DeleteApplication([FromRoute] Guid applicationId, [FromRoute] Guid candidateId, CancellationToken cancellation)
+    {
+        var result = await mediator.Send(new DeleteApplicationCommand(candidateId, applicationId), cancellation);
+        return result == DeleteApplicationCommandResult.None
+            ? NotFound()
+            : NoContent();
     }
 }
