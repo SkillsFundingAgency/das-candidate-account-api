@@ -25,7 +25,7 @@ public class WhenGettingApplicationsByVacancyReference
         context.Setup(x => x.ApplicationEntities)
             .ReturnsDbSet(new List<ApplicationEntity> { entity1, entity2, entity3 });
 
-        var actual = await repository.GetApplicationsByVacancyReference(vacancyReference);
+        var actual = await repository.GetAllApplicationsByVacancyReference(vacancyReference);
 
         actual.Should().BeEquivalentTo(new List<ApplicationEntity> { entity1, entity3 });
     }

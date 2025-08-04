@@ -19,6 +19,8 @@ public interface IApplicationRepository
         SectionStatus? additionalQuestion2Status,
         SectionStatus? employmentLocationStatus,
         ApprenticeshipTypes apprenticeshipType);
+
+    Task<IEnumerable<ApplicationEntity>> GetAllApplicationsByVacancyReference(string vacancyReference);
     Task<IEnumerable<ApplicationEntity>> GetApplicationsByVacancyReference(string vacancyReference, short? statusId = null, Guid? preferenceId = null, bool canEmailOnly = false);
     Task<IEnumerable<ApplicationEntity>> GetCountByStatus(Guid candidateId, short status, CancellationToken cancellationToken = default);
     Task<bool> DeleteAsync(Guid applicationId, Guid candidateId, CancellationToken cancellationToken);
@@ -194,7 +196,7 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
         return original;
     }
 
-    public async Task<IEnumerable<ApplicationEntity>> GetApplicationsByVacancyReference(string vacancyReference)
+    public async Task<IEnumerable<ApplicationEntity>> GetAllApplicationsByVacancyReference(string vacancyReference)
     {
         return await dataContext.ApplicationEntities
             .Include(c => c.CandidateEntity)
