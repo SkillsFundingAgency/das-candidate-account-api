@@ -53,7 +53,32 @@ public class VacanciesController(IMediator mediator, ILogger<VacanciesController
     {
         try
         {
-            var result = await mediator.Send(new GetApplicationsByVacancyReferenceQuery(vacancyRef));
+            // TODO: remove this once FAI-2721 is resolved ---------------------------------------------
+            logger.LogInformation("GetApplications ({vacancyRef}): called", vacancyRef);
+            // -----------------------------------------------------------------------------------------
+            
+            var result = await mediator.Send(new GetAllApplicationsByVacancyReferenceQuery(vacancyRef));
+
+            // TODO: remove this once FAI-2721 is resolved ---------------------------------------------
+            try
+            {
+                if (result is null)
+                {
+                    logger.LogInformation("GetApplications ({vacancyRef}): result is null", vacancyRef);
+                }
+                else
+                {
+                    var appCount = result.Applications.Count;
+                    var candidatesAreValid = result.Applications.All(x => x.Candidate is not null);
+                    logger.LogInformation("GetApplications ({vacancyRef}): there are {appCount} applications and all candidates are valid is {candidatesAreValid}", vacancyRef, appCount, candidatesAreValid);
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "GetApplications ({vacancyRef}): problem querying result", vacancyRef);
+            }
+            // -----------------------------------------------------------------------------------------
+
             return Ok(new GetApplicationsApiResponse
             {
                 Applications = result.Applications.Select(app => new GetApplicationsApiResponse.Application
