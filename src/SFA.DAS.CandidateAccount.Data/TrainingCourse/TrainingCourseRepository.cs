@@ -1,81 +1,97 @@
 using Microsoft.EntityFrameworkCore;
 using SFA.DAS.CandidateAccount.Domain.Application;
 
-namespace SFA.DAS.CandidateAccount.Data.TrainingCourse
+namespace SFA.DAS.CandidateAccount.Data.TrainingCourse;
+
+public interface ITrainingCourseRepository
 {
-    public interface ITrainingCourseRepository
+    Task<Tuple<TrainingCourseEntity, bool>> UpsertTrainingCourse(Domain.Application.TrainingCourse trainingCourseEntity, Guid candidateId);
+    Task<TrainingCourseEntity?> Get(Guid applicationId, Guid candidateId, Guid id, CancellationToken cancellationToken);
+    Task<List<TrainingCourseEntity>> GetAll(Guid applicationId, Guid candidateId, CancellationToken cancellationToken);
+    Task Delete(Guid applicationId, Guid id, Guid candidateId);
+    Task DeleteAllAsync(Guid applicationId, Guid candidateId, CancellationToken cancellationToken);
+}
+
+public class TrainingCourseRepository(ICandidateAccountDataContext dataContext) : ITrainingCourseRepository
+{
+    public async Task<TrainingCourseEntity?> Get(Guid applicationId, Guid candidateId, Guid id, CancellationToken cancellationToken)
     {
-        Task<Tuple<TrainingCourseEntity, bool>> UpsertTrainingCourse(Domain.Application.TrainingCourse trainingCourseEntity, Guid candidateId);
-        Task<TrainingCourseEntity?> Get(Guid applicationId, Guid candidateId, Guid id, CancellationToken cancellationToken);
-        Task<List<TrainingCourseEntity>> GetAll(Guid applicationId, Guid candidateId, CancellationToken cancellationToken);
-        Task Delete(Guid applicationId, Guid id, Guid candidateId);
+        var query = from course in dataContext.TrainingCourseEntities
+                .Where(fil => fil.ApplicationId == applicationId)
+                .Where(fil => fil.Id == id)
+                .OrderBy(a => a.ToYear)
+            join application in dataContext.ApplicationEntities.Where(fil => fil.CandidateId == candidateId && fil.Id == applicationId)
+                on course.ApplicationId equals application.Id
+            select course;
+
+        return await query.SingleOrDefaultAsync(cancellationToken);
     }
 
-    public class TrainingCourseRepository(ICandidateAccountDataContext dataContext) : ITrainingCourseRepository
+    public async Task<List<TrainingCourseEntity>> GetAll(Guid applicationId, Guid candidateId, CancellationToken cancellationToken)
     {
-        public async Task<TrainingCourseEntity?> Get(Guid applicationId, Guid candidateId, Guid id, CancellationToken cancellationToken)
+        var query = from course in dataContext.TrainingCourseEntities
+                .Where(fil => fil.ApplicationId == applicationId)
+                .OrderByDescending(a => a.ToYear)
+                .ThenBy(a => a.Title)
+            join application in dataContext.ApplicationEntities.Where(fil => fil.CandidateId == candidateId && fil.Id == applicationId)
+                on course.ApplicationId equals application.Id
+            select course;
+
+        return await query.ToListAsync(cancellationToken);
+    }
+
+    public async Task<Tuple<TrainingCourseEntity, bool>> UpsertTrainingCourse(Domain.Application.TrainingCourse trainingCourseEntity, Guid candidateId)
+    {
+        var query = from course in dataContext.TrainingCourseEntities
+                .Where(tc => tc.Id == trainingCourseEntity.Id)
+                .Where(tc => tc.ApplicationId == trainingCourseEntity.ApplicationId)
+            join application in dataContext.ApplicationEntities.Where(app => app.CandidateId == candidateId && app.Id == trainingCourseEntity.ApplicationId)
+                on course.ApplicationId equals application.Id
+            select course;
+
+        var trainingCourse = await query.SingleOrDefaultAsync();
+
+        if (trainingCourse is null)
         {
-            var query = from course in dataContext.TrainingCourseEntities
-                    .Where(fil => fil.ApplicationId == applicationId)
-                    .Where(fil => fil.Id == id)
-                    .OrderBy(a => a.ToYear)
-                        join application in dataContext.ApplicationEntities.Where(fil => fil.CandidateId == candidateId && fil.Id == applicationId)
-                            on course.ApplicationId equals application.Id
-                        select course;
-
-            return await query.SingleOrDefaultAsync(cancellationToken);
-        }
-
-        public async Task<List<TrainingCourseEntity>> GetAll(Guid applicationId, Guid candidateId, CancellationToken cancellationToken)
-        {
-            var query = from course in dataContext.TrainingCourseEntities
-                    .Where(fil => fil.ApplicationId == applicationId)
-                    .OrderByDescending(a => a.ToYear)
-                    .ThenBy(a => a.Title)
-                        join application in dataContext.ApplicationEntities.Where(fil => fil.CandidateId == candidateId && fil.Id == applicationId)
-                            on course.ApplicationId equals application.Id
-                        select course;
-
-            return await query.ToListAsync(cancellationToken);
-        }
-
-        public async Task<Tuple<TrainingCourseEntity, bool>> UpsertTrainingCourse(Domain.Application.TrainingCourse trainingCourseEntity, Guid candidateId)
-        {
-            var query = from course in dataContext.TrainingCourseEntities
-                    .Where(tc => tc.Id == trainingCourseEntity.Id)
-                    .Where(tc => tc.ApplicationId == trainingCourseEntity.ApplicationId)
-                        join application in dataContext.ApplicationEntities.Where(app => app.CandidateId == candidateId && app.Id == trainingCourseEntity.ApplicationId)
-                        on course.ApplicationId equals application.Id
-                        select course;
-
-            var trainingCourse = await query.SingleOrDefaultAsync();
-
-            if (trainingCourse is null)
-            {
-                await dataContext.TrainingCourseEntities.AddAsync((TrainingCourseEntity)trainingCourseEntity);
-                await dataContext.SaveChangesAsync();
-                return new Tuple<TrainingCourseEntity, bool>(trainingCourseEntity, true);
-            }
-
-            trainingCourse.ToYear = trainingCourseEntity.ToYear;
-            trainingCourse.Title = trainingCourseEntity.Title;
-            dataContext.TrainingCourseEntities.Update(trainingCourse);
-
+            await dataContext.TrainingCourseEntities.AddAsync((TrainingCourseEntity)trainingCourseEntity);
             await dataContext.SaveChangesAsync();
-            return new Tuple<TrainingCourseEntity, bool>(trainingCourse, false);
+            return new Tuple<TrainingCourseEntity, bool>(trainingCourseEntity, true);
         }
 
-        public async Task Delete(Guid applicationId, Guid id, Guid candidateId)
-        {
-            var trainingCourse = await dataContext.TrainingCourseEntities
+        trainingCourse.ToYear = trainingCourseEntity.ToYear;
+        trainingCourse.Title = trainingCourseEntity.Title;
+        dataContext.TrainingCourseEntities.Update(trainingCourse);
+
+        await dataContext.SaveChangesAsync();
+        return new Tuple<TrainingCourseEntity, bool>(trainingCourse, false);
+    }
+
+    public async Task Delete(Guid applicationId, Guid id, Guid candidateId)
+    {
+        var trainingCourse = await dataContext.TrainingCourseEntities
             .Where(w => w.Id == id && w.ApplicationId == applicationId && w.ApplicationEntity.CandidateId == candidateId)
             .SingleOrDefaultAsync();
 
-            if (trainingCourse != null)
-            {
-                dataContext.TrainingCourseEntities.Remove(trainingCourse);
-                await dataContext.SaveChangesAsync();
-            }
+        if (trainingCourse != null)
+        {
+            dataContext.TrainingCourseEntities.Remove(trainingCourse);
+            await dataContext.SaveChangesAsync();
         }
+    }
+
+    public async Task DeleteAllAsync(Guid applicationId, Guid candidateId, CancellationToken cancellationToken)
+    {
+        var records = await dataContext
+            .TrainingCourseEntities
+            .Where(x => x.ApplicationId == applicationId && x.ApplicationEntity.CandidateId == candidateId)
+            .ToListAsync(cancellationToken);
+
+        if (records is not { Count: > 0 })
+        {
+            return;
+        }
+
+        dataContext.TrainingCourseEntities.RemoveRange(records);
+        await dataContext.SaveChangesAsync(cancellationToken);
     }
 }

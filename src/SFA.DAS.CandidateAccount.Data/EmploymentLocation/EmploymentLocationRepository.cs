@@ -7,6 +7,7 @@ namespace SFA.DAS.CandidateAccount.Data.EmploymentLocation
     {
         Task<EmploymentLocationEntity?> Get(Guid applicationId, Guid candidateId, CancellationToken cancellationToken);
         Task<Tuple<EmploymentLocationEntity, bool>> UpsertEmploymentLocation(EmploymentLocationEntity employmentLocation, Guid candidateId, CancellationToken token = default);
+        Task DeleteAllAsync(Guid applicationId, Guid candidateId, CancellationToken cancellationToken);
     }
 
     public class EmploymentLocationRepository(ICandidateAccountDataContext dataContext) : IEmploymentLocationRepository
@@ -48,6 +49,22 @@ namespace SFA.DAS.CandidateAccount.Data.EmploymentLocation
 
             await dataContext.SaveChangesAsync(token);
             return new Tuple<EmploymentLocationEntity, bool>(employmentLocationEntity, false);
+        }
+
+        public async Task DeleteAllAsync(Guid applicationId, Guid candidateId, CancellationToken cancellationToken)
+        {
+            var records = await dataContext
+                .EmploymentLocationEntities
+                .Where(x => x.ApplicationId == applicationId && x.ApplicationEntity.CandidateId == candidateId)
+                .ToListAsync(cancellationToken);
+
+            if (records is not { Count: > 0 })
+            {
+                return;
+            }
+
+            dataContext.EmploymentLocationEntities.RemoveRange(records);
+            await dataContext.SaveChangesAsync(cancellationToken);
         }
     }
 }
