@@ -200,6 +200,7 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
     {
         return await dataContext.ApplicationEntities
             .Include(c => c.CandidateEntity)
+            .ThenInclude(c => c.Address)
             .Where(c => c.VacancyReference == vacancyReference)
                 .ToListAsync();
     }

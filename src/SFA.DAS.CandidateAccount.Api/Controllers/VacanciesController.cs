@@ -53,31 +53,7 @@ public class VacanciesController(IMediator mediator, ILogger<VacanciesController
     {
         try
         {
-            // TODO: remove this once FAI-2721 is resolved ---------------------------------------------
-            logger.LogInformation("GetApplications ({vacancyRef}): called", vacancyRef);
-            // -----------------------------------------------------------------------------------------
-            
             var result = await mediator.Send(new GetAllApplicationsByVacancyReferenceQuery(vacancyRef));
-
-            // TODO: remove this once FAI-2721 is resolved ---------------------------------------------
-            try
-            {
-                if (result is null)
-                {
-                    logger.LogInformation("GetApplications ({vacancyRef}): result is null", vacancyRef);
-                }
-                else
-                {
-                    var appCount = result.Applications.Count;
-                    var candidatesAreValid = result.Applications.All(x => x.Candidate is not null);
-                    logger.LogInformation("GetApplications ({vacancyRef}): there are {appCount} applications and all candidates are valid is {candidatesAreValid}", vacancyRef, appCount, candidatesAreValid);
-                }
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "GetApplications ({vacancyRef}): problem querying result", vacancyRef);
-            }
-            // -----------------------------------------------------------------------------------------
 
             return Ok(new GetApplicationsApiResponse
             {
@@ -96,9 +72,12 @@ public class VacanciesController(IMediator mediator, ILogger<VacanciesController
                         Email = app.Candidate.Email,
                         LastName = app.Candidate.LastName,
                         FirstName = app.Candidate.FirstName,
-                        MiddleNames = app.Candidate.MiddleNames
+                        MiddleNames = app.Candidate.MiddleNames,
+                        DateOfBirth = app.Candidate.DateOfBirth,
+                        Address = app.Candidate.Address,
                     },
-                    Status = app.Status
+                    Status = app.Status,
+                    Support = app.Support
                 }).ToList()
             });
         }
