@@ -25,6 +25,7 @@ namespace SFA.DAS.CandidateAccount.Api.ApiResponses
             public EmploymentLocation? EmploymentLocation { get; set; }
             public Candidate? Candidate { get; set; }
             public ApplicationStatus Status { get; set; }
+            public string? Support { get; set; }
 
             public static implicit operator Application(ApplicationDetail application)
             {
@@ -38,7 +39,8 @@ namespace SFA.DAS.CandidateAccount.Api.ApiResponses
                     WithdrawnDate = application.WithdrawnDate,
                     EmploymentLocation = application.EmploymentLocation,
                     Candidate = application.Candidate,
-                    Status = application.Status
+                    Status = application.Status,
+                    Support = application.Support
                 };
             }
         }
@@ -50,6 +52,8 @@ namespace SFA.DAS.CandidateAccount.Api.ApiResponses
             public string? LastName { get; set; }
             public string? FirstName { get; set; }
             public string? MiddleNames { get; set; }
+            public DateTime? DateOfBirth { get; set; }
+            public Domain.Candidate.Address? Address { get; set; }
 
             public static implicit operator Candidate(Domain.Candidate.Candidate candidate)
             {
@@ -60,6 +64,8 @@ namespace SFA.DAS.CandidateAccount.Api.ApiResponses
                     LastName = candidate.LastName,
                     FirstName = candidate.FirstName,
                     MiddleNames = candidate.MiddleNames,
+                    DateOfBirth = candidate.DateOfBirth,
+                    Address = candidate.Address
                 };
             }
         }
