@@ -53,6 +53,7 @@ namespace SFA.DAS.CandidateAccount.Api.ApiResponses
             public string? FirstName { get; set; }
             public string? MiddleNames { get; set; }
             public DateTime? DateOfBirth { get; set; }
+            public string? PhoneNumber { get; set; }
             public Domain.Candidate.Address? Address { get; set; }
 
             public static implicit operator Candidate(Domain.Candidate.Candidate candidate)
@@ -65,7 +66,8 @@ namespace SFA.DAS.CandidateAccount.Api.ApiResponses
                     FirstName = candidate.FirstName,
                     MiddleNames = candidate.MiddleNames,
                     DateOfBirth = candidate.DateOfBirth,
-                    Address = candidate.Address
+                    Address = candidate.Address,
+                    PhoneNumber = candidate.PhoneNumber
                 };
             }
         }
