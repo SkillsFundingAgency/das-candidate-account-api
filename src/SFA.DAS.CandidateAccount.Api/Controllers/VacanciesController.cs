@@ -75,6 +75,7 @@ public class VacanciesController(IMediator mediator, ILogger<VacanciesController
                         MiddleNames = app.Candidate.MiddleNames,
                         DateOfBirth = app.Candidate.DateOfBirth,
                         Address = app.Candidate.Address,
+                        PhoneNumber = app.Candidate.PhoneNumber
                     },
                     Status = app.Status,
                     Support = app.Support
