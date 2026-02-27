@@ -1,10 +1,6 @@
-﻿using AutoFixture.NUnit3;
-using FluentAssertions;
-using Moq;
-using SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetSavedVacancies;
+﻿using SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetSavedVacancies;
 using SFA.DAS.CandidateAccount.Data.SavedVacancy;
 using SFA.DAS.CandidateAccount.Domain.Candidate;
-using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.CandidateAccount.Application.UnitTests.SavedVacancies
 {

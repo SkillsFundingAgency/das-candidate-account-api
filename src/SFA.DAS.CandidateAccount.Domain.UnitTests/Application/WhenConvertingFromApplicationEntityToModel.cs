@@ -1,7 +1,5 @@
-using FluentAssertions;
 using Newtonsoft.Json;
 using SFA.DAS.CandidateAccount.Domain.Application;
-using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.CandidateAccount.Domain.UnitTests.Application;
 

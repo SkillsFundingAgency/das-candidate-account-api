@@ -1,7 +1,5 @@
-﻿using FluentAssertions;
-using SFA.DAS.CandidateAccount.Api.ApiResponses;
+﻿using SFA.DAS.CandidateAccount.Api.ApiResponses;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetAdditionalQuestion;
-using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.CandidateAccount.Api.UnitTests.ApiResponses;
 

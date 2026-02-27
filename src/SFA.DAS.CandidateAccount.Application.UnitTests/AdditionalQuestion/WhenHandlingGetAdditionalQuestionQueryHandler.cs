@@ -1,10 +1,6 @@
-﻿using AutoFixture.NUnit3;
-using FluentAssertions;
-using Moq;
-using SFA.DAS.CandidateAccount.Application.Application.Queries.GetAdditionalQuestion;
+﻿using SFA.DAS.CandidateAccount.Application.Application.Queries.GetAdditionalQuestion;
 using SFA.DAS.CandidateAccount.Data.AdditionalQuestion;
 using SFA.DAS.CandidateAccount.Domain.Application;
-using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.CandidateAccount.Application.UnitTests.AdditionalQuestion;
 

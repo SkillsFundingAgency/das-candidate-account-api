@@ -1,13 +1,9 @@
-using AutoFixture.NUnit3;
-using FluentAssertions;
-using MediatR;
-using Microsoft.AspNetCore.Mvc;
-using Moq;
-using SFA.DAS.CandidateAccount.Api.Controllers;
-using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplicationByVacancyReference;
-using SFA.DAS.Testing.AutoFixture;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using SFA.DAS.CandidateAccount.Api.Controllers;
+using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplicationByVacancyReference;
 
 namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.Application;
 

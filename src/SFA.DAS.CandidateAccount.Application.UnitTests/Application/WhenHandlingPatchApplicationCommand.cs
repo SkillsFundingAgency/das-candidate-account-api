@@ -1,13 +1,8 @@
 using System.ComponentModel.DataAnnotations;
-using AutoFixture.NUnit3;
-using FluentAssertions;
 using Microsoft.AspNetCore.JsonPatch;
-using Moq;
-using Newtonsoft.Json;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.PatchApplication;
 using SFA.DAS.CandidateAccount.Data.Application;
 using SFA.DAS.CandidateAccount.Domain.Application;
-using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.CandidateAccount.Application.UnitTests.Application;
 

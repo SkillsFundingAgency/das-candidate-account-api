@@ -15,6 +15,7 @@ using SFA.DAS.CandidateAccount.Domain.Application;
 using SFA.DAS.Common.Domain.Models;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
+using Asp.Versioning;
 
 namespace SFA.DAS.CandidateAccount.Api.Controllers;
 

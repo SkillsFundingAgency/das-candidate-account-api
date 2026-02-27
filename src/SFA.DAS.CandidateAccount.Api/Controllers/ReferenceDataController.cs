@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.CandidateAccount.Application.ReferenceData.Queries.GetAvailablePreferences;
 using SFA.DAS.CandidateAccount.Application.ReferenceData.Queries.GetAvailableQualifications;
 using System.Net;
+using Asp.Versioning;
 
 namespace SFA.DAS.CandidateAccount.Api.Controllers;
 

@@ -1,13 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 using System.Net;
-using AutoFixture.NUnit3;
-using FluentAssertions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Moq;
 using SFA.DAS.CandidateAccount.Api.Controllers;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplication;
-using SFA.DAS.Testing.AutoFixture;
+using SFA.DAS.CandidateAccount.Domain.Application;
 
 namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.Application;
 
@@ -44,7 +41,7 @@ public class WhenCallingGetApplication
     public async Task Then_The_Command_Is_Sent_To_Mediator_And_Ok_Returned_With_Detail(
         Guid id,
         Guid candidateId,
-        Domain.Application.ApplicationDetail application,
+        ApplicationDetail application,
         GetApplicationQueryResult response,
         [Frozen] Mock<IMediator> mediator,
         [Greedy] ApplicationController controller)
@@ -64,7 +61,7 @@ public class WhenCallingGetApplication
         //Assert
         Assert.That(actual, Is.Not.Null);
         actual!.StatusCode.Should().Be((int) HttpStatusCode.OK);
-        actual.Value.Should().BeEquivalentTo((Domain.Application.ApplicationDetail)response.Application, options => 
+        actual.Value.Should().BeEquivalentTo((ApplicationDetail)response.Application, options => 
             options
                 .Excluding(prop => prop!.AdditionalQuestions)
                 .Excluding(prop => prop!.TrainingCourses)

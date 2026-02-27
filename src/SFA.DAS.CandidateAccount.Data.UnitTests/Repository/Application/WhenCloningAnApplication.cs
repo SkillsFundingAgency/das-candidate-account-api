@@ -1,11 +1,8 @@
-﻿using AutoFixture.NUnit3;
-using FluentAssertions;
-using Moq;
+﻿using FluentAssertions;
 using SFA.DAS.CandidateAccount.Data.Application;
 using SFA.DAS.CandidateAccount.Data.UnitTests.DatabaseMock;
 using SFA.DAS.CandidateAccount.Domain;
 using SFA.DAS.CandidateAccount.Domain.Application;
-using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.CandidateAccount.Data.UnitTests.Repository.Application
 {

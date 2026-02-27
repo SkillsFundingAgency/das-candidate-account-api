@@ -6,6 +6,7 @@ using SFA.DAS.CandidateAccount.Application.Application.Commands.UpsertAdditional
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetAdditionalQuestion;
 using SFA.DAS.CandidateAccount.Domain.Application;
 using System.Net;
+using Asp.Versioning;
 
 namespace SFA.DAS.CandidateAccount.Api.Controllers
 {

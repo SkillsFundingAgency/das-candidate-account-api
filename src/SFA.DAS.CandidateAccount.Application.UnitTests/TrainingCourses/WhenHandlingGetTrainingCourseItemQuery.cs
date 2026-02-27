@@ -1,10 +1,6 @@
-﻿using AutoFixture.NUnit3;
-using FluentAssertions;
-using Moq;
-using SFA.DAS.CandidateAccount.Application.Application.Queries.GetTrainingCourseItem;
+﻿using SFA.DAS.CandidateAccount.Application.Application.Queries.GetTrainingCourseItem;
 using SFA.DAS.CandidateAccount.Data.TrainingCourse;
 using SFA.DAS.CandidateAccount.Domain.Application;
-using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.CandidateAccount.Application.UnitTests.TrainingCourses;
 public class WhenHandlingGetTrainingCourseItemQuery
