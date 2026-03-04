@@ -66,7 +66,7 @@ public class ApplicationController(IMediator mediator, ILogger<ApplicationContro
         }
     }
     
-    [HttpPatch]
+    [HttpPatch, Consumes("application/json", "application/json-patch+json", "text/json", "application/*+json")]
     [Route("Candidates/{candidateId}/[controller]s/{id}")]
     public async Task<IActionResult> PatchApplication([FromRoute]Guid id,[FromRoute]Guid candidateId, [FromBody]JsonPatchDocument<PatchApplication> applicationRequest)
     {
