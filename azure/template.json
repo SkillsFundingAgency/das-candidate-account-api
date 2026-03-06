@@ -350,6 +350,7 @@
         {
             "apiVersion": "2021-04-01",
             "name": "[concat(variables('databaseName'), '-', parameters('utcValue'))]",
+            "tags": "[parameters('tags')]",
             "type": "Microsoft.Resources/deployments",
             "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
             "properties": {
@@ -427,3 +428,4 @@
         }
     }
 }
+
