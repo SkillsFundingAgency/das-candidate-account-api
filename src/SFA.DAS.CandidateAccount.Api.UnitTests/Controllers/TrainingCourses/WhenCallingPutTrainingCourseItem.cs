@@ -1,13 +1,10 @@
 ﻿using System.Net;
-using AutoFixture.NUnit3;
-using FluentAssertions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Moq;
 using SFA.DAS.CandidateAccount.Api.ApiRequests;
 using SFA.DAS.CandidateAccount.Api.Controllers;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.UpsertTrainingCourse;
-using SFA.DAS.Testing.AutoFixture;
+using SFA.DAS.CandidateAccount.Domain.Application;
 
 namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.TrainingCourses;
 public class WhenCallingPutTrainingCourseItem
@@ -32,7 +29,7 @@ public class WhenCallingPutTrainingCourseItem
 
         var actual = await controller.PutTrainingCourseItem(candidateId, applicationId, id, upsertTrainingCourseRequest);
         var result = actual as CreatedResult;
-        var actualResult = result.Value as Domain.Application.TrainingCourse;
+        var actualResult = result.Value as TrainingCourse;
 
         actual.Should().BeOfType<CreatedResult>();
         actualResult.Should().BeEquivalentTo(upsertTrainingCourseCommandResult.TrainingCourse);
@@ -58,7 +55,7 @@ public class WhenCallingPutTrainingCourseItem
 
         var actual = await controller.PutTrainingCourseItem(candidateId, applicationId, id, upsertTrainingCourseRequest);
         var result = actual as OkObjectResult;
-        var actualResult = result.Value as Domain.Application.TrainingCourse;
+        var actualResult = result.Value as TrainingCourse;
 
         actual.Should().BeOfType<OkObjectResult>();
         actualResult.Should().BeEquivalentTo(upsertTrainingCourseCommandResult.TrainingCourse);

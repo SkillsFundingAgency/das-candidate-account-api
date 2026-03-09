@@ -1,10 +1,6 @@
-﻿using AutoFixture.NUnit3;
-using FluentAssertions;
-using Moq;
-using SFA.DAS.CandidateAccount.Application.CandidatePreferences.Commands.PutCandidatePreferences;
+﻿using SFA.DAS.CandidateAccount.Application.CandidatePreferences.Commands.PutCandidatePreferences;
 using SFA.DAS.CandidateAccount.Data.CandidatePreferences;
 using SFA.DAS.CandidateAccount.Domain.Candidate;
-using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.CandidateAccount.Application.UnitTests.NotificationPreferences;
 public class WhenHandlingPutNotificationPreferencesCommand

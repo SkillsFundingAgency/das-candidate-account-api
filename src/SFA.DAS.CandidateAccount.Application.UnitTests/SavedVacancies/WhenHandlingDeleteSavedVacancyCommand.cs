@@ -1,11 +1,7 @@
-﻿using AutoFixture.NUnit3;
-using FluentAssertions;
-using MediatR;
-using Moq;
+﻿using MediatR;
 using SFA.DAS.CandidateAccount.Application.Candidate.Commands.DeleteSavedVacancy;
 using SFA.DAS.CandidateAccount.Data.SavedVacancy;
 using SFA.DAS.CandidateAccount.Domain.Candidate;
-using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.CandidateAccount.Application.UnitTests.SavedVacancies
 {

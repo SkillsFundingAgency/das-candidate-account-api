@@ -1,5 +1,4 @@
-﻿using SFA.DAS.CandidateAccount.Data.TrainingCourse;
-using SFA.DAS.CandidateAccount.Data.UnitTests.DatabaseMock;
+﻿using SFA.DAS.CandidateAccount.Data.UnitTests.DatabaseMock;
 using SFA.DAS.CandidateAccount.Data.WorkExperience;
 using SFA.DAS.CandidateAccount.Domain.Application;
 

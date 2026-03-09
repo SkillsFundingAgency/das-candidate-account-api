@@ -1,10 +1,6 @@
-﻿using AutoFixture.NUnit3;
-using Moq;
-using SFA.DAS.CandidateAccount.Data.TrainingCourse;
+﻿using SFA.DAS.CandidateAccount.Data.TrainingCourse;
 using SFA.DAS.CandidateAccount.Data.UnitTests.DatabaseMock;
 using SFA.DAS.CandidateAccount.Domain.Application;
-using SFA.DAS.Testing.AutoFixture;
-
 
 namespace SFA.DAS.CandidateAccount.Data.UnitTests.Repository.TrainingCourse
 {

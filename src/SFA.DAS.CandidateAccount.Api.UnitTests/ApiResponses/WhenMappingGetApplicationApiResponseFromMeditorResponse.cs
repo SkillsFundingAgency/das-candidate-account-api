@@ -1,6 +1,5 @@
-using AutoFixture.NUnit3;
-using FluentAssertions;
 using SFA.DAS.CandidateAccount.Api.ApiResponses;
+using SFA.DAS.CandidateAccount.Domain.Application;
 
 namespace SFA.DAS.CandidateAccount.Api.UnitTests.ApiResponses;
 
@@ -14,7 +13,7 @@ public class WhenMappingGetApplicationApiResponseFromMediatorResponse
         actual.Should().BeEquivalentTo(application);
     }
     [Test, AutoData]
-    public void Then_The_Fields_Are_Mapped_For_Detail(Domain.Application.ApplicationDetail application)
+    public void Then_The_Fields_Are_Mapped_For_Detail(ApplicationDetail application)
     {
         var actual = (GetApplicationApiResponse)application;
 

@@ -1,9 +1,5 @@
-﻿using AutoFixture.NUnit3;
-using FluentAssertions;
-using Moq;
-using SFA.DAS.CandidateAccount.Application.Application.Commands.PutAboutYou;
+﻿using SFA.DAS.CandidateAccount.Application.Application.Commands.PutAboutYou;
 using SFA.DAS.CandidateAccount.Data.AboutYou;
-using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.CandidateAccount.Application.UnitTests.AboutYou;
 public class WhenHandlingUpsertAboutYouCommand

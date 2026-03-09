@@ -1,6 +1,4 @@
-﻿using AutoFixture.NUnit3;
-using FluentAssertions;
-using SFA.DAS.CandidateAccount.Domain.Candidate;
+﻿using SFA.DAS.CandidateAccount.Domain.Candidate;
 
 namespace SFA.DAS.CandidateAccount.Domain.UnitTests.Candidate;
 public class WhenConvertingFromAboutYouEntityToModel

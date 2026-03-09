@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Moq;
 using Moq.Language.Flow;
 
 namespace SFA.DAS.CandidateAccount.Data.UnitTests.DatabaseMock

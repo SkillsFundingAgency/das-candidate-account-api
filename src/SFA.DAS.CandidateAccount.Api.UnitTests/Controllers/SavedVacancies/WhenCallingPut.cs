@@ -1,13 +1,8 @@
-﻿using AutoFixture.NUnit3;
-using FluentAssertions;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Moq;
 using SFA.DAS.CandidateAccount.Api.ApiRequests;
 using SFA.DAS.CandidateAccount.Api.Controllers;
 using SFA.DAS.CandidateAccount.Application.Candidate.Commands.AddSavedVacancy;
-using SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetSavedVacancies;
-using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.SavedVacancies
 {

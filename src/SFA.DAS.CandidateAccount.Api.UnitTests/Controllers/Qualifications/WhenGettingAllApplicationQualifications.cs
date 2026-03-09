@@ -1,15 +1,10 @@
 using System.Net;
-using AutoFixture.NUnit3;
-using FluentAssertions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Moq;
 using SFA.DAS.CandidateAccount.Api.ApiResponses;
 using SFA.DAS.CandidateAccount.Api.Controllers;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplicationQualificationsByType;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetQualifications;
-using SFA.DAS.CandidateAccount.Domain.Application;
-using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.Qualifications;
 

@@ -1,5 +1,3 @@
-using AutoFixture.NUnit3;
-using FluentAssertions;
 using SFA.DAS.CandidateAccount.Domain.Application;
 using SFA.DAS.CandidateAccount.Domain.Candidate;
 

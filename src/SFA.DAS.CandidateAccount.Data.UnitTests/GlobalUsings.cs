@@ -1,4 +1,4 @@
 global using NUnit.Framework;
 global using SFA.DAS.Testing.AutoFixture;
-global using AutoFixture.NUnit3;
+global using AutoFixture.NUnit4;
 global using Moq;

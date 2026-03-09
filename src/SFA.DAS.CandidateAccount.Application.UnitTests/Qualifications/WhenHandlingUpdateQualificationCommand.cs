@@ -1,13 +1,8 @@
-using AutoFixture.NUnit3;
-using Azure.Core;
-using FluentAssertions;
-using Moq;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.UpsertQualification;
 using SFA.DAS.CandidateAccount.Data.Application;
 using SFA.DAS.CandidateAccount.Data.Qualification;
 using SFA.DAS.CandidateAccount.Data.ReferenceData;
 using SFA.DAS.CandidateAccount.Domain.Application;
-using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.CandidateAccount.Application.UnitTests.Qualifications;
 

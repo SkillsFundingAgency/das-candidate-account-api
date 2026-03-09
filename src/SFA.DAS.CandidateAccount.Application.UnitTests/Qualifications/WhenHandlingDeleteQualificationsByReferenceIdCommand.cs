@@ -1,11 +1,7 @@
-using AutoFixture.NUnit3;
-using Moq;
-using SFA.DAS.CandidateAccount.Application.Application.Commands.DeleteQualification;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.DeleteQualificationsByReferenceId;
 using SFA.DAS.CandidateAccount.Data.Application;
 using SFA.DAS.CandidateAccount.Data.Qualification;
 using SFA.DAS.CandidateAccount.Domain.Application;
-using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.CandidateAccount.Application.UnitTests.Qualifications;
 

@@ -6,6 +6,7 @@ using SFA.DAS.CandidateAccount.Application.Candidate.Commands.DeleteSavedVacancy
 using SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetSavedVacancies;
 using SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetSavedVacancy;
 using System.Net;
+using Asp.Versioning;
 
 namespace SFA.DAS.CandidateAccount.Api.Controllers
 {

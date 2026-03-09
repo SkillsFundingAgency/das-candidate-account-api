@@ -1,14 +1,10 @@
-﻿using AutoFixture.NUnit3;
-using FluentAssertions;
+﻿using System.Net;
 using FluentAssertions.Execution;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Moq;
+using SFA.DAS.CandidateAccount.Api.ApiResponses;
 using SFA.DAS.CandidateAccount.Api.Controllers;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplicationWorkHistories;
-using SFA.DAS.Testing.AutoFixture;
-using System.Net;
-using SFA.DAS.CandidateAccount.Api.ApiResponses;
 using SFA.DAS.CandidateAccount.Domain.Application;
 
 namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.WorkHistory

@@ -1,11 +1,8 @@
-﻿using AutoFixture.NUnit3;
-using FluentAssertions;
-using Moq;
+﻿using FluentAssertions;
 using SFA.DAS.CandidateAccount.Data.Candidate;
 using SFA.DAS.CandidateAccount.Data.UnitTests.DatabaseMock;
 using SFA.DAS.CandidateAccount.Domain.Application;
 using SFA.DAS.CandidateAccount.Domain.Candidate;
-using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.CandidateAccount.Data.UnitTests.Repository.Candidate;
 
@@ -89,7 +86,7 @@ public class WhenUpsertingCandidate
 
         //Assert
         context.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
-        Assert.IsNotNull(actual);
+        actual.Should().NotBeNull();
         actual.Item2.Should().BeTrue();
         actual.Item1.Should().BeEquivalentTo(noCandidateExists, options => options.Excluding(c=>c.CreatedOn).Excluding(c=>c.UpdatedOn).Excluding(c => c.Status));
         actual.Item1.Status.Should().Be((short)CandidateStatus.Incomplete);

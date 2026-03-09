@@ -5,6 +5,7 @@ using SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetCandidatesByAppl
 using SFA.DAS.CandidateAccount.Domain.Application;
 using SFA.DAS.Common.Domain.Models;
 using System.Net;
+using Asp.Versioning;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplicationsByVacancyReference;
 
 namespace SFA.DAS.CandidateAccount.Api.Controllers;

@@ -15,6 +15,7 @@ using SFA.DAS.CandidateAccount.Domain.Application;
 using SFA.DAS.Common.Domain.Models;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
+using Asp.Versioning;
 
 namespace SFA.DAS.CandidateAccount.Api.Controllers;
 
@@ -65,7 +66,7 @@ public class ApplicationController(IMediator mediator, ILogger<ApplicationContro
         }
     }
     
-    [HttpPatch]
+    [HttpPatch, Consumes("application/json", "application/json-patch+json", "text/json", "application/*+json")]
     [Route("Candidates/{candidateId}/[controller]s/{id}")]
     public async Task<IActionResult> PatchApplication([FromRoute]Guid id,[FromRoute]Guid candidateId, [FromBody]JsonPatchDocument<PatchApplication> applicationRequest)
     {

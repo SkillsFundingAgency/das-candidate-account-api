@@ -1,14 +1,10 @@
-﻿using AutoFixture.NUnit3;
-using FluentAssertions;
+﻿using System.Net;
 using FluentAssertions.Execution;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Moq;
 using SFA.DAS.CandidateAccount.Api.ApiResponses;
 using SFA.DAS.CandidateAccount.Api.Controllers;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetAboutYouItem;
-using SFA.DAS.Testing.AutoFixture;
-using System.Net;
 
 namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.AboutYou;
 public class WhenCallingGetAboutYouItem
