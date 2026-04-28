@@ -1,5 +1,7 @@
 using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.JsonPatch;
+using System.Text.Json;
+using Microsoft.AspNetCore.JsonPatch.SystemTextJson;
+using Microsoft.AspNetCore.JsonPatch.SystemTextJson.Operations;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.PatchApplication;
 using SFA.DAS.CandidateAccount.Data.Application;
 using SFA.DAS.CandidateAccount.Domain.Application;
@@ -70,15 +72,22 @@ public class WhenHandlingPatchApplicationCommand
 
     [Test, RecursiveMoqAutoData]
     public async Task Then_If_The_Application_Does_Not_Exist_Null_Returned(
-        PatchApplicationCommand command,
+        Guid id,
+        Operation<PatchApplication> request,
+        Guid candidateId,
         [Frozen] Mock<IApplicationRepository> service,
         PatchApplicationCommandHandler handler)
     {
         //Arrange
-        service.Setup(x => x.GetById(command.Id, false)).ReturnsAsync((ApplicationEntity)null!);
+        service.Setup(x => x.GetById(id, false)).ReturnsAsync((ApplicationEntity)null!);
         
         //Act
-        var actual = await handler.Handle(command, CancellationToken.None);
+        var actual = await handler.Handle(new PatchApplicationCommand
+        {
+            CandidateId = candidateId,
+            Id = id,
+            Patch = new JsonPatchDocument<PatchApplication>([request], new JsonSerializerOptions())
+        }, CancellationToken.None);
         
         //Assert
         actual.Should().BeEquivalentTo(new PatchApplicationCommandResponse());
@@ -88,14 +97,21 @@ public class WhenHandlingPatchApplicationCommand
     [Test, RecursiveMoqAutoData]
     public void Then_If_The_Application_Does_Not_Belong_To_The_Candidate_Validation_Error_Returned(
         ApplicationEntity entity,
-        PatchApplicationCommand command,
+        Guid id,
+        Operation<PatchApplication> request,
+        Guid candidateId,
         [Frozen] Mock<IApplicationRepository> service,
         PatchApplicationCommandHandler handler)
     {
         //Arrange
-        service.Setup(x => x.GetById(command.Id, false)).ReturnsAsync(entity);
+        service.Setup(x => x.GetById(id, false)).ReturnsAsync(entity);
         
-        Assert.ThrowsAsync<ValidationException>(()=> handler.Handle(command, CancellationToken.None));
+        Assert.ThrowsAsync<ValidationException>(()=> handler.Handle(new PatchApplicationCommand
+        {
+            CandidateId = candidateId,
+            Id = id,
+            Patch = new JsonPatchDocument<PatchApplication>([request], new JsonSerializerOptions())
+        }, CancellationToken.None));
         
     }
 

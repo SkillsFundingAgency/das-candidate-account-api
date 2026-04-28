@@ -1,7 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 using System.Net;
+using System.Text.Json;
 using MediatR;
-using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.JsonPatch.SystemTextJson;
+using Microsoft.AspNetCore.JsonPatch.SystemTextJson.Operations;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.CandidateAccount.Api.Controllers;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.PatchApplication;
@@ -16,7 +18,7 @@ public class WhenCallingPatchApplication
         Guid id,
         Guid candidateId,
         PatchApplicationCommandResponse response,
-        JsonPatchDocument<PatchApplication> request,
+        Operation<PatchApplication> request,
         [Frozen] Mock<IMediator> mediator,
         [Greedy] ApplicationController controller)
     {
@@ -25,12 +27,13 @@ public class WhenCallingPatchApplication
                 c=> 
                 c.Id.Equals(id)
                 && c.CandidateId.Equals(candidateId)
-                && c.Patch.Equals(request)
+                && c.Patch.Operations.First().path.Equals(request.path)
                 ), It.IsAny<CancellationToken>()))
             .ReturnsAsync(response);
         
         //Act
-        var actual = await controller.PatchApplication(id, candidateId, request) as OkObjectResult;
+        var actual = await controller.PatchApplication(id, candidateId, new JsonPatchDocument<PatchApplication>(
+            [request], new JsonSerializerOptions())) as OkObjectResult;
         
         //Assert
         Assert.That(actual, Is.Not.Null);
@@ -42,7 +45,7 @@ public class WhenCallingPatchApplication
     public async Task Then_If_Null_Returned_From_Mediator_Then_NotFound_Is_Returned(
         Guid id,
         Guid candidateId,
-        JsonPatchDocument<PatchApplication> request,
+        Operation<PatchApplication> request,
         [Frozen] Mock<IMediator> mediator,
         [Greedy] ApplicationController controller)
     {
@@ -54,18 +57,19 @@ public class WhenCallingPatchApplication
             });
         
         //Act
-        var actual = await controller.PatchApplication(id, candidateId, request) as StatusCodeResult;
+        var actual = await controller.PatchApplication(id, candidateId, new JsonPatchDocument<PatchApplication>(
+            [request], new JsonSerializerOptions())) as StatusCodeResult;
         
         //Assert
         Assert.That(actual, Is.Not.Null);
         actual.StatusCode.Should().Be((int) HttpStatusCode.NotFound);
     }
     
-    [Test, MoqAutoData]
+    [Test, RecursiveMoqAutoData]
     public async Task Then_If_An_Error_Then_An_InternalServer_Error_Is_Returned(
         Guid id,
         Guid candidateId,
-        JsonPatchDocument<PatchApplication> request,
+        Operation<PatchApplication> request,
         [Frozen] Mock<IMediator> mediator,
         [Greedy] ApplicationController controller)
     {
@@ -74,7 +78,8 @@ public class WhenCallingPatchApplication
             .ThrowsAsync(new Exception());
         
         //Act
-        var actual = await controller.PatchApplication(id, candidateId, request) as StatusCodeResult;
+        var actual = await controller.PatchApplication(id, candidateId, new JsonPatchDocument<PatchApplication>(
+            [request], new JsonSerializerOptions())) as StatusCodeResult;
         
         //Assert
         Assert.That(actual, Is.Not.Null);
@@ -85,7 +90,7 @@ public class WhenCallingPatchApplication
     public async Task Then_If_ValidationError_Then_BadRequest_Response_Returned(
         Guid id,
         Guid candidateId,
-        JsonPatchDocument<PatchApplication> request,
+        Operation<PatchApplication> request,
         [Frozen] Mock<IMediator> mediator,
         [Greedy] ApplicationController controller)
     {
@@ -94,7 +99,8 @@ public class WhenCallingPatchApplication
             .ThrowsAsync(new ValidationException("Error"));
         
         //Act
-        var actual = await controller.PatchApplication(id, candidateId, request) as StatusCodeResult;
+        var actual = await controller.PatchApplication(id, candidateId, new JsonPatchDocument<PatchApplication>(
+            [request], new JsonSerializerOptions())) as StatusCodeResult;
         
         //Assert
         var result = actual as BadRequestResult;

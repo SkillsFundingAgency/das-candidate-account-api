@@ -1,5 +1,5 @@
 using MediatR;
-using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.JsonPatch.SystemTextJson;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.CandidateAccount.Api.ApiRequests;
 using SFA.DAS.CandidateAccount.Api.ApiResponses;
@@ -66,7 +66,7 @@ public class ApplicationController(IMediator mediator, ILogger<ApplicationContro
         }
     }
     
-    [HttpPatch, Consumes("application/json", "application/json-patch+json", "text/json", "application/*+json")]
+    [HttpPatch]
     [Route("Candidates/{candidateId}/[controller]s/{id}")]
     public async Task<IActionResult> PatchApplication([FromRoute]Guid id,[FromRoute]Guid candidateId, [FromBody]JsonPatchDocument<PatchApplication> applicationRequest)
     {
