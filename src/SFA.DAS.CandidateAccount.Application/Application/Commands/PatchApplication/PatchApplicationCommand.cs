@@ -1,5 +1,5 @@
 using MediatR;
-using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.JsonPatch.SystemTextJson;
 
 namespace SFA.DAS.CandidateAccount.Application.Application.Commands.PatchApplication;
 
