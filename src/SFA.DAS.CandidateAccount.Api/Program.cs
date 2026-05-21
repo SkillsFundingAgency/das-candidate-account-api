@@ -60,10 +60,6 @@ builder.Services
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-    })
-    .AddNewtonsoftJson(options =>
-    {
-        options.SerializerSettings.Converters.Add(new StringEnumConverter());
     });
 
 builder.Services.AddApplicationInsightsTelemetry();
