@@ -7,8 +7,8 @@ namespace SFA.DAS.CandidateAccount.Application.Candidate.Commands.AddSavedVacanc
     public class AddSavedVacancyCommand : IRequest<AddSavedVacancyCommandResult>
     {
         public Guid CandidateId { get; set; }
-        public string VacancyReference { get; set; }
-        public string VacancyId { get; set; }
+        public string? VacancyReference { get; set; }
+        public required string VacancyId { get; set; }
 
         public DateTime CreatedOn { get; set; }
     }

@@ -1,11 +1,9 @@
-﻿using SFA.DAS.Common.Domain.Models;
-
-namespace SFA.DAS.CandidateAccount.Api.ApiRequests
+﻿namespace SFA.DAS.CandidateAccount.Api.ApiRequests
 {
     public class SavedVacancyRequest
     {
-        public VacancyReference? VacancyReference { get; set; }
-        public string? VacancyId { get; set; }
+        public string? VacancyReference { get; set; }
+        public required string VacancyId { get; set; } = null!;
         public DateTime CreatedOn { get; set; }
     }
 }
