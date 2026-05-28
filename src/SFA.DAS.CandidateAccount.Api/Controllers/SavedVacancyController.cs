@@ -49,16 +49,24 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Put(Guid candidateId, SavedVacancyRequest request)
+        public async Task<IActionResult> Put([FromRoute] Guid candidateId, [FromBody] SavedVacancyRequest request)
         {
-            var result = await mediator.Send(new AddSavedVacancyCommand
+            try
             {
-                CandidateId = candidateId,
-                VacancyReference = request.VacancyReference.HasValue ? request.VacancyReference.Value.ToShortString() : string.Empty,
-                VacancyId = request.VacancyId,
-                CreatedOn = request.CreatedOn
-            });
-            return Ok(result.SavedVacancy);
+                var result = await mediator.Send(new AddSavedVacancyCommand
+                {
+                    CandidateId = candidateId,
+                    VacancyReference = request.VacancyReference,
+                    VacancyId = request.VacancyId,
+                    CreatedOn = request.CreatedOn
+                });
+                return Ok(result.SavedVacancy);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, "Put SavedVacancy : An error occurred");
+                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+            }
         }
 
         [HttpDelete("{vacancyId}")]

@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using SFA.DAS.CandidateAccount.Domain.Candidate;
 
 namespace SFA.DAS.CandidateAccount.Data.SavedVacancy
