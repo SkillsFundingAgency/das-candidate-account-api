@@ -41,7 +41,7 @@
         "sharedBackEndAppServicePlanName": {
             "type": "string"
         },
-        "SharedBackEndSubnetResourceId": {
+        "sharedBackEndSubnetResourceId": {
             "type": "string"
         },
         "sharedKeyVaultName": {
