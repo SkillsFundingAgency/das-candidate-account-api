@@ -320,7 +320,7 @@
                                     "value": "1.0"
                                 },
                                 {
-                                    "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                                    "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
                                     "value": "[parameters('applicationInsightsConnectionString')]"
                                 },
                                 {
