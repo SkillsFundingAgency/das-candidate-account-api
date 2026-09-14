@@ -1,6 +1,7 @@
 using System.Net;
 using MediatR;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using SFA.DAS.CandidateAccount.Api.Controllers;
 using SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetCandidate;
 
@@ -20,7 +21,7 @@ public class WhenCallingGetCandidate
             .ReturnsAsync(queryResult);
         
         //Act
-        var actual = await controller.GetCandidate(id) as OkObjectResult;
+        var actual = await controller.GetCandidate(id) as Ok<Domain.Candidate.Candidate>;
         
         //Assert
         Assert.That(actual, Is.Not.Null);
@@ -41,11 +42,11 @@ public class WhenCallingGetCandidate
             .ReturnsAsync(queryResult);
 
         //Act
-        var actual = await controller.GetCandidate(id) as NotFoundResult;
+        var actual = await controller.GetCandidate(id) as NotFound;
         
         //Assert
         Assert.That(actual, Is.Not.Null);
-        actual.StatusCode.Should().Be((int) HttpStatusCode.NotFound);
+        actual.StatusCode.Should().Be(StatusCodes.Status404NotFound);
     }
 
     [Test, MoqAutoData]
@@ -60,10 +61,10 @@ public class WhenCallingGetCandidate
             .ThrowsAsync(new Exception());
             
         //Act
-        var actual = await controller.GetCandidate(id) as StatusCodeResult;
+        var actual = await controller.GetCandidate(id) as StatusCodeHttpResult;
         
         //Assert
         Assert.That(actual, Is.Not.Null);
-        actual.StatusCode.Should().Be((int) HttpStatusCode.InternalServerError);
+        actual.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
     }
 }

@@ -138,6 +138,7 @@ public class CandidateRepository(ICandidateAccountDataContext dataContext) : ICa
         existingCandidate.Status = candidate.Status.HasValue ? (short)candidate.Status : existingCandidate.Status;
         existingCandidate.MigratedEmail = candidate.MigratedEmail ?? existingCandidate.MigratedEmail;
         existingCandidate.MigratedCandidateId = candidate.MigratedCandidateId ?? existingCandidate.MigratedCandidateId;
+        existingCandidate.GovUkIdentifier = candidate.GovUkIdentifier ?? existingCandidate.GovUkIdentifier;
         dataContext.CandidateEntities.Update(existingCandidate);
         await dataContext.SaveChangesAsync();
     

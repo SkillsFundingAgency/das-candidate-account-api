@@ -1,73 +1,72 @@
-﻿using System.Net;
-using MediatR;
-using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using SFA.DAS.CandidateAccount.Api.Controllers;
 using SFA.DAS.CandidateAccount.Application.Candidate.Commands.DeleteCandidate;
 
-namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.Candidate
+namespace SFA.DAS.CandidateAccount.Api.UnitTests.Controllers.Candidate;
+
+[TestFixture]
+public class WhenDeletingCandidate
 {
-    [TestFixture]
-    public class WhenDeletingCandidate
+    [Test, MoqAutoData]
+    public async Task Then_If_MediatorCall_Returns_Candidate_Then_NoContent_Result_Returned(
+        Guid id,
+        DeleteCandidateCommandResult deleteCandidateCommandResult,
+        [Frozen] Mock<IMediator> mediator,
+        [Greedy] CandidateController controller)
     {
-        [Test, MoqAutoData]
-        public async Task Then_If_MediatorCall_Returns_Candidate_Then_NoContent_Result_Returned(
-           Guid id,
-           DeleteCandidateCommandResult deleteCandidateCommandResult,
-           [Frozen] Mock<IMediator> mediator,
-           [Greedy] CandidateController controller)
-        {
-            //Arrange
-            mediator.Setup(x => x.Send(It.Is<DeleteCandidateCommand>(c =>
-                    c.CandidateId == id
-                ), CancellationToken.None))
-                .ReturnsAsync(deleteCandidateCommandResult);
+        //Arrange
+        mediator.Setup(x => x.Send(It.Is<DeleteCandidateCommand>(c =>
+                c.CandidateId == id
+            ), CancellationToken.None))
+            .ReturnsAsync(deleteCandidateCommandResult);
 
-            //Act
-            var actual = await controller.DeleteCandidate(id);
+        //Act
+        var actual = await controller.DeleteCandidate(id);
 
-            //Assert
-            var result = actual as NoContentResult;
-            result.StatusCode.Should().Be((int)HttpStatusCode.NoContent);
-        }
+        //Assert
+        var result = actual as NoContent;
+        result!.StatusCode.Should().Be(StatusCodes.Status204NoContent);
+    }
 
-        [Test, MoqAutoData]
-        public async Task Then_If_MediatorCall_Returns_Null_Then_NotFound_Result_Returned(
-            Guid id,
-            DeleteCandidateCommandResult deleteCandidateCommandResult,
-            [Frozen] Mock<IMediator> mediator,
-            [Greedy] CandidateController controller)
-        {
-            //Arrange
-            deleteCandidateCommandResult.Candidate = null;
-            mediator.Setup(x => x.Send(It.Is<DeleteCandidateCommand>(c =>
-                    c.CandidateId == id
-                ), CancellationToken.None))
-                .ReturnsAsync(deleteCandidateCommandResult);
+    [Test, MoqAutoData]
+    public async Task Then_If_MediatorCall_Returns_Null_Then_NotFound_Result_Returned(
+        Guid id,
+        DeleteCandidateCommandResult deleteCandidateCommandResult,
+        [Frozen] Mock<IMediator> mediator,
+        [Greedy] CandidateController controller)
+    {
+        //Arrange
+        deleteCandidateCommandResult.Candidate = null;
+        mediator.Setup(x => x.Send(It.Is<DeleteCandidateCommand>(c =>
+                c.CandidateId == id
+            ), CancellationToken.None))
+            .ReturnsAsync(deleteCandidateCommandResult);
 
-            //Act
-            var actual = await controller.DeleteCandidate(id);
+        //Act
+        var actual = await controller.DeleteCandidate(id);
 
-            //Assert
-            var result = actual as NoContentResult;
-            result.StatusCode.Should().Be((int)HttpStatusCode.NoContent);
-        }
+        //Assert
+        var result = actual as NoContent;
+        result!.StatusCode.Should().Be(StatusCodes.Status204NoContent);
+    }
 
-        [Test, MoqAutoData]
-        public async Task Then_If_Error_Then_InternalServerError_Response_Returned(
-            Guid id,
-            [Frozen] Mock<IMediator> mediator,
-            [Greedy] CandidateController controller)
-        {
-            //Arrange
-            mediator.Setup(x => x.Send(It.IsAny<DeleteCandidateCommand>(),
-                CancellationToken.None)).ThrowsAsync(new Exception("Error"));
+    [Test, MoqAutoData]
+    public async Task Then_If_Error_Then_InternalServerError_Response_Returned(
+        Guid id,
+        [Frozen] Mock<IMediator> mediator,
+        [Greedy] CandidateController controller)
+    {
+        //Arrange
+        mediator.Setup(x => x.Send(It.IsAny<DeleteCandidateCommand>(),
+            CancellationToken.None)).ThrowsAsync(new Exception("Error"));
 
-            //Act
-            var actual = await controller.DeleteCandidate(id);
+        //Act
+        var actual = await controller.DeleteCandidate(id);
 
-            //Assert
-            var result = actual as StatusCodeResult;
-            result?.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
-        }
+        //Assert
+        var result = actual as StatusCodeHttpResult;
+        result?.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
     }
 }

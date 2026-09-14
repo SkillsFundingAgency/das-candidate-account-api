@@ -32,6 +32,7 @@ public class WhenUpsertingCandidate
         actual.Item1.GovUkIdentifier.Should().Be(candidate.GovUkIdentifier);
         actual.Item1.DateOfBirth.Should().Be(candidate.DateOfBirth);
         actual.Item1.UpdatedOn.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(5));
+        actual.Item1.GovUkIdentifier.Should().Be(existingCandidate.GovUkIdentifier);
         actual.Item2.Should().BeFalse();
     }
     [Test, RecursiveMoqAutoData]
@@ -63,6 +64,7 @@ public class WhenUpsertingCandidate
         actual.Item1.MigratedEmail.Should().Be(existingCandidate.MigratedEmail);
         actual.Item1.MigratedCandidateId.Should().Be(existingCandidate.MigratedCandidateId);
         actual.Item1.UpdatedOn.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(5));
+        actual.Item1.GovUkIdentifier.Should().Be(existingCandidate.GovUkIdentifier);
     }
 
     [Test, RecursiveMoqAutoData]

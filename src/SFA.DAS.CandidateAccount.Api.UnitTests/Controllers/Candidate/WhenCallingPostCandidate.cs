@@ -1,6 +1,6 @@
-using System.Net;
 using MediatR;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using SFA.DAS.CandidateAccount.Api.ApiRequests;
 using SFA.DAS.CandidateAccount.Api.Controllers;
 using SFA.DAS.CandidateAccount.Application.Application.Commands.UpsertApplication;
@@ -35,9 +35,8 @@ public class WhenCallingPostCandidate
         var actual = await controller.PostCandidate(id, postCandidateRequest);
         
         //Assert
-        var result = actual as CreatedResult;
-        var actualResult = result.Value as Domain.Candidate.Candidate;
-        actualResult.Should().BeEquivalentTo(createCandidateCommandResponse.Candidate);
+        var result = actual as Created<Domain.Candidate.Candidate>;
+        result!.Value.Should().BeEquivalentTo(createCandidateCommandResponse.Candidate);
     }
     [Test, MoqAutoData]
     public async Task Then_If_Error_Then_InternalServerError_Response_Returned(
@@ -54,7 +53,7 @@ public class WhenCallingPostCandidate
         var actual = await controller.PostCandidate(id, postCandidateRequest);
         
         //Assert
-        var result = actual as StatusCodeResult;
-        result?.StatusCode.Should().Be((int) HttpStatusCode.InternalServerError);
+        var result = actual as StatusCodeHttpResult;
+        result?.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
     }
 }
