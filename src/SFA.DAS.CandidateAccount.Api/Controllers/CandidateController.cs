@@ -17,7 +17,7 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers;
 [ApiVersion("1.0")]
 [ApiController]
 [Route("api/[controller]s/")]
-public class CandidateController(IMediator mediator, ILogger<ApplicationController> logger) : ControllerBase
+public class CandidateController(IMediator mediator, ILogger<CandidateController> logger) : ControllerBase
 {
     [HttpPost]
     [Route("{id}")]
