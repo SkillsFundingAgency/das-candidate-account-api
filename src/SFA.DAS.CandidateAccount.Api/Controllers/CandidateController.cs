@@ -153,13 +153,26 @@ public class CandidateController(IMediator mediator, ILogger<ApplicationControll
     [HttpGet]
     [Route("by-email/{emailAddress}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IResult> GetCandidateByEmailAddress([FromRoute] string emailAddress)
     {
-        var result = await mediator.Send(new GetCandidateByEmailQuery(emailAddress));
-        return result is { Candidate: null } 
-            ? TypedResults.NotFound()
-            : TypedResults.Ok(result.Candidate);
+        try
+        {
+            var result = await mediator.Send(new GetCandidateByEmailQuery(emailAddress));
+            return result is { Candidate: null } 
+                ? TypedResults.NotFound()
+                : TypedResults.Ok(result.Candidate);
+        }
+        catch (InvalidOperationException)
+        {
+            return TypedResults.Problem(new ProblemDetails
+            {
+                Title = "Too many accounts",
+                Detail = "More than one account found to match the specified email address",                
+                Status = StatusCodes.Status400BadRequest,
+            });
+        }
     }
     
     [HttpPatch, Consumes("application/json", "application/json-patch+json", "text/json", "application/*+json")]

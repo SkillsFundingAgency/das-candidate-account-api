@@ -42,7 +42,7 @@ public class CandidateRepository(ICandidateAccountDataContext dataContext) : ICa
     {
         var result = await dataContext
             .CandidateEntities
-            .FirstOrDefaultAsync(c => 
+            .SingleOrDefaultAsync(c => 
                 c.Email == email && 
                 c.Status != (short)CandidateStatus.Deleted);
 

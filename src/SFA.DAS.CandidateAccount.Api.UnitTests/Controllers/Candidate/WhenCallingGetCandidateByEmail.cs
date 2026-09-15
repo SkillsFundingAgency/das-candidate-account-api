@@ -1,5 +1,6 @@
 using System.Net;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using SFA.DAS.CandidateAccount.Api.Controllers;
 using SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetCandidateByEmail;
@@ -25,7 +26,7 @@ public class WhenCallingGetCandidateByEmail
         
         // assert
         actual.Should().NotBeNull();
-        actual.StatusCode.Should().Be((int) HttpStatusCode.OK);
+        actual.StatusCode.Should().Be(StatusCodes.Status200OK);
         actual.Value.Should().BeEquivalentTo(queryResult.Candidate);
     }
 
@@ -47,6 +48,27 @@ public class WhenCallingGetCandidateByEmail
         
         // assert
         actual.Should().NotBeNull();
-        actual.StatusCode.Should().Be((int) HttpStatusCode.NotFound);
+        actual.StatusCode.Should().Be(StatusCodes.Status404NotFound);
+    }
+    
+    [Test, MoqAutoData]
+    public async Task Then_If_Multiple_Accounts_Are_Located_Then_A_Problem_Is_Returned(
+        string emailAddress,
+        GetCandidateByEmailQueryResult queryResult,
+        [Frozen] Mock<IMediator> mediator,
+        [Greedy] CandidateController controller)
+    {
+        // arrange
+        queryResult.Candidate = null;
+        mediator
+            .Setup(x => x.Send(It.IsAny<GetCandidateByEmailQuery>(), CancellationToken.None))
+            .Throws<InvalidOperationException>();
+
+        // act
+        var actual = await controller.GetCandidateByEmailAddress(emailAddress) as ProblemHttpResult;
+        
+        // assert
+        actual.Should().NotBeNull();
+        actual.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
     }
 }
