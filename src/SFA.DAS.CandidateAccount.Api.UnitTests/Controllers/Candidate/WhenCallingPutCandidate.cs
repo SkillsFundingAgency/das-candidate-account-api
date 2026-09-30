@@ -1,5 +1,5 @@
 using MediatR;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http.HttpResults;
 using SFA.DAS.CandidateAccount.Api.ApiRequests;
 using SFA.DAS.CandidateAccount.Api.Controllers;
 using SFA.DAS.CandidateAccount.Application.Candidate.Commands.UpsertCandidate;
@@ -34,9 +34,8 @@ public class WhenCallingPutCandidate
         var actual = await controller.PutCandidate(id, postCandidateRequest);
         
         //Assert
-        var result = actual as CreatedResult;
-        var actualResult = result.Value as Domain.Candidate.Candidate;
-        actualResult.Should().BeEquivalentTo(upsertCandidateCommandResult.Candidate);
+        var result = actual as Created<Domain.Candidate.Candidate>;
+        result!.Value.Should().BeEquivalentTo(upsertCandidateCommandResult.Candidate);
     }
     
     [Test, MoqAutoData]
@@ -65,8 +64,7 @@ public class WhenCallingPutCandidate
         var actual = await controller.PutCandidate(id, postCandidateRequest);
         
         //Assert
-        var result = actual as OkObjectResult;
-        var actualResult = result.Value as Domain.Candidate.Candidate;
-        actualResult.Should().BeEquivalentTo(upsertCandidateCommandResult.Candidate);
+        var result = actual as Ok<Domain.Candidate.Candidate>;
+        result!.Value.Should().BeEquivalentTo(upsertCandidateCommandResult.Candidate);
     }
 }

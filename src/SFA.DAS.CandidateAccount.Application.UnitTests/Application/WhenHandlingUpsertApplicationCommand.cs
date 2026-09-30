@@ -53,7 +53,7 @@ public class WhenHandlingUpsertApplicationCommand
             .ReturnsAsync(new Tuple<AdditionalQuestionEntity, bool>(additionalQuestionEntity, true));
 
         employmentLocationRepository.Setup(x =>
-                x.UpsertEmploymentLocation(It.Is<EmploymentLocation>(c =>
+                x.UpsertEmploymentLocation(It.Is<EmploymentLocationEntity>(c =>
                     c.Id.Equals(Guid.NewGuid())
                     && c.ApplicationId.Equals(applicationEntity.Id)
                     && c.Addresses.Equals(command.EmploymentLocation.Addresses)
@@ -112,7 +112,7 @@ public class WhenHandlingUpsertApplicationCommand
             .ReturnsAsync(new Tuple<AdditionalQuestionEntity, bool>(additionalQuestionEntity, true));
 
         employmentLocationRepository.Setup(x =>
-                x.UpsertEmploymentLocation(It.Is<EmploymentLocation>(c =>
+                x.UpsertEmploymentLocation(It.Is<EmploymentLocationEntity>(c =>
                     c.Id.Equals(Guid.NewGuid())
                     && c.ApplicationId.Equals(applicationEntity.Id)
                     && c.Addresses.Equals(command.EmploymentLocation.Addresses)
@@ -304,7 +304,7 @@ public class WhenHandlingUpsertApplicationCommand
             .ReturnsAsync(new Tuple<AdditionalQuestionEntity, bool>(additionalQuestionEntity, true));
 
         employmentLocationRepository.Setup(x =>
-                x.UpsertEmploymentLocation(It.Is<EmploymentLocation>(c =>
+                x.UpsertEmploymentLocation(It.Is<EmploymentLocationEntity>(c =>
                     c.Id.Equals(Guid.NewGuid())
                     && c.ApplicationId.Equals(applicationEntity.Id)
                     && c.Addresses.Equals(command.EmploymentLocation.Addresses)
