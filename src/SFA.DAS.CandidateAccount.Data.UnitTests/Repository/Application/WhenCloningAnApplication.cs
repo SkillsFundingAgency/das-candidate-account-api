@@ -15,6 +15,7 @@ namespace SFA.DAS.CandidateAccount.Data.UnitTests.Repository.Application
             ApplicationRepository repository)
         {
             var originalId = originalApplication.Id;
+            originalApplication.DisabilityConfidenceStatus = (short)SectionStatus.Completed;
 
             context.Setup(x => x.ApplicationEntities)
                 .ReturnsDbSet(new List<ApplicationEntity>{originalApplication});
