@@ -1,4 +1,5 @@
-﻿using SFA.DAS.CandidateAccount.Data.EmploymentLocation;
+﻿using FluentAssertions;
+using SFA.DAS.CandidateAccount.Data.EmploymentLocation;
 using SFA.DAS.CandidateAccount.Data.UnitTests.DatabaseMock;
 using SFA.DAS.CandidateAccount.Domain.Application;
 
@@ -26,7 +27,6 @@ public class WhenDeletingAllEmploymentLocationsByApplicationId
         await sut.DeleteAllAsync(applicationId, candidateId, CancellationToken.None);
 
         // assert
-        dataContext.Verify(x => x.EmploymentLocationEntities.RemoveRange(locations), Times.Once);
-        dataContext.Verify(x => x.SaveChangesAsync(CancellationToken.None), Times.Once);
+        dataContext.Object.EmploymentLocationEntities.GetExecuteDeleteCalls().Should().ContainSingle().Which.Should().Equal(locations);
     }
 }

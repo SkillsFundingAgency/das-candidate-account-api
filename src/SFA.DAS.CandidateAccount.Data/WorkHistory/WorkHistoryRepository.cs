@@ -103,17 +103,9 @@ public class WorkHistoryRepository(ICandidateAccountDataContext dataContext) : I
 
     public async Task DeleteAllAsync(Guid applicationId, Guid candidateId, CancellationToken cancellationToken)
     {
-        var records = await dataContext
+        await dataContext
             .WorkExperienceEntities
             .Where(x => x.ApplicationId == applicationId && x.ApplicationEntity.CandidateId == candidateId)
-            .ToListAsync(cancellationToken);
-
-        if (records is not { Count: > 0 })
-        {
-            return;
-        }
-
-        dataContext.WorkExperienceEntities.RemoveRange(records);
-        await dataContext.SaveChangesAsync(cancellationToken);
+            .ExecuteDeleteAsync(cancellationToken);
     }
 }

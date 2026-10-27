@@ -1,4 +1,5 @@
-﻿using SFA.DAS.CandidateAccount.Data.UnitTests.DatabaseMock;
+﻿using FluentAssertions;
+using SFA.DAS.CandidateAccount.Data.UnitTests.DatabaseMock;
 using SFA.DAS.CandidateAccount.Data.WorkExperience;
 using SFA.DAS.CandidateAccount.Domain.Application;
 
@@ -26,6 +27,6 @@ public class WhenDeletingAllWorkExperienceByApplicationId
         await sut.DeleteAllAsync(applicationId, candidateId, CancellationToken.None);
 
         // assert
-        dataContext.Verify(x => x.SaveChangesAsync(CancellationToken.None), Times.Once);
+        dataContext.Object.WorkExperienceEntities.GetExecuteDeleteCalls().Should().ContainSingle().Which.Should().Equal(workHistories);
     }
 }

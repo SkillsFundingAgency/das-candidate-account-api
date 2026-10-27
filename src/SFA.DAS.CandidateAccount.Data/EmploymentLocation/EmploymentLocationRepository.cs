@@ -53,18 +53,10 @@ namespace SFA.DAS.CandidateAccount.Data.EmploymentLocation
 
         public async Task DeleteAllAsync(Guid applicationId, Guid candidateId, CancellationToken cancellationToken)
         {
-            var records = await dataContext
+            await dataContext
                 .EmploymentLocationEntities
                 .Where(x => x.ApplicationId == applicationId && x.ApplicationEntity.CandidateId == candidateId)
-                .ToListAsync(cancellationToken);
-
-            if (records is not { Count: > 0 })
-            {
-                return;
-            }
-
-            dataContext.EmploymentLocationEntities.RemoveRange(records);
-            await dataContext.SaveChangesAsync(cancellationToken);
+                .ExecuteDeleteAsync(cancellationToken);
         }
     }
 }

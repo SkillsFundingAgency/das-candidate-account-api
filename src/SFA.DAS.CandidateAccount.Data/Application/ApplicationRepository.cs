@@ -227,17 +227,10 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
     {
         var record = await dataContext
             .ApplicationEntities
-            .SingleOrDefaultAsync(
-                x => x.Id == applicationId && x.CandidateId == candidateId,
-                cancellationToken);
+            .Where(
+                x => x.Id == applicationId && x.CandidateId == candidateId)
+            .ExecuteDeleteAsync(cancellationToken);
 
-        if (record is null)
-        {
-            return false;
-        }
-
-        dataContext.ApplicationEntities.Remove(record);
-        await dataContext.SaveChangesAsync(cancellationToken);
-        return true;
+        return record != 0;
     }
 }

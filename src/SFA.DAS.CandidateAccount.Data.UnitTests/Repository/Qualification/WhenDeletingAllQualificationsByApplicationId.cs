@@ -1,4 +1,5 @@
-﻿using SFA.DAS.CandidateAccount.Data.Qualification;
+﻿using FluentAssertions;
+using SFA.DAS.CandidateAccount.Data.Qualification;
 using SFA.DAS.CandidateAccount.Data.UnitTests.DatabaseMock;
 using SFA.DAS.CandidateAccount.Domain.Application;
 
@@ -26,6 +27,6 @@ public class WhenDeletingAllQualificationsByApplicationId
         await sut.DeleteAllAsync(applicationId, candidateId, CancellationToken.None);
 
         // assert
-        dataContext.Verify(x => x.SaveChangesAsync(CancellationToken.None), Times.Once);
+        dataContext.Object.QualificationEntities.GetExecuteDeleteCalls().Should().ContainSingle().Which.Should().Equal(qualifications);
     }
 }

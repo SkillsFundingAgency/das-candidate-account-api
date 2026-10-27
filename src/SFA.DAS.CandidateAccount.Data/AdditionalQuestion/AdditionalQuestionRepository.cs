@@ -66,17 +66,9 @@ public class AdditionalQuestionRepository(ICandidateAccountDataContext dataConte
 
     public async Task DeleteAllAsync(Guid applicationId, Guid candidateId, CancellationToken cancellationToken)
     {
-        var records = await dataContext
+        await dataContext
             .AdditionalQuestionEntities
             .Where(x => x.ApplicationId == applicationId && x.ApplicationEntity.CandidateId == candidateId)
-            .ToListAsync(cancellationToken);
-
-        if (records is not { Count: > 0 })
-        {
-            return;
-        }
-
-        dataContext.AdditionalQuestionEntities.RemoveRange(records);
-        await dataContext.SaveChangesAsync(cancellationToken);
+            .ExecuteDeleteAsync(cancellationToken);
     }
 }
