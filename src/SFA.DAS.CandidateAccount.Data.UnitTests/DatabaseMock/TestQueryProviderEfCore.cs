@@ -5,7 +5,7 @@ namespace SFA.DAS.CandidateAccount.Data.UnitTests.DatabaseMock
 {
     public class TestAsyncEnumerableEfCore<T> : TestQueryProvider<T>, IAsyncEnumerable<T>, IAsyncQueryProvider
     {
-        public TestAsyncEnumerableEfCore(Expression expression) : base(expression)
+        public TestAsyncEnumerableEfCore(Expression expression, TestQueryExecutionLog executionLog) : base(expression, executionLog)
         {
         }
 

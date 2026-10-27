@@ -7,16 +7,20 @@ namespace SFA.DAS.CandidateAccount.Data.UnitTests.DatabaseMock
     {
         private IEnumerable<T> _enumerable;
 
-        protected TestQueryProvider(Expression expression)
+        protected TestQueryProvider(Expression expression, TestQueryExecutionLog executionLog)
         {
             Expression = expression;
+            ExecutionLog = executionLog;
         }
 
         protected TestQueryProvider(IEnumerable<T> enumerable)
         {
             _enumerable = enumerable;
             Expression = enumerable.AsQueryable().Expression;
+            ExecutionLog = new TestQueryExecutionLog();
         }
+
+        public TestQueryExecutionLog ExecutionLog { get; }
 
         public IQueryable CreateQuery(Expression expression)
         {
@@ -38,7 +42,7 @@ namespace SFA.DAS.CandidateAccount.Data.UnitTests.DatabaseMock
         private object CreateInstance(Type tElement, Expression expression)
         {
             var queryType = GetType().GetGenericTypeDefinition().MakeGenericType(tElement);
-            return Activator.CreateInstance(queryType, expression);
+            return Activator.CreateInstance(queryType, expression, ExecutionLog);
         }
 
         public object Execute(Expression expression)
@@ -48,6 +52,18 @@ namespace SFA.DAS.CandidateAccount.Data.UnitTests.DatabaseMock
 
         public TResult Execute<TResult>(Expression expression)
         {
+            if (expression is MethodCallExpression { Method.Name: "ExecuteDelete" or "ExecuteUpdate" } methodCall)
+            {
+                var affectedEntities = CompileExpressionItem<IEnumerable>(methodCall.Arguments[0]).Cast<object>().ToList();
+                if (methodCall.Method.Name == "ExecuteDelete")
+                {
+                    ExecutionLog.ExecuteDeleteCalls.Add(affectedEntities);
+                }
+
+                object affectedRows = affectedEntities.Count;
+                return (TResult)affectedRows;
+            }
+
             return CompileExpressionItem<TResult>(expression);
         }
 
