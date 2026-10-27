@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using SFA.DAS.CandidateAccount.Domain.Application;
 
 namespace SFA.DAS.CandidateAccount.Data.Qualification;
@@ -11,7 +11,7 @@ public interface IQualificationRepository
     Task DeleteCandidateApplicationQualificationsByReferenceId(Guid candidateId, Guid applicationId, Guid qualificationReferenceId);
     Task<Tuple<QualificationEntity, bool>> Upsert(Domain.Application.Qualification qualificationEntity, Guid candidateId, Guid applicationId);
     Task<IEnumerable<QualificationEntity>> GetCandidateApplicationQualificationsByQualificationReferenceType(Guid candidateId, Guid applicationId, Guid qualificationReferenceId);
-    Task DeleteAllAsync(Guid applicationId, Guid candidateId, CancellationToken cancellationToken);
+    Task DeleteAllAsync(Guid applicationId, CancellationToken cancellationToken);
 }
 public class QualificationRepository(ICandidateAccountDataContext dataContext) : IQualificationRepository
 {
@@ -40,11 +40,11 @@ public class QualificationRepository(ICandidateAccountDataContext dataContext) :
             .ToListAsync();
     }
 
-    public async Task DeleteAllAsync(Guid applicationId, Guid candidateId, CancellationToken cancellationToken)
+    public async Task DeleteAllAsync(Guid applicationId, CancellationToken cancellationToken)
     {
         await dataContext
             .QualificationEntities
-            .Where(x => x.ApplicationId == applicationId && x.ApplicationEntity.CandidateId == candidateId)
+            .Where(x => x.ApplicationId == applicationId)
             .ExecuteDeleteAsync(cancellationToken);
     }
 

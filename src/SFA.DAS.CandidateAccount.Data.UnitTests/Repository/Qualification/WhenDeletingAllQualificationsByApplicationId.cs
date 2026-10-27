@@ -10,23 +10,19 @@ public class WhenDeletingAllQualificationsByApplicationId
     [Test, RecursiveMoqAutoData]
     public async Task Qualifications_Are_Deleted(
         Guid applicationId,
-        Guid candidateId,
         List<QualificationEntity> qualifications,
         [Frozen] Mock<ICandidateAccountDataContext> dataContext,
         [Greedy] QualificationRepository sut)
     {
         // arrange
-        qualifications.ForEach(q =>
-        {
-            q.ApplicationId = applicationId;
-            q.ApplicationEntity.CandidateId = candidateId;
-        });
+        var expected = qualifications.SkipLast(1).ToList();
+        expected.ForEach(q => q.ApplicationId = applicationId);
         dataContext.Setup(x => x.QualificationEntities).ReturnsDbSet(qualifications);
 
         // act
-        await sut.DeleteAllAsync(applicationId, candidateId, CancellationToken.None);
+        await sut.DeleteAllAsync(applicationId, CancellationToken.None);
 
         // assert
-        dataContext.Object.QualificationEntities.GetExecuteDeleteCalls().Should().ContainSingle().Which.Should().Equal(qualifications);
+        dataContext.Object.QualificationEntities.GetExecuteDeleteCalls().Should().ContainSingle().Which.Should().Equal(expected);
     }
 }

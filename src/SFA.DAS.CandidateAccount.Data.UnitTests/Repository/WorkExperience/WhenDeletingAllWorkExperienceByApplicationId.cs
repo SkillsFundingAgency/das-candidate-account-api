@@ -10,23 +10,19 @@ public class WhenDeletingAllWorkExperienceByApplicationId
     [Test, RecursiveMoqAutoData]
     public async Task TrainingCourses_Are_Deleted(
         Guid applicationId,
-        Guid candidateId,
         List<WorkHistoryEntity> workHistories,
         [Frozen] Mock<ICandidateAccountDataContext> dataContext,
         [Greedy] WorkHistoryRepository sut)
     {
         // arrange
-        workHistories.ForEach(q =>
-        {
-            q.ApplicationId = applicationId;
-            q.ApplicationEntity.CandidateId = candidateId;
-        });
+        var expected = workHistories.SkipLast(1).ToList();
+        expected.ForEach(q => q.ApplicationId = applicationId);
         dataContext.Setup(x => x.WorkExperienceEntities).ReturnsDbSet(workHistories);
 
         // act
-        await sut.DeleteAllAsync(applicationId, candidateId, CancellationToken.None);
+        await sut.DeleteAllAsync(applicationId, CancellationToken.None);
 
         // assert
-        dataContext.Object.WorkExperienceEntities.GetExecuteDeleteCalls().Should().ContainSingle().Which.Should().Equal(workHistories);
+        dataContext.Object.WorkExperienceEntities.GetExecuteDeleteCalls().Should().ContainSingle().Which.Should().Equal(expected);
     }
 }

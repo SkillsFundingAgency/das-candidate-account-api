@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using SFA.DAS.CandidateAccount.Domain.Application;
 
 namespace SFA.DAS.CandidateAccount.Data.TrainingCourse;
@@ -9,7 +9,7 @@ public interface ITrainingCourseRepository
     Task<TrainingCourseEntity?> Get(Guid applicationId, Guid candidateId, Guid id, CancellationToken cancellationToken);
     Task<List<TrainingCourseEntity>> GetAll(Guid applicationId, Guid candidateId, CancellationToken cancellationToken);
     Task Delete(Guid applicationId, Guid id, Guid candidateId);
-    Task DeleteAllAsync(Guid applicationId, Guid candidateId, CancellationToken cancellationToken);
+    Task DeleteAllAsync(Guid applicationId, CancellationToken cancellationToken);
 }
 
 public class TrainingCourseRepository(ICandidateAccountDataContext dataContext) : ITrainingCourseRepository
@@ -79,11 +79,11 @@ public class TrainingCourseRepository(ICandidateAccountDataContext dataContext) 
         }
     }
 
-    public async Task DeleteAllAsync(Guid applicationId, Guid candidateId, CancellationToken cancellationToken)
+    public async Task DeleteAllAsync(Guid applicationId, CancellationToken cancellationToken)
     {
         await dataContext
             .TrainingCourseEntities
-            .Where(x => x.ApplicationId == applicationId && x.ApplicationEntity.CandidateId == candidateId)
+            .Where(x => x.ApplicationId == applicationId)
             .ExecuteDeleteAsync(cancellationToken);
     }
 }

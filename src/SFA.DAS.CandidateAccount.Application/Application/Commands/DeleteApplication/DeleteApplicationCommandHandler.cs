@@ -25,11 +25,11 @@ public class DeleteApplicationCommandHandler(
             return DeleteApplicationCommandResult.None;
         }
 
-        await employmentLocationRepository.DeleteAllAsync(request.ApplicationId, request.CandidateId, cancellationToken);
-        await workHistoryRepository.DeleteAllAsync(request.ApplicationId, request.CandidateId, cancellationToken);
-        await trainingCourseRepository.DeleteAllAsync(request.ApplicationId, request.CandidateId, cancellationToken);
-        await qualificationRepository.DeleteAllAsync(request.ApplicationId, request.CandidateId, cancellationToken);
-        await additionalQuestionRepository.DeleteAllAsync(request.ApplicationId, request.CandidateId, cancellationToken);
+        await employmentLocationRepository.DeleteAllAsync(request.ApplicationId, cancellationToken);
+        await workHistoryRepository.DeleteAllAsync(request.ApplicationId, cancellationToken);
+        await trainingCourseRepository.DeleteAllAsync(request.ApplicationId, cancellationToken);
+        await qualificationRepository.DeleteAllAsync(request.ApplicationId, cancellationToken);
+        await additionalQuestionRepository.DeleteAllAsync(request.ApplicationId, cancellationToken);
         await applicationRepository.DeleteAsync(request.ApplicationId, request.CandidateId, cancellationToken);
         return new DeleteApplicationCommandResult(request.ApplicationId);
     }

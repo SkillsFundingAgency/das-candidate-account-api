@@ -10,23 +10,19 @@ public class WhenDeletingAllTrainingCoursesByApplicationId
     [Test, RecursiveMoqAutoData]
     public async Task TrainingCourses_Are_Deleted(
         Guid applicationId,
-        Guid candidateId,
         List<TrainingCourseEntity> trainingCourses,
         [Frozen] Mock<ICandidateAccountDataContext> dataContext,
         [Greedy] TrainingCourseRepository sut)
     {
         // arrange
-        trainingCourses.ForEach(q =>
-        {
-            q.ApplicationId = applicationId;
-            q.ApplicationEntity.CandidateId = candidateId;
-        });
+        var expected = trainingCourses.SkipLast(1).ToList();
+        expected.ForEach(q => q.ApplicationId = applicationId);
         dataContext.Setup(x => x.TrainingCourseEntities).ReturnsDbSet(trainingCourses);
 
         // act
-        await sut.DeleteAllAsync(applicationId, candidateId, CancellationToken.None);
+        await sut.DeleteAllAsync(applicationId, CancellationToken.None);
 
         // assert
-        dataContext.Object.TrainingCourseEntities.GetExecuteDeleteCalls().Should().ContainSingle().Which.Should().Equal(trainingCourses);
+        dataContext.Object.TrainingCourseEntities.GetExecuteDeleteCalls().Should().ContainSingle().Which.Should().Equal(expected);
     }
 }

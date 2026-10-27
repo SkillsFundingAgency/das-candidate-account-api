@@ -65,7 +65,7 @@ public class WhenHandlingDeleteApplicationCommand
         var result = await sut.Handle(request, CancellationToken.None);
 
         // assert
-        workHistoryRepository.Verify(x => x.DeleteAllAsync(request.ApplicationId, request.CandidateId, It.IsAny<CancellationToken>()), Times.Once);
+        workHistoryRepository.Verify(x => x.DeleteAllAsync(request.ApplicationId, It.IsAny<CancellationToken>()), Times.Once);
         result.ApplicationId.Should().Be(request.ApplicationId);
     }
     
@@ -87,7 +87,7 @@ public class WhenHandlingDeleteApplicationCommand
         var result = await sut.Handle(request, CancellationToken.None);
 
         // assert
-        trainingCourseRepository.Verify(x => x.DeleteAllAsync(request.ApplicationId, request.CandidateId, It.IsAny<CancellationToken>()), Times.Once);
+        trainingCourseRepository.Verify(x => x.DeleteAllAsync(request.ApplicationId, It.IsAny<CancellationToken>()), Times.Once);
         result.ApplicationId.Should().Be(request.ApplicationId);
     }
     
@@ -109,7 +109,7 @@ public class WhenHandlingDeleteApplicationCommand
         var result = await sut.Handle(request, CancellationToken.None);
 
         // assert
-        qualificationRepository.Verify(x => x.DeleteAllAsync(request.ApplicationId, request.CandidateId, It.IsAny<CancellationToken>()), Times.Once);
+        qualificationRepository.Verify(x => x.DeleteAllAsync(request.ApplicationId, It.IsAny<CancellationToken>()), Times.Once);
         result.ApplicationId.Should().Be(request.ApplicationId);
     }
     
@@ -131,7 +131,7 @@ public class WhenHandlingDeleteApplicationCommand
         var result = await sut.Handle(request, CancellationToken.None);
 
         // assert
-        additionalQuestionRepository.Verify(x => x.DeleteAllAsync(request.ApplicationId, request.CandidateId, It.IsAny<CancellationToken>()), Times.Once);
+        additionalQuestionRepository.Verify(x => x.DeleteAllAsync(request.ApplicationId, It.IsAny<CancellationToken>()), Times.Once);
         result.ApplicationId.Should().Be(request.ApplicationId);
     }
     
