@@ -1,4 +1,5 @@
-﻿using SFA.DAS.CandidateAccount.Data.AdditionalQuestion;
+﻿using FluentAssertions;
+using SFA.DAS.CandidateAccount.Data.AdditionalQuestion;
 using SFA.DAS.CandidateAccount.Data.UnitTests.DatabaseMock;
 using SFA.DAS.CandidateAccount.Domain.Application;
 
@@ -9,23 +10,19 @@ public class WhenDeletingAllAdditionalQuestionsByApplicationId
     [Test, RecursiveMoqAutoData]
     public async Task TrainingCourses_Are_Deleted(
         Guid applicationId,
-        Guid candidateId,
         List<AdditionalQuestionEntity> additionalQuestions,
         [Frozen] Mock<ICandidateAccountDataContext> dataContext,
         [Greedy] AdditionalQuestionRepository sut)
     {
         // arrange
-        additionalQuestions.ForEach(q =>
-        {
-            q.ApplicationId = applicationId;
-            q.ApplicationEntity.CandidateId = candidateId;
-        });
+        var expected = additionalQuestions.SkipLast(1).ToList();
+        expected.ForEach(q => q.ApplicationId = applicationId);
         dataContext.Setup(x => x.AdditionalQuestionEntities).ReturnsDbSet(additionalQuestions);
 
         // act
-        await sut.DeleteAllAsync(applicationId, candidateId, CancellationToken.None);
+        await sut.DeleteAllAsync(applicationId, CancellationToken.None);
 
         // assert
-        dataContext.Verify(x => x.SaveChangesAsync(CancellationToken.None), Times.Once);
+        dataContext.Object.AdditionalQuestionEntities.GetExecuteDeleteCalls().Should().ContainSingle().Which.Should().Equal(expected);
     }
 }

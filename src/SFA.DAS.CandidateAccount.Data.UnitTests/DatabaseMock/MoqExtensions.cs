@@ -37,6 +37,13 @@ namespace SFA.DAS.CandidateAccount.Data.UnitTests.DatabaseMock
             return setupResult.Returns(entities.BuildDbSet());
         }
 
+        public static IReadOnlyList<IReadOnlyList<object>> GetExecuteDeleteCalls<TEntity>(this DbSet<TEntity> dbSet)
+            where TEntity : class
+        {
+            var provider = (TestQueryProvider<TEntity>)((IQueryable<TEntity>)dbSet).Provider;
+            return provider.ExecutionLog.ExecuteDeleteCalls;
+        }
+
         private static void ConfigureDbSetCalls<TEntity>(this Mock<DbSet<TEntity>> mock, IQueryable<TEntity> data)
             where TEntity : class
         {

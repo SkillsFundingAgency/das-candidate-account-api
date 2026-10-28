@@ -1,4 +1,5 @@
-﻿using SFA.DAS.CandidateAccount.Data.UnitTests.DatabaseMock;
+﻿using FluentAssertions;
+using SFA.DAS.CandidateAccount.Data.UnitTests.DatabaseMock;
 using SFA.DAS.CandidateAccount.Data.WorkExperience;
 using SFA.DAS.CandidateAccount.Domain.Application;
 
@@ -9,23 +10,19 @@ public class WhenDeletingAllWorkExperienceByApplicationId
     [Test, RecursiveMoqAutoData]
     public async Task TrainingCourses_Are_Deleted(
         Guid applicationId,
-        Guid candidateId,
         List<WorkHistoryEntity> workHistories,
         [Frozen] Mock<ICandidateAccountDataContext> dataContext,
         [Greedy] WorkHistoryRepository sut)
     {
         // arrange
-        workHistories.ForEach(q =>
-        {
-            q.ApplicationId = applicationId;
-            q.ApplicationEntity.CandidateId = candidateId;
-        });
+        var expected = workHistories.SkipLast(1).ToList();
+        expected.ForEach(q => q.ApplicationId = applicationId);
         dataContext.Setup(x => x.WorkExperienceEntities).ReturnsDbSet(workHistories);
 
         // act
-        await sut.DeleteAllAsync(applicationId, candidateId, CancellationToken.None);
+        await sut.DeleteAllAsync(applicationId, CancellationToken.None);
 
         // assert
-        dataContext.Verify(x => x.SaveChangesAsync(CancellationToken.None), Times.Once);
+        dataContext.Object.WorkExperienceEntities.GetExecuteDeleteCalls().Should().ContainSingle().Which.Should().Equal(expected);
     }
 }

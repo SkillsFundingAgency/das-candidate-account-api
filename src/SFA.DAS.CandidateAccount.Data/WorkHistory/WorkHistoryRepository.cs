@@ -9,7 +9,7 @@ public interface IWorkHistoryRepository
     Task<WorkHistoryEntity?> Get(Guid applicationId, Guid candidateId, Guid id, WorkHistoryType? workHistoryType, CancellationToken cancellationToken);
     Task<List<WorkHistoryEntity>> GetAll(Guid applicationId, Guid candidateId, WorkHistoryType? workHistoryType, CancellationToken cancellationToken);
     Task Delete(Guid applicationId, Guid id, Guid candidateId);
-    Task DeleteAllAsync(Guid applicationId, Guid candidateId, CancellationToken cancellationToken);
+    Task DeleteAllAsync(Guid applicationId, CancellationToken cancellationToken);
 }
 public class WorkHistoryRepository(ICandidateAccountDataContext dataContext) : IWorkHistoryRepository
 {
@@ -101,19 +101,11 @@ public class WorkHistoryRepository(ICandidateAccountDataContext dataContext) : I
         await dataContext.SaveChangesAsync();
     }
 
-    public async Task DeleteAllAsync(Guid applicationId, Guid candidateId, CancellationToken cancellationToken)
+    public async Task DeleteAllAsync(Guid applicationId, CancellationToken cancellationToken)
     {
-        var records = await dataContext
+        await dataContext
             .WorkExperienceEntities
-            .Where(x => x.ApplicationId == applicationId && x.ApplicationEntity.CandidateId == candidateId)
-            .ToListAsync(cancellationToken);
-
-        if (records is not { Count: > 0 })
-        {
-            return;
-        }
-
-        dataContext.WorkExperienceEntities.RemoveRange(records);
-        await dataContext.SaveChangesAsync(cancellationToken);
+            .Where(x => x.ApplicationId == applicationId)
+            .ExecuteDeleteAsync(cancellationToken);
     }
 }
