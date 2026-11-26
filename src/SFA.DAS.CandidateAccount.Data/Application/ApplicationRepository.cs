@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using SFA.DAS.CandidateAccount.Domain;
 using SFA.DAS.CandidateAccount.Domain.Application;
+using SFA.DAS.CandidateAccount.Domain.Models;
 
 namespace SFA.DAS.CandidateAccount.Data.Application;
 
@@ -24,6 +25,7 @@ public interface IApplicationRepository
     Task<IEnumerable<ApplicationEntity>> GetApplicationsByVacancyReference(string vacancyReference, short? statusId = null, Guid? preferenceId = null, bool canEmailOnly = false);
     Task<IEnumerable<ApplicationEntity>> GetCountByStatus(Guid candidateId, short status, CancellationToken cancellationToken = default);
     Task<bool> DeleteAsync(Guid applicationId, Guid candidateId, CancellationToken cancellationToken);
+    Task<PaginatedList<ApplicationEntity>> GetPagedApplications(DateTime? addedAfter, int pageNumber, int pageSize, CancellationToken cancellationToken);
 }
 
 public class ApplicationRepository(ICandidateAccountDataContext dataContext) : IApplicationRepository
@@ -232,5 +234,30 @@ public class ApplicationRepository(ICandidateAccountDataContext dataContext) : I
             .ExecuteDeleteAsync(cancellationToken);
 
         return record != 0;
+    }
+
+    public async Task<PaginatedList<ApplicationEntity>> GetPagedApplications(DateTime? addedAfter, int pageNumber, int pageSize, CancellationToken cancellationToken)
+    {
+        var query = dataContext
+            .ApplicationEntities
+            .AsNoTracking()
+            .Where(a =>
+                a.Status != (short)ApplicationStatus.Draft &&
+                a.CandidateEntity.Status != (short)CandidateStatus.Deleted);
+
+        if (addedAfter.HasValue)
+        {
+            query = query.Where(a => a.CreatedDate >= addedAfter.Value);
+        }
+
+        var count = await query.CountAsync(cancellationToken);
+
+        var page = query
+            .OrderBy(a => a.CreatedDate)
+            .ThenBy(a => a.Id)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize);
+
+        return await PaginatedList<ApplicationEntity>.CreateAsync(page, count, pageNumber, pageSize);
     }
 }

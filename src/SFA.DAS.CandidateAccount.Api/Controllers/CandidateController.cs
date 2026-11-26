@@ -9,6 +9,7 @@ using SFA.DAS.CandidateAccount.Application.Candidate.Commands.DeleteCandidate;
 using SFA.DAS.CandidateAccount.Application.Candidate.Commands.UpsertCandidate;
 using SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetCandidate;
 using SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetCandidateByEmail;
+using SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetPagedCandidates;
 using SFA.DAS.CandidateAccount.Application.Candidate.Queries.GetInactiveCandidates;
 using SFA.DAS.CandidateAccount.Domain.Candidate;
 
@@ -19,6 +20,8 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers;
 [Route("api/[controller]s/")]
 public class CandidateController(IMediator mediator, ILogger<CandidateController> logger) : ControllerBase
 {
+    public const int MaxPagedCandidatesPageSize = 1000;
+
     [HttpPost]
     [Route("{id}")]
     [ProducesResponseType(StatusCodes.Status201Created)]
@@ -146,6 +149,30 @@ public class CandidateController(IMediator mediator, ILogger<CandidateController
         catch (Exception e)
         {
             logger.LogError(e, "Get Candidates By Activity : An error occurred");
+            return TypedResults.StatusCode(StatusCodes.Status500InternalServerError);
+        }
+    }
+
+    [HttpGet]
+    [Route("")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IResult> GetPagedCandidates([FromQuery] DateTime? addedSince, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 500)
+    {
+        if (pageNumber < 1 || pageSize < 1 || pageSize > MaxPagedCandidatesPageSize)
+        {
+            return TypedResults.BadRequest();
+        }
+
+        try
+        {
+            var result = await mediator.Send(new GetPagedCandidatesQuery(addedSince, pageNumber, pageSize));
+            return TypedResults.Ok(result);
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e, "Get Paged Candidates : An error occurred");
             return TypedResults.StatusCode(StatusCodes.Status500InternalServerError);
         }
     }

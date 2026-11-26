@@ -14,6 +14,8 @@ public interface ICandidateRepository
     Task<Tuple<CandidateEntity?, bool>> DeleteCandidate(Guid id);
     Task<PaginatedList<CandidateEntity>> GetCandidatesByActivity(DateTime cutOffDateTime, int pageNumber, int pageSize,
         CancellationToken token);
+    Task<PaginatedList<CandidateEntity>> GetPagedCandidates(DateTime? addedSince, int pageNumber, int pageSize,
+        CancellationToken token);
 }
 public class CandidateRepository(ICandidateAccountDataContext dataContext) : ICandidateRepository
 {
@@ -97,6 +99,32 @@ public class CandidateRepository(ICandidateAccountDataContext dataContext) : ICa
         query = (IOrderedQueryable<CandidateEntity>)query.Skip((pageNumber - 1) * pageSize).Take(pageSize);
 
         return await PaginatedList<CandidateEntity>.CreateAsync(query, count, pageNumber, pageSize);
+    }
+
+    public async Task<PaginatedList<CandidateEntity>> GetPagedCandidates(DateTime? addedSince,
+        int pageNumber,
+        int pageSize,
+        CancellationToken token)
+    {
+        var query = dataContext
+            .CandidateEntities
+            .AsNoTracking()
+            .Where(c => c.Status != (short)CandidateStatus.Deleted);
+
+        if (addedSince.HasValue)
+        {
+            query = query.Where(c => c.CreatedOn >= addedSince.Value);
+        }
+
+        var count = await query.CountAsync(token);
+
+        var page = query
+            .OrderBy(c => c.CreatedOn)
+            .ThenBy(c => c.Id)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize);
+
+        return await PaginatedList<CandidateEntity>.CreateAsync(page, count, pageNumber, pageSize);
     }
 
     public async Task<CandidateEntity?> GetByGovIdentifier(string id)

@@ -11,6 +11,7 @@ using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplication;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplicationByVacancyReference;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplications;
 using SFA.DAS.CandidateAccount.Application.Application.Queries.GetApplicationsCount;
+using SFA.DAS.CandidateAccount.Application.Application.Queries.GetPagedApplications;
 using SFA.DAS.CandidateAccount.Domain.Application;
 using SFA.DAS.Common.Domain.Models;
 using System.ComponentModel.DataAnnotations;
@@ -24,6 +25,8 @@ namespace SFA.DAS.CandidateAccount.Api.Controllers;
 [Route("api/")]
 public class ApplicationController(IMediator mediator, ILogger<ApplicationController> logger) : Controller
 {
+    public const int MaxPagedApplicationsPageSize = 1000;
+
     [HttpPut]
     [Route("[controller]s/{vacancyReference}")]
     public async Task<IActionResult> PutApplication([FromRoute] VacancyReference vacancyReference, ApplicationRequest applicationRequest)
@@ -182,6 +185,30 @@ public class ApplicationController(IMediator mediator, ILogger<ApplicationContro
         catch (Exception e)
         {
             logger.LogError(e, "Unable to get application by reference");
+            return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+        }
+    }
+
+    [HttpGet]
+    [Route("[controller]s")]
+    [ProducesResponseType(typeof(GetPagedApplicationsQueryResult), (int)HttpStatusCode.OK)]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+    public async Task<IActionResult> GetPagedApplications([FromQuery] DateTime? addedAfter, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 500)
+    {
+        if (pageNumber < 1 || pageSize < 1 || pageSize > MaxPagedApplicationsPageSize)
+        {
+            return BadRequest();
+        }
+
+        try
+        {
+            var result = await mediator.Send(new GetPagedApplicationsQuery(addedAfter, pageNumber, pageSize));
+            return Ok(result);
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e, "Get Paged Applications : An error occurred");
             return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
         }
     }
